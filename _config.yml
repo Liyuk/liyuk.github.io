@@ -174,5 +174,5 @@ sitemap:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: https://github.com/Liyuk/liyuk.github.io.git
+  repository: git@github.com:Liyuk/liyuk.github.io.git
   branch: master
