@@ -1,16 +1,31 @@
+---
+title: "[Hexo] Theme BeanTech"
+catalog: true
+date: 2017-03-18 10:51:24
+subtitle: "This is hexo theme Demo."
+header-img: "Demo.png"
+tags:
+- Hexo
+- Blog
+catagories:
+- Hexo
+---
 > Ported Theme of [Hux Blog](https://github.com/Huxpro/huxpro.github.io), Thank [Huxpro](https://github.com/Huxpro) for designing such a flawless theme.
 > 
 > This BeanTech theme created by [YuHsuan](http://beantech.org) modified from the original Porter [Kaijun](http://kaijun.rocks/hexo-theme-huxblog/)
 
 # [Live Demo](http://beantech.org)
+---
 ![BeanTech Desktop](http://beantech.org/img/beantech-desktop.png)
 
 # Usage
+---
 I publish the whole project for your convenience, so you can just follow the instruction down below, then you can easily customiz your own blog!
 
 Let's begin!!!
 
 ## Init
+---
 ```bash
 git clone https://github.com/YenYuHsuan/hexo-theme-beantech.git ./hexo-beantech
 cd hexo-beantech
@@ -18,6 +33,7 @@ npm install
 ```
 
 ## Modify
+---
 Modify `_config.yml` file with your own info.
 Especially the section:
 ### Deployment
@@ -61,11 +77,11 @@ You can decide to show post tags or not.
 ```yml
 home_posts_tag: true
 ```
-![home_posts_tag-true](./source/_posts/hexo-theme-beantech/home_posts_tag-true.png)
+![home_posts_tag-true](home_posts_tag-true.png)
 ```yml
 home_posts_tag: false
 ```
-![home_posts_tag-false](./source/_posts/hexo-theme-beantech/home_posts_tag-false.png)
+![home_posts_tag-false](home_posts_tag-false.png)
 
 ### Markdown render
 My markdown render engine plugin is [hexo-renderer-markdown-it](https://github.com/celsomiranda/hexo-renderer-markdown-it).
@@ -83,17 +99,16 @@ markdown:
 ```
 and if you want to change the header anchor 'ℬ', you can go to `layout/post.ejs` to change it.
 ```javascript
-async("//cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
         anchors.options = {
           visible: 'hover',
           placement: 'left',
-          icon: 'ℬ'
+          icon: ℬ // this is the header anchor "unicode" icon
         };
-        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
-    })
 ```
 
 ## Hexo Basics
+---
 Some hexo command:
 ```bash
 hexo new post "<post name>" # you can change post to another layout if you want
@@ -103,6 +118,10 @@ hexo deploy # hexo will push the static files automatically into the specific br
 ```
 
 # Have fun ^_^ 
+---
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Place this tag where you want the button to render. -->
 
-Please [Star](https://github.com/YenYuHsuan/hexo-theme-beantech) this Project if you like it! [Follow](https://github.com/YenYuHsuan) would also be appreciated!
+Please <a class="github-button" href="https://github.com/YenYuHsuan/hexo-theme-beantech" data-icon="octicon-star" aria-label="Star YenYuHsuan/hexo-theme-beantech on GitHub">Star</a> this Project if you like it! <a class="github-button" href="https://github.com/YenYuHsuan" aria-label="Follow @YenYuHsuan on GitHub">Follow</a> would also be appreciated!
 Peace!
