@@ -11,9 +11,9 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-# url: liyuk.github.io       # Note: don't forget to modify the CNAME file to your url
+url: liyuk.github.io       # Note: don't forget to modify the CNAME file to your url
 root: /
-permalink: :year/:month/:day/:title/
+permalink: :year/:month/:day/:id/
 permalink_defaults:
 
 #Custom Setting Start
@@ -42,7 +42,7 @@ anchorjs: true                          # if you want to customize anchor. check
 
 
 # Disqus settings
-disqus_username: disqus_y6F3vOr7Sv
+disqus_username: liyuk
 
 # Duoshuo settings
 # duoshuo_username: kaijun
