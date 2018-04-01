@@ -19,21 +19,21 @@ permalink_defaults:
 #Custom Setting Start
 
 # Site settings
-SEOTitle: Prometheus
+SEOTitle: Prometheus | Fire Thief, Magician
 email: lomic28@163.com
 description: ""
 keyword: ""
-header-img: img/header_img/home-bg-2-dark.png
+header-img: img/header_img/home-bg-2-dark.jpg
 signature: true #show signature
-signature-img: img/signature/BeanTechSign-white.png 
+signature-img: img/signature/sign-white.png 
 
 
 # SNS settings
 # RSS: false
-weibo_username:     try7loving
+# weibo_username:     none
 zhihu_username:     lomic28
 github_username:    Liyuk
-twitter_username:   Liyuk_lomic28
+# twitter_username:   Liyuk_lomic28
 facebook_username:  lomic28
 linkedin_username:  kun-li-481143155
 
@@ -42,7 +42,7 @@ anchorjs: true                          # if you want to customize anchor. check
 
 
 # Disqus settings
-# disqus_username: your-disqus-ID
+disqus_username: disqus_y6F3vOr7Sv
 
 # Duoshuo settings
 # duoshuo_username: kaijun
@@ -60,8 +60,8 @@ anchorjs: true                          # if you want to customize anchor. check
 
 # Sidebar settings
 sidebar: true                       # whether or not using Sidebar.
-sidebar-about-description: "Hi, i'm Kun Li"
-sidebar-avatar: img/ironman-draw.png      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-about-description: "Hi, i'm Kun Li. A frontend engineer, photographer, writer, and magician."
+sidebar-avatar: img/avantor-min.png      # use absolute URL, seeing it's used in both `/` and `/about/`
 widgets:
 - featured-tags
 - short-about
