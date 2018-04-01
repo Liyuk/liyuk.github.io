@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://liyuk.github.io</loc>
+        <loc>http://yoursite.com</loc>
         <changefreq>daily</changefreq>
         <priority>1</priority>
     </url>
 
     <url>
-        <loc>https://liyuk.github.io/2017/03/18/hexo-theme-beantech/</loc>
-        <lastmod>2018-03-31T16:55:40.405Z</lastmod>
+        <loc>http://yoursite.com/2018/04/01/%E7%BD%91%E8%B7%AF%E4%B8%8A%E7%9A%84%E8%99%AB%E5%AD%90/</loc>
+        <lastmod>2018-04-01T03:27:51.112Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/2017/03/18/hexo-theme-beantech/</loc>
+        <lastmod>2018-04-01T02:36:16.674Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

@@ -2,18 +2,18 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <sitemap>
-        <loc>https://liyuk.github.io/post-sitemap.xml</loc>
-        <lastmod>2018-03-31T16:55:40.405Z</lastmod>
+        <loc>http://yoursite.com/post-sitemap.xml</loc>
+        <lastmod>2018-04-01T03:27:51.112Z</lastmod>
     </sitemap>
 
     <sitemap>
-        <loc>https://liyuk.github.io/page-sitemap.xml</loc>
-        <lastmod>2018-03-31T16:55:40.547Z</lastmod>
+        <loc>http://yoursite.com/page-sitemap.xml</loc>
+        <lastmod>2018-04-01T02:36:16.729Z</lastmod>
     </sitemap>
 
     <sitemap>
-        <loc>https://liyuk.github.io/tag-sitemap.xml</loc>
-        <lastmod>2018-03-31T16:55:40.405Z</lastmod>
+        <loc>http://yoursite.com/tag-sitemap.xml</loc>
+        <lastmod>2018-04-01T02:36:16.674Z</lastmod>
     </sitemap>
 
 </sitemapindex>
