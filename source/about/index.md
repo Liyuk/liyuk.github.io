@@ -7,4 +7,4 @@ header-img: "img/header_img/crafter.jpg"
 comments: true
 ---
 
-<iframe src="https://liyuk.github.io/my-resume" style="width: 100%; height: 5112px; border: 0" />
+<iframe src="https://liyuk.github.io/my-resume" style="width: 100%; height: 100vh; border: 0" />

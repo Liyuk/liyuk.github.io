@@ -2,9 +2,6 @@
 > 
 > This BeanTech theme created by [YuHsuan](http://beantech.org) modified from the original Porter [Kaijun](http://kaijun.rocks/hexo-theme-huxblog/)
 
-# [Live Demo](http://beantech.org)
-![BeanTech Desktop](http://beantech.org/img/beantech-desktop.png)
-
 ## Hexo Basics
 Some hexo command:
 ```bash
