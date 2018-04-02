@@ -11,7 +11,8 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: liyuk.github.io       # Note: don't forget to modify the CNAME file to your url
+url: https://liyuk.github.io       # Note: don't forget to modify the CNAME file to your url
+baseurl: ""
 root: /
 permalink: :year/:month/:day/:id/
 permalink_defaults:
@@ -21,8 +22,8 @@ permalink_defaults:
 # Site settings
 SEOTitle: Prometheus | Fire Thief, Magician
 email: lomic28@163.com
-description: ""
-keyword: ""
+description: "Software Engineer | Frontend Engineer | 这里是 @Liyuk 的个人博客，与你一起发现更大的世界。"
+keyword: "Liyuk, 博客, 个人网站, 互联网, Web, JavaScript, 前端, 计算机, Computer Science"
 header-img: img/header_img/home-bg-2-dark.jpg
 signature: true #show signature
 signature-img: img/signature/sign-white.png 

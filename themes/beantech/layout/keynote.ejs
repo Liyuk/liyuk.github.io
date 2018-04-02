@@ -159,7 +159,7 @@ layout: layout
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     // dynamic User by Hux
-    var _user = '<%= config['duoshuo_username'] %>';
+    var _user = "<%= config['duoshuo_username'] %>";
 
     // duoshuo comment query.
     var duoshuoQuery = {short_name: _user };
@@ -180,8 +180,8 @@ layout: layout
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "<%= config['disqus_username'] %>";
-    var disqus_identifier = "<%= page.permalink %>";
-    var disqus_url = "<%= page.permalink %>";
+    var disqus_identifier = "<%= page.url %><%= page.permalink %>";
+    var disqus_url = "<%= page.url %><%= page.permalink %>";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
