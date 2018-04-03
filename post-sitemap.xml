@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>liyuk.github.io</loc>
+        <loc>https://liyuk.github.io</loc>
         <changefreq>daily</changefreq>
         <priority>1</priority>
     </url>
 
     <url>
-        <loc>liyuk.github.io/2018/04/01/cjfgwksu7000223s6hri69zaj/</loc>
-        <lastmod>2018-04-01T14:29:21.114Z</lastmod>
+        <loc>https://liyuk.github.io/2018/04/01/cjfjujgin00033ss6qeyzk06m/</loc>
+        <lastmod>2018-04-02T13:35:14.274Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://liyuk.github.io/2018/04/02/cjfjujgii00013ss6slbytmnt/</loc>
+        <lastmod>2018-04-02T13:35:14.269Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
