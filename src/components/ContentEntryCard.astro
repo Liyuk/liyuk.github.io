@@ -1,0 +1,22 @@
+---
+import { contentUrl, galleryUrl } from '../lib/content-paths.mjs';
+import { localeFromPath } from '../lib/locale-url.mjs';
+import { formatFullDate, isoDate } from '../lib/format-dates.mjs';
+import { getUiCopy } from '../i18n/ui.mjs';
+import { publishedDate } from '../lib/timeline.mjs';
+
+const { entry, collection, action, label, locale: localeProp } = Astro.props;
+const locale = localeProp ?? entry.data.locale ?? localeFromPath(Astro.url.pathname);
+const ui = getUiCopy(locale);
+const published = publishedDate(entry);
+const date = formatFullDate(published, locale);
+const meta = collection === 'research' ? `${entry.data.status} · ${entry.data.version}` : collection === 'gallery' ? ui.count.photos(entry.data.images.length) : entry.data.status;
+const href = collection === 'gallery' ? galleryUrl(entry.data.slug, locale) : contentUrl(collection, entry.id, locale);
+---
+
+<article class="entry-card">
+  <div class="entry-meta"><span>{label} · {meta}</span><time datetime={isoDate(published)}>{ui.entry.publishedAt} {date}</time></div>
+  <h2><a href={href}>{entry.data.title}</a></h2>
+  <p>{entry.data.description}</p>
+  <a class="text-link" href={href}>{action} <span aria-hidden="true">↗</span></a>
+</article>

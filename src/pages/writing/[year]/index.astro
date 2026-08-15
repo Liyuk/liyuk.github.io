@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import { publishedFilter } from '../../../lib/content-model.mjs';
+import { localeFromPath } from '../../../lib/locale-url.mjs';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EntryCard from '../../../components/EntryCard.astro';
+import { site } from '../../../data/site.mjs';
+import { getPageCopy } from '../../../i18n/page-copy.mjs';
+import { getUiCopy } from '../../../i18n/ui.mjs';
+import { groupByYear } from '../../../lib/timeline.mjs';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('writing', publishedFilter);
+  return groupByYear(entries).map(({ year, entries: archiveEntries }) => ({ params: { year: String(year) }, props: { year, entries: archiveEntries } }));
+}
+
+const { year, entries } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const copy = getPageCopy(locale).writingArchive;
+const archive = getPageCopy(locale).writingArchive2;
+const ui = getUiCopy(locale);
+---
+<BaseLayout title={archive.metaTitle(year, copy.yearSuffix, ui.brand)} description={copy.description}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{archive.title(year, copy.yearSuffix)}</h1><p>{copy.description}</p></section>
+  <section class="shell entry-list archive-list">{entries.map((entry) => <EntryCard entry={entry} locale={locale} />)}</section>
+</BaseLayout>

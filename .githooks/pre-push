@@ -1,0 +1,21 @@
+#!/bin/sh
+# pre-push hook: run the full publish gate before any push is allowed.
+# Installed by `git config core.hooksPath .githooks` (see package.json
+# "prepare" script / README). Failures block the push with exit 1.
+#
+# Note: on a plain `git push` without refs (e.g. pushing a tag or when
+# git can't resolve a source branch), this script still runs the checks —
+# that's intended, since a tag push deploys the site too.
+
+echo "▶ pre-push: 运行发布前检查（publish:check）..."
+
+npm run publish:check
+status=$?
+
+if [ $status -ne 0 ]; then
+  echo "✘ pre-push: publish:check 未通过，已阻止 push。修复后重试。"
+  exit 1
+fi
+
+echo "✔ pre-push: 检查通过，允许 push。"
+exit 0

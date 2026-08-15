@@ -1,0 +1,26 @@
+---
+import { site } from '../data/site.mjs';
+import { getUiCopy } from '../i18n/ui.mjs';
+import ThemeToggle from './ThemeToggle.astro';
+import { searchUrl } from '../lib/content-paths.mjs';
+import { localeFromPath, localizePath, toggleLocalePath } from '../lib/locale-url.mjs';
+const { currentPath = '/', locale = localeFromPath(Astro.url.pathname) } = Astro.props;
+const ui = getUiCopy(locale);
+const alternateHref = toggleLocalePath(currentPath);
+---
+
+<header class="site-header">
+  <a class="wordmark" href={locale === 'en' ? '/en/' : '/'} aria-label={ui.accessibility.home}>{ui.brandShort}<span>.</span></a>
+  <div class="utility-controls" aria-label={ui.accessibility.siteSettings}>
+    <a class="search-link" href={searchUrl(locale)}>{ui.navigation.search}</a>
+    <a class="language-switch" href={alternateHref} lang="en"><b>{ui.language.current}</b><i>/</i><em>{ui.language.alternate}</em></a>
+    <ThemeToggle labels={ui.theme} />
+  </div>
+  <nav aria-label={ui.navigation.main}>
+    <ul>
+      {site.navigation.map((item) => (
+        <li><a href={localizePath(item.href, locale)} aria-current={currentPath.startsWith(localizePath(item.href, locale)) ? 'page' : undefined}>{ui.navigation[item.key]}</a></li>
+      ))}
+    </ul>
+  </nav>
+</header>

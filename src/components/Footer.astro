@@ -1,0 +1,13 @@
+---
+import { getUiCopy } from '../i18n/ui.mjs';
+import { localeFromPath } from '../lib/locale-url.mjs';
+import { site } from '../data/site.mjs';
+const { locale = localeFromPath(Astro.url.pathname) } = Astro.props;
+const ui = getUiCopy(locale);
+const currentYear = new Date().getFullYear();
+const yearRange = currentYear > site.since ? `${site.since}–${currentYear}` : `${site.since}`;
+---
+<footer class="site-footer">
+  <p>© {yearRange} {ui.name}{ui.footer.nameMark}{ui.footer.publishedOpenly}</p>
+  <a href="/rss.xml">{ui.footer.rss}</a>
+</footer>

@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ColumnCard from '../../components/ColumnCard.astro';
+import { site } from '../../data/site.mjs';
+import { publishedFilter } from '../../lib/content-model.mjs';
+import { writingSlug } from '../../lib/content-paths.mjs';
+import { columnUrl, galleryUrl, tagUrl, writingUrl } from '../../lib/content-paths.mjs';
+import { getColumn, getColumnEntries, getTag, getIndexableTags, getRelatedEntries } from '../../lib/taxonomy.mjs';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { formatFullDate, isoDate } from '../../lib/format-dates.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { publishedDate } from '../../lib/timeline.mjs';
+
+export async function getStaticPaths() {
+  const writing = await getCollection('writing', publishedFilter);
+  return writing.map((entry) => ({ params: { slug: writingSlug(entry.id) }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const isEnglish = locale === 'en';
+const ui = getUiCopy(locale);
+const pageCopy = getPageCopy(locale);
+const { Content, headings } = await render(entry);
+const allWriting = await getCollection('writing', ({ data }) => !data.draft && data.locale === entry.data.locale);
+const allGalleries = await getCollection('gallery', ({ data }) => !data.draft && data.locale === entry.data.locale);
+const indexableTags = getIndexableTags(allWriting).map(({ slug }) => slug);
+const columnEntries = entry.data.column ? getColumnEntries([...allWriting, ...allGalleries], entry.data.column.slug) : [];
+const columnIndex = columnEntries.findIndex((columnEntry) => columnEntry.id === entry.id);
+const previousColumnEntry = columnEntries[columnIndex - 1];
+const nextColumnEntry = columnEntries[columnIndex + 1];
+const relatedEntries = getRelatedEntries(allWriting, entry, 3, locale);
+const readingMinutes = Math.max(1, Math.ceil((entry.body?.match(/[\p{L}\p{N}]+/gu) ?? []).length / 400));
+const formatDate = (date) => formatFullDate(date, locale);
+const columnEntryUrl = (columnEntry) => columnEntry.collection === 'gallery' ? galleryUrl(columnEntry.data.slug, locale) : writingUrl(columnEntry.id, locale);
+---
+<BaseLayout title={`${entry.data.title} — ${ui.name}`} description={entry.data.description}>
+  <article class="article shell">
+    <header><p class="eyebrow">{ui.navigation.writing}</p><h1>{entry.data.title}</h1><p class="article-dek" data-pagefind-meta="description">{entry.data.description}</p><div class="article-dates"><time datetime={isoDate(publishedDate(entry))}>{ui.entry.publishedAt} {formatDate(publishedDate(entry))}</time>{entry.data.updatedAt && <time datetime={isoDate(entry.data.updatedAt)}>{ui.entry.updatedAt} {formatDate(entry.data.updatedAt)}</time>}<span>{ui.entry.readingMinutes(readingMinutes)}</span></div>{entry.data.tags?.length > 0 && <ul class="tag-list article-tags" aria-label={ui.entry.tagsAria}>{entry.data.tags.map((slug) => <li data-pagefind-filter="tag">{indexableTags.includes(slug) ? <a href={tagUrl(slug, locale)}>#{getTag(slug, locale).label}</a> : <span>#{getTag(slug, locale).label}</span>}</li>)}</ul>}</header>
+    {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={[...allWriting, ...allGalleries]} />}
+    {headings.length > 2 && <nav class="article-toc" aria-label={ui.toc.aria} data-pagefind-ignore><strong>{ui.toc.label}</strong><ol>{headings.filter((heading) => heading.depth <= 3).map((heading) => <li class:list={{ nested: heading.depth === 3 }}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></nav>}
+    <div class="prose" data-pagefind-body={isEnglish ? undefined : ''}><Content /></div>
+    {entry.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(entry.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(entry.data.column.slug, locale)?.label ?? '')}</a>{previousColumnEntry && <a href={columnEntryUrl(previousColumnEntry)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={columnEntryUrl(nextColumnEntry)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
+    {relatedEntries.length > 0 && <section class="related-entries" aria-labelledby="related-heading"><p class="eyebrow">{pageCopy.writingDetail.relatedEyebrow}</p><h2 id="related-heading">{pageCopy.writingDetail.relatedTitle}</h2><ol>{relatedEntries.map(({ entry: related, reasons }) => <li><a href={writingUrl(related.id, locale)}>{related.data.title}</a>{reasons.length > 0 && <p class="related-reason">{reasons.join(' · ')}</p>}</li>)}</ol></section>}
+  </article>
+</BaseLayout>

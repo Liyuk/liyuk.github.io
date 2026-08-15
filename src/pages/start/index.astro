@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localeFromPath, localizePath } from '../../lib/locale-url.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+
+const locale = localeFromPath(Astro.url.pathname);
+const copy = getPageCopy(locale).start;
+const ui = getUiCopy(locale);
+
+const cards = copy.cards.map((card) => ({ ...card, url: localizePath(card.url, locale) }));
+---
+
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="shell start-grid archive-list">
+    {cards.map((card) => <a href={card.url}><span>{card.label}</span><strong>{card.title}</strong><p>{card.description}</p></a>)}
+  </section>
+</BaseLayout>

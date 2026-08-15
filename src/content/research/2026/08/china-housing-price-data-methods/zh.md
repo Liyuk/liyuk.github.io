@@ -2,6 +2,7 @@
 title: 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）
 description: 基于一套已补全的中国房价数据资产（70 城官方指数面板、全国宏观面板与 LPR 序列、北京区级挂牌均价月度序列、官方区级网签与年度交易），提出来源—口径感知的数据构建框架，并给出跨口径实证。
 createdAt: 2026-08-08
+publishedAt: 2026-08-08
 version: '0.4'
 status: preprint
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
@@ -275,11 +276,11 @@ LPR 侧，5 年期以上 LPR（与房贷直接相关）从 2019-08 推出时的 
 
 [9] 中国房地产估价师与房地产经纪人学会（CIREA）. 70 城二手住宅价格指数（历史附件）. <https://www.cirea.org.cn/content/4773>
 
-[10] 中国房价行情（creprice.cn）. 北京房地产数据报告（月度）. <https://www.creprice.cn/report/bj/>
+[10] 中国房价行情（creprice.cn）. 北京房地产数据报告（月度）. <https://www.creprice.cn/report/bj.html>
 
 ## 作者与声明
 
-**作者：** 李鲲（Kun Li）
+**作者：** Liyuk
 
 **利益冲突：** 作者声明无利益冲突。本项目未受任何商业机构资助，不构成任何投资建议；模型输出不构成对未来房价的预测或承诺。
 

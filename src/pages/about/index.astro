@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { site } from '../../data/site.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+const copy = getPageCopy(localeFromPath(Astro.url.pathname)).about;
+---
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
+  <section class="page-heading shell about"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p><p class="about-intro">{copy.intro}</p></section>
+
+  <section class="shell section about-map" aria-labelledby="about-map-heading">
+    <p class="eyebrow">{copy.mapEyebrow}</p>
+    <h2 id="about-map-heading">{copy.mapTitle}</h2>
+    <div class="about-map-grid">
+      {['writing', 'projects', 'research', 'fiction'].map((key) => (
+        <a class="about-map-card" href={copy.map[key].url}>
+          <strong>{copy.map[key].title}</strong>
+          <span>{copy.map[key].desc}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="shell section about-fiction" aria-labelledby="about-fiction-heading">
+    <p class="eyebrow">{copy.fictionEyebrow}</p>
+    <h2 id="about-fiction-heading">{copy.fictionIntro}</h2>
+    <div class="about-novel-list">
+      {copy.fictionNovels.map((novel) => (
+        <a class="about-novel" href={novel.url}>
+          <strong>{novel.title}</strong>
+          <span>{novel.desc}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="shell section about-boundary">
+    <p class="eyebrow">{copy.boundaryEyebrow}</p>
+    <p>{copy.boundary}</p>
+    <p class="about-note">{copy.note}</p>
+    <a class="text-link" href="mailto:hello@liyuk.github.io">{copy.contact} <span aria-hidden="true">↗</span></a>
+  </section>
+</BaseLayout>

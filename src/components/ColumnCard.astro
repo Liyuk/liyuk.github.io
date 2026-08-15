@@ -1,0 +1,178 @@
+---
+// 专栏卡片：显示当前文章所属专栏的完整清单，本篇加粗，可折叠（默认展开）
+import { getColumn, getColumnEntries } from '../lib/taxonomy.mjs';
+import { columnUrl, writingUrl, galleryUrl } from '../lib/content-paths.mjs';
+import { localeFromPath } from '../lib/locale-url.mjs';
+import { getUiCopy } from '../i18n/ui.mjs';
+
+const {
+  entry,
+  columnSlug,
+  locale = localeFromPath(Astro.url.pathname),
+  allEntries = [],
+} = Astro.props;
+
+const ui = getUiCopy(locale);
+const column = getColumn(columnSlug, locale);
+
+const columnEntries = getColumnEntries(allEntries, columnSlug);
+const entryUrl = (e) => (e.collection === 'gallery' ? galleryUrl(e.data.slug, e.data.locale) : writingUrl(e.id, e.data.locale));
+const currentId = entry.id;
+const columnPath = columnUrl(columnSlug, locale);
+---
+
+{column && (
+<div class="column-card" data-open="true">
+  <button class="column-card-toggle" type="button" aria-expanded="true">
+    <span class="column-card-title">
+      <span class="eyebrow">{ui.column.eyebrow}</span>
+      <strong>{column.label}</strong>
+      <em class="column-card-count">{ui.column.count(columnEntries.length)}</em>
+    </span>
+    <span class="column-card-chevron" aria-hidden="true">⌄</span>
+  </button>
+  <ol class="column-card-list">
+    {columnEntries.map((colEntry) => {
+      const isCurrent = colEntry.id === currentId;
+      return (
+        <li class:list={{ current: isCurrent }}>
+          {isCurrent ? (
+            <span class="column-card-item-current">
+              <span class="column-card-order">{colEntry.data.column.order}</span>
+              <strong>{colEntry.data.title}</strong>
+              <em class="column-card-you">{ui.column.current}</em>
+            </span>
+          ) : (
+            <a href={entryUrl(colEntry)}>
+              <span class="column-card-order">{colEntry.data.column.order}</span>
+              <span>{colEntry.data.title}</span>
+            </a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</div>
+)}
+
+<style>
+  .column-card {
+    margin: 1.25rem 0 2.5rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--paper-strong);
+  }
+  .column-card-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--ink);
+    text-align: left;
+    font-family: inherit;
+  }
+  .column-card-toggle:hover {
+    background: var(--accent-soft);
+  }
+  .column-card-title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .column-card-title .eyebrow {
+    margin: 0;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .column-card-title strong {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .column-card-count {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-style: normal;
+  }
+  .column-card-chevron {
+    color: var(--muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+    transform: rotate(0deg);
+  }
+  .column-card[data-open="false"] .column-card-chevron {
+    transform: rotate(-90deg);
+  }
+  .column-card-list {
+    margin: 0;
+    padding: 0 1.1rem 0.7rem;
+    list-style: none;
+    display: grid;
+    gap: 0.1rem;
+  }
+  .column-card[data-open="false"] .column-card-list {
+    display: none;
+  }
+  .column-card-list a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.35rem 0.3rem;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.92rem;
+    border-radius: 5px;
+  }
+  .column-card-list a:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .column-card-order {
+    flex-shrink: 0;
+    width: 1.2rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    text-align: right;
+  }
+  .column-card-item-current {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.35rem 0.3rem;
+    font-size: 0.92rem;
+    border-radius: 5px;
+    background: var(--accent-soft);
+  }
+  .column-card-item-current strong {
+    font-weight: 700;
+  }
+  .column-card-you {
+    margin-left: auto;
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+</style>
+
+<script>
+  // 文章页每篇最多一个专栏卡片；用 data-open 单一状态控制折叠
+  const card = document.querySelector('.column-card');
+  if (card instanceof HTMLElement) {
+    const toggle = card.querySelector('.column-card-toggle');
+    toggle?.addEventListener('click', () => {
+      const isOpen = card.dataset.open !== 'false';
+      card.dataset.open = String(!isOpen);
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+  }
+</script>

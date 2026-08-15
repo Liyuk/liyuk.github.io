@@ -1,0 +1,53 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site.mjs';
+import { getUiCopy } from '../i18n/ui.mjs';
+import { getPageCopy } from '../i18n/page-copy.mjs';
+import { localeFromPath, localizePath } from '../lib/locale-url.mjs';
+
+const {
+  title = site.title,
+  description = site.description,
+  locale = localeFromPath(Astro.url.pathname),
+  noindex = false,
+} = Astro.props;
+const ui = getUiCopy(locale);
+const pageCopy = getPageCopy(locale);
+const isEnglish = locale === 'en';
+const zhUrl = new URL(localizePath(Astro.url.pathname, 'zh-CN'), Astro.site);
+const enUrl = new URL(localizePath(Astro.url.pathname, 'en'), Astro.site);
+const defaultUrl = isEnglish ? new URL('/', Astro.site) : new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={locale} data-pagefind-ignore={isEnglish ? '' : undefined}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#f4f1ea" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={isEnglish ? enUrl : zhUrl} />
+    {!noindex && <>
+      <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
+      <link rel="alternate" hreflang="en" href={enUrl} />
+      <link rel="alternate" hreflang="x-default" href={defaultUrl} />
+    </>}
+    <link rel="alternate" type="application/rss+xml" title={`${pageCopy.rss.title} RSS`} href="/rss.xml" />
+    <script is:inline>
+      const storedTheme = localStorage.getItem('liyuk-theme');
+      if (storedTheme) document.documentElement.dataset.theme = storedTheme;
+    </script>
+    <title>{title}</title>
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "c23ada27d5ac4a998ba3d64fbd8cfc93"}'></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">{ui.accessibility.skipToContent}</a>
+    <Header currentPath={Astro.url.pathname} locale={locale} />
+    <main id="content"><slot /></main>
+    <Footer locale={locale} />
+  </body>
+</html>

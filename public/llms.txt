@@ -1,0 +1,16 @@
+# Liyuk
+
+> An independent writing and project archive about technology, products, leadership, research, and field notes.
+
+## Primary sections
+
+- [Writing](https://liyuk.github.io/writing/): Chinese-language original essays and notes.
+- [Projects](https://liyuk.github.io/projects/): Products, tools, and experiments.
+- [Research](https://liyuk.github.io/research/): Papers, research notes, and talks.
+- [Photos](https://liyuk.github.io/photos/): Curated photography and field notes.
+- [English interface](https://liyuk.github.io/en/): The same content with an English UI shell (article bodies remain Chinese).
+
+## Machine-readable resources
+
+- [RSS](https://liyuk.github.io/rss.xml)
+- [Sitemap](https://liyuk.github.io/sitemap-index.xml)

@@ -1,0 +1,12 @@
+# --- 运行时产物与缓存（任意深度） ---
+**/node_modules/
+**/.astro/
+**/dist/
+**/.DS_Store
+output/
+.playwright-cli/
+
+# --- 内部原始文档与源素材（不应进入 git / 公开站点） ---
+# 这些目录保留在仓库外（见 README「Legacy site」）：内容已迁移进 src/content，
+# 原始文档/图源为不可再生的独有源文件，若在仓库内会被公开部署。
+docs/

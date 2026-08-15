@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.mjs';
+import { publishedFilter } from '../../lib/content-model.mjs';
+import { columnUrl } from '../../lib/content-paths.mjs';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+
+const locale = localeFromPath(Astro.url.pathname);
+const copy = getPageCopy(locale).columns;
+const ui = getUiCopy(locale);
+const [writing, research] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter)]);
+const entries = [...writing, ...research];
+const availableColumns = Object.keys(columns).map((slug) => ({ ...columns[slug], slug, count: getColumnEntries(entries, slug).length })).filter(({ count }) => count > 0);
+---
+
+<BaseLayout title={`${copy.eyebrow} — ${ui.brand}`} description={copy.description}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="shell taxonomy-section archive-list"><div class="column-grid">{availableColumns.map(({ slug, count }) => { const column = getColumn(slug, locale); return <a href={columnUrl(slug, locale)}><span>{copy.seriesLabel}</span><strong>{column?.label}</strong><p>{column?.description}</p><em>{copy.count(count)}</em></a>; })}</div></section>
+</BaseLayout>

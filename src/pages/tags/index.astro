@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTag, getIndexableTags } from '../../lib/taxonomy.mjs';
+import { publishedFilter } from '../../lib/content-model.mjs';
+import { tagUrl } from '../../lib/content-paths.mjs';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+
+const locale = localeFromPath(Astro.url.pathname);
+const copy = getPageCopy(locale).tags;
+const ui = getUiCopy(locale);
+const [writing, research, projects, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter), getCollection('project'), getCollection('gallery', publishedFilter)]);
+const tags = getIndexableTags([...writing, ...research, ...projects, ...galleries]);
+---
+
+<BaseLayout title={`${copy.eyebrow} — ${ui.brand}`} description={copy.description}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="shell taxonomy-section archive-list"><ul class="topic-directory">{tags.map(({ slug, count }) => <li><a href={tagUrl(slug, locale)}>#{getTag(slug, locale).label}</a><span>{copy.count(count)}</span></li>)}</ul></section>
+</BaseLayout>

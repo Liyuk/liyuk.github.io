@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localeFromPath } from '../lib/locale-url.mjs';
+import { site } from '../data/site.mjs';
+import { getPageCopy } from '../i18n/page-copy.mjs';
+const copy = getPageCopy(localeFromPath(Astro.url.pathname)).notFound;
+---
+<BaseLayout title={copy.metaTitle}><section class="page-heading shell"><p class="eyebrow">404</p><h1>{copy.title}</h1><a class="text-link" href="/">{copy.returnHome} <span aria-hidden="true">↗</span></a></section></BaseLayout>

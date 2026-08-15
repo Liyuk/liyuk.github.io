@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+
+const locale = localeFromPath(Astro.url.pathname);
+const copy = getPageCopy(locale).search;
+const ui = getUiCopy(locale);
+---
+
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription} noindex>
+  <section class="page-heading shell search-heading"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="shell search-page" aria-labelledby="search-label">
+    <label id="search-label" for="site-search">{copy.label}</label>
+    <input id="site-search" type="search" placeholder={copy.placeholder} autocomplete="off" />
+    <p id="search-status" role="status" aria-live="polite"></p>
+    <ol id="search-results" class="search-results"></ol>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ statusTemplate: copy.statusTemplate }}>
+  const input = document.querySelector('#site-search');
+  const status = document.querySelector('#search-status');
+  const results = document.querySelector('#search-results');
+  let pagefind;
+  let timer;
+  const pagefindModule = '/pagefind/pagefind.js';
+
+  const render = (items) => {
+    if (!(results instanceof HTMLOListElement)) return;
+    results.replaceChildren(...items.map((item) => {
+      const row = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = item.url;
+      link.textContent = item.meta.title;
+      const excerpt = document.createElement('p');
+      excerpt.textContent = item.plain_excerpt || item.meta.description || '';
+      row.append(link, excerpt);
+      return row;
+    }));
+  };
+
+  const search = async (query) => {
+    if (!(status instanceof HTMLElement) || !query) { render([]); if (status instanceof HTMLElement) status.textContent = ''; return; }
+    pagefind ??= await import(/* @vite-ignore */ pagefindModule);
+    const response = await pagefind.search(query);
+    const items = await Promise.all(response.results.slice(0, 20).map((result) => result.data()));
+    render(items);
+    status.textContent = statusTemplate.replace('{{n}}', String(response.results.length));
+  };
+
+  if (input instanceof HTMLInputElement) input.addEventListener('input', () => {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => search(input.value.trim()), 180);
+  });
+</script>

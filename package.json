@@ -1,0 +1,27 @@
+{
+  "name": "liyuk.github.io",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "audit:images": "node scripts/audit-images.mjs",
+    "new:post": "node scripts/new-post.mjs",
+    "new:gallery": "node scripts/new-gallery.mjs",
+    "publish": "node scripts/publish.mjs",
+    "publish:check": "node scripts/publish-check.mjs",
+    "prepare": "git config core.hooksPath .githooks",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^5.13.7",
+    "pagefind": "^1.5.2",
+    "playwright": "^1.62.1"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19"
+  }
+}

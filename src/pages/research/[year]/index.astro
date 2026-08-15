@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import ArchiveSection from '../../../components/ArchiveSection.astro';
+import { publishedFilter } from '../../../lib/content-model.mjs';
+import { groupByYear } from '../../../lib/timeline.mjs';
+import { localeFromPath } from '../../../lib/locale-url.mjs';
+import { getPageCopy } from '../../../i18n/page-copy.mjs';
+
+export async function getStaticPaths() {
+  return groupByYear(await getCollection('research', publishedFilter)).map(({ year, entries }) => ({ params: { year: String(year) }, props: { year, entries } }));
+}
+
+const { year, entries } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+---
+
+<ArchiveSection collection="research" entries={entries} label={getPageCopy(locale).tagCards.research.label} action={getPageCopy(locale).tagCards.research.action} kind="year" year={year} />

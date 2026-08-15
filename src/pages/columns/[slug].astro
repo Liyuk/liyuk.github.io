@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.mjs';
+import { publishedFilter } from '../../lib/content-model.mjs';
+import { galleryUrl, writingUrl } from '../../lib/content-paths.mjs';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { formatFullDate, isoDate } from '../../lib/format-dates.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+import { publishedDate } from '../../lib/timeline.mjs';
+
+const locale = localeFromPath(Astro.url.pathname);
+const copy = getPageCopy(locale).columnsDetail;
+const ui = getUiCopy(locale);
+
+export async function getStaticPaths() {
+  const [writing, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('gallery', publishedFilter)]);
+  const entries = [...writing, ...galleries];
+  return Object.keys(columns).filter((slug) => getColumnEntries(entries, slug).length > 0).map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const [writing, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('gallery', publishedFilter)]);
+const entries = [...writing, ...galleries];
+const column = getColumn(slug, locale);
+const chapters = getColumnEntries(entries, slug);
+const entryUrl = (entry) => entry.collection === 'gallery' ? galleryUrl(entry.data.slug, locale) : writingUrl(entry.id, locale);
+const formatDate = (date) => formatFullDate(date, locale);
+const chapterDates = (entry) => {
+  const published = `${ui.entry.publishedAt} ${formatDate(publishedDate(entry))}`;
+  const updated = entry.data.updatedAt ? `${ui.entry.updatedAt} ${formatDate(entry.data.updatedAt)}` : undefined;
+  return copy.chapterDate(published, updated);
+};
+---
+
+<BaseLayout title={copy.title(column?.label ?? '')} description={column?.description}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{column?.label}</h1><p>{column?.description}</p></section>
+  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}><ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column.order)}</span><h2><a href={entryUrl(entry)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol></section>
+</BaseLayout>

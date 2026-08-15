@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import ContentEntryCard from '../../components/ContentEntryCard.astro';
+import { getTag, getIndexableTags } from '../../lib/taxonomy.mjs';
+import { publishedFilter } from '../../lib/content-model.mjs';
+import { sortByCreatedAt } from '../../lib/timeline.mjs';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+
+export async function getStaticPaths() {
+  const [writing, research, projects, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter), getCollection('project'), getCollection('gallery', publishedFilter)]);
+  return getIndexableTags([...writing, ...research, ...projects, ...galleries]).map(({ slug }) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUiCopy(locale);
+const pageCopy = getPageCopy(locale);
+const [writing, research, projects, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter), getCollection('project'), getCollection('gallery', publishedFilter)]);
+const indexableTags = getIndexableTags([...writing, ...research, ...projects, ...galleries]).map(({ slug: tagSlug }) => tagSlug);
+const tag = getTag(slug, locale);
+const entries = sortByCreatedAt([...writing, ...research, ...projects, ...galleries]).filter((entry) => entry.data.tags?.includes(slug));
+const description = pageCopy.tags.detailDescription(tag.label);
+const cards = pageCopy.tagCards;
+---
+
+<BaseLayout title={`#${tag.label} — ${ui.brand}`} description={description}>
+  <section class="page-heading shell"><p class="eyebrow">{pageCopy.tags.eyebrow}</p><h1>#{tag.label}</h1><p>{description}</p></section>
+  <section class="shell entry-list archive-list">{entries.map((entry) => entry.collection === 'writing' ? <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} /> : entry.collection === 'research' ? <ContentEntryCard entry={entry} collection="research" label={cards.research.label} action={cards.research.action} locale={locale} /> : entry.collection === 'project' ? <ContentEntryCard entry={entry} collection="project" label={cards.project.label} action={cards.project.action} locale={locale} /> : <ContentEntryCard entry={entry} collection="gallery" label={cards.gallery.label} action={cards.gallery.action} locale={locale} />)}</section>
+</BaseLayout>

@@ -1,0 +1,104 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site.mjs';
+import { getGalleryCover } from '../../lib/gallery.mjs';
+import { columnUrl, galleryUrl, tagUrl, writingUrl } from '../../lib/content-paths.mjs';
+import { getColumn, getColumnEntries, getIndexableTags, getTag } from '../../lib/taxonomy.mjs';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { formatFullDate } from '../../lib/format-dates.mjs';
+import { publishedFilter } from '../../lib/content-model.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { publishedDate } from '../../lib/timeline.mjs';
+
+export async function getStaticPaths() {
+  const galleries = await getCollection('gallery', publishedFilter);
+  return galleries.map((gallery) => ({ params: { slug: gallery.data.slug }, props: { gallery } }));
+}
+
+const { gallery } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUiCopy(locale);
+const pageCopy = getPageCopy(locale);
+const cover = getGalleryCover(gallery);
+const coverIndex = Math.max(0, gallery.data.images.findIndex((image) => image.id === cover.id));
+const formatDate = (date) => formatFullDate(date, locale);
+const localeFilter = ({ data }) => !data.draft && data.locale === gallery.data.locale;
+const [writing, galleries] = await Promise.all([getCollection('writing', localeFilter), getCollection('gallery', localeFilter)]);
+const indexableTags = getIndexableTags([...writing, ...galleries]).map(({ slug }) => slug);
+const columnEntries = gallery.data.column ? getColumnEntries([...writing, ...galleries], gallery.data.column.slug) : [];
+const columnIndex = columnEntries.findIndex((entry) => entry.id === gallery.id);
+const previousColumnEntry = columnEntries[columnIndex - 1];
+const nextColumnEntry = columnEntries[columnIndex + 1];
+const entryUrl = (entry) => entry.collection === 'gallery' ? galleryUrl(entry.data.slug, locale) : writingUrl(entry.id, locale);
+---
+
+<BaseLayout title={`${gallery.data.title} — ${ui.navigation.photos} — ${ui.name}`} description={gallery.data.description}>
+  <article class="gallery-detail shell">
+    <header class="gallery-header"><p class="eyebrow">{ui.navigation.photos} · {formatDate(publishedDate(gallery))}</p><h1>{gallery.data.title}</h1><p>{gallery.data.description}</p><span>{ui.count.photos(gallery.data.images.length)}</span>{gallery.data.column && <p class="column-reference">{ui.entry.columnIn(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug, gallery.data.column.order)}</p>}{gallery.data.tags.length > 0 && <ul class="tag-list article-tags" aria-label={ui.entry.tagsAria}>{gallery.data.tags.map((slug) => <li>{indexableTags.includes(slug) ? <a href={tagUrl(slug, locale)}>#{getTag(slug, locale).label}</a> : <span>#{getTag(slug, locale).label}</span>}</li>)}</ul>}</header>
+    <section class="gallery-carousel" aria-label={ui.gallery.carouselAria(gallery.data.title)} data-gallery-carousel tabindex="-1">
+      <figure>
+        <img data-gallery-image src={cover.src} alt={cover.alt} width={cover.width} height={cover.height} decoding="async" fetchpriority="high" />
+        <figcaption data-gallery-caption>{cover.caption}</figcaption>
+      </figure>
+      <div class="gallery-controls">
+        <button type="button" data-gallery-previous aria-label={ui.gallery.previousAria}>{ui.gallery.previous}</button>
+        <p><span data-gallery-position>{coverIndex + 1}</span> / {gallery.data.images.length}</p>
+        <button type="button" data-gallery-next aria-label={ui.gallery.nextAria}>{ui.gallery.next}</button>
+      </div>
+      <ol class="gallery-thumbnails" aria-label={ui.gallery.selectAria}>
+        {gallery.data.images.map((image, index) => <li><button type="button" aria-label={ui.gallery.viewPhotoAria(index + 1, image.alt)} aria-current={image.id === cover.id ? 'true' : undefined} data-gallery-select={index}><img src={image.src} alt="" width={image.width} height={image.height} loading="lazy" decoding="async" /></button></li>)}
+      </ol>
+    </section>
+    {gallery.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(gallery.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug)}</a>{previousColumnEntry && <a href={entryUrl(previousColumnEntry)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={entryUrl(nextColumnEntry)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
+  </article>
+</BaseLayout>
+
+<script define:vars={{ images: gallery.data.images, initialImageId: cover.id }}>
+  const root = document.querySelector('[data-gallery-carousel]');
+  if (root instanceof HTMLElement) {
+    const image = root.querySelector('[data-gallery-image]');
+    const caption = root.querySelector('[data-gallery-caption]');
+    const position = root.querySelector('[data-gallery-position]');
+    const previous = root.querySelector('[data-gallery-previous]');
+    const next = root.querySelector('[data-gallery-next]');
+    const choices = [...root.querySelectorAll('[data-gallery-select]')];
+    let currentIndex = Math.max(0, images.findIndex((item) => item.id === initialImageId));
+
+    const show = (index) => {
+      currentIndex = (index + images.length) % images.length;
+      const item = images[currentIndex];
+      if (image instanceof HTMLImageElement) {
+        image.src = item.src;
+        image.alt = item.alt;
+        image.width = item.width;
+        image.height = item.height;
+      }
+      if (caption instanceof HTMLElement) caption.textContent = item.caption ?? '';
+      if (position instanceof HTMLElement) position.textContent = String(currentIndex + 1);
+      choices.forEach((choice, choiceIndex) => choice.setAttribute('aria-current', String(choiceIndex === currentIndex)));
+      // Preload neighbors so advancing feels instant.
+      [currentIndex - 1, currentIndex + 1].forEach((near) => {
+        const neighbor = images[(near + images.length) % images.length];
+        const cached = new Image();
+        cached.src = neighbor.src;
+      });
+    };
+
+    previous?.addEventListener('click', () => show(currentIndex - 1));
+    next?.addEventListener('click', () => show(currentIndex + 1));
+    choices.forEach((choice) => choice.addEventListener('click', () => show(Number(choice.getAttribute('data-gallery-select')))));
+    // Clicking the image focuses the carousel so arrow keys work immediately.
+    root.addEventListener('click', (event) => {
+      if (!(event.target instanceof HTMLButtonElement)) root.focus({ preventScroll: true });
+    });
+    // Keyboard: arrow keys step the carousel while focus is inside it.
+    root.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (!root.contains(document.activeElement)) return;
+      event.preventDefault();
+      show(currentIndex + (event.key === 'ArrowRight' ? 1 : -1));
+    });
+  }
+</script>

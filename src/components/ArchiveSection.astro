@@ -1,0 +1,35 @@
+---
+// 通用归档区块：用于 research / projects 的按年、按月归档页
+// 接收：collection（research/projects）、entries、label（中文名）、action（卡片按钮文案）、kind（year/month）、year、month、eyebrow
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentEntryCard from './ContentEntryCard.astro';
+import { localeFromPath } from '../lib/locale-url.mjs';
+import { getUiCopy } from '../i18n/ui.mjs';
+import { getPageCopy } from '../i18n/page-copy.mjs';
+
+const {
+  collection,
+  entries,
+  label,
+  action,
+  kind = 'year',
+  year,
+  month,
+  eyebrow,
+  description,
+} = Astro.props;
+
+const locale = localeFromPath(Astro.url.pathname);
+const ui = getUiCopy(locale);
+const pageCopy = getPageCopy(locale);
+const archiveCopy = collection === 'projects' ? pageCopy.projectArchive : pageCopy.researchArchive;
+const title = kind === 'month' ? archiveCopy.titleMonth(year, month) : archiveCopy.title(year);
+const metaTitle = archiveCopy.metaTitle(year, ui.brand);
+const resolvedEyebrow = eyebrow ?? archiveCopy.eyebrow;
+const resolvedDescription = description ?? archiveCopy.description;
+---
+
+<BaseLayout title={metaTitle} description={resolvedDescription}>
+  <section class="page-heading shell"><p class="eyebrow">{resolvedEyebrow}</p><h1>{title}</h1><p>{resolvedDescription}</p></section>
+  <section class="shell entry-list archive-list">{entries.map((entry) => <ContentEntryCard entry={entry} collection={collection} label={label} action={action} locale={locale} />)}</section>
+</BaseLayout>

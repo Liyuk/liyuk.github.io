@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import { publishedFilter } from '../../lib/content-model.mjs';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import { site } from '../../data/site.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { sortByCreatedAt } from '../../lib/timeline.mjs';
+import { getIndexableTags } from '../../lib/taxonomy.mjs';
+const locale = localeFromPath(Astro.url.pathname);
+const writing = sortByCreatedAt(await getCollection('writing', publishedFilter));
+const indexableTags = getIndexableTags(writing).map(({ slug }) => slug);
+const copy = getPageCopy(locale).writing;
+const sortCopy = getPageCopy(locale).writingIndex;
+---
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="shell archive-list">
+    <div class="writing-sort">
+      <label for="writing-sort-select">{sortCopy.sortLabel}</label>
+      <select id="writing-sort-select" name="sort">
+        <option value="published">{sortCopy.sortPublished}</option>
+        <option value="last-updated">{sortCopy.sortUpdated}</option>
+      </select>
+      <p>{sortCopy.sortHint}</p>
+      <p id="writing-sort-status" class="visually-hidden" aria-live="polite"></p>
+    </div>
+    <div class="entry-list" id="writing-list">{writing.map((entry) => <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} />)}</div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ statusPublished: sortCopy.sortStatusPublished, statusUpdated: sortCopy.sortStatusUpdated }}>
+  const select = document.querySelector('#writing-sort-select');
+  const list = document.querySelector('#writing-list');
+  const status = document.querySelector('#writing-sort-status');
+
+  if (select instanceof HTMLSelectElement && list instanceof HTMLElement) {
+    const sortEntries = () => {
+      const dataKey = select.value === 'last-updated' ? 'lastUpdatedAt' : 'publishedAt';      const entries = [...list.querySelectorAll(':scope > .entry-card')];
+      entries.sort((a, b) => Date.parse(b.dataset[dataKey]) - Date.parse(a.dataset[dataKey]));
+      entries.forEach((entry) => {
+        const date = entry.querySelector('[data-entry-date]');
+        if (date instanceof HTMLTimeElement) {
+          date.dateTime = entry.dataset[dataKey];
+          date.textContent = entry.dataset[`${dataKey}Label`];
+        }
+        list.append(entry);
+      });
+
+      if (status instanceof HTMLElement) {
+        status.textContent = select.value === 'last-updated' ? statusUpdated : statusPublished;
+      }
+    };
+
+    select.addEventListener('change', sortEntries);
+  }
+</script>

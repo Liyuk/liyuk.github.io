@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localeFromPath } from '../../lib/locale-url.mjs';
+import { site } from '../../data/site.mjs';
+import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { getUiCopy } from '../../i18n/ui.mjs';
+import { getCollection } from 'astro:content';
+import { galleryUrl } from '../../lib/content-paths.mjs';
+import { getGalleryCover } from '../../lib/gallery.mjs';
+import { publishedFilter } from '../../lib/content-model.mjs';
+import { sortByCreatedAt } from '../../lib/timeline.mjs';
+
+const locale = localeFromPath(Astro.url.pathname);
+const copy = getPageCopy(locale).photos;
+const ui = getUiCopy(locale);
+const galleries = sortByCreatedAt(await getCollection('gallery', publishedFilter));
+---
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  {galleries.length > 0 ? (
+    <section class="shell gallery-masonry" aria-label={copy.label}>
+      {galleries.map((gallery) => {
+        const cover = getGalleryCover(gallery);
+        return <a class="gallery-card" href={galleryUrl(gallery.data.slug, locale)}>
+          <span class="gallery-card-figure"><img src={cover.src} alt={cover.alt} width={cover.width} height={cover.height} loading="lazy" decoding="async" /></span>
+          <span class="gallery-card-copy"><strong>{gallery.data.title}</strong><em>{gallery.data.description}</em><small>{ui.count.photos(gallery.data.images.length)}</small></span>
+        </a>;
+      })}
+    </section>
+  ) : <section class="shell photo-placeholder" aria-label={copy.placeholderLabel}><span>{copy.placeholder}</span></section>}
+</BaseLayout>
