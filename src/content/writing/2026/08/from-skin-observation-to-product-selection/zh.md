@@ -108,7 +108,7 @@ White background. Professional beauty consulting report style. Luxury cosmetic c
 Chinese labels only. Ultra detailed. 9:16 vertical.
 ```
 
-![面容观察示意：以人像为中心，标出脸型、三庭、五眼、肤色倾向与明度观察](./images/facial-observation-chart.png)
+![面容观察示意：以人像为中心，标出脸型、三庭、五眼、肤色倾向与明度观察](./images/facial-observation-chart.webp)
 
 *效果图示意：它把提示词中的观察项目整理成可对照的版面；不构成生物特征或专业诊断。*
 
@@ -131,7 +131,7 @@ For each style show: suitability score, recommended eyeshadow colors, recommende
 Use professional makeup color swatches. Chinese labels. Beauty consultant report style. White background. Magazine quality. 9:16.
 ```
 
-![日常妆容方向推荐：以同一张人像配合眼影、腮红与唇色的色卡](./images/makeup-direction-board.png)
+![日常妆容方向推荐：以同一张人像配合眼影、腮红与唇色的色卡](./images/makeup-direction-board.webp)
 
 *效果图示意：色卡用于比较不同妆容方向，并非对个人适配度的定论。*
 
@@ -151,7 +151,7 @@ Show: recommended colors, recommended lipstick shades, recommended blush shades,
 Include color palettes. Professional image consultant style. Chinese labels. White background. Luxury beauty report. 9:16.
 ```
 
-![个人色彩探索：春夏秋冬四组服装、唇色、腮红与发色灵感色卡](./images/personal-color-exploration.png)
+![个人色彩探索：春夏秋冬四组服装、唇色、腮红与发色灵感色卡](./images/personal-color-exploration.webp)
 
 *效果图示意：四季色彩只是探索颜色方向的起点，实际效果仍需在自然光下试色确认。*
 
@@ -170,7 +170,7 @@ Use heat maps, semi-transparent overlays, beauty clinic visualization.
 Chinese labels. Medical beauty report style. White background. Ultra realistic. 9:16.
 ```
 
-![皮肤状态观察示意：用分区与状态条记录水分感、出油感、纹理、均匀度、眼周与舒适度](./images/skin-observation-sheet.png)
+![皮肤状态观察示意：用分区与状态条记录水分感、出油感、纹理、均匀度、眼周与舒适度](./images/skin-observation-sheet.webp)
 
 *效果图示意：这里改为日常状态观察，不替代皮肤检测、医疗建议或诊断。*
 
@@ -193,7 +193,7 @@ Use arrows and labels. Chinese annotations: 肤色提亮, 眼部放大, 轮廓�
 White background. Beauty academy textbook style. Ultra realistic. 9:16.
 ```
 
-![日常柔和妆前后参考：自然底妆、柔和眼妆、轻薄腮红与日常唇色](./images/everyday-makeup-simulation.png)
+![日常柔和妆前后参考：自然底妆、柔和眼妆、轻薄腮红与日常唇色](./images/everyday-makeup-simulation.webp)
 
 *效果图示意：妆后部分仅展示一种低强度妆容方向；实际产品、手法和效果会因光线、肤感与个人偏好而不同。*
 

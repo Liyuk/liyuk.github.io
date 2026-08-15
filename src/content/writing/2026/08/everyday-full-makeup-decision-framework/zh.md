@@ -21,7 +21,7 @@ tags: [beauty, everyday-life, guide, field-notes]
 
 ## STEP 1：妆前准备
 
-![妆前准备：修眉、保湿与隔离提亮](./images/prep.png)
+![妆前准备：修眉、保湿与隔离提亮](./images/prep.webp)
 
 #### 修眉
 
@@ -37,7 +37,7 @@ tags: [beauty, everyday-life, guide, field-notes]
 
 ## STEP 2：遮瑕系统
 
-![遮瑕系统：黑眼圈与局部瑕疵分层处理](./images/concealer.png)
+![遮瑕系统：黑眼圈与局部瑕疵分层处理](./images/concealer.webp)
 
 #### 大瑕疵遮瑕 / 黑眼圈
 
@@ -45,7 +45,7 @@ tags: [beauty, everyday-life, guide, field-notes]
 
 ## STEP 3：粉底统一肤色
 
-![粉底统一肤色：分区铺开与避开眼下重点遮瑕](./images/foundation.png)
+![粉底统一肤色：分区铺开与避开眼下重点遮瑕](./images/foundation.webp)
 
 #### 粉底
 
@@ -61,7 +61,7 @@ tags: [beauty, everyday-life, guide, field-notes]
 
 ## STEP 4：提亮与立体塑形
 
-![提亮与立体塑形：提亮凹陷并避开高光区修容](./images/highlight-and-contour.png)
+![提亮与立体塑形：提亮凹陷并避开高光区修容](./images/highlight-and-contour.webp)
 
 #### 提亮
 
@@ -77,7 +77,7 @@ tags: [beauty, everyday-life, guide, field-notes]
 
 ## STEP 5：定妆
 
-![定妆：以按压方式处理容易出油和移动的区域](./images/setting.png)
+![定妆：以按压方式处理容易出油和移动的区域](./images/setting.webp)
 
 #### 散粉定妆
 
@@ -85,7 +85,7 @@ tags: [beauty, everyday-life, guide, field-notes]
 
 ## STEP 6：修容与鼻影
 
-![修容与鼻影：脸颊、下颌线和鼻梁的自然过渡](./images/contour-and-nose-shadow.png)
+![修容与鼻影：脸颊、下颌线和鼻梁的自然过渡](./images/contour-and-nose-shadow.webp)
 
 #### 粉状脸颊修容
 
@@ -101,7 +101,7 @@ tags: [beauty, everyday-life, guide, field-notes]
 
 ## STEP 7：完整眼妆
 
-![完整眼妆：双眼皮贴、眼影层次、眼线和睫毛](./images/eye-makeup.png)
+![完整眼妆：双眼皮贴、眼影层次、眼线和睫毛](./images/eye-makeup.webp)
 
 #### 贴双眼皮
 
@@ -121,7 +121,7 @@ tags: [beauty, everyday-life, guide, field-notes]
 
 ## STEP 8：妆容收尾
 
-![妆容收尾：腮红、珠光高光、眉毛与渐变唇](./images/finish.png)
+![妆容收尾：腮红、珠光高光、眉毛与渐变唇](./images/finish.webp)
 
 #### 腮红
 
