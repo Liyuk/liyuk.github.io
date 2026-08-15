@@ -28,7 +28,7 @@ tags: [housing, forecasting, time-series, explainability, china]
 
 本文的定位不是"我们猜中了未来"，而是提出一种**可解释**的预测框架：每个预测数字都能拆解为若干可理解成分的加权，且权重由数据自身在滚动验证中选出。这使预测既可用于决策参考，也可被审计——当实际偏离预测时，能追溯到是哪个成分、哪个假设失效。
 
-本文聚焦中国二手住宅市场，基于 70 城官方二手指数。数据与方法细节建立在作者此前的工作上（Liyuk, 2026a），本文不再重复数据构建过程，直接使用其产出的连续面板。
+本文聚焦中国二手住宅市场，基于 70 城官方二手指数。数据与方法细节建立在作者此前的工作上（作者, 2026a），本文不再重复数据构建过程，直接使用其产出的连续面板。
 
 **本文贡献：**
 1. 提出可解释三成分组合预测方法，权重由滚动样本外验证自动选择；
@@ -53,7 +53,7 @@ tags: [housing, forecasting, time-series, explainability, china]
 
 ### 3.1 数据
 
-使用国家统计局 70 城二手住宅官方价格指数的月环比序列（2019-01 至 2026-06，90 个月，无缺口）。全国序列取 70 城月环比均值；北京取单城序列。数据构建细节见 Liyuk (2026a)。
+使用国家统计局 70 城二手住宅官方价格指数的月环比序列（2019-01 至 2026-06，90 个月，无缺口）。全国序列取 70 城月环比均值；北京取单城序列。数据构建细节见作者此前工作（作者, 2026a）。
 
 ### 3.2 可解释三成分组合
 
@@ -164,7 +164,7 @@ tags: [housing, forecasting, time-series, explainability, china]
 
 [6] Glaeser, E., & Nathanson, C. (2017). An Extrapolative Model of House Price Dynamics. *Journal of Financial Economics*, 126(1). https://www.nber.org/papers/w21037
 
-[7] Liyuk, K. (2026a). 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）. preprint, v0.4.
+[7] 作者. (2026a). 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）. preprint, v0.4.
 
 [8] Piazzesi, M., & Schneider, M. (2009). Momentum Traders in the Housing Market: Survey Evidence and a Search Model. *American Economic Review*, 99(2), 406–411. https://benny.aeaweb.org/articles?id=10.1257/aer.99.2.406
 
@@ -174,7 +174,7 @@ tags: [housing, forecasting, time-series, explainability, china]
 
 ## 作者与声明
 
-**作者：** 李鲲（Kun Li）
+**作者：** Liyuk
 
 **利益冲突：** 作者声明无利益冲突。本项目未受任何商业机构资助，不构成任何投资建议；预测输出不构成对未来房价的承诺或保证。
 
