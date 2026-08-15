@@ -42,11 +42,11 @@ tags: [data, machine-learning, housing, reproducibility, provenance]
 
 房价测量研究大致沿两条主线展开：一是**指数编制方法**，二是**数据来源与口径**。
 
-**指数编制。** 官方层面的国际比较研究（如中国与美国住房价格指数编制的对比）长期关注定基指数、同质指数与重复销售法的差异（《中美住房价格指数编制的对比研究》，2012）。在线挂牌信息作为价格数据来源近年受到关注：Wang 与 Li（2020）基于中国在线挂牌信息构造房价指数，发现挂牌价与成交价之间存在系统性的水平与方向偏离——这与本文第 5.6 节的跨口径观察（官方成交指数与挂牌环比不必然同向）相互印证。
+**指数编制与在线数据。** Wang、Li 与 Wu（2020）利用中国二手住宅市场的在线挂牌信息构造房价指数，覆盖 274 个城市，并论证挂牌数据在准确性与可行性之间提供了比官方登记交易信息更好的权衡（在处理重复与操纵数据之后）。该研究证明了在线挂牌数据在官方覆盖不足的城市（约 200 个中小城市）可作为价格指标来源，也说明官方与在线口径在覆盖面上存在系统性差异——这与本文"区级挂牌与官方指数属于不同口径、需分开处理"的立场一致，但本文不预设挂牌与官方之间偏离的方向与大小，而是通过字段标注让数据自行说明。
 
-**数据来源与口径。** IMF 对中国住宅房地产数据的系统性梳理（Chivakul et al., 2015）指出，中国官方房价数据（NBS 70 城指数）与市场第三方数据在覆盖、时点与口径上存在显著差异，使用者须明确区分。国内对房地产价格指数偏差的分析（《试析房地产价格指数的偏差与完善》，2010）也较早指出官方指数在样本覆盖与时序一致性上的局限。北京大学中国信用研究中心等机构则探讨了中国房价指数的构造与应用，强调口径统一对跨期可比性的影响。
+**数据来源与官方统计。** Chivakul 等（2015）基于多种数据集分析中国住宅地产的供需与过剩，按城市层级评估调整压力，指出小型城市及东北地区面临更严峻的供需动态。该研究展示了多源数据综合用于全国与城市层级分析的价值，也提示单一官方序列的覆盖局限。陈红艳（2010）较早指出按拉氏指数编制的全国 70 城价格指数存在个体与总体、价格采集、样本代表性、计算模型四方面的偏差；许永洪与曾五一（2012）则对比了 NBS 70 城指数与美国 Case-Shiller 指数的编制实践，讨论重复售出模型与拉氏指数的取舍。
 
-本文与上述工作的区别在于：不提出新的指数编制方法，而是把**数据来源的分级与口径的显式标注**本身作为方法贡献，用一套可复现的字段协议（`source_tier` / `methodology` / `is_transaction_price`）落地为可执行的数据资产。这与"诚实数据"（honest data）传统一脉相承：一个明确声明"数据不能告诉我们什么"的数据集，比一个混入异质口径的漂亮面板更有研究价值。
+本文与上述工作的区别在于：不提出新的指数编制方法，也不重复对官方指数的批评，而是把**数据来源的分级与口径的显式标注**本身作为方法贡献，用一套可复现的字段协议（`source_tier` / `methodology` / `is_transaction_price`）落地为可执行的数据资产。这与"诚实数据"（honest data）传统一脉相承：一个明确声明"数据不能告诉我们什么"的数据集，比一个混入异质口径的漂亮面板更有研究价值。
 
 ## 3. 数据资产与来源分级
 
@@ -239,13 +239,13 @@ LPR 侧，5 年期以上 LPR（与房贷直接相关）从 2019-08 推出时的 
 
 **学术文献**
 
-[1] Wang, X., & Li, C. (2020). House price index based on online listing information: The case of China. *Journal of Housing Economics*, 50, 101715. <https://www.sciencedirect.com/science/article/abs/pii/S1051137720300516>
+[1] Wang, X., Li, K., & Wu, J. (2020). House price index based on online listing information: The case of China. *Journal of Housing Economics*, 50, 101715. <https://www.sciencedirect.com/science/article/abs/pii/S1051137720300516>
 
-[2] Chivakul, M., Lam, W., Liu, X., & Maliszewski, W. (2015). *Understanding Residential Real Estate in China*. IMF Working Paper No. 15/84. <https://www.imf.org/en/publications/wp/issues/2016/12/31/understanding-residential-real-estate-in-china-42873>
+[2] Chivakul, M., Lam, W., Liu, X., Maliszewski, W., & Schipke, A. (2015). *Understanding Residential Real Estate in China*. IMF Working Paper No. 15/84. <https://www.imf.org/en/publications/wp/issues/2016/12/31/understanding-residential-real-estate-in-china-42873>
 
-[3] 张立群，等. (2012). 中美住房价格指数编制的对比研究. 《统计研究》, 29(12), 14–20. <https://tjyj.stats.gov.cn/CN/Y2012/V29/I12/14>
+[3] 许永洪，曾五一. (2012). 中美住房价格指数编制的对比研究. 《统计研究》, 29(12), 14–20. <https://tjyj.stats.gov.cn/CN/Y2012/V29/I12/14>
 
-[4] 试析房地产价格指数的偏差与完善. 《江西社会科学》, 2010(06). <https://wap.cnki.net/touch/web/Journal/Article/JXSH201006016.html>
+[4] 陈红艳. (2010). 试析房地产价格指数的偏差与完善. 《江西社会科学》, 2010(06). <https://wap.cnki.net/touch/web/Journal/Article/JXSH201006016.html>
 
 **官方数据源**
 
