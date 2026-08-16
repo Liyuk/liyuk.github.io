@@ -286,7 +286,7 @@ Structured thinking is not "the look of being organized," but making thinking jo
 
 The Five Lenses method combines these four steps into one repeatable path: first structure (separate conclusion, evidence, assumption, and next step), then use the five lenses to bring out connections (causal, duality, dialectical, position, interest), then distinguish surface from root, and finally aim the solution at the underlying constraint. This path does not guarantee a correct answer — no method can — but it guarantees this: when you arrive at a wrong answer, others can point out which cell the error sits in, and you yourself know which step to return to and redo.
 
-This paper is the "argument" version of the method; readers who just want to apply it can see the practical version, [*Structured Thinking in Practice*](/writing/2026/08/structured-thinking-practice/).
+This paper is the "argument" version of the method; readers who just want to apply it can see the practical version, [*Thinking Training (4): Structured Thinking in Practice*](/writing/2026/08/structured-thinking-practice/).
 
 ## References
 
