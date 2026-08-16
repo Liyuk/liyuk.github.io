@@ -60,7 +60,9 @@ const items = headings.filter((heading) => heading.depth >= 2 && heading.depth <
   const updateFixed = () => {
     if (!nav || !prose) return;
     if (!wideQuery.matches) { nav.classList.remove('is-fixed'); return; } // 折叠形态
-    const threshold = 80;
+    // 阈值必须与 CSS 里 .article-toc.is-fixed 的 top: 6rem（96px）一致，否则
+    // 切换瞬间目录会在 80px 与 96px 之间跳变 16px，产生抖动。
+    const threshold = 96;
     const firstParagraphTop = prose.getBoundingClientRect().top;
     nav.classList.toggle('is-fixed', firstParagraphTop <= threshold);
   };
