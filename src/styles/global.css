@@ -387,11 +387,15 @@ h1, h2, h3, p { margin-top: 0; }
   color: var(--muted);
   font-size: .9rem;
 }
+.about-fiction-desc {
+  max-width: 42rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
 .about-novel-list {
   display: grid;
   gap: .75rem;
-}
-.about-novel {
+}.about-novel {
   display: flex;
   flex-direction: column;
   gap: .3rem;
@@ -448,9 +452,6 @@ h1, h2, h3, p { margin-top: 0; }
   max-width: 42rem;
   color: var(--muted);
   line-height: 1.7;
-}
-.about-note {
-  font-size: .88rem;
 }
 .about-boundary .text-link {
   margin-top: 1.5rem;
