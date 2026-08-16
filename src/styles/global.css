@@ -10,10 +10,10 @@
   --serif: "Iowan Old Style", "Baskerville", "Noto Serif SC", "Songti SC", serif;
   --sans: Inter, "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   /* Layout tokens (kept in px so the breakpoints and min() clamps stay explicit). */
-  --shell-w: var(--shell-w);
-  --wide-w: var(--wide-w);
-  --article-w: var(--article-w);
-  --prose-w: var(--prose-w);
+  --shell-w: 1180px;
+  --wide-w: 1280px;
+  --article-w: 860px;
+  --prose-w: 690px;
 }
 
 @media (prefers-color-scheme: dark) {
