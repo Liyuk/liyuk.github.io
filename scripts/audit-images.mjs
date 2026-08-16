@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const imageExtension = /\.(avif|gif|jpe?g|png|svg|webp)$/i;
 const markdownExtension = /\.(md|mdx)$/i;
+const astroExtension = /\.astro$/i;
 
 export function extractImageReferences(source) {
   const markdown = [...source.matchAll(/!\[[^\]]*\]\(<?([^>)]+?)>?\)/g)]
@@ -14,7 +15,10 @@ export function extractImageReferences(source) {
     .map((match) => match[1]);
   const cover = [...source.matchAll(/^\s*cover:\s*["']?(\/images\/[^"'\s]+)["']?\s*$/gm)]
     .map((match) => match[1]);
-  return [...markdown, ...frontmatter, ...cover];
+  // .astro 组件里的 <img src="..."> 引用（如 TipCard 的打赏码）。
+  const htmlImg = [...source.matchAll(/<img[^>]+src=["']([^"']+)["']/g)]
+    .map((match) => match[1]);
+  return [...markdown, ...frontmatter, ...cover, ...htmlImg];
 }
 
 async function walk(directory) {
@@ -38,9 +42,12 @@ async function exists(file) {
 
 export async function auditImages(root = process.cwd()) {
   const contentRoot = path.join(root, 'src/content');
+  const srcRoot = path.join(root, 'src');
   const publicImageRoot = path.join(root, 'public/images');
   const contentFiles = await walk(contentRoot);
   const markdownFiles = contentFiles.filter((file) => markdownExtension.test(file) && path.basename(file) !== '_template.md');
+  // .astro 组件也可能引用图片（如 TipCard 的打赏码），纳入引用扫描。
+  const astroFiles = (await walk(srcRoot)).filter((file) => astroExtension.test(file));
   const assets = [
     ...contentFiles.filter((file) => imageExtension.test(file)),
     ...(await exists(publicImageRoot) ? (await walk(publicImageRoot)).filter((file) => imageExtension.test(file)) : []),
@@ -48,7 +55,7 @@ export async function auditImages(root = process.cwd()) {
   const referenced = new Set();
   const missing = [];
 
-  for (const file of markdownFiles) {
+  for (const file of [...markdownFiles, ...astroFiles]) {
     const source = await readFile(file, 'utf8');
     for (const reference of extractImageReferences(source)) {
       if (/^[a-z][a-z0-9+.-]*:/i.test(reference) || reference.startsWith('#')) continue;
