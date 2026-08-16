@@ -4,15 +4,15 @@
 
 ## Primary sections
 
-- [Writing](https://liyuk.github.io/writing/): essays and field notes.
-- [Projects](https://liyuk.github.io/projects/): products, tools, and experiments.
-- [Research](https://liyuk.github.io/research/): papers, research notes, and talks.
-- [Photos](https://liyuk.github.io/photos/): curated photography and field notes.
-- [Columns](https://liyuk.github.io/columns/): hand-curated reading paths.
-- [English](https://liyuk.github.io/en/): the full site with English article bodies and an English UI.
+- [Writing](https://liyuk.com/writing/): essays and field notes.
+- [Projects](https://liyuk.com/projects/): products, tools, and experiments.
+- [Research](https://liyuk.com/research/): papers, research notes, and talks.
+- [Photos](https://liyuk.com/photos/): curated photography and field notes.
+- [Columns](https://liyuk.com/columns/): hand-curated reading paths.
+- [English](https://liyuk.com/en/): the full site with English article bodies and an English UI.
 
 ## Machine-readable resources
 
-- [RSS (中文)](https://liyuk.github.io/rss.xml)
-- [RSS (English)](https://liyuk.github.io/en/rss.xml)
-- [Sitemap](https://liyuk.github.io/sitemap-index.xml)
+- [RSS (中文)](https://liyuk.com/rss.xml)
+- [RSS (English)](https://liyuk.com/en/rss.xml)
+- [Sitemap](https://liyuk.com/sitemap-index.xml)

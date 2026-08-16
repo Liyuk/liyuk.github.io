@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex';
 import { rehypeScrollWrap } from './src/lib/rehype-scroll-wrap.mjs';
 
 export default defineConfig({
-  site: 'https://liyuk.github.io',
+  site: 'https://liyuk.com',
   trailingSlash: 'always',
   i18n: {
     defaultLocale: 'zh-CN',

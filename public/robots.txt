@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://liyuk.github.io/sitemap-index.xml
+Sitemap: https://liyuk.com/sitemap-index.xml

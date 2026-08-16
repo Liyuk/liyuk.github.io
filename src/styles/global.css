@@ -60,7 +60,7 @@ a:hover { color: var(--accent); }
 .site-header ul { display: flex; align-items: center; gap: clamp(.8rem, 2vw, 1.65rem); margin: 0; padding: 0; list-style: none; }
 .site-header nav a { color: var(--muted); font-size: .78rem; font-weight: 600; letter-spacing: .025em; text-decoration: none; }
 .site-header nav a[aria-current="page"], .site-header nav a:hover { color: var(--ink); }
-.utility-controls { display: flex; align-items: center; gap: .65rem; color: var(--muted); font-size: .68rem; font-weight: 650; letter-spacing: .03em; white-space: nowrap; }
+.utility-controls { display: flex; align-items: center; gap: .65rem; color: var(--muted); font-size: .75rem; font-weight: 600; letter-spacing: .03em; white-space: nowrap; }
 .search-link { color: var(--ink); text-decoration: none; }
 .search-link:hover { color: var(--accent); }
 .language-switch { display: flex; gap: .3rem; align-items: center; }
@@ -71,7 +71,7 @@ a:hover { color: var(--accent); }
 .theme-toggle:hover { border-color: var(--accent); background: var(--accent-soft); }
 
 .hero { display: grid; grid-template-columns: 1.1fr .75fr; gap: 3rem; padding-block: clamp(6rem, 14vw, 12rem) clamp(5rem, 12vw, 10rem); }
-.eyebrow { margin: 0 0 1.2rem; color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .12em; line-height: 1.2; text-transform: uppercase; }
+.eyebrow { margin: 0 0 1.2rem; color: var(--accent); font-size: .78rem; font-weight: 700; letter-spacing: .12em; line-height: 1.2; text-transform: uppercase; }
 h1, h2, h3, p { margin-top: 0; }
 .hero h1, .page-heading h1 { grid-column: 1 / -1; max-width: 13ch; margin-bottom: 0; font-family: var(--serif); font-size: clamp(3rem, 6.5vw, 6.6rem); font-weight: 500; letter-spacing: -.065em; line-height: .98; }
 .hero .eyebrow { grid-column: 1 / -1; }
@@ -87,7 +87,7 @@ h1, h2, h3, p { margin-top: 0; }
 .section-intro h2 { margin: 0; font-family: var(--serif); font-size: clamp(2.25rem, 4.3vw, 4.8rem); font-weight: 500; letter-spacing: -.06em; line-height: 1.02; }
 .entry-list { border-top: 1px solid var(--line); }
 .entry-card { padding: 1.85rem 0 2rem; border-bottom: 1px solid var(--line); }
-.entry-meta { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.entry-meta { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); font-size: .78rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
 .entry-card h2 { max-width: 23ch; margin: .6rem 0 .75rem; font-family: var(--serif); font-size: clamp(1.65rem, 2.4vw, 2.5rem); font-weight: 500; letter-spacing: -.045em; line-height: 1.08; }
 .entry-card h2 a { text-decoration: none; }
 .entry-card p { max-width: 54ch; margin-bottom: 0; color: var(--muted); }
@@ -109,7 +109,7 @@ h1, h2, h3, p { margin-top: 0; }
   border: 1px solid var(--accent);
   border-radius: 4px;
   padding: .1rem .35rem;
-  font-size: .66rem;
+  font-size: .75rem;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -299,7 +299,7 @@ h1, h2, h3, p { margin-top: 0; }
 .gallery-card-copy { display: grid; gap: .35rem; padding: 1rem; }
 .gallery-card-copy strong { font-family: var(--serif); font-size: 1.5rem; font-weight: 500; letter-spacing: -.04em; line-height: 1.05; }
 .gallery-card-copy em { color: var(--muted); font-size: .86rem; font-style: normal; line-height: 1.45; }
-.gallery-card-copy small { margin-top: .25rem; color: var(--accent); font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.gallery-card-copy small { margin-top: .25rem; color: var(--accent); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .gallery-card:hover { color: var(--ink); background: var(--paper-strong); box-shadow: 0 14px 30px -18px rgba(0, 0, 0, .35); }
 .gallery-card:hover img { filter: saturate(1); transform: scale(1.025); }
 .gallery-detail { padding-block: clamp(5rem, 11vw, 9rem); }
@@ -336,12 +336,14 @@ h1, h2, h3, p { margin-top: 0; }
 }
 .about-map,
 .about-fiction,
+.about-cooperate,
 .about-boundary,
 .about-guestbook {
   max-width: 950px;
 }
 .about-map h2,
 .about-fiction h2,
+.about-cooperate h2,
 .about-guestbook h2 {
   margin: 0 0 1.5rem;
   font-family: var(--serif);
@@ -408,6 +410,40 @@ h1, h2, h3, p { margin-top: 0; }
   color: var(--muted);
   font-size: .9rem;
 }
+.about-cooperate-desc {
+  max-width: 42rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.about-cooperate-list {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: .75rem;
+}
+.about-cooperate-list li {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper-strong);
+}
+.about-cooperate-list strong {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.about-cooperate-list span {
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.6;
+}
+.about-cooperate .text-link {
+  margin-top: 1.5rem;
+}
 .about-boundary p {
   max-width: 42rem;
   color: var(--muted);
@@ -419,6 +455,12 @@ h1, h2, h3, p { margin-top: 0; }
 .about-boundary .text-link {
   margin-top: 1.5rem;
 }
+.about-boundary .text-link + .text-link {
+  margin-left: 1.5rem;
+}
+.about-x-note {
+  font-size: .82rem;
+}
 
 .article { max-width: var(--article-w); padding-block: clamp(5rem, 11vw, 9rem); }
 .article header { max-width: 760px; margin-bottom: clamp(3rem, 7vw, 6rem); }
@@ -428,7 +470,9 @@ h1, h2, h3, p { margin-top: 0; }
 .prose { max-width: var(--prose-w); font-family: var(--serif); font-size: clamp(1.15rem, 1.5vw, 1.32rem); line-height: 1.9; }
 .prose p + p { margin-top: 1.4em; }
 .prose a { color: var(--accent); }
-.prose h2 { margin-top: 2.6em; font-family: var(--sans); font-size: 1.25rem; letter-spacing: -.025em; }
+.prose h2 { margin-top: 2em; margin-bottom: .9em; font-family: var(--sans); font-size: 1.5rem; font-weight: 600; line-height: 1.3; letter-spacing: -.02em; }
+.prose h3 { margin-top: 1.8em; margin-bottom: .6em; font-family: var(--sans); font-size: 1.2rem; font-weight: 600; line-height: 1.4; letter-spacing: -.01em; }
+.prose h4 { margin-top: 1.5em; margin-bottom: .5em; font-family: var(--sans); font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
 .prose code { padding: .12em .3em; background: var(--paper-strong); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8em; }
 
 /* Tables previously rendered with browser defaults — no borders, padding, or
@@ -584,9 +628,11 @@ h1, h2, h3, p { margin-top: 0; }
 .locale-zh .work-badge,
 .locale-zh .article-toc strong,
 .locale-zh .gallery-card-copy small,
-.locale-zh .gallery-header > span {
-  letter-spacing: 0;
-  text-transform: none;
+.locale-zh .gallery-header > span,
+.locale-zh .tip-card-toggle-copy .eyebrow,
+.locale-zh .column-card-title .eyebrow {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
 }
 .locale-zh .hero h1,
 .locale-zh .page-heading h1,
@@ -599,11 +645,17 @@ h1, h2, h3, p { margin-top: 0; }
   line-height: 1.18;
   letter-spacing: -0.02em;
 }
-/* Body h2: serif in Chinese (keeps the site-wide "headings are serif" rule);
-   English keeps the sans contrast set by the base .prose h2 rule. */
-.locale-zh .prose h2 {
+/* Body headings: serif in Chinese (keeps the site-wide "headings are serif" rule);
+   English keeps the sans contrast set by the base .prose h2/h3/h4 rules. */
+.locale-zh .prose h2,
+.locale-zh .prose h3,
+.locale-zh .prose h4 {
   font-family: var(--serif);
+  letter-spacing: 0;
 }
+
+/* English prose reads looser than CJK at the same line-height; tighten it. */
+.locale-en .prose { line-height: 1.7; }
 
 .project-hero { max-width: var(--article-w); margin: 0 0 clamp(2.5rem, 6vw, 4.5rem); }
 .project-hero img { width: 100%; height: auto; display: block; border: 1px solid var(--line); background: var(--paper-strong); }
@@ -629,7 +681,7 @@ h1, h2, h3, p { margin-top: 0; }
   .practice-grid { grid-template-columns: 1fr; margin-inline: auto; }
   .practice-card, .practice-card:first-child { min-height: 15rem; border-right: 1px solid var(--line); border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .entry-card h2 { font-size: 1.8rem; }
-  .entry-meta { font-size: .67rem; }
+  .entry-meta { font-size: .75rem; }
   .taxonomy-grid { grid-template-columns: 1fr; }
   .taxonomy-grid a, .taxonomy-grid a:first-child { min-height: 11rem; border-left: 1px solid var(--line); }
   .column-grid { grid-template-columns: 1fr; }
