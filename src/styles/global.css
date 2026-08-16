@@ -475,6 +475,33 @@ h1, h2, h3, p { margin-top: 0; }
 .prose h4 { margin-top: 1.5em; margin-bottom: .5em; font-family: var(--sans); font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
 .prose code { padding: .12em .3em; background: var(--paper-strong); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8em; }
 
+/* 基础 Markdown 元素：blockquote / 列表 / 分隔线。此前只写了 p/a/h/code/table，
+   这些元素一直落在浏览器默认样式上，与正文排版脱节。 */
+.prose blockquote {
+  margin: 1.6em 0;
+  padding: .4em 0 .4em 1.1em;
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+}
+.prose blockquote p { margin: 0; }
+.prose blockquote p + p { margin-top: .8em; }
+.prose ul,
+.prose ol {
+  margin: 1.2em 0;
+  padding-left: 1.4em;
+}
+.prose li { margin: .35em 0; }
+.prose li::marker { color: var(--accent); }
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul { margin: .35em 0; }
+.prose hr {
+  margin: 2.4em 0;
+  border: none;
+  border-top: 1px solid var(--line);
+}
+
 /* Tables previously rendered with browser defaults — no borders, padding, or
    header treatment. Give data tables a real look, and let wide ones scroll
    (via the .scroll-wrap added at build time) instead of crushing their columns. */
