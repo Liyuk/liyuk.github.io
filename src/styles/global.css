@@ -5,7 +5,7 @@
   --ink: #232522;
   --muted: #696a65;
   --line: #ddd8ce;
-  --accent: #3e7c70;
+  --accent: #35685d;
   --accent-soft: #dcebe5;
   --serif: "Iowan Old Style", "Baskerville", "Noto Serif SC", "Songti SC", serif;
   --sans: Inter, "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
@@ -94,7 +94,7 @@ h1, h2, h3, p { margin-top: 0; }
   padding: 1.6rem 1.4rem;
   margin-bottom: 1.2rem;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--paper-strong);
 }
 .work-card .entry-meta {
@@ -234,6 +234,9 @@ h1, h2, h3, p { margin-top: 0; }
 .search-results li { padding: 1.2rem 0; border-bottom: 1px solid var(--line); }
 .search-results a { font-family: var(--serif); font-size: 1.5rem; font-weight: 500; letter-spacing: -.035em; text-decoration: none; }
 .search-results p { margin: .45rem 0 0; color: var(--muted); }
+.writing-years { display: flex; flex-wrap: wrap; gap: .4rem .9rem; margin-bottom: 1.5rem; }
+.writing-years a { color: var(--muted); font-size: .8rem; font-weight: 700; text-decoration: none; }
+.writing-years a:hover { color: var(--accent); }
 .writing-sort { display: flex; flex-wrap: wrap; align-items: baseline; gap: .55rem .8rem; margin-bottom: 1.5rem; color: var(--muted); font-size: .8rem; }
 .writing-sort label { color: var(--ink); font-weight: 700; }
 .writing-sort select { padding: .38rem 1.9rem .38rem .55rem; border: 1px solid var(--line); border-radius: 0; background: var(--paper); color: var(--ink); font: inherit; }
@@ -372,6 +375,46 @@ h1, h2, h3, p { margin-top: 0; }
 .prose h2 { margin-top: 2.6em; font-family: var(--sans); font-size: 1.25rem; letter-spacing: -.025em; }
 .prose code { padding: .12em .3em; background: var(--paper-strong); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8em; }
 
+/* Tables previously rendered with browser defaults — no borders, padding, or
+   header treatment. Give data tables a real look, and let wide ones scroll
+   (via the .scroll-wrap added at build time) instead of crushing their columns. */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.6em 0;
+  font-family: var(--sans);
+  font-size: .9rem;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--line);
+  padding: .5em .7em;
+  text-align: left;
+  vertical-align: top;
+}
+.prose thead th { background: var(--paper-strong); font-weight: 700; }
+.prose tbody tr:nth-child(even) { background: var(--paper-strong); }
+
+/* Build-time scroll wrappers around tables and mermaid diagrams. */
+.prose .scroll-wrap {
+  max-width: 100%;
+  margin: 1.6em 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.prose .scroll-wrap > table { margin: 0; }
+.prose .scroll-wrap > svg { display: block; margin: 0 auto; }
+
+/* Responsive fallbacks: never let media, long tokens, or wide math overflow
+   the article column. */
+.prose img,
+.prose video,
+.prose iframe { max-width: 100%; height: auto; }
+.prose { overflow-wrap: anywhere; }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: .3em 0; }
+
 /* Fenced code blocks (Shiki). Light theme colors come inline; the dark theme is
    carried on each element via --shiki-dark* custom properties, swapped here to
    follow the site's `data-theme` toggle (and OS dark before any toggle). */
@@ -462,6 +505,50 @@ h1, h2, h3, p { margin-top: 0; }
   fill: var(--paper) !important;
 }
 
+/* stateDiagram divider lines (mermaid emits them as #000, invisible on dark),
+   and edgeLabel rects that carry a residual 0.5 opacity from mermaid's theme. */
+.prose svg[id^="mermaid-"] .divider {
+  stroke: var(--line) !important;
+}
+.prose svg[id^="mermaid-"] .edgeLabel rect {
+  opacity: 1 !important;
+}
+
+/* Locale-scoped typography. The <html> element carries a `locale-zh` /
+   `locale-en` class (BaseLayout), giving the two languages separate type
+   systems: CJK glyphs are near-full-height and have no case, so Latin wide
+   tracking (meant for uppercase labels) and ultra-tight display leading fight
+   them. Reset tracking and relax leading under the zh locale only. */
+.locale-zh .eyebrow,
+.locale-zh .entry-meta,
+.locale-zh .practice-card span,
+.locale-zh .column-grid span,
+.locale-zh .column-chapters li > span,
+.locale-zh .start-grid span,
+.locale-zh .work-badge,
+.locale-zh .article-toc strong,
+.locale-zh .gallery-card-copy small,
+.locale-zh .gallery-header > span {
+  letter-spacing: 0;
+  text-transform: none;
+}
+.locale-zh .hero h1,
+.locale-zh .page-heading h1,
+.locale-zh .article h1,
+.locale-zh .gallery-header h1 {
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+}
+.locale-zh .section-intro h2 {
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+/* Body h2: serif in Chinese (keeps the site-wide "headings are serif" rule);
+   English keeps the sans contrast set by the base .prose h2 rule. */
+.locale-zh .prose h2 {
+  font-family: var(--serif);
+}
+
 .project-hero { max-width: var(--article-w); margin: 0 0 clamp(2.5rem, 6vw, 4.5rem); }
 .project-hero img { width: 100%; height: auto; display: block; border: 1px solid var(--line); background: var(--paper-strong); }
 .project-hero figcaption { margin-top: .7rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
@@ -474,7 +561,7 @@ h1, h2, h3, p { margin-top: 0; }
   .site-header { width: min(100% - 2rem, var(--wide-w)); min-height: 5.6rem; display: grid; grid-template-columns: 1fr auto; gap: .4rem .55rem; padding-block: .7rem; }
   .site-header nav { grid-column: 1 / -1; margin-left: 0; min-width: 0; }
   .site-header ul { gap: .58rem; }
-  .site-header nav a { font-size: .64rem; }
+  .site-header nav a { font-size: .72rem; }
   .hero { display: block; padding-block: 5.5rem 6rem; }
   .hero h1, .page-heading h1 { font-size: clamp(3rem, 13vw, 4.6rem); }
   .hero-copy { max-width: 31rem; margin-top: 2.25rem; }
@@ -494,6 +581,10 @@ h1, h2, h3, p { margin-top: 0; }
   .article { padding-block: 4.7rem; }
   .article h1 { font-size: clamp(2.85rem, 12vw, 4.5rem); }
   .prose { font-size: 1.14rem; line-height: 1.85; }
+  .prose .scroll-wrap > table { width: auto; min-width: 100%; }
+  .prose .scroll-wrap > table th,
+  .prose .scroll-wrap > table td { white-space: nowrap; }
+  .prose .scroll-wrap > svg[id^="mermaid-"] { max-width: none; min-width: 520px; }
   .gallery-masonry { columns: 2 11rem; column-gap: .75rem; }
   .gallery-card { margin-bottom: .75rem; }
   .gallery-card-copy { padding: .85rem; }

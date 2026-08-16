@@ -27,7 +27,7 @@ const defaultUrl = isEnglish ? new URL('/', Astro.site) : new URL(Astro.url.path
 ---
 
 <!doctype html>
-<html lang={locale}>
+<html lang={locale} class:list={[isEnglish ? 'locale-en' : 'locale-zh']}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />

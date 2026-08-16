@@ -24,5 +24,4 @@ const lastUpdatedLabel = entry.data.updatedAt ? `${ui.entry.updatedAt} ${lastUpd
   <p>{entry.data.description}</p>
   {entry.data.column && <p class="column-reference">{ui.entry.columnIn(getColumn(entry.data.column.slug, locale)?.label ?? entry.data.column.slug, entry.data.column.order)}</p>}
   <TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} max={MAX_CARD_TAGS} />
-  <a class="text-link" href={writingUrl(entry.id, locale)}>{ui.entry.readFull} <span aria-hidden="true">↗</span></a>
 </article>

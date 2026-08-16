@@ -3,6 +3,7 @@ import sitemap from '@astrojs/sitemap';
 import rehypeMermaid from 'rehype-mermaid';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { rehypeScrollWrap } from './src/lib/rehype-scroll-wrap.mjs';
 
 export default defineConfig({
   site: 'https://liyuk.github.io',
@@ -32,6 +33,8 @@ export default defineConfig({
       [rehypeMermaid, { strategy: 'inline-svg', mermaidConfig: { theme: 'neutral' } }],
       // A malformed formula renders in red instead of failing the whole build.
       [rehypeKatex, { throwOnError: false, strict: 'ignore' }],
+      // Wrap wide tables/mermaid SVGs in a scroll container for narrow screens.
+      rehypeScrollWrap,
     ],
   },
   integrations: [sitemap({ filter: (page) => !page.endsWith('/search/') && !page.endsWith('/en/search/') })],

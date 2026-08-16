@@ -22,6 +22,8 @@ export const site = {
     { href: '/research/', key: 'research' },
     { href: '/photos/', key: 'photos' },
     { href: '/about/', key: 'about' },
+    { href: '/start/', key: 'start' },
+    { href: '/tags/', key: 'tags' },
   ],
   translation: {
     sourceLocale: 'zh-CN',
