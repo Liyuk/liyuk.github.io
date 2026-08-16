@@ -54,16 +54,16 @@ Don't start with "I want to monitor a page" or "I want to improve performance." 
 
 For each core task, first write a card no longer than one page. It doesn't need an approval process, but it should be reviewed by relevant collaborators before instrumentation or analysis begins.
 
-```text
-Task name: Save draft
-Target user: Someone who is editing content and wants to continue later
-Start point: The editing page has completed the necessary input, and the user clicks "Save"
-End point: The user gets a clear success or failure result
-Success: The draft can be opened later, and its content matches what the user submitted
-Failure: An explicit failure, a timeout, or the user leaves before confirming the result
-Excluded: Test traffic, auto-save (counted separately from manual save)
-Key risks: Repeated clicks on a weak network, leaving the page, inconsistency between client and server state
-```
+| Field | Value |
+| --- | --- |
+| Task name | Save draft |
+| Target user | Someone who is editing content and wants to continue later |
+| Start point | The editing page has completed the necessary input, and the user clicks "Save" |
+| End point | The user gets a clear success or failure result |
+| Success | The draft can be opened later, and its content matches what the user submitted |
+| Failure | An explicit failure, a timeout, or the user leaves before confirming the result |
+| Excluded | Test traffic, auto-save (counted separately from manual save) |
+| Key risks | Repeated clicks on a weak network, leaving the page, inconsistency between client and server state |
 
 **Why do this:** it distinguishes "the save API returns 200" from "the user actually has a recoverable draft." The API is an implementation detail; the task result is the object to protect.
 
@@ -122,17 +122,17 @@ A task should not be tied to just one metric. A minimal usable metric set usuall
 
 Keep a definition card for each core metric. It should be short enough to read through in a review, and complete enough for another colleague to recompute.
 
-```text
-Name: User-visible completion rate of saving a draft
-Purpose: Judge whether the user gets a clear save-success result within a reasonable time
-Object: One manual save task (linked by task ID)
-Numerator: The number of tasks that produced draft_save_succeeded within the agreed window
-Denominator: The number of tasks that produced draft_save_started and meet the statistical conditions
-Excluded: Test traffic, duplicate events, events that cannot be linked to a task ID (reported separately as coverage)
-Breakdown: Platform, app version, network type, entry point
-Companion metrics: P95 visible wait, timeout rate, final processing success rate, retry rate
-Known boundary: This metric alone cannot judge whether the saved content fully matches the user's expectation
-```
+| Field | Value |
+| --- | --- |
+| Name | User-visible completion rate of saving a draft |
+| Purpose | Judge whether the user gets a clear save-success result within a reasonable time |
+| Object | One manual save task (linked by task ID) |
+| Numerator | The number of tasks that produced draft_save_succeeded within the agreed window |
+| Denominator | The number of tasks that produced draft_save_started and meet the statistical conditions |
+| Excluded | Test traffic, duplicate events, events that cannot be linked to a task ID (reported separately as coverage) |
+| Breakdown | Platform, app version, network type, entry point |
+| Companion metrics | P95 visible wait, timeout rate, final processing success rate, retry rate |
+| Known boundary | This metric alone cannot judge whether the saved content fully matches the user's expectation |
 
 ### Metric set example: don't let a single number carry the conclusion alone
 
@@ -264,14 +264,14 @@ The end of data analysis is not "finding the problem", but clarifying the next a
 
 ### Method: the action-hypothesis card
 
-```text
-Observation: Under weak networks, the user-visible completion rate dropped, while P95 wait time and repeated-click rate rose.
-Hypothesis: The submission result has returned, but the client does not refresh the success state promptly after the network recovers.
-Action: Fix the state refresh; provide a clear status while waiting; make repeated clicks idempotent.
-Expected: The user-visible completion rate rises, while the timeout rate and retry rate drop; the final processing success rate should not get worse.
-Verification: Under the same version range and the same network slice, compare complete statistics windows before and after the change; return to the original task and verify manually.
-Risk guardrails: The error rate, content-consistency problems, and crash rate must not worsen.
-```
+| Field | Value |
+| --- | --- |
+| Observation | Under weak networks, the user-visible completion rate dropped, while P95 wait time and repeated-click rate rose. |
+| Hypothesis | The submission result has returned, but the client does not refresh the success state promptly after the network recovers. |
+| Action | Fix the state refresh; provide a clear status while waiting; make repeated clicks idempotent. |
+| Expected | The user-visible completion rate rises, while the timeout rate and retry rate drop; the final processing success rate should not get worse. |
+| Verification | Under the same version range and the same network slice, compare complete statistics windows before and after the change; return to the original task and verify manually. |
+| Risk guardrails | The error rate, content-consistency problems, and crash rate must not worsen. |
 
 The key here is to write the "expectation" as a set of metrics, rather than just "the experience is better". If a change raises the completion rate but increases errors or duplicate content, the guardrails will expose that cost in time.
 
@@ -292,15 +292,15 @@ A metric system is not a one-off project. A lightweight, sustainable rhythm usua
 
 ### One-page anomaly record template
 
-```text
-Discovery time and metric: When, which metric, and against which baseline did the change appear?
-Scope: Which platforms, versions, networks, or tasks are affected? What are the numerator, denominator, and sample size?
-User impact: What will the user see, and can they still complete the task?
-Data credibility: Are coverage, latency, definitions, and the collection pipeline normal?
-Current evidence: Which metrics or logs support it, and which facts are not yet confirmed?
-Action: Mitigate first, keep investigating, fix, or observe? Who is responsible and when will it be verified?
-Verification result: How does the same-caliber data change after the action, are the guardrails stable, and does tracking need to continue?
-```
+| Field | Value |
+| --- | --- |
+| Discovery time and metric | When, which metric, and against which baseline did the change appear? |
+| Scope | Which platforms, versions, networks, or tasks are affected? What are the numerator, denominator, and sample size? |
+| User impact | What will the user see, and can they still complete the task? |
+| Data credibility | Are coverage, latency, definitions, and the collection pipeline normal? |
+| Current evidence | Which metrics or logs support it, and which facts are not yet confirmed? |
+| Action | Mitigate first, keep investigating, fix, or observe? Who is responsible and when will it be verified? |
+| Verification result | How does the same-caliber data change after the action, are the guardrails stable, and does tracking need to continue? |
 
 Its value is that the next participant doesn't have to start over from an isolated screenshot, and that retrospectives can distinguish "facts known at the time" from "explanations confirmed later".
 
@@ -308,15 +308,15 @@ Its value is that the next participant doesn't have to start over from an isolat
 
 What's easiest to omit in metric arguments is not the formula, but the exclusions. It's recommended to keep a short definition for each core metric:
 
-```text
-Name: Draft-save task completion rate
-Object: One user task from the start of editing to a clear save result
-Numerator: The number of tasks that got a "save succeeded" result within the agreed window
-Denominator: The number of save tasks started and meeting the statistical conditions
-Excluded: Test traffic, duplicate reports, tasks the user actively cancelled (counted separately)
-Dimensions: Platform, version, network type, region, entry point
-Latency: How long after the event the data becomes available for analysis
-```
+| Field | Value |
+| --- | --- |
+| Name | Draft-save task completion rate |
+| Object | One user task from the start of editing to a clear save result |
+| Numerator | The number of tasks that got a "save succeeded" result within the agreed window |
+| Denominator | The number of save tasks started and meeting the statistical conditions |
+| Excluded | Test traffic, duplicate reports, tasks the user actively cancelled (counted separately) |
+| Dimensions | Platform, version, network type, region, entry point |
+| Latency | How long after the event the data becomes available for analysis |
 
 This definition doesn't need to be long, but it should be enough for another reader to recompute independently and to know how it differs from similar metrics.
 

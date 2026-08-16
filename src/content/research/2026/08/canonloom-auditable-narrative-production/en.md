@@ -510,21 +510,19 @@ The project repository provides command-line entries, schemas, example projects,
 
 ### 15.2 What Each Experiment Must Record
 
-```text
-repo_commit
-model_id
-model_parameters
-prompt_or_skill_version
-input_manifest_and_hashes
-chapter_contract
-random_seed_if_available
-token_usage
-wall_clock_time
-retry_count
-review_findings
-author_edits
-final_ratings
-```
+- repo_commit
+- model_id
+- model_parameters
+- prompt_or_skill_version
+- input_manifest_and_hashes
+- chapter_contract
+- random_seed_if_available
+- token_usage
+- wall_clock_time
+- retry_count
+- review_findings
+- author_edits
+- final_ratings
 
 ### 15.3 Reproduction Experiment Steps
 

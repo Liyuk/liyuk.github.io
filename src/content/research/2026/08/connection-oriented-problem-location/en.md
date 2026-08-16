@@ -341,12 +341,10 @@ This paper is the "argument" version of the method; readers who just want to app
 
 To start using the Five Lenses method from scratch, four minimal deliverables are enough:
 
-```text
 1. Structured proposition card (conclusion / evidence / assumption / next step, four cells)
 2. Five-lens question list (causal / duality / dialectical / position / interest, one question each)
 3. Root-problem statement (one refutable statement, including "under what conditions I would admit I'm wrong")
 4. Alignment check (whether the solution is aimed at the underlying constraint, not the surface symptoms)
-```
 
 You do not need to use every tool at once. Start from a real, scattered problem description and run one small closed loop of "Structure → five lenses → distinguish surface/root → aim the solution," which is usually more valuable than finishing an entire book of tools.
 

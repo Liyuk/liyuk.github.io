@@ -91,14 +91,12 @@ The new hire's early tasks should be real enough, but relatively controllable in
 
 In this stage, the two of you can jointly build a one-page "onboarding map" that includes:
 
-```text
-我负责或参与的结果：
-关键协作者与各自关注点：
-常用信息来源与它们的用途：
-当前最不清楚的三个问题：
-本阶段要练习的一个能力：
-何时、以什么方式获得反馈：
-```
+- The results I own or contribute to:
+- Key collaborators and what each cares about:
+- Common information sources and their uses:
+- The three questions I'm least clear about right now:
+- One capability to practice at this stage:
+- When and how to get feedback:
 
 It does not need to become a work log. The purpose is simply to turn the scattered information in the new hire's head into something that can be discussed. What the mentor should see is not just "how much was completed," but also how the new hire understands the problem, where they hesitate, and whether they can surface risks early. The mentor is responsible for the key gaps in it: point out which contexts must be filled in, introduce who can provide useful input, and temporarily shield the new hire from problems that don't suit the current stage.
 

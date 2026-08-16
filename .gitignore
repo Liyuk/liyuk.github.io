@@ -10,3 +10,4 @@ output/
 # 这些目录保留在仓库外（见 README「Legacy site」）：内容已迁移进 src/content，
 # 原始文档/图源为不可再生的独有源文件，若在仓库内会被公开部署。
 docs/
+.agent-teams/

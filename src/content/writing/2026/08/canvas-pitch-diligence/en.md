@@ -33,11 +33,7 @@ The nine boxes, and the "four on each side with one in the middle" layout — se
 
 ## 2. Startup pitch: told to others
 
-Facing investors, in a few minutes you turn "why now, why us, why worth investing" into a story with rhythm. The typical structure is a ten-step pipeline:
-
-```
-Problem → Solution → Market → Why now → Product → Business model → Competition → Team → Traction → Funding ask
-```
+Facing investors, in a few minutes you turn "why now, why us, why worth investing" into a story with rhythm. The typical structure is a ten-step pipeline: Problem → Solution → Market → Why now → Product → Business model → Competition → Team → Traction → Funding ask.
 
 ```mermaid
 flowchart LR

@@ -52,17 +52,17 @@ Whatever formula you use, the statistics table must explicitly label the metric-
 
 After spotting a fluctuation, don't immediately write a long retrospective. First create a one-page anomaly record so collaborators can share the current evidence.
 
-```text
-Anomaly: The user-visible completion rate of search-and-open results has dropped below baseline.
-Time: The first complete statistics window in which it was observed; the current metric-definition version.
-Scope: Affected platforms, versions, and network conditions; numerator, denominator, and sample size.
-User impact: Users may be unable to reach results, or may need to wait, retry, or exit.
-Confirmed facts: The completion rate dropped; the timeout rate rose under a certain network condition; data latency is normal.
-Hypotheses to verify: The client did not refresh result status in time after a network switch.
-Not evidence: It has not been proven that server-side processing failed, nor that all network conditions are affected.
-Current actions: Limit the release scope; collect reproducible logs; prepare a fix and a rollback.
-Verification time: After the fix, re-check using the same metric definition and the same breakdown.
-```
+| Field | Value |
+| --- | --- |
+| Anomaly | The user-visible completion rate of search-and-open results has dropped below baseline. |
+| Time | The first complete statistics window in which it was observed; the current metric-definition version. |
+| Scope | Affected platforms, versions, and network conditions; numerator, denominator, and sample size. |
+| User impact | Users may be unable to reach results, or may need to wait, retry, or exit. |
+| Confirmed facts | The completion rate dropped; the timeout rate rose under a certain network condition; data latency is normal. |
+| Hypotheses to verify | The client did not refresh result status in time after a network switch. |
+| Not evidence | It has not been proven that server-side processing failed, nor that all network conditions are affected. |
+| Current actions | Limit the release scope; collect reproducible logs; prepare a fix and a rollback. |
+| Verification time | After the fix, re-check using the same metric definition and the same breakdown. |
 
 Separating "confirmed" from "to be verified" prevents the discussion from being led astray by the earliest guess. One principle of a retrospective is always worth keeping: its purpose is to solve the problem, not to find someone to blame. Data records should help people reconstruct conditions and take action, not disguise uncertainty as a definite conclusion.
 

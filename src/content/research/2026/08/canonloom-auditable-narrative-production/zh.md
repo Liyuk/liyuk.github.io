@@ -506,21 +506,19 @@ CanonLoom 应使用作者拥有或有权处理的材料。参考作品只能在�
 
 ### 15.2 每次实验需要记录
 
-```text
-repo_commit
-model_id
-model_parameters
-prompt_or_skill_version
-input_manifest_and_hashes
-chapter_contract
-random_seed_if_available
-token_usage
-wall_clock_time
-retry_count
-review_findings
-author_edits
-final_ratings
-```
+- repo_commit
+- model_id
+- model_parameters
+- prompt_or_skill_version
+- input_manifest_and_hashes
+- chapter_contract
+- random_seed_if_available
+- token_usage
+- wall_clock_time
+- retry_count
+- review_findings
+- author_edits
+- final_ratings
 
 ### 15.3 复现实验步骤
 

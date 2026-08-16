@@ -176,13 +176,11 @@ The value of data measurement lies not in covering more pages or generating more
 
 The value of a protocol lies in being adoptable. A team starting from scratch can begin with five minimal artifacts:
 
-```text
-1. 任务定义卡（每项核心任务一页）
-2. 状态-事件表（覆盖成功/失败/取消/超时）
-3. 指标定义卡（五部分口径 + 分母 + 排除项）
-4. 核心/观察/按需三张清单（含护栏与数据质量）
-5. 行动假设卡（观察 → 假设 → 行动 → 预期 → 验证 → 护栏）
-```
+1. Task definition card (one page per core task)
+2. State–event table (covering success / failure / cancel / timeout)
+3. Metric definition card (five-part definition + denominator + exclusions)
+4. Core / observed / on-demand lists (with guardrails and data quality)
+5. Action hypothesis card (observe → hypothesize → act → expect → verify → guardrail)
 
 There is no need to build all metrics at once. Start from one key user task and complete a small loop in the order "define the task → draw the states → collect events → build the metric group → investigate changes → verify the action"; this is usually more valuable than spreading out dozens of charts.
 

@@ -33,31 +33,29 @@ A note up front: tools are good at helping you structure your thinking and actin
 
 ## After — The Tidied-Up Version
 
-```text
-研发与运营效率：保证基本面效率提升
+**R&D and operational efficiency: guarantee the fundamentals improve**
 
-运营提效需要以业务理解为基础，聚焦高频、强时效场景的真实痛点，通过工具链优化或轻量配置能力，支持小而快需求的高效交付。目标是把重复性操作转化为可复用、可沉淀的标准能力，在合适的场景中减少人力投入。
+Operational efficiency must be grounded in business understanding, focusing on real pain points in high-frequency, time-sensitive scenarios. Use toolchain optimization or lightweight configuration capabilities to support the efficient delivery of small, fast requirements. The goal is to turn repetitive operations into reusable, sinkable standard capabilities, and reduce labor input where appropriate.
 
-研发提效的核心是降低边际人力成本。持续建设配置化能力、研发工作台、链路排查等手段，减少接入和排障成本；更进一步，将有效的能力沉淀为基础设施，支持多个场景复用。
+The core of R&D efficiency is lowering marginal labor cost. Keep building configuration capabilities, a development workbench, and link-tracing tooling to reduce integration and troubleshooting costs; further, sink effective capabilities into infrastructure for reuse across scenarios.
 
-人力压力：资源有限时，除了效率，也要关注真实负荷
+**Labor pressure: when resources are limited, watch real workload, not just efficiency**
 
-减轻真实工作负荷：识别并消除低价值重复劳动，例如多端重复配置、非流程化的兜底工作；推进自动化，例如自动回归、告警降噪；通过合理排期与容量管理，避免资源超载带来的质量下降和返工。
+Reduce real workload: identify and eliminate low-value repetitive labor, such as multi-end duplicate configuration and non-process fallback work; push automation, such as auto-regression and alert-noise reduction; through reasonable scheduling and capacity management, avoid quality degradation and rework from resource overload.
 
-减少非技术性负担与心理压力：保持会议精简，减少形式化工作，确保核心协作和信息同步到位；明确需求准入与优先级，避免“所有事都紧急”。关注团队成员的负荷与状态，保证可持续工作。
+Reduce non-technical burden and psychological pressure: keep meetings lean, cut formalized work, and ensure core collaboration and information sync are in place; make requirement admission and priority explicit, avoiding "everything is urgent." Pay attention to team members' load and state to keep work sustainable.
 
-架构合理性：效率提升以合理的系统架构为前提。好的架构不仅提高迭代速度，也会减少定制开发、联调成本和线上问题，从而缓解人力压力。
+Architectural soundness: efficiency improvement presupposes a reasonable system architecture. A good architecture not only raises iteration speed, but also reduces custom development, integration cost, and online issues, thereby easing labor pressure.
 
-架构治理：短期需求的持续堆叠会带来耦合、逻辑冗余和维护成本上升。需要持续推进：（1）模块解耦与边界清晰化；（2）接口标准化与能力下沉；（3）对高复用路径进行抽象和治理。
+Architecture governance: the continuous piling-up of short-term requirements brings coupling, logical redundancy, and rising maintenance cost. Keep advancing: (1) module decoupling with clear boundaries; (2) interface standardization and capability sinking; (3) abstraction and governance of high-reuse paths.
 
-用户体验：持续提升核心场景体验。性能与用户体验、转化等指标相关；离线能力、包体积压缩、预加载策略等方面仍有空间，需要长期、系统性建设，尤其关注用户动线和首屏等关键路径。
+User experience: keep improving core-scenario experience. Performance correlates with user experience and conversion metrics; offline capability, bundle-size compression, and preloading strategy all still have room, and need long-term, systematic building — especially the user flow and the first screen.
 
-稳定性建设：稳定性是效率与人力健康的基石，需要关注事前、事中、事后的动作。持续提升全链路监控和报警召回速度，缩短平均修复时间；强化单元测试、端到端测试、巡检与产物检查等前置质量保障；建设故障回放与现场复现能力，支撑根因分析和预防闭环。
+Stability: stability is the bedrock of efficiency and labor health, requiring attention to before-, during-, and after-the-fact actions. Keep improving full-chain monitoring and alert recall speed to shorten mean time to repair; strengthen unit tests, end-to-end tests, inspection, and artifact checks as front-line quality assurance; build failure replay and on-site reproduction to support root-cause analysis and a prevention loop.
 
-智能化：务实推进，聚焦真实场景价值。可以从代码辅助、日志分析、配置建议等小场景开始，但也要看到准确率、上下文理解和工程集成成本的限制。目标是构建可控、可解释、可迭代的增强能力，减少认知负荷和机械性工作，让人把精力放到更重要的问题上。
+Intelligent capability: advance pragmatically, focusing on real-scenario value. You can start from small scenarios like code assistance, log analysis, and configuration suggestions, but also recognize the limits of accuracy, context understanding, and engineering integration cost. The goal is a controllable, explainable, iterable enhancement that reduces cognitive load and mechanical work, letting people put energy into more important problems.
 
-执行原则：坚持做正确且高效的事。对架构治理、自动化、智能化等长期价值方向，在方案设计阶段就应投入足够的资源和信心，避免因为短期阻力选择低效但“容易”的路径。在合理负荷下，持续产出高质量结果。
-```
+Execution principle: do what is right and efficient. For long-term value directions like architecture governance, automation, and intelligence, invest sufficient resources and conviction at the design stage, avoiding low-efficiency "easy" paths chosen under short-term resistance. Under a reasonable load, keep producing high-quality results.
 
 # A Concrete Distillation Approach
 

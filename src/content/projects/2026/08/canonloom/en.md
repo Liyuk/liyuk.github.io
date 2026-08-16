@@ -24,12 +24,12 @@ It is not GUI writing software, nor a black-box tool that "generates an entire n
 
 The most essential point of the design: **the protocol lives in files, not in the model's memory**. Project state, plans, drafts, reviews, and approvals are all stored as readable files (Markdown / JSON / JSONL), so different Agents can work on the same file protocol and recover from the last valid artifact after an interruption.
 
-```text
-作者    敲短命令、做选择、批准
-Agent  读任务文件，负责创意/规划/写作/修订/审查解释
-Python 确定性校验、索引、来源追踪、阶段门禁、运行记录
-文件   意图、canon、计划、草稿、审查、状态、trace 全是可读文件
-```
+| Role | Responsibility |
+| --- | --- |
+| Author | Type short commands, make choices, approve |
+| Agent | Read the task file; responsible for creativity / planning / writing / revision / review explanation |
+| Python | Deterministic checks, indexing, source tracking, stage gates, run logs |
+| Files | Intent, canon, plan, draft, review, state, trace are all readable files |
 
 ## Why
 
