@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [workplace, power, professional-relationships, risk-analysis, human-ai-collaboration, work-leadership]
 ---
 
-# 职场人际风险分析协议：从权力结构到权责与职业安全
-
 **版本：** 0.1（preprint）
 **日期：** 2026-08-14
 **类型：** 研究设计与协议论文（research design / protocol paper）

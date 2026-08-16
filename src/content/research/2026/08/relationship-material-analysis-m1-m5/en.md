@@ -13,8 +13,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [relationships, interpersonal-analysis, anti-scam, psychology, human-ai-collaboration, work-leadership]
 ---
 
-# Interpersonal Risk Analysis Protocol: From Relationship Material to Facts, Hypotheses, and Actions
-
 **Version:** 0.1 (preprint)
 **Date:** 2026-08-14
 **Type:** Research design / protocol paper

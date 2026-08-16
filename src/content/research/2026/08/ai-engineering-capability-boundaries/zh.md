@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [ai, software-engineering, agent-systems, developer-productivity, governance, technology]
 ---
 
-# 把 AI 能力放进工程组织前，先定义哪些边界
-
 **版本：** 0.3（preprint）
 **日期：** 2026-08-14
 **类型：** 立场论文（position paper），基于作者在真实工程组织推进 AI 基建与试点的经验与公开材料的综合判断

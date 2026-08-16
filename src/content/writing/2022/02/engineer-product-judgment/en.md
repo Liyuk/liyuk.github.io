@@ -11,8 +11,6 @@ column: { slug: product-judgment, order: 1 }
 translationKey: 2022/02/engineer-product-judgment
 ---
 
-# Why Engineers Need Product Judgment
-
 Product judgment for engineers is not a demand that everyone replace the product manager, nor is it an extra "soft skill" bolted onto technical work. Its purpose is to let engineers know: whose problem they are solving, why the approach holds, how the effort produces results, and where to go back and correct when results fall short of expectations.
 
 Technical implementation is one part of the work; understanding the problem, weighing trade-offs, and validating outcomes determine whether that implementation is actually pointed in the right direction. This article keeps a practical growth framework: starting from completing requirements, gradually learning to understand outcomes, take part in discussions, map the business, and form judgment across a wider scope.

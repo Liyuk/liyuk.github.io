@@ -13,8 +13,6 @@ translationStatus: draft
 translationKey: 2026/08/data-measurement-organizational-protocol
 ---
 
-# Data Measurement as Organizational Protocol: Definitions, Measurement, Tiering, and Retrospectives
-
 **Version:** 0.1 (preprint)
 **Date:** 2026-08-14
 **Type:** Research design / protocol paper

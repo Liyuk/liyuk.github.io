@@ -8,8 +8,6 @@ tags: [thinking, problem-framing, decision-making, communication, work-leadershi
 column: { slug: thinking-training, order: 4 }
 ---
 
-# 结构化思维实践
-
 > 本文是[《五镜法：联系导向的问题定位》](/research/2026/08/connection-oriented-problem-location/)的实战篇——那篇讲这套方法"是什么、凭什么成立、边界在哪"，这篇只讲"怎么用"。工具的定义不在这里重复，用到的地方顺手带一句；想查完整定义，看研究版或文末速查卡。
 
 先记住一句话：**结构化不是"有条理的样子"，而是把"结论、证据、假设、下一步"分开摆，让别人能指出他不同意的是哪一格。**

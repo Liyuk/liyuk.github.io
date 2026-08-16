@@ -13,8 +13,6 @@ translationStatus: draft
 translationKey: 2026/08/workplace-relationship-risk-protocol
 ---
 
-# Workplace Relationship Risk Analysis Protocol: From Power Structures to Authority, Responsibility, and Career Safety
-
 **Version:** 0.1 (preprint)
 **Date:** 2026-08-14
 **Type:** Research design / protocol paper

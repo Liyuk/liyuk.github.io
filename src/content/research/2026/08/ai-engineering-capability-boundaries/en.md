@@ -13,8 +13,6 @@ tags: [ai, software-engineering, agent-systems, developer-productivity, governan
 translationKey: 2026/08/ai-engineering-capability-boundaries
 ---
 
-# Defining the Boundaries Before Bringing AI Capability into an Engineering Organization
-
 **Version:** 0.3 (preprint)
 **Date:** 2026-08-14
 **Type:** Position paper, based on the author's experience driving AI infrastructure and pilots in a real engineering organization, combined with a synthesis of public materials.

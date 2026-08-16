@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [housing, forecasting, time-series, explainability, china]
 ---
 
-# 未来五年中国二手住宅价格：一种可解释组合预测方法及其驻底分析（2026—2030）
-
 **版本：** 0.2（preprint）
 **日期：** 2026-08-15
 

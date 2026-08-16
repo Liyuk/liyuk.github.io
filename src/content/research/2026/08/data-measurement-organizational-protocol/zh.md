@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [data, metrics, measurement, collaboration, reproducibility, technology]
 ---
 
-# 数据度量作为组织协议：口径、测量、分级与复盘
-
 **版本：** 0.1（preprint）
 **日期：** 2026-08-14
 **类型：** 研究设计与协议论文（research design / protocol paper）

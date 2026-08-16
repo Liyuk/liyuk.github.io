@@ -13,8 +13,6 @@ translationStatus: draft
 translationKey: 2026/08/china-housing-price-data-methods
 ---
 
-# The Measurable and the Unmeasurable: A Source- and Methodology-Aware Method for Constructing China's Housing Price Data (Beijing as a District-Level Case)
-
 **Version:** 0.4 (preprint)
 **Date:** 2026-08-15
 

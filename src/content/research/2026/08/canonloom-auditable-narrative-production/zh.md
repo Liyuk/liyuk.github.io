@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/canonloom/blob/main/docs/paper-0.2.0/paper.md
 tags: [human-ai-collaboration, agent-systems, narrative, auditability, technology]
 ---
 
-# 从提示词到叙事生产：CanonLoom 0.2.0 的可审计长篇小说人机协作架构
-
 **版本：** CanonLoom 0.2.0 定稿版
 **日期：** 2026-08-03
 

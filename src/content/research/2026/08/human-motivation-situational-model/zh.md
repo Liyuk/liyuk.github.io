@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [psychology, motivation, behavior, work-leadership, management]
 ---
 
-# 人的激励法则：情景激励模型
-
 **版本：** 0.1（preprint）
 **日期：** 2026-08-15
 **类型：** 理论综述、概念模型与应用框架（theoretical synthesis / conceptual model / application framework）

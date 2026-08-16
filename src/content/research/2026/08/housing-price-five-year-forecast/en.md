@@ -13,8 +13,6 @@ translationStatus: draft
 translationKey: 2026/08/housing-price-five-year-forecast
 ---
 
-# China's Second-Hand Home Prices over the Next Five Years: An Interpretable Combination Forecasting Method and Bottoming Analysis (2026–2030)
-
 **Version:** 0.2 (preprint)
 **Date:** 2026-08-15
 

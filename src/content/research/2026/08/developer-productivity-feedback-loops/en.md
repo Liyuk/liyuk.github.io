@@ -13,8 +13,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [developer-productivity, platform-engineering, feedback-loops, software-engineering, technology]
 ---
 
-# Developer Productivity Is Not a Tool Catalog, but a Feedback System
-
 **Version:** 0.1 (preprint)
 **Date:** 2026-08-14
 **Type:** Research synthesis / position paper

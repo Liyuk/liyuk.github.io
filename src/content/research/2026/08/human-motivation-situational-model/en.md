@@ -13,8 +13,6 @@ translationStatus: draft
 translationKey: 2026/08/human-motivation-situational-model
 ---
 
-# The Laws of Human Motivation: The Situational Motivation Model
-
 **Version:** 0.1 (preprint)
 **Date:** 2026-08-15
 **Type:** Theoretical synthesis, conceptual model, and application framework

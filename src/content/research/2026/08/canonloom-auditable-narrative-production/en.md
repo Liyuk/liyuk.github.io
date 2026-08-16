@@ -13,8 +13,6 @@ translationStatus: draft
 translationKey: 2026/08/canonloom-auditable-narrative-production
 ---
 
-# From Prompt to Narrative Production: CanonLoom 0.2.0's Auditable Human-AI Collaboration Architecture for Long-Form Fiction
-
 **Version:** CanonLoom 0.2.0 final
 
 **Date:** 2026-08-03

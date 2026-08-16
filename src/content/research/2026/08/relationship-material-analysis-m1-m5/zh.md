@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [relationships, interpersonal-analysis, anti-scam, psychology, human-ai-collaboration, work-leadership]
 ---
 
-# 人际风险分析协议：从关系材料到事实、假设与行动
-
 **版本：** 0.1（preprint）
 **日期：** 2026-08-14
 **类型：** 研究设计与协议论文（research design / protocol paper）

@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [developer-productivity, platform-engineering, feedback-loops, software-engineering, technology]
 ---
 
-# 开发者生产力不是工具目录，而是一个反馈系统
-
 **版本：** 0.1（preprint）
 **日期：** 2026-08-14
 **类型：** 研究综述与立场论文（research synthesis / position paper）

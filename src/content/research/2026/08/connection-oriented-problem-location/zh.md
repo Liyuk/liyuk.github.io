@@ -10,8 +10,6 @@ draft: false
 tags: [thinking, problem-framing, decision-making, communication, leadership, work-leadership, strategy]
 ---
 
-# 五镜法：联系导向的问题定位
-
 **版本：** 0.1（preprint）
 **日期：** 2026-08-15
 **类型：** 方法框架论文（framework paper），兼立场论文

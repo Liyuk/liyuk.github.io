@@ -13,8 +13,6 @@ translationStatus: draft
 translationKey: 2026/08/functional-lines-versus-business-lines
 ---
 
-# When AI Lowers Workflow Barriers: How to Redivide Functional Lines and Business Lines
-
 **Version:** 0.1 (preprint)
 **Date:** 2026-08-14
 **Type:** Position paper, based on the author's practice in engineering organizations and a synthesis of public materials.

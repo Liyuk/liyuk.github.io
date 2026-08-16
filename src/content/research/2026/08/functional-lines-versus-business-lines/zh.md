@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [organization-design, ai, engineering, functional-teams, business-lines, work-leadership]
 ---
 
-# 当 AI 降低工作流壁垒，职能线与业务线怎样重新划分
-
 **版本：** 0.1（preprint）
 **日期：** 2026-08-14
 **类型：** 立场论文（position paper），基于作者在工程组织的实践与公开材料的综合判断

@@ -13,8 +13,6 @@ translationStatus: reviewed
 translationKey: 2026/08/connection-oriented-problem-location
 ---
 
-# The Five Lenses: Connection-Oriented Problem Location
-
 **Version:** 0.1 (preprint)
 **Date:** 2026-08-15
 **Type:** Framework paper, and a position paper as well.

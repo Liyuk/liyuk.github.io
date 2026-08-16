@@ -10,8 +10,6 @@ paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [data, machine-learning, housing, reproducibility, provenance]
 ---
 
-# 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）
-
 **版本：** 0.4（preprint）
 **日期：** 2026-08-15
 
