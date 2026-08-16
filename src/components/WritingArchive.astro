@@ -1,0 +1,72 @@
+---
+// Shared writing archive body, rendered by both /writing/ (page 1) and
+// /writing/page/N/ (deeper pages). Kept here so the two routes don't duplicate
+// the list markup, sort control, and year-archive nav.
+import { getCollection } from 'astro:content';
+import { publishedIn } from '../lib/content-model.ts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EntryCard from './EntryCard.astro';
+import PaginationNav from './PaginationNav.astro';
+import { i18n } from '../i18n/index.mjs';
+import { sortByCreatedAt, groupByYear } from '../lib/timeline.ts';
+import { getIndexableTags } from '../lib/taxonomy.ts';
+import { PAGE_SIZE, paginateList } from '../lib/pagination.ts';
+
+const { page = 1 } = Astro.props;
+const locale = Astro.currentLocale ?? 'zh-CN';
+const writing = sortByCreatedAt(await getCollection('writing', publishedIn(locale)));
+const indexableTags = getIndexableTags(writing).map(({ slug }) => slug);
+const years = groupByYear(writing).map(({ year }) => year);
+const copy = i18n(locale).page.writing;
+const sortCopy = i18n(locale).page.writingIndex;
+const archivePrefix = locale === 'en' ? '/en/writing/' : '/writing/';
+const { items, currentPage, totalPages, prevUrl, nextUrl } = paginateList(writing, page, PAGE_SIZE, archivePrefix);
+const titleSuffix = currentPage > 1 ? i18n(locale).pagination.pageTitleSuffix(currentPage) : '';
+---
+
+<BaseLayout title={copy.metaTitle + titleSuffix} description={copy.metaDescription}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="shell archive-list">
+    <nav class="writing-years" aria-label={sortCopy.archiveLabel}>{years.map((year) => <a href={`${archivePrefix}${year}/`}>{year}</a>)}</nav>
+    <div class="writing-sort">
+      <label for="writing-sort-select">{sortCopy.sortLabel}</label>
+      <select id="writing-sort-select" name="sort">
+        <option value="published">{sortCopy.sortPublished}</option>
+        <option value="last-updated">{sortCopy.sortUpdated}</option>
+      </select>
+      <p>{sortCopy.sortHint}</p>
+      <p id="writing-sort-status" class="visually-hidden" aria-live="polite"></p>
+    </div>
+    <div class="entry-list" id="writing-list">{items.map((entry) => <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} />)}</div>
+    <PaginationNav prevUrl={prevUrl} nextUrl={nextUrl} currentPage={currentPage} totalPages={totalPages} locale={locale} />
+  </section>
+</BaseLayout>
+
+<script define:vars={{ statusPublished: sortCopy.sortStatusPublished, statusUpdated: sortCopy.sortStatusUpdated }}>
+  const select = document.querySelector('#writing-sort-select');
+  const list = document.querySelector('#writing-list');
+  const status = document.querySelector('#writing-sort-status');
+
+  if (select instanceof HTMLSelectElement && list instanceof HTMLElement) {
+    const sortEntries = () => {
+      const dataKey = select.value === 'last-updated' ? 'lastUpdatedAt' : 'publishedAt';
+      const labelKey = dataKey === 'lastUpdatedAt' ? 'lastUpdatedLabel' : 'publishedLabel';
+      const entries = [...list.querySelectorAll(':scope > .entry-card')];
+      entries.sort((a, b) => Date.parse(b.dataset[dataKey]) - Date.parse(a.dataset[dataKey]));
+      entries.forEach((entry) => {
+        const date = entry.querySelector('[data-entry-date]');
+        if (date instanceof HTMLTimeElement) {
+          date.dateTime = entry.dataset[dataKey];
+          date.textContent = entry.dataset[labelKey];
+        }
+        list.append(entry);
+      });
+
+      if (status instanceof HTMLElement) {
+        status.textContent = select.value === 'last-updated' ? statusUpdated : statusPublished;
+      }
+    };
+
+    select.addEventListener('change', sortEntries);
+  }
+</script>

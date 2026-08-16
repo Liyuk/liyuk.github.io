@@ -1,0 +1,27 @@
+---
+// Shared pagination footer for list pages (writing/research/projects).
+// Props: prevUrl/nextUrl (locale-aware, already trailing-slashed) plus a
+// currentPage/totalPages readout. Renders nothing when there's a single page
+// and no nav links.
+interface Props {
+  prevUrl?: string;
+  nextUrl?: string;
+  currentPage?: number;
+  totalPages?: number;
+  locale?: string;
+}
+
+import { i18n } from '../i18n/index.mjs';
+
+const { prevUrl, nextUrl, currentPage = 1, totalPages = 1, locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props as Props;
+const ui = i18n(locale);
+const hasNav = Boolean(prevUrl || nextUrl);
+---
+
+{hasNav && (
+  <nav class="pagination" aria-label={ui.pagination.label}>
+    {prevUrl ? <a class="pagination-link pagination-prev" href={prevUrl} rel="prev">{ui.pagination.prev}</a> : <span class="pagination-link pagination-prev is-disabled" aria-hidden="true">{ui.pagination.prev}</span>}
+    <span class="pagination-status">{ui.pagination.status(currentPage, totalPages)}</span>
+    {nextUrl ? <a class="pagination-link pagination-next" href={nextUrl} rel="next">{ui.pagination.next}</a> : <span class="pagination-link pagination-next is-disabled" aria-hidden="true">{ui.pagination.next}</span>}
+  </nav>
+)}

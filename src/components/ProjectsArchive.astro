@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { i18n } from '../i18n/index.mjs';
+import { contentUrl } from '../lib/content-paths.ts';
+import { isoDate } from '../lib/format-dates.ts';
+import { publishedIn } from '../lib/content-model.ts';
+import { sortByCreatedAt } from '../lib/timeline.ts';
+import { publishedDate } from '../lib/timeline.ts';
+import { PAGE_SIZE, paginateList } from '../lib/pagination.ts';
+import PaginationNav from './PaginationNav.astro';
+
+const { page = 1 } = Astro.props;
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.projects;
+const projects = sortByCreatedAt(await getCollection('project', publishedIn(locale)));
+const prefix = locale === 'en' ? '/en/projects/' : '/projects/';
+const { items, currentPage, totalPages, prevUrl, nextUrl } = paginateList(projects, page, PAGE_SIZE, prefix);
+const titleSuffix = currentPage > 1 ? i18n(locale).pagination.pageTitleSuffix(currentPage) : '';
+---
+
+<BaseLayout title={copy.metaTitle + titleSuffix} description={copy.metaDescription}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="shell entry-list archive-list">
+    {items.map((project) =>
+      project.data.workUrl && project.data.work ? (
+        <article class="entry-card work-card">
+          <div class="entry-meta"><span class="work-badge">{copy.label}</span><span>{project.data.work.platform}</span>{project.data.work.status && <span>{project.data.work.status}</span>}</div>
+          <h2><a href={project.data.workUrl} target="_blank" rel="noopener noreferrer">{project.data.title}</a></h2>
+          <p class="work-pen">{project.data.work.penName ? `${project.data.work.penName} · ` : ''}{project.data.work.status ?? ''}</p>
+          <p>{project.data.description}</p>
+          <a class="text-link" href={project.data.workUrl} target="_blank" rel="noopener noreferrer">{copy.read} <span aria-hidden="true">↗</span></a>
+        </article>
+      ) : (
+        <article class="entry-card">
+          <div class="entry-meta"><span>{project.data.status}</span><time datetime={isoDate(publishedDate(project))}>{publishedDate(project).getFullYear()}</time></div>
+          <h2><a href={contentUrl('projects', project.id, locale)}>{project.data.title}</a></h2>
+          <p>{project.data.description}</p>
+          <a class="text-link" href={contentUrl('projects', project.id, locale)}>{copy.view} <span aria-hidden="true">↗</span></a>
+        </article>
+      )
+    )}
+    <PaginationNav prevUrl={prevUrl} nextUrl={nextUrl} currentPage={currentPage} totalPages={totalPages} locale={locale} />
+  </section>
+</BaseLayout>

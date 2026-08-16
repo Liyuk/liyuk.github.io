@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import { publishedIn } from '../../../lib/content-model.ts';
+import { sortByCreatedAt } from '../../../lib/timeline.ts';
+import { PAGE_SIZE, paginateList } from '../../../lib/pagination.ts';
+import ResearchArchive from '../../../components/ResearchArchive.astro';
+
+export async function getStaticPaths({ routePattern }: { routePattern: string }) {
+  const locale = routePattern.startsWith('/en') ? 'en' : 'zh-CN';
+  const entries = sortByCreatedAt(await getCollection('research', publishedIn(locale)));
+  const { totalPages } = paginateList(entries, 1, PAGE_SIZE, '/research/');
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => {
+    const page = i + 2;
+    return { params: { page: String(page) }, props: { page } };
+  });
+}
+
+const { page } = Astro.props;
+---
+<ResearchArchive page={page} />

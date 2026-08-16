@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { i18n } from '../i18n/index.mjs';
+import { contentUrl } from '../lib/content-paths.ts';
+import { isoDate } from '../lib/format-dates.ts';
+import { publishedIn } from '../lib/content-model.ts';
+import { sortByCreatedAt } from '../lib/timeline.ts';
+import { publishedDate } from '../lib/timeline.ts';
+import { PAGE_SIZE, paginateList } from '../lib/pagination.ts';
+import PaginationNav from './PaginationNav.astro';
+
+const { page = 1 } = Astro.props;
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.research;
+const research = sortByCreatedAt(await getCollection('research', publishedIn(locale)));
+const prefix = locale === 'en' ? '/en/research/' : '/research/';
+const { items, currentPage, totalPages, prevUrl, nextUrl } = paginateList(research, page, PAGE_SIZE, prefix);
+const titleSuffix = currentPage > 1 ? i18n(locale).pagination.pageTitleSuffix(currentPage) : '';
+---
+
+<BaseLayout title={copy.metaTitle + titleSuffix} description={copy.metaDescription}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="shell entry-list archive-list">
+    {items.map((paper) => <article class="entry-card"><div class="entry-meta"><span>{paper.data.status} · {paper.data.version}</span><time datetime={isoDate(publishedDate(paper))}>{publishedDate(paper).getFullYear()}</time></div><h2><a href={contentUrl('research', paper.id, locale)}>{paper.data.title}</a></h2><p>{paper.data.description}</p><a class="text-link" href={contentUrl('research', paper.id, locale)}>{i18n(locale).page.tagCards.research.action} <span aria-hidden="true">↗</span></a></article>)}
+    <PaginationNav prevUrl={prevUrl} nextUrl={nextUrl} currentPage={currentPage} totalPages={totalPages} locale={locale} />
+  </section>
+</BaseLayout>

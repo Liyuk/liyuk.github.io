@@ -1,16 +1,23 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Comments from '../../components/Comments.astro';
 import { i18n } from '../../i18n/index.mjs';
 import { site } from '../../data/site.mjs';
+import { publishedIn } from '../../lib/content-model.ts';
 const locale = Astro.currentLocale ?? 'zh-CN';
 const copy = i18n(locale).page.about;
 const url = (p: string) => getRelativeLocaleUrl(locale, p);
 const email = site.email;
+const [writing, research, projects] = await Promise.all([
+  getCollection('writing', publishedIn(locale)),
+  getCollection('research', publishedIn(locale)),
+  getCollection('project', publishedIn(locale)),
+]);
 ---
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
-  <section class="page-heading shell about"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p><p class="about-intro">{copy.intro}</p></section>
+  <section class="page-heading shell about"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p><p class="about-intro">{copy.intro}</p><p class="about-stats">{copy.stats(writing.length, research.length, projects.length)}</p></section>
 
   <section class="shell section about-map" aria-labelledby="about-map-heading">
     <p class="eyebrow">{copy.mapEyebrow}</p>

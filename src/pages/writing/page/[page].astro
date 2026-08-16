@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import { publishedIn } from '../../../lib/content-model.ts';
+import { sortByCreatedAt } from '../../../lib/timeline.ts';
+import { PAGE_SIZE, paginateList } from '../../../lib/pagination.ts';
+import WritingArchive from '../../../components/WritingArchive.astro';
+
+// Page 1 lives at /writing/ (index.astro); this route emits pages 2..N under
+// /writing/page/N/. getStaticPaths cannot read Astro.currentLocale, so locale is
+// inferred from the route pattern (/en/writing/... vs /writing/...).
+export async function getStaticPaths({ routePattern }: { routePattern: string }) {
+  const locale = routePattern.startsWith('/en') ? 'en' : 'zh-CN';
+  const entries = sortByCreatedAt(await getCollection('writing', publishedIn(locale)));
+  const { totalPages } = paginateList(entries, 1, PAGE_SIZE, '/writing/');
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => {
+    const page = i + 2;
+    return { params: { page: String(page) }, props: { page } };
+  });
+}
+
+const { page } = Astro.props;
+---
+<WritingArchive page={page} />
