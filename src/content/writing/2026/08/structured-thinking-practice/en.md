@@ -2,7 +2,7 @@
 title: "Structured Thinking in Practice"
 description: "A hands-on companion to the Five Lenses method: four scenarios — interview, promotion, reporting, and cross-team collaboration — show how to apply the structured tools and the Five Lenses to real problems."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-15
 type: essay
 draft: false
@@ -15,7 +15,7 @@ translationKey: 2026/08/structured-thinking-practice
 
 > This is the hands-on companion to [The Five Lenses: Connection-Oriented Problem Location](/research/2026/08/connection-oriented-problem-location/). That piece explains "what this method is, why it holds, and where its boundaries lie"; this one is only about "how to use it." Tool definitions are not repeated here — where a tool is used, a brief mention is dropped in. For the full definitions, see the research version or the quick-reference card at the end.
 
-First, remember one line: **being structured isn't "looking organized"; it's laying out "conclusion, evidence, assumption, and next step" in separate cells, so that others can point out exactly which cell they disagree with.**
+First, remember this one line: **being structured isn't "looking organized"; it's laying out "conclusion, evidence, assumption, and next step" in separate cells, so that others can point out exactly which cell they disagree with.**
 
 Below are four scenarios, straight to the point.
 
@@ -42,7 +42,7 @@ The worst mistake in promotion materials is turning them into a laundry list of 
 
 Use the Five Lenses to understand the reviewers: the **Position lens** — reviewers fear "promoting the wrong person"; the **Interest lens** — they want "reproducible evidence," not "I worked hard." So every sentence should land on verifiable facts, not adjectives.
 
-## Reporting: let your manager know "what decision you need from me" as soon as they finish listening
+## Reporting: let your manager know "what decision you need them to make" as soon as they finish listening
 
 **Scenario**: you report a stuck project to your manager, spend five minutes on the process, and they ask, "So? What do you want me to do?"
 

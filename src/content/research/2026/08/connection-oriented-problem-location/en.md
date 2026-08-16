@@ -9,7 +9,7 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 draft: false
 tags: [thinking, problem-framing, decision-making, communication, leadership, work-leadership, strategy]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/connection-oriented-problem-location
 ---
 
@@ -225,7 +225,7 @@ This paper adopts the method of **practical induction + conceptual analysis + fa
 
 ## 8. Relation to related work
 
-The Five Lenses method is not a replacement for any existing system, but the enlistment and reordering of a set of mature concepts. The table below is for positioning, not endorsement:
+The Five Lenses method is not a replacement for any existing system, but the incorporation and reordering of a set of mature concepts. The table below is for positioning, not endorsement:
 
 | Concept / tool | Source | Position in the Five Lenses method |
 | --- | --- | --- |
@@ -342,10 +342,10 @@ This paper is the "argument" version of the method; readers who just want to app
 To start using the Five Lenses method from scratch, four minimal deliverables are enough:
 
 ```text
-1. 结构化命题卡（结论 / 证据 / 假设 / 下一步，四格）
-2. 五镜问句清单（因果 / 二元 / 辩证 / 立场 / 利益，各一句）
-3. 底层问题陈述（一条可反驳的陈述，含"什么条件下我承认错了"）
-4. 对准检查（方案是否对准底层约束，而非表层症状）
+1. Structured proposition card (conclusion / evidence / assumption / next step, four cells)
+2. Five-lens question list (causal / duality / dialectical / position / interest, one question each)
+3. Root-problem statement (one refutable statement, including "under what conditions I would admit I'm wrong")
+4. Alignment check (whether the solution is aimed at the underlying constraint, not the surface symptoms)
 ```
 
 You do not need to use every tool at once. Start from a real, scattered problem description and run one small closed loop of "Structure → five lenses → distinguish surface/root → aim the solution," which is usually more valuable than finishing an entire book of tools.

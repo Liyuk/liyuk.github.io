@@ -7,7 +7,7 @@ type: note
 draft: false
 tags: [strategy, product-thinking, decision-making, learning]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/business-model-canvas
 ---
 
@@ -24,7 +24,7 @@ First, let me write down the nine boxes as a record. Each box is accompanied by 
    One line: why would others choose you instead of someone else, or instead of doing nothing.
 
 3. **Channels** — Through which channels do we reach customers? Which is most effective and cheapest?
-   One line: how to make customers know you, be able to buy from you, and use you smoothly.
+   One line: how to make customers know you, be able to buy from you, and use it smoothly.
 
 4. **Customer Relationships** — What kind of relationship do we want with customers? How do we acquire, retain, and upsell?
    One line: one-off deal or long-term lock-in — this is a choice that costs something.
@@ -62,7 +62,7 @@ The real use of this framework is not in "filling all nine boxes," but in checki
 
 - Whether the customers you chose (1) will actually be moved by your value proposition (2);
 - Whether revenue streams (5) can cover cost structure (9) over the long run;
-- Whether key activities (7) and key resources (6) are actually supporting the value proposition (2), or each busy on its own.
+- Whether key activities (7) and key resources (6) are actually supporting the value proposition (2), or each off doing its own thing.
 
 This is what the class meant by "a project can only be done well when all these conditions are satisfied": it is not checking off the nine boxes one by one, but the nine boxes connecting into a self-consistent whole. The canvas helps you see whether "the business logic holds" — whether any box is empty, or which two boxes are fighting each other; but "whether it is worth investing in" depends on things outside the canvas (team, market, competition, valuation). The canvas is **necessary but not sufficient**.
 
@@ -124,7 +124,7 @@ The Business Model Canvas has several derived versions, each modified for a diff
 |---|---|---|
 | Lean Canvas | Four swapped for four: Key Partnerships→Problem, Key Activities→Solution, Key Resources→Key Metrics, Customer Relationships→Unfair Advantage | Early startup: whether this idea will die |
 | Value Proposition Canvas | Pulls out the "Value Proposition" and "Customer Segments" boxes and enlarges them into two halves | Checking whether "what you give" matches "what they want" |
-| Business Model Environment | Draws **a separate** external environment diagram beyond the canvas: market forces, industry forces, key trends, macro-economy | Seeing which box external change will hit |
+| Business Model Environment | Draws **a separate** external environment diagram beyond the canvas: market forces, industry forces, key trends, the macroeconomy | Seeing which box external change will hit |
 
 There are also several frameworks with **similar names but which are actually a different system**, easy to confuse (I nearly confused them at first):
 

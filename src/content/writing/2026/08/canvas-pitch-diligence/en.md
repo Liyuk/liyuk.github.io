@@ -2,7 +2,7 @@
 title: "Three Lenses on One Project: Canvas, Pitch, Due Diligence"
 description: "A note on a distinction: the business model canvas is 'made for yourself,' the startup pitch is 'told to others,' and investor due diligence is 'others scrutinizing you'; the three differ completely in purpose, focus, and framing — don't mix them up."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 type: note
@@ -36,7 +36,7 @@ The nine boxes, and the "four on each side with one in the middle" layout — se
 Facing investors, in a few minutes you turn "why now, why us, why worth investing" into a story with rhythm. The typical structure is a ten-step pipeline:
 
 ```
-问题 → 方案 → 市场 → 为什么现在 → 产品 → 商业模式 → 竞争 → 团队 → 牵引力 → 融资请求
+Problem → Solution → Market → Why now → Product → Business model → Competition → Team → Traction → Funding ask
 ```
 
 ```mermaid
@@ -137,7 +137,7 @@ Don't write the comparison as "the only difference is whether the financials are
 | | Business model canvas | Startup pitch | Investor due diligence |
 |---|---|---|---|
 | **Purpose** | explain how the business works | persuade "why it's worth investing" | verify "whether it's worth investing, and how much" |
-| **Who is looking** | the founder themself | founder → investors | investors → the project |
+| **Who is looking** | the founder themselves | founder → investors | investors → the project |
 | **Core focus** | 9-box self-consistency | problem→solution→market→…→funding ask (ten pages) | people, industry, financials, assets, valuation, exit |
 | **Where the canvas sits** | everything | one page (working draft) | as the underlying structure running through the rest |
 | **Framing** | facts / assumptions | promises + highlights | independent verification + re-pricing |
@@ -145,7 +145,7 @@ Don't write the comparison as "the only difference is whether the financials are
 
 ## 6. How the three relate: partly overlapping, not nested
 
-The three are neither "one assembly line" nor a nesting-doll "canvas ⊂ pitch ⊂ due diligence" — due diligence doesn't contain the pitch or the canvas (legal affairs, tax, corporate history, and supplier interviews never appear in a pitch), and the canvas isn't a prerequisite step for the pitch (many successful fundraises had no canvas at all). A more accurate way to put it: **three lenses with different purposes, partly overlapping and partly independent**:
+The three are neither "one assembly line" nor a nesting-doll "canvas ⊂ pitch ⊂ due diligence" — due diligence doesn't contain the pitch or the canvas (legal affairs, tax, corporate history, and supplier interviews never appear in a pitch), and the canvas isn't a prerequisite step for the pitch (many successful funding rounds had no canvas at all). A more accurate way to put it: **three lenses with different purposes, partly overlapping and partly independent**:
 
 - The canvas is one of the working drafts behind the "business model" page of the pitch;
 - Both the canvas and the pitch are **one input** to due diligence, but due diligence's scope is broader than either and doesn't depend on them;
