@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 import { i18n } from '../../i18n/index.mjs';
 const locale = Astro.currentLocale ?? 'zh-CN';
 const copy = i18n(locale).page.about;
@@ -40,5 +41,12 @@ const url = (p: string) => getRelativeLocaleUrl(locale, p);
     <p>{copy.boundary}</p>
     <p class="about-note">{copy.note}</p>
     <a class="text-link" href="mailto:hello@liyuk.github.io">{copy.contact} <span aria-hidden="true">↗</span></a>
+  </section>
+
+  <section class="shell section about-guestbook">
+    <p class="eyebrow">{copy.guestbookEyebrow}</p>
+    <h2>{copy.guestbookTitle}</h2>
+    <p>{copy.guestbookDesc}</p>
+    <Comments lang={locale} term="guestbook" />
   </section>
 </BaseLayout>

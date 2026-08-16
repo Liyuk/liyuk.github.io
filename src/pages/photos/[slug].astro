@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TagList from '../../components/TagList.astro';
+import Comments from '../../components/Comments.astro';
 import { getGalleryCover } from '../../lib/gallery.ts';
 import { columnUrl, entryUrl } from '../../lib/content-paths.ts';
 import { getColumn, getColumnEntries, getIndexableTags } from '../../lib/taxonomy.ts';
@@ -54,6 +55,7 @@ const nextColumnEntry = columnEntries[columnIndex + 1];
       </ol>
     </section>
     {gallery.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(gallery.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug)}</a>{previousColumnEntry && <a href={entryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={entryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
+    <Comments lang={locale} />
   </article>
 </BaseLayout>
 

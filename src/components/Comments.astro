@@ -1,10 +1,21 @@
 ---
 // Giscus 评论区。未启用时（comments.enabled=false）不渲染任何东西。
 // 启用后：评论以 Discussion 存进 GitHub 仓库，可经 GraphQL API 导出。
+//
+// 两种模式：
+//   - 默认（不传 term）：pathname 映射，每篇文章/项目/影像一个独立讨论。
+//   - 传 term（留言板）：specific 映射，所有留言汇聚到标题含该 term 的同一条
+//     讨论（如 about 页「给作者留言」），中英文页共用同一条。
 import { comments } from '../data/comments.mjs';
 
-const { lang = 'zh-CN' } = Astro.props;
+interface Props {
+  lang?: string;
+  term?: string;
+}
+
+const { lang = 'zh-CN', term } = Astro.props as Props;
 const giscusLang = lang === 'en' ? 'en' : 'zh-CN';
+const mapping = term ? 'specific' : comments.mapping;
 ---
 
 {comments.enabled && (
@@ -13,7 +24,7 @@ const giscusLang = lang === 'en' ? 'en' : 'zh-CN';
   </section>
 )}
 
-<script define:vars={{ enabled: comments.enabled, repo: comments.repo, repoId: comments.repoId, category: comments.category, categoryId: comments.categoryId, mapping: comments.mapping, lightTheme: comments.lightTheme, darkTheme: comments.darkTheme, giscusLang }}>
+<script define:vars={{ enabled: comments.enabled, repo: comments.repo, repoId: comments.repoId, category: comments.category, categoryId: comments.categoryId, mapping, term, lightTheme: comments.lightTheme, darkTheme: comments.darkTheme, giscusLang }}>
   if (enabled) {
     // 用运行时注入的方式加载 giscus，这样能动态决定主题（跟随 data-theme）。
     const dark = document.documentElement.dataset.theme === 'dark';
@@ -28,6 +39,7 @@ const giscusLang = lang === 'en' ? 'en' : 'zh-CN';
     script.setAttribute('data-category', category);
     script.setAttribute('data-category-id', categoryId);
     script.setAttribute('data-mapping', mapping);
+    if (term) script.setAttribute('data-term', term);
     script.setAttribute('data-strict', '1');
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
