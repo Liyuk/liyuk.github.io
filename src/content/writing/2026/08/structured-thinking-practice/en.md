@@ -1,5 +1,5 @@
 ---
-title: "Structured Thinking in Practice"
+title: "Thinking Training (4): Structured Thinking in Practice"
 description: "A hands-on companion to the Five Lenses method: four scenarios — interview, promotion, reporting, and cross-team collaboration — show how to apply the structured tools and the Five Lenses to real problems."
 locale: en
 translationStatus: reviewed
