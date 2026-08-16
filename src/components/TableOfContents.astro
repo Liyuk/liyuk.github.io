@@ -1,0 +1,107 @@
+---
+// 文章左侧悬浮目录（飞书/Notion 风格）。
+// 桌面：粘性悬浮在正文左侧；移动端：折叠成「目录」按钮点击展开。
+// 含 scroll-spy：滚动时高亮当前章节对应的链接。
+import { i18n } from '../i18n/index.mjs';
+
+interface TocHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+const { headings, locale = 'zh-CN' } = Astro.props as { headings: TocHeading[]; locale?: string };
+const toc = i18n(locale).toc;
+// 只收录 h2/h3：h1 是文章标题，不属于目录（且其锚点在 .prose 之外）。
+const items = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+---
+
+<div class="toc-wrap">
+  <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="article-toc">
+    {toc.label}<span aria-hidden="true">▾</span>
+  </button>
+  <nav class="article-toc" id="article-toc" aria-label={toc.aria} data-pagefind-ignore>
+    <strong>{toc.label}</strong>
+    <ol>
+      {items.map((heading) => (
+        <li class:list={{ nested: heading.depth === 3 }}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+</div>
+
+<script>
+  const wrap = document.querySelector('.toc-wrap');
+  const toggle = wrap?.querySelector<HTMLButtonElement>('.toc-toggle');
+  const nav = wrap?.querySelector<HTMLElement>('.article-toc');
+
+  // 移动端折叠：点击按钮切换展开态。
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    nav?.classList.toggle('is-open', !open);
+  });
+
+  // scroll-spy：基于滚动位置高亮当前章节（比 IntersectionObserver 更确定）。
+  const links = [...(nav?.querySelectorAll<HTMLAnchorElement>('a') ?? [])];
+  // 标题 id 可能以数字开头（如 "#1-问题"），querySelector 会抛错，改用 getElementById。
+  const targets = links
+    .map((link) => document.getElementById((link.getAttribute('href') ?? '').replace(/^#/, '')))
+    .filter((el): el is HTMLElement => el != null);
+
+  // 宽屏下：目录初始 absolute 跟随正文顶部（与第一段同高），滚动到正文第一段
+  // 高于阈值后切为 fixed 悬浮，滚回顶部时恢复 absolute。
+  // 用媒体查询判断是否处于「宽屏悬浮形态」——不能用 computed position，因为它会
+  // 随 fixed 切换而变化（一旦 fixed 就永远无法切回 absolute）。
+  const prose = document.querySelector('.article-body > .prose');
+  const wideQuery = matchMedia('(min-width: 1380px)');
+  const updateFixed = () => {
+    if (!nav || !prose) return;
+    if (!wideQuery.matches) { nav.classList.remove('is-fixed'); return; } // 折叠形态
+    const threshold = 80;
+    const firstParagraphTop = prose.getBoundingClientRect().top;
+    nav.classList.toggle('is-fixed', firstParagraphTop <= threshold);
+  };
+
+  if (targets.length > 0) {
+    let activeId = '';
+    const setActive = (id: string) => {
+      if (id === activeId) return;
+      activeId = id;
+      links.forEach((link) => {
+        const on = link.getAttribute('href') === `#${id}`;
+        link.classList.toggle('is-active', on);
+        if (on) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    const compute = () => {
+      // 当前章节 = 位于视口顶部上方（或最靠近顶部）的最后一个标题。
+      const offset = 80; // 站头粘性偏移
+      let currentId = targets[0].id;
+      for (const target of targets) {
+        if (target.getBoundingClientRect().top <= offset) currentId = target.id;
+        else break;
+      }
+      // 已滚到底部时，高亮最后一个章节。
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
+        currentId = targets[targets.length - 1].id;
+      }
+      setActive(currentId);
+      updateFixed();
+    };
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { compute(); ticking = false; });
+    }, { passive: true });
+    // 跨断点（窗口缩放）时也重算一次，避免宽→窄后残留 is-fixed。
+    wideQuery.addEventListener?.('change', updateFixed);
+    compute(); // 初始状态
+  }
+</script>

@@ -2,6 +2,8 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TagList from '../../components/TagList.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import Comments from '../../components/Comments.astro';
 import { contentSlug } from '../../lib/content-paths.ts';
 import { contentUrl } from '../../lib/content-paths.ts';
 import { getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
@@ -24,15 +26,22 @@ const locale = Astro.currentLocale ?? 'zh-CN';
 const entry = pickLocaleVariant(variants, locale)!;
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 const allResearch = await getCollection('research', ({ data }) => !data.draft && data.locale === entry.data.locale);
 const indexableTags = getIndexableTags(allResearch).map(({ slug }) => slug);
 const relatedEntries = getRelatedEntries(allResearch, entry, RELATED_LIMIT, locale);
 const researchUrl = (entryId: string, entryLocale?: string) => contentUrl('research', entryId, entryLocale ?? 'zh-CN');
 const formatDate = (date: Date) => formatFullDate(date, locale);
+// 论文/仓库链接：多数 research 的 paperUrl/repositoryUrl 是占位值，指向本博客
+// 仓库本身（无意义的循环跳转）。仅当指向真实外部仓库时才展示对应链接。
+const BLOG_REPO_URL = 'https://github.com/Liyuk/liyuk.github.io';
+const paperUrl = entry.data.paperUrl && entry.data.paperUrl !== BLOG_REPO_URL ? entry.data.paperUrl : undefined;
+const repositoryUrl = entry.data.repositoryUrl && entry.data.repositoryUrl !== BLOG_REPO_URL ? entry.data.repositoryUrl : undefined;
+const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 ---
 <BaseLayout title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description}>
-  <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time><a href={entry.data.paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a><a href={entry.data.repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a></div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header><div class="prose"><Content /></div>
+  <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time>{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header><div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose"><Content /></div></div>
   {relatedEntries.length > 0 && <section class="related-entries" aria-labelledby="related-heading"><p class="eyebrow">{pageCopy.writingDetail.relatedEyebrow}</p><h2 id="related-heading">{pageCopy.writingDetail.relatedTitle}</h2><ol>{relatedEntries.map(({ entry: related, reasons }) => <li><a href={researchUrl(related.id, locale)}>{related.data.title}</a>{reasons.length > 0 && <p class="related-reason">{reasons.join(' · ')}</p>}</li>)}</ol></section>}
+  <Comments lang={locale} />
   </article>
 </BaseLayout>

@@ -50,9 +50,12 @@ a:hover { color: var(--accent); }
 .skip-link:focus { top: 1rem; }
 .shell { width: min(100% - 3rem, var(--shell-w)); margin-inline: auto; }
 
-.site-header { width: min(100% - 3rem, var(--wide-w)); min-height: 5.5rem; margin-inline: auto; display: flex; align-items: center; gap: 1.5rem; border-bottom: 1px solid var(--line); }
+.site-header { position: sticky; top: 0; z-index: 20; width: min(100% - 3rem, var(--wide-w)); min-height: 5.5rem; margin-inline: auto; display: flex; align-items: center; gap: 1.5rem; border-bottom: 1px solid var(--line); background: var(--paper); transition: transform 220ms ease; }
+.site-header.is-hidden { transform: translateY(-100%); }
 .wordmark { color: var(--ink); font: 600 1.15rem/1 var(--sans); letter-spacing: -.045em; text-decoration: none; white-space: nowrap; }
 .wordmark span { color: var(--accent); }
+.menu-toggle { display: none; flex-direction: column; justify-content: center; gap: .28rem; width: 2.4rem; height: 2.4rem; padding: .45rem .5rem; border: 1px solid var(--line); border-radius: 6px; background: transparent; cursor: pointer; }
+.menu-toggle span { display: block; height: 2px; width: 100%; background: var(--ink); border-radius: 1px; transition: transform 180ms ease, opacity 180ms ease; }
 .site-header nav { margin-left: auto; }
 .site-header ul { display: flex; align-items: center; gap: clamp(.8rem, 2vw, 1.65rem); margin: 0; padding: 0; list-style: none; }
 .site-header nav a { color: var(--muted); font-size: .78rem; font-weight: 600; letter-spacing: .025em; text-decoration: none; }
@@ -199,12 +202,53 @@ h1, h2, h3, p { margin-top: 0; }
 .column-pagination { max-width: var(--prose-w); margin-top: 4rem; padding-top: 1.3rem; border-top: 1px solid var(--line); display: grid; gap: .75rem; }
 .column-pagination a { color: var(--ink); font-size: .9rem; font-weight: 700; text-decoration: none; }
 .column-pagination a:hover { color: var(--accent); }
-.article-toc { max-width: var(--prose-w); margin: 0 0 2.5rem; padding: 1rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.article-toc strong { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
-.article-toc ol { display: grid; gap: .35rem; margin: .75rem 0 0; padding: 0; list-style: none; }
-.article-toc li.nested { padding-left: 1rem; }
-.article-toc a { color: var(--muted); font-size: .9rem; text-decoration: none; }
-.article-toc a:hover { color: var(--accent); }
+/* 文章左侧悬浮目录（飞书/Notion 风格）。
+   宽屏：fixed 悬浮在正文左侧空白，正文保持原宽不左移；窄屏：折叠成按钮。 */
+.toc-wrap { position: relative; }
+.toc-toggle { display: none; }
+.article-toc { display: none; }
+.article-toc strong { display: block; margin-bottom: .75rem; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.article-toc ol { display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+.article-toc li.nested { padding-left: 1rem; border-left: 1px solid var(--line); }
+.article-toc a { color: var(--muted); font-size: .9rem; line-height: 1.45; text-decoration: none; }
+.article-toc a:hover { color: var(--ink); }
+.article-toc a.is-active { color: var(--accent); font-weight: 700; }
+
+/* 正文单栏（目录 fixed 后不再需要两栏 grid）。 */
+.article-body { position: relative; }
+.article-body > .prose { max-width: var(--prose-w); }
+
+/* 宽屏：目录初始定位在正文第一段同高的左侧空白（absolute，相对 .article-body），
+   滚动到正文第一段高于阈值后，由 JS 加 .is-fixed 切为 fixed 悬浮。 */
+@media (min-width: 1380px) {
+  .article-body { position: relative; }
+  .article-toc {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(-14rem - 2rem);
+    width: 14rem;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    padding-right: 1.5rem;
+  }
+  .article-toc.is-fixed {
+    position: fixed;
+    top: 6rem;
+    left: calc((100vw - var(--article-w)) / 2 - 14rem - 2rem);
+  }
+}
+
+/* 窄于悬浮目录所需空间：折叠成「目录」按钮，展开为正文上方下拉块。 */
+@media (max-width: 1379px) {
+  .toc-wrap { margin-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+  .toc-toggle { display: flex; align-items: center; gap: .4rem; padding: .7rem 0; border: 0; background: transparent; color: var(--ink); font: 700 .9rem/1 var(--sans); cursor: pointer; }
+  .toc-toggle span { transition: transform 180ms ease; }
+  .toc-toggle[aria-expanded="true"] span { transform: rotate(180deg); }
+  .article-toc { display: none; position: static; width: auto; max-width: none; max-height: none; padding: 0 0 1rem; }
+  .article-toc.is-open { display: block; }
+}
+
 .related-entries { max-width: var(--prose-w); margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--line); }
 .related-entries h2, .start-callout h2 { margin: 0 0 1.25rem; font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.05; }
 .related-entries ol { margin: 0; padding: 0; list-style: none; }
@@ -223,6 +267,10 @@ h1, h2, h3, p { margin-top: 0; }
 .start-grid strong { max-width: 13ch; margin-top: auto; font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 500; letter-spacing: -.05em; line-height: 1; }
 .start-grid p { max-width: 25rem; margin: 1rem 0 0; color: var(--muted); }
 .article-tags { margin-top: 1.35rem; }
+
+/* 评论区（giscus）。未启用时不渲染，因此这里只兜底间距与宽度约束。 */
+.comments { max-width: var(--prose-w); margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--line); }
+.comments .giscus { min-height: 8rem; }
 .search-heading { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
 .search-page { min-height: 40rem; margin-bottom: clamp(4rem, 10vw, 9rem); }
 .search-page label { display: block; margin-bottom: .7rem; font-size: .85rem; font-weight: 700; }
@@ -558,10 +606,13 @@ h1, h2, h3, p { margin-top: 0; }
 
 @media (max-width: 720px) {
   .shell { width: min(100% - 2rem, var(--shell-w)); }
-  .site-header { width: min(100% - 2rem, var(--wide-w)); min-height: 5.6rem; display: grid; grid-template-columns: 1fr auto; gap: .4rem .55rem; padding-block: .7rem; }
-  .site-header nav { grid-column: 1 / -1; margin-left: 0; min-width: 0; }
-  .site-header ul { gap: .58rem; }
-  .site-header nav a { font-size: .72rem; }
+  .site-header { width: min(100% - 2rem, var(--wide-w)); min-height: 5.6rem; display: grid; grid-template-columns: auto 1fr auto; gap: .4rem .55rem; padding-block: .7rem; }
+  .menu-toggle { display: flex; justify-self: start; }
+  .site-header nav { grid-column: 1 / -1; margin-left: 0; min-width: 0; display: none; }
+  .site-header nav.is-open { display: block; }
+  .site-header ul { flex-direction: column; align-items: stretch; gap: 0; padding: .5rem 0 .25rem; border-top: 1px solid var(--line); }
+  .site-header ul li { border-bottom: 1px solid var(--line); }
+  .site-header nav a { display: block; padding: .7rem 0; font-size: .95rem; }
   .hero { display: block; padding-block: 5.5rem 6rem; }
   .hero h1, .page-heading h1 { font-size: clamp(3rem, 13vw, 4.6rem); }
   .hero-copy { max-width: 31rem; margin-top: 2.25rem; }

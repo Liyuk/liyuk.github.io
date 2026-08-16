@@ -13,12 +13,15 @@ const alternateHref = getRelativeLocaleUrl(otherLocale, rootPath);
 
 <header class="site-header">
   <a class="wordmark" href={locale === 'en' ? '/en/' : '/'} aria-label={ui.accessibility.home}>{ui.brandShort}<span>.</span></a>
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label={ui.navigation.menuOpen} data-menu-toggle data-menu-open={ui.navigation.menuOpen} data-menu-close={ui.navigation.menuClose}>
+    <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+  </button>
   <div class="utility-controls" aria-label={ui.accessibility.siteSettings}>
     <a class="search-link" href={searchUrl(locale)}>{ui.navigation.search}</a>
     <a class="language-switch" href={alternateHref} lang="en"><b>{ui.language.current}</b><i>/</i><em>{ui.language.alternate}</em></a>
     <ThemeToggle labels={ui.theme} />
   </div>
-  <nav aria-label={ui.navigation.main}>
+  <nav id="site-nav" aria-label={ui.navigation.main}>
     <ul>
       {site.navigation.map((item) => (
         <li><a href={getRelativeLocaleUrl(locale, item.href)} aria-current={currentPath.startsWith(getRelativeLocaleUrl(locale, item.href)) ? 'page' : undefined}>{ui.navigation[item.key as keyof typeof ui.navigation]}</a></li>
@@ -26,3 +29,30 @@ const alternateHref = getRelativeLocaleUrl(otherLocale, rootPath);
     </ul>
   </nav>
 </header>
+
+<script>
+  // 移动端汉堡菜单：切换导航展开/收起，并同步 aria 状态。
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const nav = document.querySelector<HTMLElement>('#site-nav');
+  const header = document.querySelector<HTMLElement>('.site-header');
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      toggle.setAttribute('aria-label', open ? (toggle.dataset.menuOpen ?? '') : (toggle.dataset.menuClose ?? ''));
+      header?.classList.toggle('menu-open', !open);
+      nav.classList.toggle('is-open', !open);
+    });
+  }
+
+  // 上划展现、下滑隐藏 sticky header（PC 与移动端一致）。
+  let lastY = window.scrollY;
+  const onScroll = () => {
+    const y = window.scrollY;
+    // 顶部附近始终展现；下滑超过阈值隐藏，上划展现。
+    if (y < 80) header?.classList.remove('is-hidden');
+    else header?.classList.toggle('is-hidden', y > lastY);
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>

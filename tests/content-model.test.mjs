@@ -23,7 +23,7 @@ test('shared public copy lives in one site configuration', () => {
   assert.equal(site.locale, 'zh-CN');
   assert.equal(site.name, 'Liyuk');
   assert.equal(site.title, '沉默土豆的烹饪指南 — Liyuk');
-  assert.equal(site.navigation[0].href, '/writing/');
+  assert.equal(site.navigation[0].href, '/start/');
   assert.equal(site.translation.mode, 'manual-review');
 });
 

@@ -1,0 +1,169 @@
+---
+// Tip / donation card — collapsed by default, expands in place to reveal the
+// payment options. Mirrors the ColumnCard interaction (data-open + toggle).
+//
+// Chinese routes reveal WeChat Pay + Alipay QR codes; English routes reveal a
+// single tip link (PayPal placeholder — fill in before mounting English).
+// Mount Chinese-only for now: `{locale !== 'en' && <TipCard locale={locale} />}`
+// before the article's closing tag.
+import { i18n } from '../i18n/index.mjs';
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props as Props;
+const t = i18n(locale).tip;
+const isEnglish = locale === 'en';
+// TODO: replace with your real PayPal / Ko-fi URL before enabling the English card.
+const tipLink = 'https://paypal.me/YOUR_USERNAME';
+---
+
+<aside class="tip-card" data-open="false">
+  <button class="tip-card-toggle" type="button" aria-expanded="false">
+    <span class="tip-card-toggle-copy">
+      <span class="eyebrow">{t.eyebrow}</span>
+      <strong>{t.title}</strong>
+    </span>
+    <span class="tip-card-chevron" aria-hidden="true">⌄</span>
+  </button>
+
+  <div class="tip-card-body">
+    <p class="tip-card-desc">{t.description}</p>
+    {isEnglish ? (
+      <a class="tip-card-link" href={tipLink} rel="noopener">{t.action} →</a>
+    ) : (
+      <div class="tip-card-codes">
+        <figure>
+          <img src="/images/tip/wechat-pay.png" alt={t.wechat} width="120" height="120" loading="lazy" />
+          <figcaption>{t.wechat}</figcaption>
+        </figure>
+        <figure>
+          <img src="/images/tip/alipay.png" alt={t.alipay} width="120" height="120" loading="lazy" />
+          <figcaption>{t.alipay}</figcaption>
+        </figure>
+      </div>
+    )}
+    <p class="tip-card-note">{t.note}</p>
+  </div>
+</aside>
+
+<style>
+  .tip-card {
+    margin: 2.5rem 0;
+    max-width: var(--prose-w);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--paper-strong);
+  }
+  .tip-card-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.9rem 1.1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--ink);
+    text-align: left;
+    font-family: inherit;
+  }
+  .tip-card-toggle:hover {
+    background: var(--accent-soft);
+  }
+  .tip-card-toggle-copy {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .tip-card-toggle-copy .eyebrow {
+    margin: 0;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .tip-card-toggle-copy strong {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .tip-card-chevron {
+    color: var(--muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+  }
+  .tip-card[data-open="false"] .tip-card-chevron {
+    transform: rotate(-90deg);
+  }
+  .tip-card-body {
+    padding: 0 1.1rem 1rem;
+  }
+  .tip-card[data-open="false"] .tip-card-body {
+    display: none;
+  }
+  .tip-card-desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .tip-card-codes {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  .tip-card-codes figure {
+    margin: 0;
+    text-align: center;
+  }
+  .tip-card-codes img {
+    display: block;
+    width: 7.5rem;
+    height: 7.5rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff; /* keep codes legible in dark mode */
+  }
+  .tip-card-codes figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .tip-card-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .tip-card-link:hover {
+    background: var(--accent-soft);
+  }
+  .tip-card-note {
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+</style>
+
+<script>
+  // One tip card per page; a single data-open state controls the expand.
+  const card = document.querySelector('.tip-card');
+  if (card instanceof HTMLElement) {
+    const toggle = card.querySelector('.tip-card-toggle');
+    toggle?.addEventListener('click', () => {
+      const isOpen = card.dataset.open !== 'false';
+      card.dataset.open = String(!isOpen);
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+  }
+</script>
