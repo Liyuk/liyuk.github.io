@@ -61,6 +61,13 @@ AI 改变了这个前提。当 AI 和自动化工具大幅降低工作流壁垒�
 | C. 跨域闭环 | 成员围绕一条完整链路共同负责，专家作为共享支持 | 工具显著降低壁垒、链路连贯是主要瓶颈 | 深度领域的覆盖下降 |
 | D. 全链路小队 | 小队独立对端到端结果负责，几乎无需跨队交接 | 高价值、高频、责任边界清晰 | 复用与标准化的损失 |
 
+```mermaid
+flowchart LR
+  A["A Functional queue<br/>grouped by skill"] --> B["B Shared capability<br/>horizontal platform / expert pool"]
+  B --> C["C Cross-domain loop<br/>own a full chain"]
+  C --> D["D Full-chain squad<br/>end-to-end ownership"]
+```
+
 **关键洞察。** 多数团队不需要在 A 和 D 之间跳变，而是在这条谱系上移动：当信号变化，把责任单元往更贴近业务的一端挪一格，而不是彻底重构。过度重构（直接跳到 D）常带来与"固守职能线"对称的失败——专业深度下降、复用丧失，而交付改善有限。
 
 ## 4. 判断信号：什么情况下值得移动，往哪移动

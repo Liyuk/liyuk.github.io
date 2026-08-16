@@ -2,53 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-import {
-  contentTypes,
-  publishedFilter,
-} from '../src/lib/content-model.mjs';
+import { notDraft, publishedIn } from '../src/lib/content-model.ts';
 import { site } from '../src/data/site.mjs';
-import { getUiCopy } from '../src/i18n/ui.mjs';
-import { getPageCopy } from '../src/i18n/page-copy.mjs';
-import { groupByYear, groupByYearMonth, sortByCreatedAt, sortByLastUpdatedAt, shouldNotify } from '../src/lib/timeline.mjs';
-import { columnUrl, contentUrl, galleryUrl, tagUrl, writingUrl } from '../src/lib/content-paths.mjs';
-import { parseContentDate } from '../src/lib/content-date.mjs';
-import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, getTag } from '../src/lib/taxonomy.mjs';
-import { getGalleryCover } from '../src/lib/gallery.mjs';
-import { localeFromPath, localizePath, toggleLocalePath } from '../src/lib/locale-url.mjs';
+import { i18n } from '../src/i18n/index.mjs';
+import { groupByYear, groupByYearMonth, sortByCreatedAt, sortByLastUpdatedAt } from '../src/lib/timeline.ts';
+import { columnUrl, contentUrl, entryUrl, galleryUrl, tagUrl, writingUrl } from '../src/lib/content-paths.ts';
+import { parseContentDate } from '../src/lib/content-date.ts';
+import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, getTag } from '../src/lib/taxonomy.ts';
+import { getGalleryCover } from '../src/lib/gallery.ts';
 
-test('the public content model represents writing, projects, research, and photos', () => {
-  assert.deepEqual(contentTypes, ['writing', 'projects', 'research', 'photos']);
-});
-
-test('the published filter selects non-draft content from the source locale', () => {
-  assert.equal(publishedFilter({ data: { draft: false, locale: 'zh-CN' } }), true);
-  assert.equal(publishedFilter({ data: { draft: true, locale: 'zh-CN' } }), false);
-  assert.equal(publishedFilter({ data: { draft: false, locale: 'en' } }), false);
-});
-
-test('locale is derived from the URL path', () => {
-  assert.equal(localeFromPath('/'), 'zh-CN');
-  assert.equal(localeFromPath('/writing/'), 'zh-CN');
-  assert.equal(localeFromPath('/en'), 'en');
-  assert.equal(localeFromPath('/en/'), 'en');
-  assert.equal(localeFromPath('/en/writing/'), 'en');
-  assert.equal(localeFromPath('/english-mistake/'), 'zh-CN');
-});
-
-test('paths localize with a clean /en prefix and handle the root', () => {
-  assert.equal(localizePath('/writing/', 'zh-CN'), '/writing/');
-  assert.equal(localizePath('/writing/', 'en'), '/en/writing/');
-  assert.equal(localizePath('/en/writing/', 'zh-CN'), '/writing/');
-  assert.equal(localizePath('/', 'zh-CN'), '/');
-  assert.equal(localizePath('/', 'en'), '/en/');
-  assert.equal(localizePath('/en/', 'en'), '/en/');
-});
-
-test('the language switcher toggles a path to the other locale', () => {
-  assert.equal(toggleLocalePath('/'), '/en/');
-  assert.equal(toggleLocalePath('/en/'), '/');
-  assert.equal(toggleLocalePath('/writing/foo/'), '/en/writing/foo/');
-  assert.equal(toggleLocalePath('/en/writing/foo/'), '/writing/foo/');
+test('the published predicates select non-draft content for the right locale', () => {
+  assert.equal(notDraft({ data: { draft: false, locale: 'zh-CN' } }), true);
+  assert.equal(notDraft({ data: { draft: true, locale: 'zh-CN' } }), false);
+  assert.equal(publishedIn('zh-CN')({ data: { draft: false, locale: 'zh-CN' } }), true);
+  assert.equal(publishedIn('zh-CN')({ data: { draft: false, locale: 'en' } }), false);
+  assert.equal(publishedIn('en')({ data: { draft: false, locale: 'en' } }), true);
 });
 
 test('shared public copy lives in one site configuration', () => {
@@ -60,27 +28,24 @@ test('shared public copy lives in one site configuration', () => {
 });
 
 test('system copy is available in Chinese and English', () => {
-  assert.equal(getUiCopy('zh-CN').brand, '沉默土豆的烹饪指南');
-  assert.equal(getUiCopy('en').brand, 'Silent Potato’s Cookbook');
-  assert.equal(getUiCopy('zh-CN').navigation.writing, '写作');
-  assert.equal(getUiCopy('en').navigation.writing, 'Writing');
-  assert.equal(getUiCopy('en').theme.toDark, 'Switch to dark mode');
+  assert.equal(i18n('zh-CN').brand, '沉默土豆的烹饪指南');
+  assert.equal(i18n('en').brand, 'Silent Potato’s Cookbook');
+  assert.equal(i18n('zh-CN').navigation.writing, '写作');
+  assert.equal(i18n('en').navigation.writing, 'Writing');
+  assert.equal(i18n('en').theme.toDark, 'Switch to dark mode');
 });
 
 test('public page copy is centrally managed for both languages', () => {
-  assert.deepEqual(getPageCopy('zh-CN').home.title, ['沉默土豆的', '烹饪指南。']);
-  assert.equal(getPageCopy('zh-CN').writing.metaDescription, '关于技术、工作与日常的写作。');
-  assert.equal(getPageCopy('en').home.byline, 'Liyuk · Field Notes on Technology, Leadership & Life');
+  assert.deepEqual(i18n('zh-CN').page.home.title, ['沉默土豆的', '烹饪指南。']);
+  assert.equal(i18n('zh-CN').page.writing.metaDescription, '关于技术、工作与日常的写作。');
+  assert.equal(i18n('en').page.home.byline, 'Liyuk · Field Notes on Technology, Leadership & Life');
 });
 
-test('writing is ordered by publication date while notifications remain explicit', () => {
-  const olderPublishedLater = { data: { createdAt: new Date('2012-06-01'), publishedAt: new Date('2026-08-14'), notification: 'never' } };
-  const newer = { data: { createdAt: new Date('2018-04-02'), publishedAt: new Date('2018-04-02'), notification: 'publish' } };
+test('writing is ordered by publication date', () => {
+  const olderPublishedLater = { data: { createdAt: new Date('2012-06-01'), publishedAt: new Date('2026-08-14') } };
+  const newer = { data: { createdAt: new Date('2018-04-02'), publishedAt: new Date('2018-04-02') } };
   // sortByCreatedAt now keys on publishedAt: 2026-08-14 sorts before 2018-04-02.
   assert.deepEqual(sortByCreatedAt([newer, olderPublishedLater]), [olderPublishedLater, newer]);
-  assert.equal(shouldNotify(olderPublishedLater.data, 'publish'), false);
-  assert.equal(shouldNotify(newer.data, 'publish'), true);
-  assert.equal(shouldNotify(newer.data, 'update'), false);
 });
 
 test('writing can be ordered by its most recent public change', () => {
@@ -112,6 +77,15 @@ test('galleries have a stable top-level photo URL and an explicit cover image', 
   };
   assert.equal(galleryUrl(gallery.data.slug), '/photos/tokyo-rain/');
   assert.deepEqual(getGalleryCover(gallery), gallery.data.images[1]);
+});
+
+test('column members resolve to writing or gallery URLs in the current locale', () => {
+  const essay = { id: '2026/08/example/zh', collection: 'writing', data: { locale: 'zh-CN' } };
+  const gallery = { id: 'maomao', collection: 'gallery', data: { slug: 'maomao', locale: 'zh-CN' } };
+  assert.equal(entryUrl(essay), '/writing/2026/08/example/');
+  assert.equal(entryUrl(gallery), '/photos/maomao/');
+  assert.equal(entryUrl(essay, 'en'), '/en/writing/2026/08/example/');
+  assert.equal(entryUrl(gallery, 'en'), '/en/photos/maomao/');
 });
 
 test('dated content can be grouped into year and month archives', () => {
@@ -162,13 +136,13 @@ test('columns have localized editorial copy, stable URLs, and preserve their dec
 test('column pages replace the legacy albums model', async () => {
   const columnIndex = await readFile(new URL('../src/pages/columns/index.astro', import.meta.url), 'utf8');
   const writingPage = await readFile(new URL('../src/pages/writing/[...slug].astro', import.meta.url), 'utf8');
-  const pageCopy = await readFile(new URL('../src/i18n/page-copy.mjs', import.meta.url), 'utf8');
+  const uiCopy = await readFile(new URL('../src/i18n/index.mjs', import.meta.url), 'utf8');
 
   assert.match(columnIndex, /copy\.seriesLabel|copy\.count/);
   assert.doesNotMatch(columnIndex, /albumUrl|getAlbum/);
   assert.match(writingPage, /entry\.data\.column/);
   assert.doesNotMatch(writingPage, /entry\.data\.album/);
-  assert.match(pageCopy, /seriesLabel/);
+  assert.match(uiCopy, /seriesLabel/);
 });
 
 test('related content prefers a non-adjacent same-column entry over one that only shares tags', () => {
@@ -221,7 +195,7 @@ test('related content localizes its reasons', () => {
 
 test('writing detail pages show publication and optional update dates without creation dates', async () => {
   const page = await readFile(new URL('../src/pages/writing/[...slug].astro', import.meta.url), 'utf8');
-  const ui = await readFile(new URL('../src/i18n/ui.mjs', import.meta.url), 'utf8');
+  const ui = await readFile(new URL('../src/i18n/index.mjs', import.meta.url), 'utf8');
 
   assert.match(page, /ui\.entry\.publishedAt/);
   assert.match(page, /ui\.entry\.updatedAt/);

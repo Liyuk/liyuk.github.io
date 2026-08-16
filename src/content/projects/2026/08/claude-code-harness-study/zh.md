@@ -29,24 +29,26 @@ tags: [agent, coding-agent, systems, typescript]
 
 实现部分已经有一条可运行的垂直切片：内存中的 process / budget / policy gate / tool broker / event trace，以及第一个真实 I/O adapter——受限文件执行器。它只允许访问指定 workspace；读取文件不产生副作用，写入文件只生成暂存的 unified diff，绝不直接写回磁盘。写入还需要相应的、可范围限定的 capability，并须经过人工批准。
 
-```text
-模型提出写入请求
-  → capability / approval 判定
-  → tool broker
-  → workspace 内的 FileSystemExecutor
-  → 暂存 diff + 结构化事件
+```mermaid
+flowchart TD
+    A["Model proposes write request"] --> B["capability / approval check"]
+    B --> C["tool broker"]
+    C --> D["FileSystemExecutor in workspace"]
+    D --> E["Stage diff + structured events"]
 ```
 
 这不是一个“已经能自主开发”的 Agent；它是一条已经可以测试的安全边界。合同测试覆盖越权写入被拒绝、批准前不执行、路径不能越出 workspace 或穿过 symbolic link，以及 executor 不直接落盘。
 
 ## 正在学习的完整模型
 
-```text
-用户任务 / 工作区
-  → Context builder：选择当前轮所需的事实与约束
-  → Agent loop：计划、执行、观察、重试与停止
-  → Tool broker → Policy gate → Sandboxed executor
-  → append-only event store / checkpoint：保存可恢复状态
+```mermaid
+flowchart TD
+    A["User task / workspace"] --> B["Context builder: select facts & constraints for this round"]
+    B --> C["Agent loop: plan, act, observe, retry, stop"]
+    C --> D["Tool broker"]
+    D --> E["Policy gate"]
+    E --> F["Sandboxed executor"]
+    F --> G["append-only event store / checkpoint: save recoverable state"]
 ```
 
 这张图是正在验证的目标模型，不是当前功能清单。关键不在于把每个组件做大，而是让每个边界可见：模型负责判断与生成；系统规定它能读什么、能写什么、哪些调用必须被拒绝或确认，以及何时必须停止。

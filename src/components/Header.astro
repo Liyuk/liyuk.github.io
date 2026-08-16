@@ -1,12 +1,14 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { site } from '../data/site.mjs';
-import { getUiCopy } from '../i18n/ui.mjs';
+import { i18n } from '../i18n/index.mjs';
 import ThemeToggle from './ThemeToggle.astro';
-import { searchUrl } from '../lib/content-paths.mjs';
-import { localeFromPath, localizePath, toggleLocalePath } from '../lib/locale-url.mjs';
-const { currentPath = '/', locale = localeFromPath(Astro.url.pathname) } = Astro.props;
-const ui = getUiCopy(locale);
-const alternateHref = toggleLocalePath(currentPath);
+import { searchUrl } from '../lib/content-paths.ts';
+const { currentPath = '/', locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props;
+const ui = i18n(locale);
+const otherLocale = locale === 'en' ? 'zh-CN' : 'en';
+const rootPath = currentPath.replace(/^\/en(?=\/|$)/, '');
+const alternateHref = getRelativeLocaleUrl(otherLocale, rootPath);
 ---
 
 <header class="site-header">
@@ -19,7 +21,7 @@ const alternateHref = toggleLocalePath(currentPath);
   <nav aria-label={ui.navigation.main}>
     <ul>
       {site.navigation.map((item) => (
-        <li><a href={localizePath(item.href, locale)} aria-current={currentPath.startsWith(localizePath(item.href, locale)) ? 'page' : undefined}>{ui.navigation[item.key]}</a></li>
+        <li><a href={getRelativeLocaleUrl(locale, item.href)} aria-current={currentPath.startsWith(getRelativeLocaleUrl(locale, item.href)) ? 'page' : undefined}>{ui.navigation[item.key as keyof typeof ui.navigation]}</a></li>
       ))}
     </ul>
   </nav>

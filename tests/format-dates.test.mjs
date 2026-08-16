@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { parseContentDate } from '../src/lib/content-date.mjs';
-import { formatFullDate, formatYearMonth, isoDate } from '../src/lib/format-dates.mjs';
+import { parseContentDate } from '../src/lib/content-date.ts';
+import { formatFullDate, formatYearMonth, isoDate } from '../src/lib/format-dates.ts';
 
 // Helper: build a Date in the local calendar timezone (the same way
 // parseContentDate and content frontmatter do) so these tests pass on any

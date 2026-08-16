@@ -83,6 +83,13 @@ tags: [data, metrics, measurement, collaboration, reproducibility, technology]
 | L3：过程诊断 | 哪一段路径或条件可能造成变化？ | 某步骤转化、错误类别、版本分布 | 缩小排查范围、验证假设。 |
 | L4：数据质量 | 这些数字本身能相信吗？ | 事件覆盖率、重复率、延迟、状态闭环率 | 防止以坏数据推动行动。 |
 
+```mermaid
+flowchart TD
+  L1["L1 Task outcome: is the goal met"] --> L2["L2 Experience guardrail: at what user cost"]
+  L2 --> L3["L3 Process diagnosis: which path changed"]
+  L3 --> L4["L4 Data quality: can we trust the numbers"]
+```
+
 四层不是单向因果链。分层的价值在于顺序：先看结果是否改变，再用护栏判断用户代价，最后用诊断指标找证据，任何时候都保留对数据质量的检查。
 
 **机制：核心 / 观察 / 按需三张清单。** 在四层之外，还需决定监控频率。核心清单应当很短，每个核心指标都要有定义卡、基线、配套护栏与数据质量检查；若无法说明它变化时谁做什么，它通常应降为观察或按需指标。

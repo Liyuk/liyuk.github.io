@@ -1,17 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { localeFromPath } from '../../lib/locale-url.mjs';
 import { getCollection } from 'astro:content';
-import { site } from '../../data/site.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { contentUrl } from '../../lib/content-paths.mjs';
-import { isoDate } from '../../lib/format-dates.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { sortByCreatedAt } from '../../lib/timeline.mjs';
-import { publishedDate } from '../../lib/timeline.mjs';
-const locale = localeFromPath(Astro.url.pathname);
-const copy = getPageCopy(locale).projects;
-const projects = sortByCreatedAt(await getCollection('project', publishedFilter));
+import { i18n } from '../../i18n/index.mjs';
+import { contentUrl } from '../../lib/content-paths.ts';
+import { isoDate } from '../../lib/format-dates.ts';
+import { publishedIn } from '../../lib/content-model.ts';
+import { sortByCreatedAt } from '../../lib/timeline.ts';
+import { publishedDate } from '../../lib/timeline.ts';
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.projects;
+const projects = sortByCreatedAt(await getCollection('project', publishedIn(locale)));
 ---
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
   <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>

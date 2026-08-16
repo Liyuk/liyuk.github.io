@@ -24,9 +24,28 @@ git push                # publish:check runs automatically; push is blocked on f
 Skip the gate in an emergency with `git push --no-verify`. Full workflow, including
 field-by-field details for each content type, lives in `docs/publishing-workflow.md`.
 
-English is intentionally not generated during deploys. A future explicit translation
-workflow will create a reviewable English Markdown draft from a published Chinese
-article; API secrets never belong in this repository.
+The site is bilingual. Chinese is the source of truth; every published article has an
+English `en.md` sibling served under the same URL with the `/en/` prefix. English
+translations are machine-generated and marked `translationStatus: draft` until
+human-reviewed. Translation conventions live in `docs/translation-spec.md`; the
+English UI shell lives in `src/i18n/index.mjs`. API secrets never belong in this
+repository.
+
+## Content capabilities
+
+Markdown entries support the following out of the box. A copy-paste demo lives in
+`src/content/writing/_template.md`.
+
+| Capability | Syntax | Notes |
+| ---------- | ------ | ----- |
+| Code blocks | ```` ```ts ```` … ```` ``` ```` | Shiki syntax highlighting, light/dark aware |
+| Mermaid | ```` ```mermaid ```` … ```` ``` ```` | Rendered to inline SVG at build time |
+| Images | `![alt](./images/x.webp)` | Auto-optimized (WebP, resized) |
+| LaTeX math | `$E=mc^2$` / `$$…$$` | Rendered by KaTeX at build time |
+
+Only `mermaid` is excluded from syntax highlighting; every other fenced block gets
+Shiki highlighting. Frontmatter `hero` / `cover` images and Mermaid/KaTeX are all
+rendered statically — no client-side JavaScript is shipped for them.
 
 ## Local development
 

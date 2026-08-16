@@ -1,19 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { site } from '../../data/site.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
+import { i18n } from '../../i18n/index.mjs';
 import { getCollection } from 'astro:content';
-import { galleryUrl } from '../../lib/content-paths.mjs';
-import { getGalleryCover } from '../../lib/gallery.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { sortByCreatedAt } from '../../lib/timeline.mjs';
+import { galleryUrl } from '../../lib/content-paths.ts';
+import { getGalleryCover } from '../../lib/gallery.ts';
+import { publishedIn } from '../../lib/content-model.ts';
+import { sortByCreatedAt } from '../../lib/timeline.ts';
 
-const locale = localeFromPath(Astro.url.pathname);
-const copy = getPageCopy(locale).photos;
-const ui = getUiCopy(locale);
-const galleries = sortByCreatedAt(await getCollection('gallery', publishedFilter));
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.photos;
+const ui = i18n(locale);
+const galleries = sortByCreatedAt(await getCollection('gallery', publishedIn(locale)));
 ---
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
   <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>

@@ -8,6 +8,8 @@ type: essay
 tags: [engineering, retrospective, learning, collaboration, technology]
 ---
 
+> 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「复盘」这条线的展开。
+
 复盘最容易变成两种无效的文档：一种是按时间顺序重述发生过什么，读完之后谁也不知道该改变什么；另一种是急着给出一个看似明确的归因，却把复杂的问题压缩成某个人“不够仔细”。两者都留下了记录，却没有留下可复用的能力。
 
 一次工程复盘真正要完成的事，是把已经发生的经历转化为下一次能够做出更好判断的知识。它不以寻找一个人来结束，而以改变一个系统为目标：让风险更早被看见，让关键判断有依据，让重复劳动或重复错误更难发生。
@@ -43,6 +45,11 @@ tags: [engineering, retrospective, learning, collaboration, technology]
 ## 一次完整复盘的工作流
 
 复盘最好被视为一段从信息收集到改进验证的工作，而不是一场临时会议。一个稳定的流程通常有五步。
+
+```mermaid
+flowchart LR
+    A["Define problem boundary"] --> B["Gather material"] --> C["Calibrate questioning"] --> D["Convert to actions"] --> E["Review & maintain"]
+```
 
 ### 1. 明确问题边界与主持责任
 

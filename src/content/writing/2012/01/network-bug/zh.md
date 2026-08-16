@@ -4,7 +4,6 @@ description: 一篇写于大学早期的科幻短篇：当二维网路中的虫�
 createdAt: 2012-01-01
 publishedAt: 2012-01-01
 updatedAt: 2026-08-14
-notification: never
 type: essay
 tags: [fiction, archive, field-notes]
 ---

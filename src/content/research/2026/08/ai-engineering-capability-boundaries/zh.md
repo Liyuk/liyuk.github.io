@@ -128,12 +128,12 @@ AI 的影响力随它能执行的动作而跃升。给你一段建议，和能�
 
 边界如果不落成系统，就只是愿望。作者把上述边界中的"公共能力"部分（授权分级、受限执行、审计恢复）实现成了一个最小的 coding-agent harness：模型可以提出动作，但权限、真实副作用和运行状态由系统边界控制。
 
-```text
-模型提出写入请求
-  → capability / approval 判定
-  → tool broker
-  → workspace 内的沙箱执行器
-  → 暂存 diff + 结构化事件
+```mermaid
+flowchart TD
+  A["Model proposes write request"] --> B["capability / approval check"]
+  B --> C["tool broker"]
+  C --> D["sandbox executor in workspace"]
+  D --> E["Stage diff + structured events"]
 ```
 
 关键设计是：**写入不直接落盘**，先产出暂存 diff，经人工批准后才应用；所有调用留下 append-only 事件轨迹，可复查、可恢复。它不宣称是完整平台，只示范"授权、审计、恢复"这些边界可以带合同测试地落地——越权写入被拒、批准前不执行、路径不能逃逸 workspace。[8]

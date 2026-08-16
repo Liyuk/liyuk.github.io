@@ -1,21 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { localeFromPath } from '../../lib/locale-url.mjs';
 import { getCollection } from 'astro:content';
-import { site } from '../../data/site.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { contentUrl } from '../../lib/content-paths.mjs';
-import { isoDate } from '../../lib/format-dates.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { sortByCreatedAt } from '../../lib/timeline.mjs';
-import { publishedDate } from '../../lib/timeline.mjs';
-const locale = localeFromPath(Astro.url.pathname);
-const copy = getPageCopy(locale).research;
-const research = sortByCreatedAt(await getCollection('research', publishedFilter));
+import { i18n } from '../../i18n/index.mjs';
+import { contentUrl } from '../../lib/content-paths.ts';
+import { isoDate } from '../../lib/format-dates.ts';
+import { publishedIn } from '../../lib/content-model.ts';
+import { sortByCreatedAt } from '../../lib/timeline.ts';
+import { publishedDate } from '../../lib/timeline.ts';
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.research;
+const research = sortByCreatedAt(await getCollection('research', publishedIn(locale)));
 ---
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
   <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   <section class="shell entry-list archive-list">
-    {research.map((paper) => <article class="entry-card"><div class="entry-meta"><span>{paper.data.status} · {paper.data.version}</span><time datetime={isoDate(publishedDate(paper))}>{publishedDate(paper).getFullYear()}</time></div><h2><a href={contentUrl('research', paper.id, locale)}>{paper.data.title}</a></h2><p>{paper.data.description}</p><a class="text-link" href={contentUrl('research', paper.id, locale)}>{getPageCopy(locale).tagCards.research.action} <span aria-hidden="true">↗</span></a></article>)}
+    {research.map((paper) => <article class="entry-card"><div class="entry-meta"><span>{paper.data.status} · {paper.data.version}</span><time datetime={isoDate(publishedDate(paper))}>{publishedDate(paper).getFullYear()}</time></div><h2><a href={contentUrl('research', paper.id, locale)}>{paper.data.title}</a></h2><p>{paper.data.description}</p><a class="text-link" href={contentUrl('research', paper.id, locale)}>{i18n(locale).page.tagCards.research.action} <span aria-hidden="true">↗</span></a></article>)}
   </section>
 </BaseLayout>

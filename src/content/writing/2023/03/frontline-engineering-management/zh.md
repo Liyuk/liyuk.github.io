@@ -8,6 +8,8 @@ tags: [technical-management, leadership, decision-making, team, work-leadership]
 column: { slug: team-building, order: 1 }
 ---
 
+> 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「团队与成长」这条线的展开。
+
 刚开始带团队时，最容易把管理理解成“自己原来做的事，再加上一些协调工作”：项目卡住了就亲自推进，方案不清楚就自己补完，成员遇到困难就马上给答案，进度有风险就逐项盯紧。
 
 这些动作短期内往往有效。管理者经验更多、信息更全、判断更快，亲自下场确实能让一个具体问题向前走。但如果团队长期只能靠管理者的判断、催促和补位才能运转，团队的能力并没有增长，只是把瓶颈换成了一个人。

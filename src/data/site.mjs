@@ -12,7 +12,9 @@ export const site = {
   // 起始年保持不变；末年是构建时的当前年（new Date().getFullYear()）。
   since: 2018,
   title: `${brand} — Liyuk`,
+  titleEn: `${brandEn} — Liyuk`,
   description: 'Liyuk 关于技术、领导力与日常的现场笔记。',
+  descriptionEn: 'Field notes from Liyuk on technology, leadership, and everyday life.',
   navigation: [
     { href: '/writing/', key: 'writing' },
     { href: '/columns/', key: 'columns' },

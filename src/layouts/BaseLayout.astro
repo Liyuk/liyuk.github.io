@@ -1,28 +1,33 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import 'katex/dist/katex.min.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site.mjs';
-import { getUiCopy } from '../i18n/ui.mjs';
-import { getPageCopy } from '../i18n/page-copy.mjs';
-import { localeFromPath, localizePath } from '../lib/locale-url.mjs';
+import { i18n } from '../i18n/index.mjs';
 
 const {
-  title = site.title,
-  description = site.description,
-  locale = localeFromPath(Astro.url.pathname),
+  title: titleProp,
+  description: descriptionProp,
+  locale = Astro.currentLocale ?? 'zh-CN',
   noindex = false,
 } = Astro.props;
-const ui = getUiCopy(locale);
-const pageCopy = getPageCopy(locale);
+const ui = i18n(locale);
+const pageCopy = i18n(locale).page;
 const isEnglish = locale === 'en';
-const zhUrl = new URL(localizePath(Astro.url.pathname, 'zh-CN'), Astro.site);
-const enUrl = new URL(localizePath(Astro.url.pathname, 'en'), Astro.site);
+// Locale-aware fallbacks so a page that omits its own title/description never
+// leaks the Chinese site defaults onto an English route.
+const title = titleProp ?? (isEnglish ? site.titleEn : site.title);
+const description = descriptionProp ?? (isEnglish ? site.descriptionEn : site.description);
+const rootPath = Astro.url.pathname.replace(/^\/en(?=\/|$)/, '');
+const zhUrl = new URL(getRelativeLocaleUrl('zh-CN', rootPath), Astro.site);
+const enUrl = new URL(getRelativeLocaleUrl('en', rootPath), Astro.site);
 const defaultUrl = isEnglish ? new URL('/', Astro.site) : new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang={locale} data-pagefind-ignore={isEnglish ? '' : undefined}>
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -36,13 +41,13 @@ const defaultUrl = isEnglish ? new URL('/', Astro.site) : new URL(Astro.url.path
       <link rel="alternate" hreflang="en" href={enUrl} />
       <link rel="alternate" hreflang="x-default" href={defaultUrl} />
     </>}
-    <link rel="alternate" type="application/rss+xml" title={`${pageCopy.rss.title} RSS`} href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${pageCopy.rss.title} RSS`} href={isEnglish ? '/en/rss.xml' : '/rss.xml'} />
     <script is:inline>
       const storedTheme = localStorage.getItem('liyuk-theme');
       if (storedTheme) document.documentElement.dataset.theme = storedTheme;
     </script>
     <title>{title}</title>
-    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "c23ada27d5ac4a998ba3d64fbd8cfc93"}'></script>
+    <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "c23ada27d5ac4a998ba3d64fbd8cfc93"}'></script>
   </head>
   <body>
     <a class="skip-link" href="#content">{ui.accessibility.skipToContent}</a>

@@ -1,9 +1,10 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { site } from '../../data/site.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-const copy = getPageCopy(localeFromPath(Astro.url.pathname)).about;
+import { i18n } from '../../i18n/index.mjs';
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.about;
+const url = (p: string) => getRelativeLocaleUrl(locale, p);
 ---
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
   <section class="page-heading shell about"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p><p class="about-intro">{copy.intro}</p></section>
@@ -12,8 +13,8 @@ const copy = getPageCopy(localeFromPath(Astro.url.pathname)).about;
     <p class="eyebrow">{copy.mapEyebrow}</p>
     <h2 id="about-map-heading">{copy.mapTitle}</h2>
     <div class="about-map-grid">
-      {['writing', 'projects', 'research', 'fiction'].map((key) => (
-        <a class="about-map-card" href={copy.map[key].url}>
+      {(['writing', 'projects', 'research', 'fiction'] as const).map((key) => (
+        <a class="about-map-card" href={url(copy.map[key].url)}>
           <strong>{copy.map[key].title}</strong>
           <span>{copy.map[key].desc}</span>
         </a>
@@ -26,7 +27,7 @@ const copy = getPageCopy(localeFromPath(Astro.url.pathname)).about;
     <h2 id="about-fiction-heading">{copy.fictionIntro}</h2>
     <div class="about-novel-list">
       {copy.fictionNovels.map((novel) => (
-        <a class="about-novel" href={novel.url}>
+        <a class="about-novel" href={url(novel.url)}>
           <strong>{novel.title}</strong>
           <span>{novel.desc}</span>
         </a>

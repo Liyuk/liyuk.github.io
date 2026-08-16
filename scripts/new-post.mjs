@@ -6,8 +6,8 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { tags, columns } from '../src/lib/taxonomy.mjs';
-import { buildFrontmatter, buildSlug, createPrompter, isValidDate, isValidSlug, todayStr, validateDate, validateSlug } from './lib/cli.mjs';
+import { tags, columns } from '../src/lib/taxonomy.ts';
+import { buildFrontmatter, buildSlug, createPrompter, todayStr, validateDate, validateSlug } from './lib/cli.mjs';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'src/content');
 const TYPE_CHOICES = [
@@ -45,7 +45,6 @@ export function buildPostFrontmatter(type, answers) {
       ...common,
       publishedAt: answers.publishedAt,
       type: answers.type ?? 'essay',
-      notification: 'never',
       ...(answers.column ? { column: answers.column } : {}),
     };
   }
@@ -132,7 +131,7 @@ async function main() {
           if (!v) return null;
           const unknown = parseTags(v).filter((t) => !(t in tags));
           if (unknown.length) {
-            console.log(`  · 新标签：${unknown.join('、')}（不在注册表，显示为原样；如要双语显示需加入 src/lib/taxonomy.mjs）`);
+            console.log(`  · 新标签：${unknown.join('、')}（不在注册表，显示为原样；如要双语显示需加入 src/lib/taxonomy.ts）`);
           }
           return null;
         },

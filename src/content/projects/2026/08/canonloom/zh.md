@@ -58,15 +58,27 @@ tasks/current.md                   # 当前任务（Agent 的入口）
 
 一章的生产被拆成 7 个阶段，每个阶段有固定产物和写入边界：
 
-```text
-S0  Contract       冻结章契、方案选择、上下文包
-S1  Draft          生成候选正文（只写 drafts/）
-S2  Quick Check    确定性快速检查
-S3  Repair         按 Finding 受限修订（不能借修复发明新事实）
-S4  Strict Check   严格结构/连续性检查
-S5  Independent Review  独立审查视角
-S5b Cross-Validation    交叉验证两份隔离报告
-S6  Settlement     作者批准 → 正文进 manuscript/、状态结算
+```mermaid
+stateDiagram-v2
+    state "S0 Contract — freeze contract" as S0
+    state "S1 Draft — generate candidate draft" as S1
+    state "S2 Quick Check — quick check" as S2
+    state "S3 Repair — bounded revision" as S3
+    state "S4 Strict Check — strict check" as S4
+    state "S5 Independent Review — independent review" as S5
+    state "S5b Cross-Validation — cross-validation" as S5b
+    state "S6 Settlement — author-approved settlement" as S6
+    state "Human decision" as H
+
+    S0 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S3 : S4 fail → retry
+    S4 --> S5
+    S5 --> S5b
+    S5b --> S6
+    S5b --> H : divergence → human decision
 ```
 
 阶段不能跳过：S6 没有作者批准，草稿进不了 `manuscript/`；有 BLOCKER/MAJOR 审查未解决就进不了 S6；任何阶段直接写 canon 都不允许。审查 Finding 分 BLOCKER / MAJOR / MINOR / ADVISORY 四级，前两级阻断晋升。

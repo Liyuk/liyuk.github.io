@@ -6,10 +6,10 @@ const { labels } = Astro.props;
 </button>
 
 <script>
-  const button = document.querySelector('[data-theme-toggle]');
+  const button = document.querySelector<HTMLElement>('[data-theme-toggle]');
   const storageKey = 'liyuk-theme';
 
-  function applyTheme(theme) {
+  function applyTheme(theme: string) {
     document.documentElement.dataset.theme = theme;
     const label = theme === 'dark' ? button?.dataset.darkLabel : button?.dataset.lightLabel;
     if (label) {
@@ -19,7 +19,7 @@ const { labels } = Astro.props;
   }
 
   const savedTheme = localStorage.getItem(storageKey);
-  const initialTheme = savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const initialTheme: string = savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   applyTheme(initialTheme);
 
   button?.addEventListener('click', () => {

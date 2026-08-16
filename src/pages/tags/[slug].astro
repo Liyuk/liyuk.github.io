@@ -1,25 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EntryCard from '../../components/EntryCard.astro';
 import ContentEntryCard from '../../components/ContentEntryCard.astro';
-import { getTag, getIndexableTags } from '../../lib/taxonomy.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { sortByCreatedAt } from '../../lib/timeline.mjs';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
+import { getTag, getIndexableTags } from '../../lib/taxonomy.ts';
+import { getAllPublished } from '../../lib/content-query.ts';
+import { sortByCreatedAt } from '../../lib/timeline.ts';
+import { i18n } from '../../i18n/index.mjs';
 
 export async function getStaticPaths() {
-  const [writing, research, projects, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter), getCollection('project'), getCollection('gallery', publishedFilter)]);
-  return getIndexableTags([...writing, ...research, ...projects, ...galleries]).map(({ slug }) => ({ params: { slug } }));
+  const { writing, research, projects, galleries } = await getAllPublished('zh-CN');
+  return getIndexableTags([...writing, ...research, ...projects, ...galleries]).map(({ slug }) => ({ params: { slug }, props: {} }));
 }
 
 const { slug } = Astro.params;
-const locale = localeFromPath(Astro.url.pathname);
-const ui = getUiCopy(locale);
-const pageCopy = getPageCopy(locale);
-const [writing, research, projects, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter), getCollection('project'), getCollection('gallery', publishedFilter)]);
+const locale = Astro.currentLocale ?? 'zh-CN';
+const ui = i18n(locale);
+const pageCopy = i18n(locale).page;
+const { writing, research, projects, galleries } = await getAllPublished(locale);
 const indexableTags = getIndexableTags([...writing, ...research, ...projects, ...galleries]).map(({ slug: tagSlug }) => tagSlug);
 const tag = getTag(slug, locale);
 const entries = sortByCreatedAt([...writing, ...research, ...projects, ...galleries]).filter((entry) => entry.data.tags?.includes(slug));

@@ -1,14 +1,12 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { localeFromPath, localizePath } from '../../lib/locale-url.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
+import { i18n } from '../../i18n/index.mjs';
 
-const locale = localeFromPath(Astro.url.pathname);
-const copy = getPageCopy(locale).start;
-const ui = getUiCopy(locale);
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.start;
 
-const cards = copy.cards.map((card) => ({ ...card, url: localizePath(card.url, locale) }));
+const cards = copy.cards.map((card) => ({ ...card, url: getRelativeLocaleUrl(locale, card.url) }));
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription}>

@@ -70,11 +70,11 @@ column: { slug: data-metrics-guide, order: 1 }
 
 把几十个指标放到同一张看板上，通常只会制造更多问题。更好的组织方式是从“要保护什么”出发，向下拆成可观察、可行动的信号。
 
-```text
-用户能否完成关键任务
-├── 结果：任务完成率、放弃率、重复尝试率
-├── 过程：可见等待时长、交互卡顿、页面布局是否稳定
-└── 原因：网络失败、服务失败、客户端异常、资源加载失败
+```mermaid
+flowchart TD
+    A["Can user complete the key task"] --> B["Outcome: completion, abandonment, retry rate"]
+    A --> C["Process: visible wait, interaction jank, layout stability"]
+    A --> D["Cause: network, service, client, resource-load failures"]
 ```
 
 这棵树有三个好处。第一，上层指标说明为什么要关心；第二，下层指标帮助定位可能的原因；第三，任何一个数字变化时，都知道应该向上看影响，还是向下找证据。

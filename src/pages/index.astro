@@ -1,20 +1,21 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { getCollection } from 'astro:content';
-import { publishedFilter } from '../lib/content-model.mjs';
-import { localeFromPath, localizePath } from '../lib/locale-url.mjs';
+import { publishedIn } from '../lib/content-model.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EntryCard from '../components/EntryCard.astro';
-import { site } from '../data/site.mjs';
-import { getPageCopy } from '../i18n/page-copy.mjs';
-import { sortByCreatedAt } from '../lib/timeline.mjs';
+import { i18n } from '../i18n/index.mjs';
+import { sortByCreatedAt } from '../lib/timeline.ts';
 
-const locale = localeFromPath(Astro.url.pathname);
-const writing = sortByCreatedAt(await getCollection('writing', publishedFilter));
-const copy = getPageCopy(locale).home;
-const path = (p) => localizePath(p, locale);
+const HOME_POSTS = 3;
+
+const locale = Astro.currentLocale ?? 'zh-CN';
+const writing = sortByCreatedAt(await getCollection('writing', publishedIn(locale)));
+const copy = i18n(locale).page.home;
+const path = (p: string) => getRelativeLocaleUrl(locale, p);
 ---
 
-<BaseLayout>
+<BaseLayout title={copy.metaTitle} description={copy.description}>
   <section class="hero shell">
     <p class="eyebrow">{copy.eyebrow}</p>
     <h1>{copy.title[0]}<br />{copy.title[1]}</h1>
@@ -32,7 +33,7 @@ const path = (p) => localizePath(p, locale);
       <a class="text-link" href={path('/writing/')}>{copy.writing.link} <span aria-hidden="true">↗</span></a>
     </div>
     <div class="entry-list">
-      {writing.length ? writing.slice(0, 3).map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
+      {writing.length ? writing.slice(0, HOME_POSTS).map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
     </div>
   </section>
 

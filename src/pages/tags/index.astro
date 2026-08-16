@@ -1,17 +1,14 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getTag, getIndexableTags } from '../../lib/taxonomy.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { tagUrl } from '../../lib/content-paths.mjs';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
+import { getTag, getIndexableTags } from '../../lib/taxonomy.ts';
+import { getAllPublished } from '../../lib/content-query.ts';
+import { tagUrl } from '../../lib/content-paths.ts';
+import { i18n } from '../../i18n/index.mjs';
 
-const locale = localeFromPath(Astro.url.pathname);
-const copy = getPageCopy(locale).tags;
-const ui = getUiCopy(locale);
-const [writing, research, projects, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter), getCollection('project'), getCollection('gallery', publishedFilter)]);
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.tags;
+const ui = i18n(locale);
+const { writing, research, projects, galleries } = await getAllPublished(locale);
 const tags = getIndexableTags([...writing, ...research, ...projects, ...galleries]);
 ---
 

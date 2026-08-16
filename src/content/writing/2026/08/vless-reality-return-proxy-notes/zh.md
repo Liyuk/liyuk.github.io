@@ -3,7 +3,6 @@ title: 从零搭建一个回国代理：VLESS + Reality 的踩坑记录
 description: 从 SSH 临时直连，到要照顾手机和家人的使用体验，最后用 sing-box 收敛为一套可维护的回国网络方案。
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
-notification: publish
 type: case-study
 tags: [sing-box, vless, reality, network, operations, technology]
 ---
@@ -97,17 +96,11 @@ ssh -D 1080 -N <user>@<server>
 
 最后的结构其实并不花哨：国内 VPS 运行 sing-box；电脑导入到 Clash Verge 一类客户端；手机则使用支持 VLESS + Reality 的客户端。每一台设备使用独立身份信息，不共享一条万能链接。
 
-```text
-电脑 / 手机 / 家人的设备
-          │
-          ▼
-    VLESS + Reality
-          │
-          ▼
- 国内 VPS 上的 sing-box
-          │
-          ▼
-      国内网络服务
+```mermaid
+flowchart TD
+    A["PC / phone / family devices"] --> B["VLESS + Reality"]
+    B --> C["sing-box on China VPS"]
+    C --> D["China network service"]
 ```
 
 我刻意没有追求“全家网络统一接管”。日常只是访问几个站点时，按设备启用客户端更容易理解，也更容易在出现问题时缩小范围。路由器级方案当然更省开关，但它把排障范围扩大到了整个家庭网络，不适合这次需求。
@@ -118,7 +111,7 @@ ssh -D 1080 -N <user>@<server>
 
 第一次写好配置执行 `sing-box check`，报错：
 
-```
+```text
 missing `route.default_domain_resolver` or `domain_resolver` in dial fields
 ```
 
@@ -148,7 +141,7 @@ Reality 的握手目标不是一个写在配置里就自动成立的名字。它
 
 去掉客户端指纹、尝试让它使用系统默认 TLS 时，收到过这样的报错：
 
-```
+```text
 uTLS is required by reality client
 ```
 
@@ -216,6 +209,11 @@ Clash Verge 的界面显示系统代理已开启，但用 `scutil --proxy` 查�
 ```
 
 真正值得保存的不是某一份 JSON，而是排障顺序：先验证服务进程和端口，再从 VPS 验证握手目标的解析与 TLS，接着看客户端版本和指纹，最后检查本机系统代理有没有生效。按这条链路排，问题会比“换一个教程里的参数试试”收敛得快得多。
+
+```mermaid
+flowchart TD
+    A["Verify service process & port"] --> B["From VPS verify handshake target DNS & TLS"] --> C["Check client version & fingerprint"] --> D["Check local system proxy"]
+```
 
 ## 结尾：从“能用”到“可用”
 

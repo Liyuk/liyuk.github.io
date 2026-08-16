@@ -135,6 +135,11 @@ tags: [career, campus-recruitment, engineering, work-leadership]
 
 我更喜欢用四个部分组织项目。
 
+```mermaid
+flowchart LR
+    A["Problem"] --> B["Judgment"] --> C["Action"] --> D["Result & retrospective"]
+```
+
 ### 1. 问题
 
 先说项目面对什么问题，谁受影响，为什么现在要解决。不要从技术方案起手。

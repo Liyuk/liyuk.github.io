@@ -1,13 +1,15 @@
 // Publish gate: run the full verification pipeline before pushing content.
 // Run: npm run publish:check
-// Executes, in order: image audit → unit tests → production build.
+// Executes, in order: image audit → column audit → unit tests → type check → build.
 // Any failure stops the pipeline and exits non-zero.
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const STEPS = [
   { name: '图片引用审计', command: 'npm', args: ['run', 'audit:images'] },
+  { name: '专栏顺序审计', command: 'npm', args: ['run', 'audit:columns'] },
   { name: '单元测试', command: 'npm', args: ['test'] },
+  { name: '类型检查', command: 'npm', args: ['run', 'check'] },
   { name: '生产构建', command: 'npm', args: ['run', 'build'] },
 ];
 

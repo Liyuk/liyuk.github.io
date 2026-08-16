@@ -1,18 +1,16 @@
 ---
 import { getCollection } from 'astro:content';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { localeFromPath } from '../../lib/locale-url.mjs';
+import { publishedIn } from '../../lib/content-model.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EntryCard from '../../components/EntryCard.astro';
-import { site } from '../../data/site.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { sortByCreatedAt } from '../../lib/timeline.mjs';
-import { getIndexableTags } from '../../lib/taxonomy.mjs';
-const locale = localeFromPath(Astro.url.pathname);
-const writing = sortByCreatedAt(await getCollection('writing', publishedFilter));
+import { i18n } from '../../i18n/index.mjs';
+import { sortByCreatedAt } from '../../lib/timeline.ts';
+import { getIndexableTags } from '../../lib/taxonomy.ts';
+const locale = Astro.currentLocale ?? 'zh-CN';
+const writing = sortByCreatedAt(await getCollection('writing', publishedIn(locale)));
 const indexableTags = getIndexableTags(writing).map(({ slug }) => slug);
-const copy = getPageCopy(locale).writing;
-const sortCopy = getPageCopy(locale).writingIndex;
+const copy = i18n(locale).page.writing;
+const sortCopy = i18n(locale).page.writingIndex;
 ---
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
   <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>

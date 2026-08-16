@@ -3,7 +3,6 @@ title: 招聘与职业关系（一）：技术招聘，从“招到人”到建�
 description: 招聘不只是填补一个空缺，而是持续澄清团队需要什么、能提供什么，并在每一次选择中校准判断。
 createdAt: 2022-01-01
 publishedAt: 2022-01-01
-notification: never
 type: essay
 tags: [leadership, team, decision-making, communication, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 1 }

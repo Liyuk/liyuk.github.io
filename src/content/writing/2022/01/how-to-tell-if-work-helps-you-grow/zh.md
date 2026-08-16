@@ -16,6 +16,11 @@ column: { slug: growth-self-assessment, order: 2 }
 
 个人成长可以从三个词开始：**认知、时间、执行**。它们不是线性的步骤，而是一个循环：先看清自己面对的问题，再投入足够的时间去尝试，最后通过执行和总结修正判断。判断一段工作时，也可以逐项检查这三件事有没有发生。
 
+```mermaid
+flowchart LR
+    A["See problem"] --> B["Take action"] --> C["Accept outcome"] --> D["Correct judgment"] --> A
+```
+
 ### 认知
 
 #### 角色的变化

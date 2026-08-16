@@ -4,7 +4,6 @@ description: 当既有梯队失效或需要重新开始时，先重建责任、�
 createdAt: 2023-06-01
 publishedAt: 2023-06-01
 updatedAt: 2026-08-14
-notification: never
 type: essay
 tags: [leadership, collaboration, management, work-leadership]
 column: { slug: team-building, order: 2 }
@@ -15,6 +14,11 @@ column: { slug: team-building, order: 2 }
 真正要重建的不是图，而是一套梯队：它能理解共同目标、承担清楚的责任，在环境变化后仍保持判断、交付和协作的连续性。梯队不是自然长出来的；它需要被选择、培养、校准，也需要在必要时被调整。
 
 因此，从零搭团队的第一件事不是“补齐谁”，而是归零地看待现状：已有的能力是什么，缺失的环节在哪里，哪些习惯正在消耗信任，接下来要靠什么重新建立秩序。下面是我在重建团队时实际遵循的思考顺序；它只讨论可公开复用的原则，不提供任何具体方案。
+
+```mermaid
+flowchart LR
+    A["Rebuild shared goal"] --> B["Set principles first"] --> C["Close the accountability loop"] --> D["Build durable capability"] --> E["Communication serves decisions"] --> F["Manager boundaries"] --> G["Check continuity"]
+```
 
 ## 先重建共同的目标感
 

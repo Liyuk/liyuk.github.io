@@ -1,13 +1,13 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import { site } from '../data/site.mjs';
-import { publishedFilter } from '../lib/content-model.mjs';
-import { getPageCopy } from '../i18n/page-copy.mjs';
-import { writingUrl } from '../lib/content-paths.mjs';
+import { publishedIn } from '../lib/content-model.ts';
+import { i18n } from '../i18n/index.mjs';
+import { writingUrl } from '../lib/content-paths.ts';
 
 export async function GET(context) {
-  const posts = await getCollection('writing', publishedFilter);
-  const copy = getPageCopy(site.locale).rss;
+  const posts = await getCollection('writing', publishedIn(site.locale));
+  const copy = i18n(site.locale).page.rss;
   return rss({
     title: copy.title,
     description: copy.description,

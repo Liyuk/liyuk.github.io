@@ -1,33 +1,30 @@
 ---
-import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { galleryUrl, writingUrl } from '../../lib/content-paths.mjs';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { formatFullDate, isoDate } from '../../lib/format-dates.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
-import { publishedDate } from '../../lib/timeline.mjs';
+import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.ts';
+import { getColumnCollections } from '../../lib/content-query.ts';
+import { entryUrl } from '../../lib/content-paths.ts';
+import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
+import { i18n } from '../../i18n/index.mjs';
+import { publishedDate } from '../../lib/timeline.ts';
 
-const locale = localeFromPath(Astro.url.pathname);
-const copy = getPageCopy(locale).columnsDetail;
-const ui = getUiCopy(locale);
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.columnsDetail;
+const ui = i18n(locale);
 
 export async function getStaticPaths() {
-  const [writing, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('gallery', publishedFilter)]);
+  const { writing, galleries } = await getColumnCollections('zh-CN');
   const entries = [...writing, ...galleries];
-  return Object.keys(columns).filter((slug) => getColumnEntries(entries, slug).length > 0).map((slug) => ({ params: { slug } }));
+  return Object.keys(columns).filter((slug) => getColumnEntries(entries, slug).length > 0).map((slug) => ({ params: { slug }, props: {} }));
 }
 
 const { slug } = Astro.params;
-const [writing, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('gallery', publishedFilter)]);
+const { writing, galleries } = await getColumnCollections(locale);
 const entries = [...writing, ...galleries];
 const column = getColumn(slug, locale);
 const chapters = getColumnEntries(entries, slug);
-const entryUrl = (entry) => entry.collection === 'gallery' ? galleryUrl(entry.data.slug, locale) : writingUrl(entry.id, locale);
-const formatDate = (date) => formatFullDate(date, locale);
-const chapterDates = (entry) => {
+const formatDate = (date: Date) => formatFullDate(date, locale);
+const chapterDates = (entry: CollectionEntry<'writing'> | CollectionEntry<'gallery'>) => {
   const published = `${ui.entry.publishedAt} ${formatDate(publishedDate(entry))}`;
   const updated = entry.data.updatedAt ? `${ui.entry.updatedAt} ${formatDate(entry.data.updatedAt)}` : undefined;
   return copy.chapterDate(published, updated);
@@ -36,5 +33,5 @@ const chapterDates = (entry) => {
 
 <BaseLayout title={copy.title(column?.label ?? '')} description={column?.description}>
   <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{column?.label}</h1><p>{column?.description}</p></section>
-  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}><ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column.order)}</span><h2><a href={entryUrl(entry)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol></section>
+  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}><ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column!.order)}</span><h2><a href={entryUrl(entry, locale)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol></section>
 </BaseLayout>

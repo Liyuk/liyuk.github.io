@@ -1,24 +1,32 @@
 ---
-// 专栏卡片：显示当前文章所属专栏的完整清单，本篇加粗，可折叠（默认展开）
-import { getColumn, getColumnEntries } from '../lib/taxonomy.mjs';
-import { columnUrl, writingUrl, galleryUrl } from '../lib/content-paths.mjs';
-import { localeFromPath } from '../lib/locale-url.mjs';
-import { getUiCopy } from '../i18n/ui.mjs';
+// Column card: shows the full chapter list of the current article's column,
+// bolding the current entry; collapsible (expanded by default).
+import type { CollectionEntry } from 'astro:content';
+import { getColumn, getColumnEntries } from '../lib/taxonomy.ts';
+import { entryUrl } from '../lib/content-paths.ts';
+import { i18n } from '../i18n/index.mjs';
+
+type ColumnMember = CollectionEntry<'writing'> | CollectionEntry<'gallery'>;
+
+interface Props {
+  entry: ColumnMember;
+  columnSlug: string;
+  locale?: string;
+  allEntries?: ColumnMember[];
+}
 
 const {
   entry,
   columnSlug,
-  locale = localeFromPath(Astro.url.pathname),
+  locale = Astro.currentLocale ?? 'zh-CN',
   allEntries = [],
-} = Astro.props;
+} = Astro.props as Props;
 
-const ui = getUiCopy(locale);
+const ui = i18n(locale);
 const column = getColumn(columnSlug, locale);
 
 const columnEntries = getColumnEntries(allEntries, columnSlug);
-const entryUrl = (e) => (e.collection === 'gallery' ? galleryUrl(e.data.slug, e.data.locale) : writingUrl(e.id, e.data.locale));
 const currentId = entry.id;
-const columnPath = columnUrl(columnSlug, locale);
 ---
 
 {column && (
@@ -38,13 +46,13 @@ const columnPath = columnUrl(columnSlug, locale);
         <li class:list={{ current: isCurrent }}>
           {isCurrent ? (
             <span class="column-card-item-current">
-              <span class="column-card-order">{colEntry.data.column.order}</span>
+              <span class="column-card-order">{colEntry.data.column!.order}</span>
               <strong>{colEntry.data.title}</strong>
               <em class="column-card-you">{ui.column.current}</em>
             </span>
           ) : (
-            <a href={entryUrl(colEntry)}>
-              <span class="column-card-order">{colEntry.data.column.order}</span>
+            <a href={entryUrl(colEntry, locale)}>
+              <span class="column-card-order">{colEntry.data.column!.order}</span>
               <span>{colEntry.data.title}</span>
             </a>
           )}
@@ -165,7 +173,7 @@ const columnPath = columnUrl(columnSlug, locale);
 </style>
 
 <script>
-  // 文章页每篇最多一个专栏卡片；用 data-open 单一状态控制折叠
+  // A detail page has at most one column card; a single data-open state controls folding.
   const card = document.querySelector('.column-card');
   if (card instanceof HTMLElement) {
     const toggle = card.querySelector('.column-card-toggle');

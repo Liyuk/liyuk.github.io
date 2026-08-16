@@ -9,14 +9,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-import { buildFrontmatter, createPrompter, isValidSlug, todayStr, validateSlug, validateDate } from './lib/cli.mjs';
+import { buildFrontmatter, createPrompter, todayStr, validateSlug, validateDate } from './lib/cli.mjs';
 
 const GALLERY_CONTENT_DIR = path.join(process.cwd(), 'src/content/galleries');
 const GALLERY_PUBLIC_DIR = path.join(process.cwd(), 'public/images/galleries');
 const MAX_WIDTH = 1600;
+const WEBP_QUALITY = '82';
 
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.heic', '.heif', '.tiff', '.tif', '.gif']);
-const NEEDS_CONVERT = new Set(['.heic', '.heif', '.tiff', '.tif', '.gif']);
 
 // --- pure helpers (exported for tests) ---
 
@@ -87,7 +87,7 @@ export async function convertToWebP(srcFile, outFile) {
     // webp but too wide → decode via sips then re-encode
     const tmp = `${outFile}.tmp.jpg`;
     spawnSync('sips', ['-s', 'format', 'jpeg', ...resizeFlag, srcFile, '--out', tmp], { encoding: 'utf8' });
-    spawnSync('cwebp', ['-q', '82', tmp, '-o', outFile], { encoding: 'utf8' });
+    spawnSync('cwebp', ['-q', WEBP_QUALITY, tmp, '-o', outFile], { encoding: 'utf8' });
     await rm(tmp, { force: true });
     return outFile;
   }
@@ -98,7 +98,7 @@ export async function convertToWebP(srcFile, outFile) {
   if (resizeFlag.length) sipsArgs.push(...resizeFlag);
   const sipsResult = spawnSync('sips', [...sipsArgs, srcFile, '--out', tmp], { encoding: 'utf8' });
   if (sipsResult.status !== 0) throw new Error(`sips 转换失败: ${sipsResult.stderr?.trim() ?? ''}`);
-  const cwebpResult = spawnSync('cwebp', ['-q', '82', tmp, '-o', outFile], { encoding: 'utf8' });
+  const cwebpResult = spawnSync('cwebp', ['-q', WEBP_QUALITY, tmp, '-o', outFile], { encoding: 'utf8' });
   if (cwebpResult.status !== 0) throw new Error(`cwebp 转换失败: ${cwebpResult.stderr?.trim() ?? ''}`);
   await rm(tmp, { force: true });
   return outFile;

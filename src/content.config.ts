@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { parseContentDate } from './lib/content-date.mjs';
+import { parseContentDate } from './lib/content-date.ts';
 
 const contentDate = z.preprocess(parseContentDate, z.date());
 
@@ -14,7 +14,10 @@ const writing = defineCollection({
     createdAt: contentDate,
     publishedAt: contentDate.optional(),
     updatedAt: contentDate.optional(),
-    notification: z.enum(['publish', 'update', 'never']).default('publish'),
+    // Reserved metadata, not yet consumed by any renderer: `type` classifies
+    // the writing stream (essay/note/case-study); `featured` marks entries for
+    // a future curated home section. Kept in the schema so authored frontmatter
+    // stays valid.
     type: z.enum(['essay', 'note', 'case-study']).default('essay'),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
@@ -30,6 +33,7 @@ const project = defineCollection({
     title: z.string(),
     description: z.string(),
     locale: z.enum(['zh-CN', 'en']).default('zh-CN'),
+    translationStatus: z.enum(['original', 'draft', 'reviewed']).default('original'),
     createdAt: contentDate,
     publishedAt: contentDate.optional(),
     updatedAt: contentDate.optional(),
@@ -68,6 +72,7 @@ const research = defineCollection({
     repositoryUrl: z.string().url().optional(),
     paperUrl: z.string().url().optional(),
     locale: z.enum(['zh-CN', 'en']).default('zh-CN'),
+    translationStatus: z.enum(['original', 'draft', 'reviewed']).default('original'),
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
     translationKey: z.string().optional(),
@@ -87,12 +92,23 @@ const galleryImage = z.object({
 });
 
 const gallery = defineCollection({
-  loader: glob({ base: './src/content/galleries', pattern: '**/*.{md,mdx}' }),
+  loader: glob({
+    base: './src/content/galleries',
+    pattern: '**/*.{md,mdx}',
+    // The gallery schema has a `slug` field, which the glob loader's default id
+    // generation would use as the entry id — colliding when a zh file and its en
+    // file share the same slug (e.g. maomao.md and maomao.en.md both slug
+    // "maomao"). Override to id by file path so the two are distinct entries;
+    // the public URL still comes from the shared `slug` field.
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, ''),
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
     slug: z.string().regex(/^[a-z0-9-]+$/, 'Use a stable lowercase gallery slug.'),
     locale: z.enum(['zh-CN', 'en']).default('zh-CN'),
+    translationStatus: z.enum(['original', 'draft', 'reviewed']).default('original'),
+    translationKey: z.string().optional(),
     createdAt: contentDate,
     publishedAt: contentDate.optional(),
     updatedAt: contentDate.optional(),

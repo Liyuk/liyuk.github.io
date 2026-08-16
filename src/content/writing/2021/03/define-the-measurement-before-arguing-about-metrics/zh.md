@@ -14,8 +14,9 @@ column: { slug: data-metrics-guide, order: 2 }
 
 这不是一份“看板应该放什么”的清单，而是一套可执行的工作流程。它适合四类常见场景：准备一个新功能、发现线上波动、推进体验优化，以及复盘一次问题。读者不必一次性建设所有指标；从一条关键用户任务开始，按下面六步做完一个小闭环，通常比铺开几十张图更有价值。
 
-```text
-定义任务 → 画出状态 → 采集事件 → 建立指标组 → 调查变化 → 验证行动
+```mermaid
+flowchart LR
+    A["Define task"] --> B["Draw states"] --> C["Collect events"] --> D["Build metric set"] --> E["Investigate changes"] --> F["Verify action"]
 ```
 
 文中的“保存草稿”只是示例，可以替换为登录、搜索、支付、上传、预约或任何其他关键任务。数字、阈值和结论都应结合自己的场景重新建立，而不是直接套用。
@@ -67,14 +68,16 @@ column: { slug: data-metrics-guide, order: 2 }
 
 指标只能从事件中计算出来。埋点之前，先画出任务允许经过的状态和不允许发生的状态。状态不必复杂，但应覆盖成功、失败、取消和超时。
 
-```text
-编辑中
-  └─ 点击保存 → 请求已发起 → 等待结果
-                                  ├─ 成功：显示“已保存”
-                                  ├─ 可恢复失败：显示原因，可重试
-                                  ├─ 不可恢复失败：明确提示下一步
-                                  ├─ 超时：用户未在约定窗口内得到结果
-                                  └─ 取消：用户主动退出或取消操作
+```mermaid
+stateDiagram-v2
+    [*] --> Editing
+    Editing --> Request sent: click Save
+    Request sent --> Waiting for result
+    Waiting for result --> Success: show "Saved"
+    Waiting for result --> Recoverable failure: show reason, retryable
+    Waiting for result --> Unrecoverable failure: explicit next step
+    Waiting for result --> Timeout: no result within agreed window
+    Waiting for result --> Cancelled: user exits or cancels
 ```
 
 ### 方法：状态-事件表
@@ -209,7 +212,7 @@ column: { slug: data-metrics-guide, order: 2 }
 | 问题确认率 | 经核实的问题数 / 有效反馈数 | 反映反馈分类和处理质量，不代表全部真实问题。 |
 | 重复问题占比 | 某类问题反馈数 / 全部问题反馈数 | 有助于发现集中痛点，但受分类规则影响。 |
 | 修复后复发率 | 修复后同类问题再次出现的比例 | 需明确“同类”的判定和观察窗口。 |
-| 每百万活跃用户的问题反馈数 | 有效问题反馈数 / 活跃用户数 × 1,000,000 | 适合在不同规模的产品或周期之间比较，前提是反馈入口与分类规则一致。 |
+| 每百万活跃用户的问题反馈数 | $\text{Valid Problem Reports} / \text{Active Users} \times 1{,}000{,}000$ | 适合在不同规模的产品或周期之间比较，前提是反馈入口与分类规则一致。 |
 
 用户反馈是发现问题的入口，不是对真实分布的无偏抽样。愿意反馈的人、反馈入口的位置和分类方式都会改变数据；因此它应与行为数据、日志和访谈互相验证。
 
@@ -318,8 +321,16 @@ column: { slug: data-metrics-guide, order: 2 }
 
 以“发布一条内容”为例，可以把一次用户任务拆成状态序列：
 
-```text
-开始编辑 → 输入或选择内容 → 发起提交 → 等待处理 → 明确成功 / 明确失败 / 主动取消 / 超时
+```mermaid
+stateDiagram-v2
+    [*] --> Start editing
+    Start editing --> Enter/select content
+    Enter/select content --> Submit
+    Submit --> Processing
+    Processing --> Explicit success
+    Processing --> Explicit failure
+    Processing --> User cancelled
+    Processing --> Timeout
 ```
 
 由此可以得到一组彼此互相校验的指标：

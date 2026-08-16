@@ -26,12 +26,12 @@ tags: [product, ai, computer-vision, privacy, beauty]
 
 V1 的流程不是单点图像识别，而是一个决策闭环：
 
-```text
-单人正脸照片
-  → 可见特征观察：肤色深度、undertone、脸型与可见肤质状态
-  → 妆容方案与注意事项
-  → 商品、色号、肤质与品牌市场筛选
-  → 真实购买链接、教程与历史记录
+```mermaid
+flowchart TD
+    A["Single front-facing photo"] --> B["Observable features: skin depth, undertone, face shape & skin condition"]
+    B --> C["Makeup plan & precautions"]
+    C --> D["Product / shade / tone / brand market filtering"]
+    D --> E["Real purchase links, tutorials & history"]
 ```
 
 这意味着每一步都要回答不同的问题。图像分析需要说明“看到了什么”；推荐需要说明“为什么适合”；商品层需要面对不同地区的品牌、色号与购买路径；教程则要让建议有可执行的下一步。

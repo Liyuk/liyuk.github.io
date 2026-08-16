@@ -7,19 +7,27 @@
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
+    "check": "astro check",
     "audit:images": "node scripts/audit-images.mjs",
+    "audit:columns": "node scripts/audit-columns.mjs",
     "new:post": "node scripts/new-post.mjs",
     "new:gallery": "node scripts/new-gallery.mjs",
     "publish": "node scripts/publish.mjs",
     "publish:check": "node scripts/publish-check.mjs",
     "prepare": "git config core.hooksPath .githooks",
-    "test": "node --test"
+    "test": "node --test",
+    "test:e2e": "node tests/e2e-smoke.mjs"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^5.13.7",
+    "katex": "^0.18.4",
     "pagefind": "^1.5.2",
-    "playwright": "^1.62.1"
+    "playwright": "^1.62.1",
+    "rehype-katex": "^7.0.1",
+    "rehype-mermaid": "^3.0.0",
+    "remark-math": "^6.0.0"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19"

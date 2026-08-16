@@ -6,7 +6,7 @@ publishedAt: 2026-08-15
 status: active
 repositoryUrl: https://github.com/Liyuk/neo-matrix
 hero:
-  src: /images/projects/neo-matrix/hero-settlement.png
+  src: /images/projects/neo-matrix/hero-settlement.webp
   alt: Neo Matrix 管理端的结算与提现页面，12 张结算单、¥123 流水，含一张对账异常待核验。
   caption: 结算与提现管理页面——调度与结算机制的可视化结果。
 tags: [ai-relay, api-key, revenue-sharing, routing, settlement]
@@ -54,7 +54,7 @@ Neo Matrix 的想法很简单：**把个人闲置的 Key，变成平台可调度
 
 ## 架构：调度 + 结算两条链路
 
-![Neo Matrix 调度与结算架构](/images/projects/neo-matrix/architecture.png)
+![Neo Matrix 调度与结算架构](/images/projects/neo-matrix/architecture.webp)
 
 平台上有四个模块在协作：**成本最优路由**决定请求走哪个渠道；**消费记账**同时记零售价和成本价；**分成结算**按周期把利润分给供给方；**对账 + 信任**保证账目可信、异常渠道被压制。
 
@@ -62,21 +62,28 @@ Neo Matrix 的想法很简单：**把个人闲置的 Key，变成平台可调度
 
 一般中转站（one-api 原版等）的调度是**随机选路**：所有可用渠道放一个池子，按优先级加权随机挑一个。它解决的是"请求别都挤在一条渠道上"的负载均衡问题，**不区分渠道的成本和可信度**。
 
-Neo Matrix 的调度把"利益"织进了权重。同模型多渠道时，**不是随机派发，也不是只挑最便宜的**，而是按 `1 / (成本倍率 × 信任惩罚)` 加权随机：
+Neo Matrix 的调度把"利益"织进了权重。同模型多渠道时，**不是随机派发，也不是只挑最便宜的**，而是按 $1 / (\text{Cost Ratio} \times \text{Trust Penalty})$ 加权随机：
 
 1. 先按**优先级**分组，只在最高优先级这一组里选。
-2. 组内按 `WeightFactor = 1 / (CostRatio × trustPenalty)` **加权随机**：
+2. 组内按 $WeightFactor = 1 / (CostRatio \times trustPenalty)$ **加权随机**：
    - 成本越低 → 分值越高 → 选中概率越大（平台利润最大化）
    - 信任越高 → 惩罚越小（信任 5 无惩罚，信任 1 成本放大 5 倍）→ 选中概率越大
    - **低信任渠道概率非零**——保证新渠道能"爬坡"
 3. **反套利防线**：如果消费者正好是某渠道的供给方，调度会**排除他自己托管的渠道**（`excludeOwnerId`），从机制上杜绝"自产自销套分成"。
 
+```mermaid
+flowchart TD
+    A["Multi-channel request for one model"] --> B["1. Priority grouping: pick from top-priority group only"]
+    B --> C["2. Weighted random: WeightFactor = 1 / (CostRatio × trustPenalty)"]
+    C --> D["3. Anti-arbitrage: excludeOwnerId drops self-hosted channel"]
+```
+
 | 维度 | 一般中转站 | Neo Matrix |
 |---|---|---|
 | 优先级分组 | ✅ | ✅ |
 | 随机均衡 | ✅ | ✅（加权随机，低信任概率非零） |
-| 渠道成本 | ❌ | ✅ `1/CostRatio` |
-| 渠道信任 | ❌ | ✅ `1/trustPenalty` |
+| 渠道成本 | ❌ | ✅ $1/CostRatio$ |
+| 渠道信任 | ❌ | ✅ $1/trustPenalty$ |
 | 反套利 | ❌ | ✅ `excludeOwnerId` |
 
 > **一句话**：一般中转站是"随机把请求撒出去"；Neo Matrix 是"按『谁便宜 + 谁可信』加权分配，同时防自产自销"。前者解决"能不能用"，后者解决"怎么用最划算、且不会被人薅"。
@@ -91,21 +98,47 @@ Neo Matrix 的调度把"利益"织进了权重。同模型多渠道时，**不�
 
 **信任是"低起点 + 运营自动升 + 异常自动降"的闭环**：新渠道靠爬坡证明自己，异常渠道被负反馈压制，管理员只在关键节点干预。
 
+```mermaid
+stateDiagram-v2
+    state "Trust 1 (new channel default)" as t1
+    state "Trust 2" as t2
+    state "Trust 3" as t3
+    state "Trust 4" as t4
+    state "Trust 5" as t5
+
+    [*] --> t1
+    t1 --> t2 : 7 normal cycles → +1
+    t2 --> t3 : 7 normal cycles → +1
+    t3 --> t4 : 7 normal cycles → +1
+    t4 --> t5 : 7 normal cycles → +1
+    t2 --> t1 : 2 abnormal cycles → −1
+    t3 --> t2 : 2 abnormal cycles → −1
+    t4 --> t3 : 2 abnormal cycles → −1
+    t5 --> t4 : 2 abnormal cycles → −1
+    note right of t1 : Admin can manually set 1–5
+```
+
 用演示数据举例：同样的 `gpt-4o-mini` 请求，官方直连（成本 1.0，信任 5）份额最多；聚合平台（成本 1.2，信任 4）次之；订阅转API（成本 0.8 但信任 2 有惩罚）分到少量爬坡流量。
 
 ## 结算：钱怎么分
 
 每笔消费记两个数：**零售额**（消费者付的）和**成本额**（付给上游的）。周期结算：
 
-```
-利润 = 零售额 − 成本额
-供给方分成 = 成本额 + 利润 × (1 − 平台抽成比)   // 默认平台抽 20% 利润
-平台留存   = 零售额 − 供给方分成
-```
+$$
+\text{Profit} = \text{Revenue} - \text{Cost}
+$$
 
-成本额 = 零售额 × 渠道成本倍率。成本倍率 1.0 → 利润 0，供给方拿回成本；> 1.0 → 平台有利润抽；< 1.0（需审批）→ 平台贴钱换低价供给。
+$$
+\text{Supplier Share} = \text{Cost} + \text{Profit} \times (1 - \text{Platform Take Rate})
+$$
 
-![结算与提现管理](/images/projects/neo-matrix/hero-settlement.png)
+$$
+\text{Platform Retained} = \text{Revenue} - \text{Supplier Share}
+$$
+
+其中默认平台抽 20% 利润，且 $\text{Cost} = \text{Revenue} \times \text{Channel Cost Ratio}$。成本倍率 1.0 → 利润 0，供给方拿回成本；> 1.0 → 平台有利润抽；< 1.0（需审批）→ 平台贴钱换低价供给。
+
+![结算与提现管理](/images/projects/neo-matrix/hero-settlement.webp)
 
 ### 三个工程难点（踩过的坑）
 
@@ -154,21 +187,21 @@ curl http://localhost:3000/v1/chat/completions \
 
 价格 = 平台统一零售价（`ModelRatio`，锚定官方公开价）。**同一模型无论走哪个渠道，消费者价格不变**：
 
-![消费者令牌](/images/projects/neo-matrix/tokens-consumer.png)
+![消费者令牌](/images/projects/neo-matrix/tokens-consumer.webp)
 
-![令牌管理](/images/projects/neo-matrix/tokens.png)
+![令牌管理](/images/projects/neo-matrix/tokens.webp)
 
 ### 我是供给方
 
 提交 API Key → 平台自动校验 → 参与调度 → 按用量分成 → 提现：
 
-![供给方中心](/images/projects/neo-matrix/supplier-center.png)
+![供给方中心](/images/projects/neo-matrix/supplier-center.webp)
 
 供给方中心一眼看清账目：可提现余额 ¥54、结算中 ¥63、平台抽成 20%。
 
 ### 管理员的渠道管理
 
-![渠道管理](/images/projects/neo-matrix/channels.png)
+![渠道管理](/images/projects/neo-matrix/channels.webp)
 
 4 个渠道展示不同成本倍率与信任档位。注意"订阅转API · 优化路由"成本 0.8 < 1.0——低于官方基准必须走**成本申报审批**，防"低报抢量"。
 

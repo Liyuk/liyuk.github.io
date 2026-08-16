@@ -147,6 +147,12 @@ tags: [workplace, power, professional-relationships, risk-analysis, human-ai-col
 | 中：同级/协作方 | 横向 | 恶性竞争、抢功、信息截断、构陷、排挤（mobbing） | 职场欺凌与排挤综述[7] | 信息与声誉权的争夺；群体性排挤；边界惩罚 |
 | 下：下属/执行方 | 向上 | 向上越界、下属的沉默与失声、执行层信息失真 | 员工沉默研究[8] | 下情无法上达；异议被压制；信息在传递中失真 |
 
+```mermaid
+flowchart TD
+  UP["Above: managers / decision-makers (downward)"] --> MID["Middle: peers / collaborators (horizontal)"]
+  MID --> DOWN["Below: reports / executors (upward)"]
+```
+
 三个层级里，"来自下方"的风险最容易被忽略，也最值得单独说明。**员工沉默（employee silence）**研究指出：员工不发声，往往不是因为没有问题，而是因为发声被经验性地惩罚过——被冷落、被贴"不配合"标签、被排除在关键场合之外[8]。当一个人"选择沉默"，这本身就是一项需要被纳入风险标注的事实，而不是"他没什么意见"。心理安全（psychological safety）研究从正面给出了同一件事的另一面：在心理安全的团队里，成员才敢于提问、承认错误、提出异议——这种安全感正是对抗三个层级风险的基础[9]。
 
 三层级模型对分析的实际价值是**强制补全**：当材料里只有"上级 vs 我"时，协议应追问"平级那里有没有同类模式""下属那里有没有失声信号"；当材料里只有"我和同事"时，应追问"这个结构里谁有权决定、谁在承担风险"。这也让 §4 的结构位置图（谁掌握绩效、信息、声誉、资源）有了明确的分层骨架。
@@ -218,13 +224,13 @@ AI 的可取用途是减少遗漏、让假设显式化，并帮助用户从强�
 
 ### 5.2 安全工作流
 
-```text
-去标识材料
-  → 时间线与事实抽取
-  → M1–M5 候选标注（每项含替代解释）
-  → 矛盾 / 证据缺口 / 高风险信号检查
-  → 人类审阅与独立核验
-  → 风险匹配的保护动作
+```mermaid
+flowchart TD
+  A["De-identified material"] --> B["Timeline & fact extraction"]
+  B --> C["M1–M5 candidate annotation (each with alternative)"]
+  C --> D["Contradictions / evidence gaps / high-risk signals"]
+  D --> E["Human review & independent verification"]
+  E --> F["Risk-matched protective action"]
 ```
 
 去标识是第一步，不是可选项：输入前应删除姓名、联系方式、精确地点、工作单位、账号、证件和私密内容。AI 输出只能作为讨论提纲，不能替代 HR、法务、律师、劳动仲裁机构或心理专业人员的判断。

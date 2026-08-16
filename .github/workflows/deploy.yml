@@ -21,10 +21,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # Node 24 (matches local dev): `src/lib/*.ts` is imported directly by
+          # `node --test` and the content scripts, which rely on Node's built-in
+          # type stripping (enabled by default since Node 23.6).
+          node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build
+      # Mermaid diagrams are rendered at build time (rehype-mermaid) via Playwright.
+      - run: npx playwright install --with-deps chromium
+      # Full publish gate (image audit → column audit → tests → type check → build).
+      # Mirrors the local pre-push hook so `--no-verify` / manual dispatch still verify.
+      - run: npm run publish:check
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

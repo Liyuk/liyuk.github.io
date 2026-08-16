@@ -1,17 +1,17 @@
 ---
 import { getCollection } from 'astro:content';
 import ArchiveSection from '../../../components/ArchiveSection.astro';
-import { publishedFilter } from '../../../lib/content-model.mjs';
-import { groupByYear } from '../../../lib/timeline.mjs';
-import { localeFromPath } from '../../../lib/locale-url.mjs';
-import { getPageCopy } from '../../../i18n/page-copy.mjs';
+import { notDraft } from '../../../lib/content-model.ts';
+import { groupByYear } from '../../../lib/timeline.ts';
+import { i18n } from '../../../i18n/index.mjs';
 
 export async function getStaticPaths() {
-  return groupByYear(await getCollection('project', publishedFilter)).map(({ year, entries }) => ({ params: { year: String(year) }, props: { year, entries } }));
+  return groupByYear(await getCollection('project', notDraft)).map(({ year, entries }) => ({ params: { year: String(year) }, props: { year, entries } }));
 }
 
 const { year, entries } = Astro.props;
-const locale = localeFromPath(Astro.url.pathname);
+const locale = Astro.currentLocale ?? 'zh-CN';
+const localEntries = entries.filter((entry) => entry.data.locale === locale);
 ---
 
-<ArchiveSection collection="projects" entries={entries} label={getPageCopy(locale).projects.label} action={getPageCopy(locale).projects.view} kind="year" year={year} />
+<ArchiveSection collection="projects" entries={localEntries} label={i18n(locale).page.projects.label} action={i18n(locale).page.projects.view} kind="year" year={year} />

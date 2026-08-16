@@ -4,7 +4,6 @@ description: 一个双十一购物场景的旧案例：在急着想方案之前�
 createdAt: 2018-04-05
 publishedAt: 2018-04-05
 updatedAt: 2026-08-14
-notification: never
 type: case-study
 tags: [product, problem-framing, archive, work-leadership]
 ---

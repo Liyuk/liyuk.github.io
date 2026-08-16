@@ -1,32 +1,35 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { contentSlug } from '../../lib/content-paths.mjs';
-import { tagUrl } from '../../lib/content-paths.mjs';
-import { getIndexableTags, getTag } from '../../lib/taxonomy.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { formatFullDate, isoDate } from '../../lib/format-dates.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { publishedDate } from '../../lib/timeline.mjs';
+import TagList from '../../components/TagList.astro';
+import { contentSlug } from '../../lib/content-paths.ts';
+import { getIndexableTags } from '../../lib/taxonomy.ts';
+import { getAllPublished, groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
+import { notDraft } from '../../lib/content-model.ts';
+import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
+import { i18n } from '../../i18n/index.mjs';
+import { publishedDate } from '../../lib/timeline.ts';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('project', publishedFilter);
-  return projects.map((entry) => ({ params: { slug: contentSlug(entry.id) }, props: { entry } }));
+  const projects = await getCollection('project', notDraft);
+  return groupByLocaleVariant(projects, (entry) => contentSlug(entry.id)).map(({ slug, variants }) => ({
+    params: { slug },
+    props: { variants },
+  }));
 }
 
-const { entry } = Astro.props;
-const locale = localeFromPath(Astro.url.pathname);
-const ui = getUiCopy(locale);
-const pageCopy = getPageCopy(locale);
+const { variants } = Astro.props;
+const locale = Astro.currentLocale ?? 'zh-CN';
+const entry = pickLocaleVariant(variants, locale)!;
+const ui = i18n(locale);
+const pageCopy = i18n(locale).page;
 const { Content } = await render(entry);
-const [writing, research, projects, galleries] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter), getCollection('project'), getCollection('gallery', publishedFilter)]);
+const { writing, research, projects, galleries } = await getAllPublished(locale);
 const indexableTags = getIndexableTags([...writing, ...research, ...projects, ...galleries]).map(({ slug }) => slug);
 const isWork = Boolean(entry.data.workUrl && entry.data.work);
 const workCover = entry.data.work?.cover;
-const formatDate = (date) => formatFullDate(date, locale);
+const formatDate = (date: Date) => formatFullDate(date, locale);
 ---
 <BaseLayout title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description}>
-  <article class="article shell"><header><p class="eyebrow">{isWork ? pageCopy.projectsDetail.work : pageCopy.projectsDetail.project} · {entry.data.status}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><time datetime={isoDate(publishedDate(entry))}>{isWork ? pageCopy.projectsDetail.collectedAt : pageCopy.projectsDetail.startedAt} {formatDate(publishedDate(entry))}</time>{entry.data.updatedAt && <time datetime={isoDate(entry.data.updatedAt)}>{formatDate(entry.data.updatedAt)}</time>}{isWork ? <>{entry.data.work.penName && <span>{entry.data.work.penName}</span>}{entry.data.work.platform && <span>{entry.data.work.platform}</span>}{entry.data.work.status && <span>{entry.data.work.status}</span>}<a href={entry.data.workUrl} target="_blank" rel="noopener noreferrer">{pageCopy.projectsDetail.read} ↗</a></> : <a href={entry.data.repositoryUrl}>{pageCopy.projectsDetail.github} ↗</a>}{!isWork && entry.data.paperUrl && <a href={entry.data.paperUrl}>{pageCopy.projectsDetail.systemDesignPaper} ↗</a>}</div>{entry.data.tags.length > 0 && <ul class="tag-list article-tags" aria-label={ui.entry.tagsAria}>{entry.data.tags.map((slug) => <li>{indexableTags.includes(slug) ? <a href={tagUrl(slug, locale)}>#{getTag(slug, locale).label}</a> : <span>#{getTag(slug, locale).label}</span>}</li>)}</ul>}</header>{workCover ? <figure class="project-hero work-cover"><img src={workCover} alt={pageCopy.projectsDetail.coverAlt(entry.data.title)} decoding="async" /></figure> : isWork ? <div class="work-cover-placeholder" aria-hidden="true"><span>《{entry.data.title}》</span><em>{pageCopy.projectsDetail.coverPlaceholder}</em></div> : entry.data.hero && <figure class="project-hero"><img src={entry.data.hero.src} alt={entry.data.hero.alt} decoding="async" />{entry.data.hero.caption && <figcaption>{entry.data.hero.caption}</figcaption>}</figure>}<div class="prose"><Content /></div></article>
+  <article class="article shell"><header><p class="eyebrow">{isWork ? pageCopy.projectsDetail.work : pageCopy.projectsDetail.project} · {entry.data.status}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><time datetime={isoDate(publishedDate(entry))}>{isWork ? pageCopy.projectsDetail.collectedAt : pageCopy.projectsDetail.startedAt} {formatDate(publishedDate(entry))}</time>{entry.data.updatedAt && <time datetime={isoDate(entry.data.updatedAt)}>{formatDate(entry.data.updatedAt)}</time>}{isWork ? <>{entry.data.work?.penName && <span>{entry.data.work?.penName}</span>}{entry.data.work?.platform && <span>{entry.data.work?.platform}</span>}{entry.data.work?.status && <span>{entry.data.work?.status}</span>}<a href={entry.data.workUrl} target="_blank" rel="noopener noreferrer">{pageCopy.projectsDetail.read} ↗</a></> : <a href={entry.data.repositoryUrl}>{pageCopy.projectsDetail.github} ↗</a>}{!isWork && entry.data.paperUrl && <a href={entry.data.paperUrl}>{pageCopy.projectsDetail.systemDesignPaper} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" />}</header>{workCover ? <figure class="project-hero work-cover"><img src={workCover} alt={pageCopy.projectsDetail.coverAlt(entry.data.title)} decoding="async" /></figure> : isWork ? <div class="work-cover-placeholder" aria-hidden="true"><span>《{entry.data.title}》</span><em>{pageCopy.projectsDetail.coverPlaceholder}</em></div> : entry.data.hero && <figure class="project-hero"><img src={entry.data.hero.src} alt={entry.data.hero.alt} decoding="async" />{entry.data.hero.caption && <figcaption>{entry.data.hero.caption}</figcaption>}</figure>}<div class="prose"><Content /></div></article>
 </BaseLayout>

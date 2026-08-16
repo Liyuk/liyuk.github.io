@@ -1,13 +1,12 @@
 ---
-import { contentUrl, galleryUrl } from '../lib/content-paths.mjs';
-import { localeFromPath } from '../lib/locale-url.mjs';
-import { formatFullDate, isoDate } from '../lib/format-dates.mjs';
-import { getUiCopy } from '../i18n/ui.mjs';
-import { publishedDate } from '../lib/timeline.mjs';
+import { contentUrl, galleryUrl } from '../lib/content-paths.ts';
+import { formatFullDate, isoDate } from '../lib/format-dates.ts';
+import { i18n } from '../i18n/index.mjs';
+import { publishedDate } from '../lib/timeline.ts';
 
 const { entry, collection, action, label, locale: localeProp } = Astro.props;
-const locale = localeProp ?? entry.data.locale ?? localeFromPath(Astro.url.pathname);
-const ui = getUiCopy(locale);
+const locale = localeProp ?? entry.data.locale ?? Astro.currentLocale ?? 'zh-CN';
+const ui = i18n(locale);
 const published = publishedDate(entry);
 const date = formatFullDate(published, locale);
 const meta = collection === 'research' ? `${entry.data.status} · ${entry.data.version}` : collection === 'gallery' ? ui.count.photos(entry.data.images.length) : entry.data.status;

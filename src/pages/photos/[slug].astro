@@ -1,42 +1,44 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { site } from '../../data/site.mjs';
-import { getGalleryCover } from '../../lib/gallery.mjs';
-import { columnUrl, galleryUrl, tagUrl, writingUrl } from '../../lib/content-paths.mjs';
-import { getColumn, getColumnEntries, getIndexableTags, getTag } from '../../lib/taxonomy.mjs';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { formatFullDate } from '../../lib/format-dates.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { publishedDate } from '../../lib/timeline.mjs';
+import TagList from '../../components/TagList.astro';
+import { getGalleryCover } from '../../lib/gallery.ts';
+import { columnUrl, entryUrl } from '../../lib/content-paths.ts';
+import { getColumn, getColumnEntries, getIndexableTags } from '../../lib/taxonomy.ts';
+import { formatFullDate } from '../../lib/format-dates.ts';
+import { notDraft } from '../../lib/content-model.ts';
+import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
+import { i18n } from '../../i18n/index.mjs';
+import { publishedDate } from '../../lib/timeline.ts';
 
 export async function getStaticPaths() {
-  const galleries = await getCollection('gallery', publishedFilter);
-  return galleries.map((gallery) => ({ params: { slug: gallery.data.slug }, props: { gallery } }));
+  const galleries = await getCollection('gallery', notDraft);
+  return groupByLocaleVariant(galleries, (gallery) => gallery.data.slug).map(({ slug, variants }) => ({
+    params: { slug },
+    props: { variants },
+  }));
 }
 
-const { gallery } = Astro.props;
-const locale = localeFromPath(Astro.url.pathname);
-const ui = getUiCopy(locale);
-const pageCopy = getPageCopy(locale);
+const { variants } = Astro.props;
+const locale = Astro.currentLocale ?? 'zh-CN';
+const gallery = pickLocaleVariant(variants, locale)!;
+const ui = i18n(locale);
+const pageCopy = i18n(locale).page;
 const cover = getGalleryCover(gallery);
 const coverIndex = Math.max(0, gallery.data.images.findIndex((image) => image.id === cover.id));
-const formatDate = (date) => formatFullDate(date, locale);
-const localeFilter = ({ data }) => !data.draft && data.locale === gallery.data.locale;
+const formatDate = (date: Date) => formatFullDate(date, locale);
+const localeFilter = ({ data }: { data: { draft: boolean; locale: string } }) => !data.draft && data.locale === gallery.data.locale;
 const [writing, galleries] = await Promise.all([getCollection('writing', localeFilter), getCollection('gallery', localeFilter)]);
 const indexableTags = getIndexableTags([...writing, ...galleries]).map(({ slug }) => slug);
 const columnEntries = gallery.data.column ? getColumnEntries([...writing, ...galleries], gallery.data.column.slug) : [];
 const columnIndex = columnEntries.findIndex((entry) => entry.id === gallery.id);
 const previousColumnEntry = columnEntries[columnIndex - 1];
 const nextColumnEntry = columnEntries[columnIndex + 1];
-const entryUrl = (entry) => entry.collection === 'gallery' ? galleryUrl(entry.data.slug, locale) : writingUrl(entry.id, locale);
 ---
 
 <BaseLayout title={`${gallery.data.title} — ${ui.navigation.photos} — ${ui.name}`} description={gallery.data.description}>
   <article class="gallery-detail shell">
-    <header class="gallery-header"><p class="eyebrow">{ui.navigation.photos} · {formatDate(publishedDate(gallery))}</p><h1>{gallery.data.title}</h1><p>{gallery.data.description}</p><span>{ui.count.photos(gallery.data.images.length)}</span>{gallery.data.column && <p class="column-reference">{ui.entry.columnIn(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug, gallery.data.column.order)}</p>}{gallery.data.tags.length > 0 && <ul class="tag-list article-tags" aria-label={ui.entry.tagsAria}>{gallery.data.tags.map((slug) => <li>{indexableTags.includes(slug) ? <a href={tagUrl(slug, locale)}>#{getTag(slug, locale).label}</a> : <span>#{getTag(slug, locale).label}</span>}</li>)}</ul>}</header>
+    <header class="gallery-header"><p class="eyebrow">{ui.navigation.photos} · {formatDate(publishedDate(gallery))}</p><h1>{gallery.data.title}</h1><p>{gallery.data.description}</p><span>{ui.count.photos(gallery.data.images.length)}</span>{gallery.data.column && <p class="column-reference">{ui.entry.columnIn(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug, gallery.data.column.order)}</p>}<TagList tags={gallery.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header>
     <section class="gallery-carousel" aria-label={ui.gallery.carouselAria(gallery.data.title)} data-gallery-carousel tabindex="-1">
       <figure>
         <img data-gallery-image src={cover.src} alt={cover.alt} width={cover.width} height={cover.height} decoding="async" fetchpriority="high" />
@@ -51,7 +53,7 @@ const entryUrl = (entry) => entry.collection === 'gallery' ? galleryUrl(entry.da
         {gallery.data.images.map((image, index) => <li><button type="button" aria-label={ui.gallery.viewPhotoAria(index + 1, image.alt)} aria-current={image.id === cover.id ? 'true' : undefined} data-gallery-select={index}><img src={image.src} alt="" width={image.width} height={image.height} loading="lazy" decoding="async" /></button></li>)}
       </ol>
     </section>
-    {gallery.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(gallery.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug)}</a>{previousColumnEntry && <a href={entryUrl(previousColumnEntry)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={entryUrl(nextColumnEntry)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
+    {gallery.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(gallery.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug)}</a>{previousColumnEntry && <a href={entryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={entryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
   </article>
 </BaseLayout>
 

@@ -1,0 +1,39 @@
+---
+// Shared tag-list renderer: one row per tag, linked only when the tag is
+// indexable (has enough content to earn its own page). Used by entry cards and
+// every detail page so the link-vs-plain decision stays in one place.
+import { tagUrl } from '../lib/content-paths.ts';
+import { getTag } from '../lib/taxonomy.ts';
+import { i18n } from '../i18n/index.mjs';
+
+interface Props {
+  tags?: string[];
+  locale?: string;
+  indexableTags?: string[];
+  class?: string;
+  max?: number;
+  pagefindFilter?: boolean;
+}
+
+const {
+  tags = [],
+  locale,
+  indexableTags = [],
+  class: extraClass,
+  max,
+  pagefindFilter = false,
+} = Astro.props as Props;
+
+const shown = max ? tags.slice(0, max) : tags;
+---
+{shown.length > 0 && (
+  <ul class:list={['tag-list', extraClass]} aria-label={i18n(locale).entry.tagsAria}>
+    {shown.map((slug) => (
+      <li data-pagefind-filter={pagefindFilter ? 'tag' : undefined}>
+        {indexableTags.includes(slug)
+          ? <a href={tagUrl(slug, locale)}>#{getTag(slug, locale).label}</a>
+          : <span>#{getTag(slug, locale).label}</span>}
+      </li>
+    ))}
+  </ul>
+)}

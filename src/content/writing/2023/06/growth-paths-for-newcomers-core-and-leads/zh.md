@@ -8,11 +8,18 @@ tags: [career, growth, team, leadership, work-leadership]
 column: { slug: team-building, order: 5 }
 ---
 
+> 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「团队与成长」这条线的展开。
+
 团队谈成长路径时，很容易先画出一张层级图：从初级到资深，从成员到负责人，每一层列出更多技能和更大影响力。它能提供方向，却也容易造成误解：仿佛每个人都要走同一条路，或只要逐项完成清单，就完成了成长。
 
 更有用的路径设计，不是给人贴阶段标签，而是说明**责任如何扩大、判断如何变化、支持应当如何调整**。同一个人也可能在不同领域处于不同阶段：在熟悉的系统里能够经营复杂问题，在陌生领域仍需要从基本任务开始。
 
 下面三条路径不是任何组织的职级标准，而是设计培养机会时可用的框架：新人先建立可靠的完成能力；骨干开始经营问题与协作；负责人则让更多人能够独立承担责任。
+
+```mermaid
+flowchart TD
+    A["Newcomer<br/>full loop on a defined task"] --> B["Core member<br/>loop from definition to collaboration & verification"] --> C["Owner/lead<br/>keep multiple problems & long-term capability aligned"]
+```
 
 ## 新人：从完成任务，到理解问题
 

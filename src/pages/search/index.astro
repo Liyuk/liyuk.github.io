@@ -1,12 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
+import { i18n } from '../../i18n/index.mjs';
 
-const locale = localeFromPath(Astro.url.pathname);
-const copy = getPageCopy(locale).search;
-const ui = getUiCopy(locale);
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.search;
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription} noindex>
@@ -20,6 +17,8 @@ const ui = getUiCopy(locale);
 </BaseLayout>
 
 <script define:vars={{ statusTemplate: copy.statusTemplate }}>
+  const MAX_RESULTS = 20;
+  const DEBOUNCE_MS = 180;
   const input = document.querySelector('#site-search');
   const status = document.querySelector('#search-status');
   const results = document.querySelector('#search-results');
@@ -45,13 +44,13 @@ const ui = getUiCopy(locale);
     if (!(status instanceof HTMLElement) || !query) { render([]); if (status instanceof HTMLElement) status.textContent = ''; return; }
     pagefind ??= await import(/* @vite-ignore */ pagefindModule);
     const response = await pagefind.search(query);
-    const items = await Promise.all(response.results.slice(0, 20).map((result) => result.data()));
+    const items = await Promise.all(response.results.slice(0, MAX_RESULTS).map((result) => result.data()));
     render(items);
     status.textContent = statusTemplate.replace('{{n}}', String(response.results.length));
   };
 
   if (input instanceof HTMLInputElement) input.addEventListener('input', () => {
     window.clearTimeout(timer);
-    timer = window.setTimeout(() => search(input.value.trim()), 180);
+    timer = window.setTimeout(() => search(input.value.trim()), DEBOUNCE_MS);
   });
 </script>

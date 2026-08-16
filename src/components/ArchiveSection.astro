@@ -1,11 +1,23 @@
 ---
-// 通用归档区块：用于 research / projects 的按年、按月归档页
-// 接收：collection（research/projects）、entries、label（中文名）、action（卡片按钮文案）、kind（year/month）、year、month、eyebrow
+// Generic archive block for research / projects year and month archives.
+// Props: collection (research/projects), entries, label, action (card CTA),
+// kind (year/month), year, month, eyebrow.
+import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentEntryCard from './ContentEntryCard.astro';
-import { localeFromPath } from '../lib/locale-url.mjs';
-import { getUiCopy } from '../i18n/ui.mjs';
-import { getPageCopy } from '../i18n/page-copy.mjs';
+import { i18n } from '../i18n/index.mjs';
+
+interface Props {
+  collection: 'projects' | 'research';
+  entries: CollectionEntry<'project'>[] | CollectionEntry<'research'>[];
+  label: string;
+  action: string;
+  kind?: 'year' | 'month';
+  year: number;
+  month?: number;
+  eyebrow?: string;
+  description?: string;
+}
 
 const {
   collection,
@@ -17,11 +29,11 @@ const {
   month,
   eyebrow,
   description,
-} = Astro.props;
+} = Astro.props as Props;
 
-const locale = localeFromPath(Astro.url.pathname);
-const ui = getUiCopy(locale);
-const pageCopy = getPageCopy(locale);
+const locale = Astro.currentLocale ?? 'zh-CN';
+const ui = i18n(locale);
+const pageCopy = i18n(locale).page;
 const archiveCopy = collection === 'projects' ? pageCopy.projectArchive : pageCopy.researchArchive;
 const title = kind === 'month' ? archiveCopy.titleMonth(year, month) : archiveCopy.title(year);
 const metaTitle = archiveCopy.metaTitle(year, ui.brand);

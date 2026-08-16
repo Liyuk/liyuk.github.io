@@ -4,7 +4,6 @@ description: 一份写给前端初学者的旧路标：信息获取、学习记�
 createdAt: 2018-07-04
 publishedAt: 2018-07-04
 updatedAt: 2026-08-14
-notification: never
 type: note
 tags: [frontend, learning, career, archive, technology]
 ---

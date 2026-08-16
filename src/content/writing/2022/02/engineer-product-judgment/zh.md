@@ -19,6 +19,11 @@ column: { slug: product-judgment, order: 1 }
 
 这五个阶段不是职级划分，也不是线性晋级。同一位工程师在熟悉领域可能已经能够参与规划，进入新领域后仍需要从理解需求开始。它们描述的是视角如何逐渐扩大。
 
+```mermaid
+flowchart LR
+    A["Fulfill requirements"] --> B["Focus on outcomes"] --> C["Understand decision context"] --> D["Map the business"] --> E["Understand market"]
+```
+
 ### 阶段一：完成需求，先把事情做对
 
 最初的关注点通常是实现本身：需求是什么、接口如何定义、边界条件有哪些、怎样按时且稳定地交付。这是工程工作的基本功，不能被轻视。
@@ -65,6 +70,11 @@ column: { slug: product-judgment, order: 1 }
 
 需求文档通常描述的是一种待实现的方案，而不是问题本身。拿到需求后，工程师可以用三层追问避免过早进入实现细节。
 
+```mermaid
+flowchart TD
+    A["Surface request"] --> B["Behavior obstacle"] --> C["Value outcome"]
+```
+
 ### 第一层：表层请求——要交付什么
 
 先确认基本边界：谁会使用这项能力，在哪个场景发生，要新增或改变什么行为，哪些体验、兼容、合规或时效条件不能突破。这一层保证团队对范围有共同理解。
@@ -82,6 +92,11 @@ column: { slug: product-judgment, order: 1 }
 ## 三、如何把技术方案放进业务因果链
 
 任何方案都应能写成一条可讨论的链路：用户在某个场景遇到障碍，产品机制降低障碍，用户行为发生变化，关键结果得到改善，进而推动业务目标。工程师的职责，是使其中的机制可靠、可控、成本合理，并验证链条是否真的成立。
+
+```mermaid
+flowchart LR
+    A["User hits obstacle"] --> B["Mechanism removes obstacle"] --> C["Behavior changes"] --> D["Outcome improves"] --> E["Business goal"]
+```
 
 ### 从目标倒推，而不是从技术偏好出发
 

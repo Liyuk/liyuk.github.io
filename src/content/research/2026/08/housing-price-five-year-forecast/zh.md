@@ -62,11 +62,33 @@ tags: [housing, forecasting, time-series, explainability, china]
 
 | 成分 | 含义 | 公式 |
 |---|---|---|
-| **趋势延续** | 延续最近 12 个月环比均值 | `mean(mom[-12:])` |
-| **均值回归** | 向长期均值收敛（AR(1) 速度） | `long_mean + (anchor - long_mean)(1-ρ)` |
-| **季节性** | 去年同月环比 | `mom[-12+i]` |
+| **趋势延续** | 延续最近 12 个月环比均值 | $\mathrm{mean}(\mathrm{mom}[-12:])$ |
+| **均值回归** | 向长期均值收敛（AR(1) 速度） | $\mathrm{long\_mean} + (\mathrm{anchor} - \mathrm{long\_mean})(1-\rho)$ |
+| **季节性** | 去年同月环比 | $\mathrm{mom}[-12+i]$ |
 
-权重 w₁,w₂,w₃ 在单位单纯形上网格搜索（步长 0.25），按**滚动 12 个月样本外 MAE** 最小化选择。为避免数据窥探，权重只用每个预测点之前约 3/4 的历史选择，剩余 1/4 用于确认。
+三个成分按权重线性组合得到预测：
+
+$$
+\hat{y}_{t+h} = w_1\,T_{t+h} + w_2\,R_{t+h} + w_3\,S_{t+h}, \qquad w_1 + w_2 + w_3 = 1,\ w_i \ge 0
+$$
+
+其中 $T$、$R$、$S$ 分别为上表的趋势延续、均值回归、季节性成分。
+
+```mermaid
+flowchart TD
+  T["Trend continuation: mean of last 12 MoM"] --> W["Weights w1,w2,w3 (rolling out-of-sample MAE)"]
+  R["Mean reversion: converge to long-run mean"] --> W
+  S["Seasonality: same month last year"] --> W
+  W --> P["Combined forecast (direction + scenario range)"]
+```
+
+权重 $w_1, w_2, w_3$ 在单位单纯形上网格搜索（步长 0.25），按**滚动 12 个月样本外 MAE** 最小化选择：
+
+$$
+\text{MAE} = \frac{1}{n}\sum_{i=1}^{n} |\hat{y}_i - y_i|
+$$
+
+为避免数据窥探，权重只用每个预测点之前约 3/4 的历史选择，剩余 1/4 用于确认。
 
 **权重的敏感性**（方法稳健性的关键检验）。权重选择依赖"训练切点比例"（frac，默认 0.75），需验证结论不随该超参数漂移。对 frac ∈ {0.55, 0.6, 0.7, 0.75, 0.8, 0.9} 的敏感性检验：
 
@@ -93,9 +115,11 @@ tags: [housing, forecasting, time-series, explainability, china]
 |---|---|---|
 | 权重（趋势/均值回归/季节） | **1.0 / 0 / 0** | **0.25 / 0.50 / 0.25** |
 | 12 个月训练 MAE（指数点） | 0.297 | 0.614 |
-| AR(1) 回归系数 ρ | 0.958 | 0.695 |
+| AR(1) 回归系数 $\rho$ | 0.958 | 0.695 |
 | 半衰期 | 16.1 个月 | 1.9 个月 |
 | 长期均值环比 | 99.80 | 100.04 |
+
+其中半衰期由 $\rho$ 按 $h = \ln(0.5) / \ln(\rho)$ 折算：全国 $\rho=0.958$ 对应约 16 个月，北京 $\rho=0.695$ 对应约 2 个月——回归越快，偏离长期均值的部分被"消化"得越快。
 
 **解读**：全国被数据选为趋势市（趋势权重 1.0）——因为近 5 年持续下行，均值回归假设不成立；北京被选为均值回归市（回归权重 0.5）——因为其长期均值略高于 100，且当前接近该均值。这与 Capozza 等"回归速度随市场而异"的结论一致：不同市场应使用不同方法，而本文让数据自己选。
 

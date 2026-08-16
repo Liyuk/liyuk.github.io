@@ -8,6 +8,8 @@ tags: [thinking, prioritization, communication, work-leadership]
 column: { slug: thinking-training, order: 1 }
 ---
 
+> 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「判断」这条线的展开。
+
 很多文档、汇报和讨论的问题，不是信息不够，而是信息没有顺序。每件事都写了，每个困难都提了，最后却没有回答一个更重要的问题：**在同一个判断口径下，最重要的是什么？**
 
 我把这种练习借用了一个算法里的名字，叫作 Top K。这里不讨论怎样从数组里找第 k 大的元素；它指的是一个更字面的提问：在明确的目标和口径下，排在最前面的 K 件事是什么？

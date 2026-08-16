@@ -34,6 +34,14 @@ tags: [developer-productivity, platform-engineering, feedback-loops, software-en
 
 因此，本文的研究问题不是"我们需要哪些工具"，而是：**如何把一个团队的开发者生产力，建成一条持续缩短、可被验证的反馈回路？**
 
+```mermaid
+flowchart LR
+  A["Propose change"] --> B["Get trustworthy, task-relevant feedback"]
+  B --> C["On failure, locate & correct safely"]
+  C --> D["Use results to correct the next change"]
+  D --> A
+```
+
 ## 2. 方法与材料
 
 本文采用聚焦式文献与立场综述。材料选择遵循三个标准：研究对象直接涉及真实软件工程任务；论文或实践可公开访问；材料能帮助区分"接入工具"与"建立反馈回路"这两种生产力建设方式。主要材料包括：

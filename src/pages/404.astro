@@ -1,8 +1,32 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { localeFromPath } from '../lib/locale-url.mjs';
-import { site } from '../data/site.mjs';
-import { getPageCopy } from '../i18n/page-copy.mjs';
-const copy = getPageCopy(localeFromPath(Astro.url.pathname)).notFound;
+import { i18n } from '../i18n/index.mjs';
+
+// GitHub Pages serves a single static /404.html for every missing URL (there is
+// no per-locale 404 file), so this page ships both languages and switches
+// client-side based on the path prefix.
+const zh = i18n('zh-CN').page.notFound;
+const en = i18n('en').page.notFound;
 ---
-<BaseLayout title={copy.metaTitle}><section class="page-heading shell"><p class="eyebrow">404</p><h1>{copy.title}</h1><a class="text-link" href="/">{copy.returnHome} <span aria-hidden="true">↗</span></a></section></BaseLayout>
+<BaseLayout title={zh.metaTitle} description={zh.metaDescription}>
+  <section class="page-heading shell" id="not-found">
+    <p class="eyebrow">404</p>
+    <h1 id="not-found-title">{zh.title}</h1>
+    <a id="not-found-home" class="text-link" href="/"><span id="not-found-home-label">{zh.returnHome}</span> <span aria-hidden="true">↗</span></a>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ zh, en }}>
+  const isEn = location.pathname.startsWith('/en/');
+  const copy = isEn ? en : zh;
+  document.documentElement.lang = isEn ? 'en' : 'zh-CN';
+  document.title = copy.metaTitle;
+  const meta = document.querySelector('meta[name="description"]');
+  if (meta) meta.setAttribute('content', copy.metaDescription);
+  const title = document.querySelector('#not-found-title');
+  const home = document.querySelector('#not-found-home');
+  const label = document.querySelector('#not-found-home-label');
+  if (title) title.textContent = copy.title;
+  if (label) label.textContent = copy.returnHome;
+  if (home) home.setAttribute('href', isEn ? '/en/' : '/');
+</script>

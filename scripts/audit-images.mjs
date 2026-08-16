@@ -1,4 +1,4 @@
-import { access, readFile, readdir } from 'node:fs/promises';
+import { access, readFile, readdir, stat as statFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -67,15 +67,46 @@ export async function auditImages(root = process.cwd()) {
   return { missing, unreferenced, references: referenced.size };
 }
 
+// Image quality gates: flag images that should be optimized before shipping.
+// - Photos / gradients should be WebP or AVIF, not PNG (PNG bloat).
+// - Any committed image over `maxBytes` is a flag (usually a forgotten export
+//   at full camera resolution or an unoptimized screenshot).
+export async function auditImageQuality(root = process.cwd(), { maxBytes = 200 * 1024 } = {}) {
+  const publicImageRoot = path.join(root, 'public/images');
+  const contentImageRoot = path.join(root, 'src/content');
+  const imageExtension = /\.(jpe?g|png|webp|avif)$/i;
+  const candidates = [];
+  if (await exists(publicImageRoot)) candidates.push(...(await walk(publicImageRoot)).filter((f) => imageExtension.test(f)));
+  if (await exists(contentImageRoot)) candidates.push(...(await walk(contentImageRoot)).filter((f) => imageExtension.test(f)));
+
+  const flags = [];
+  for (const file of candidates) {
+    const stat = await statFile(file);
+    const rel = path.relative(root, file);
+    if (stat.size > maxBytes) flags.push(`${rel} (${(stat.size / 1024).toFixed(0)} KB > ${maxBytes / 1024} KB)`);
+    // PNG screenshots/photos should be WebP; SVG-only/transparent cases are rare here.
+    if (/\.png$/i.test(file)) flags.push(`${rel} (PNG — prefer WebP for photos)`);
+  }
+  return { flags };
+}
+
 async function main() {
   const report = await auditImages();
-  if (report.missing.length || report.unreferenced.length) {
-    for (const issue of report.missing) console.error(`Missing image: ${issue}`);
-    for (const issue of report.unreferenced) console.error(`Unreferenced image: ${issue}`);
+  const issues = [...report.missing.map((m) => `Missing image: ${m}`), ...report.unreferenced.map((u) => `Unreferenced image: ${u}`)];
+  if (issues.length) {
+    for (const issue of issues) console.error(issue);
     process.exitCode = 1;
     return;
   }
   console.log(`Image audit passed: ${report.references} referenced assets.`);
+  // Quality gate (non-blocking by default): report oversized/PNG images so they
+  // can be optimized, but don't fail the build over them.
+  const quality = await auditImageQuality();
+  if (quality.flags.length) {
+    console.log(`\nImage quality notes (${quality.flags.length}):`);
+    for (const flag of quality.flags.slice(0, 20)) console.log(`  • ${flag}`);
+    if (quality.flags.length > 20) console.log(`  … and ${quality.flags.length - 20} more`);
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) await main();

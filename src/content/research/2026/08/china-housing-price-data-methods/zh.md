@@ -64,6 +64,13 @@ tags: [data, machine-learning, housing, reproducibility, provenance]
 | `C_public_third_party` | 公开第三方挂牌/行情样本 | 中国房价行情（creprice）区级挂牌均价 |
 | `D_unverified_or_derived` | 未充分核验或派生估计 | 区级情景预测中的代理基准 |
 
+```mermaid
+flowchart TD
+  A["A_official — official statistics / transaction registry"] --> B["B_industry_index — industry index"]
+  B --> C["C_public_third_party — public third-party listings"]
+  C --> D["D_unverified_or_derived — unverified / derived"]
+```
+
 `price_basis` 进一步区分数字的物质基础：`price_index`（指数，无单价语义）、`listing_price`（挂牌/行情价）、`transaction_volume_area`（成交套数/面积，无价格）、`official_statistic`（官方统计量）。`is_transaction_price` 明确标注该字段是否为成交单价——本文所有数据集中该值为 `False`，因为在公开层面，**没有任何一个数据集提供了可直接当"成交单价"用的字段**。
 
 ### 3.2 数据清单

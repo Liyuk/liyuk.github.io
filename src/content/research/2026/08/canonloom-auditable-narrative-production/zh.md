@@ -72,17 +72,17 @@ CanonLoom 将一部作品的运行状态拆为五类：
 
 将项目状态记为 $S_t$，作者在阶段 $t$ 的显式决定记为 $A_t$，当前任务的受限上下文为 $C_t$，生成结果为 $D_t$，审查结果为 $R_t$。CanonLoom 不允许生成结果直接覆盖正式状态，而是要求：
 
-\[
+$$
 S_{t+1}=\operatorname{settle}(S_t, A_t, D_t, R_t)
-\]
+$$
 
 其中 `settle` 只有在通过门禁且存在作者批准时才允许产生正式状态变化。候选结果可以被保存、比较和修订，但它不能通过普通生成动作直接成为 $S_{t+1}$。
 
 上下文不是整个历史，而是一个带来源说明的选择函数：
 
-\[
+$$
 C_t = f(I, K, P_t, N_t, X_t, Q_t)
-\]
+$$
 
 这里 $I$ 是意图，$K$ 是正式 canon，$P_t$ 是当前计划，$N_t$ 是叙事状态，$X_t$ 是工作流产物，$Q_t$ 是当前任务及其权限。函数的输出必须记录包含项、排除项、选择原因和来源哈希。
 
@@ -145,8 +145,9 @@ Markdown 适合作者阅读和编辑；JSON 适合 schema 验证和工具读取�
 
 计划从项目、卷、篇章、章节契约到 Beat 逐层收窄：
 
-```text
-project → volume → arc → chapter contract → beat → scene
+```mermaid
+flowchart LR
+  A["project"] --> B["volume"] --> C["arc"] --> D["chapter contract"] --> E["beat"] --> F["scene"]
 ```
 
 高层计划规定方向和长期承诺，章契规定本章必须发生或不能发生的变化，Beat 把因果骨架拆成可生成单元，场景则保留语言和动作层面的创作自由。下层产物可以提出偏差，但不能静默覆盖上层约束。
@@ -315,8 +316,9 @@ Agent 负责把自然语言输入落到对应产物，并在每个需要决定�
 
 系统的"自我修复"不是无条件自动改写。它由诊断、修复计划、受限执行和回归验证组成：
 
-```text
-check → finding → repair plan → bounded change → regression check
+```mermaid
+flowchart LR
+  A["check"] --> B["finding"] --> C["repair plan"] --> D["bounded change"] --> E["regression check"]
 ```
 
 确定性问题，例如缺字段、坏引用、重复 ID、哈希不匹配和非法阶段迁移，可以由工具修复或明确提示。文学问题，例如动机不足、节奏松散和语气不稳定，只能生成修复建议或候选版本，并经过同一审查链和作者批准。
@@ -383,9 +385,9 @@ S6 产生两类结果：作者批准的正文进入 `manuscript/`；状态变化
 
 总成本应报告为：
 
-\[
+$$
 Cost = c_{in}T_{in}+c_{out}T_{out}+c_{tool}N_{tool}+c_{human}H
-\]
+$$
 
 其中 $T$ 为 token，$N_{tool}$ 为工具调用数，$H$ 为作者投入时间；不同模型价格和作者时间价值应单独列出，不用一个不可解释的总分替代。
 

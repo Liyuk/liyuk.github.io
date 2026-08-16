@@ -3,7 +3,6 @@ title: 招聘与职业关系（二）：推荐不是转发职位
 description: 一次负责任的推荐，不是促成一次投递，而是帮助双方获得足够真实的信息，判断是否值得继续靠近。
 createdAt: 2025-03-01
 publishedAt: 2025-03-01
-notification: never
 type: essay
 tags: [communication, relationships, career, team, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 2 }

@@ -1,34 +1,38 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { contentSlug } from '../../lib/content-paths.mjs';
-import { contentUrl, tagUrl } from '../../lib/content-paths.mjs';
-import { getTag, getIndexableTags, getRelatedEntries } from '../../lib/taxonomy.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { formatFullDate, isoDate } from '../../lib/format-dates.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { publishedDate } from '../../lib/timeline.mjs';
+import TagList from '../../components/TagList.astro';
+import { contentSlug } from '../../lib/content-paths.ts';
+import { contentUrl } from '../../lib/content-paths.ts';
+import { getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
+import { notDraft } from '../../lib/content-model.ts';
+import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
+import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
+import { i18n } from '../../i18n/index.mjs';
+import { publishedDate } from '../../lib/timeline.ts';
 
 export async function getStaticPaths() {
-  const research = await getCollection('research', publishedFilter);
-  return research.map((entry) => ({ params: { slug: contentSlug(entry.id) }, props: { entry } }));
+  const research = await getCollection('research', notDraft);
+  return groupByLocaleVariant(research, (entry) => contentSlug(entry.id)).map(({ slug, variants }) => ({
+    params: { slug },
+    props: { variants },
+  }));
 }
 
-const { entry } = Astro.props;
-const locale = localeFromPath(Astro.url.pathname);
-const ui = getUiCopy(locale);
-const pageCopy = getPageCopy(locale);
+const { variants } = Astro.props;
+const locale = Astro.currentLocale ?? 'zh-CN';
+const entry = pickLocaleVariant(variants, locale)!;
+const ui = i18n(locale);
+const pageCopy = i18n(locale).page;
 const { Content } = await render(entry);
 const allResearch = await getCollection('research', ({ data }) => !data.draft && data.locale === entry.data.locale);
 const indexableTags = getIndexableTags(allResearch).map(({ slug }) => slug);
-const relatedEntries = getRelatedEntries(allResearch, entry, 3, locale);
-const researchUrl = (entryId, entryLocale) => contentUrl('research', entryId, entryLocale ?? 'zh-CN');
-const formatDate = (date) => formatFullDate(date, locale);
+const relatedEntries = getRelatedEntries(allResearch, entry, RELATED_LIMIT, locale);
+const researchUrl = (entryId: string, entryLocale?: string) => contentUrl('research', entryId, entryLocale ?? 'zh-CN');
+const formatDate = (date: Date) => formatFullDate(date, locale);
 ---
 <BaseLayout title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description}>
-  <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time><a href={entry.data.paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a><a href={entry.data.repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a></div>{entry.data.tags?.length > 0 && <ul class="tag-list article-tags" aria-label={ui.entry.tagsAria}>{entry.data.tags.map((slug) => <li>{indexableTags.includes(slug) ? <a href={tagUrl(slug, locale)}>#{getTag(slug, locale).label}</a> : <span>#{getTag(slug, locale).label}</span>}</li>)}</ul>}</header><div class="prose"><Content /></div>
+  <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time><a href={entry.data.paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a><a href={entry.data.repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a></div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header><div class="prose"><Content /></div>
   {relatedEntries.length > 0 && <section class="related-entries" aria-labelledby="related-heading"><p class="eyebrow">{pageCopy.writingDetail.relatedEyebrow}</p><h2 id="related-heading">{pageCopy.writingDetail.relatedTitle}</h2><ol>{relatedEntries.map(({ entry: related, reasons }) => <li><a href={researchUrl(related.id, locale)}>{related.data.title}</a>{reasons.length > 0 && <p class="related-reason">{reasons.join(' · ')}</p>}</li>)}</ol></section>}
   </article>
 </BaseLayout>

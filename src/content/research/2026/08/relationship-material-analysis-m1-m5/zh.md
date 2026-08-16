@@ -156,13 +156,13 @@ AI 的可取用途是减少遗漏、让假设显式化，并帮助用户从强�
 
 ### 5.2 安全工作流
 
-```text
-去标识材料
-  → 时间线与事实抽取
-  → M1–M5 候选标注（每项含替代解释）
-  → 矛盾 / 证据缺口 / 高风险请求检查
-  → 人类审阅与独立核验
-  → 风险匹配的保护动作
+```mermaid
+flowchart TD
+  A["De-identified material"] --> B["Timeline & fact extraction"]
+  B --> C["M1–M5 candidate annotation (each with alternative)"]
+  C --> D["Contradictions / evidence gaps / high-risk requests"]
+  D --> E["Human review & independent verification"]
+  E --> F["Risk-matched protective action"]
 ```
 
 去标识是第一步，不是可选项：输入前应删除姓名、联系方式、精确地点、工作单位、账号、证件、转账凭据和私密影像。AI 输出只能作为讨论提纲，不能替代银行、平台、警方、律师、医生或心理专业人员的判断。

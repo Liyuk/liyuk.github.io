@@ -3,21 +3,26 @@
 // Locates the entry across writing/research/projects/galleries by slug
 // (the directory name for dated collections, the explicit slug for galleries).
 import { readFile, writeFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'node:fs/promises';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'src/content');
 
-// Find every content md file whose slug matches. Returns [{ file, slug, collection }].
+// Find every content md file whose slug matches — both the source (zh) and any
+// translation (en) so `npm run publish <slug>` flips draft on every language
+// together. Returns [{ file, slug, collection }].
 export async function findEntriesBySlug(slug) {
   const results = [];
   const patterns = [
     `${CONTENT_ROOT}/writing/*/*/${slug}/zh.md`,
+    `${CONTENT_ROOT}/writing/*/*/${slug}/en.md`,
     `${CONTENT_ROOT}/research/*/*/${slug}/zh.md`,
+    `${CONTENT_ROOT}/research/*/*/${slug}/en.md`,
     `${CONTENT_ROOT}/projects/*/*/${slug}/zh.md`,
+    `${CONTENT_ROOT}/projects/*/*/${slug}/en.md`,
     `${CONTENT_ROOT}/galleries/${slug}.md`,
+    `${CONTENT_ROOT}/galleries/${slug}.en.md`,
   ];
   for (const pattern of patterns) {
     for await (const file of glob(pattern)) {

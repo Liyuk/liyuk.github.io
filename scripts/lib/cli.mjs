@@ -57,7 +57,7 @@ export function buildSlug(title) {
 export function validateTags(tags, registry) {
   const unknown = tags.filter((tag) => !(tag in registry));
   if (unknown.length === 0) return null;
-  return `新标签：${unknown.join('、')}（不在注册表，显示为原样；如要双语显示请加入 src/lib/taxonomy.mjs 的 tags）`;
+  return `新标签：${unknown.join('、')}（不在注册表，显示为原样；如要双语显示请加入 src/lib/taxonomy.ts 的 tags）`;
 }
 
 // Serialize a nested object to YAML-ish frontmatter lines.
@@ -125,7 +125,7 @@ export function createPrompter({ input = process.stdin, output = process.stdout 
       lines = buffer.split('\n');
     })();
     return {
-      async ask(question, options = {}) {
+      async ask(_question, options = {}) {
         await ready;
         const raw = lines[index++] ?? undefined; // undefined at EOF
         const value = (raw ?? '').trim() === '' && options.default !== undefined && options.default !== ''

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { buildSlug, buildFrontmatter, isValidDate, validateSlug, validateTags, todayStr } from '../scripts/lib/cli.mjs';
+import { buildSlug, buildFrontmatter, isValidDate, validateSlug, validateTags } from '../scripts/lib/cli.mjs';
 import { buildPostFrontmatter, parseTags, postPath, pickSlug } from '../scripts/new-post.mjs';
 import { buildGalleryFrontmatter, galleryFilePath, imageIdFromName, scanImageFiles } from '../scripts/new-gallery.mjs';
 import { unDraft, findEntriesBySlug } from '../scripts/publish.mjs';
@@ -63,7 +63,7 @@ test('buildPostFrontmatter produces legal writing (strict) frontmatter', () => {
   assert.equal(fm.type, 'note');
   assert.deepEqual(fm.column, { slug: 'technical-systems', order: 2 });
   // strict schema: no keys beyond what writing allows
-  const allowed = new Set(['title', 'description', 'createdAt', 'draft', 'tags', 'publishedAt', 'type', 'notification', 'column']);
+  const allowed = new Set(['title', 'description', 'createdAt', 'draft', 'tags', 'publishedAt', 'type', 'column']);
   for (const key of Object.keys(fm)) assert.ok(allowed.has(key), `unexpected key: ${key}`);
 });
 

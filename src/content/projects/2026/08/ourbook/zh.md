@@ -39,6 +39,15 @@ tags: [education, public-good, vuepress, static-site, community]
 
 在写这个项目时,我顺带梳理了一遍它所在的市场。十五年里,同一个问题——"怎么让考生在填报志愿时看到真实的信息"——被完全不同的产品形态回答过。
 
+```mermaid
+timeline
+    title 2011–2026 college-exam info product market
+    2011-2014 : Era of scarce information
+    2014-2018 : Policy opening & algorithm startups
+    2018-2023 : Big-tech entry, free tiers & chaos
+    2023-2026 : AI takeover & official entry
+```
+
 ### 2011-2014:信息稀缺时代
 
 2011 年,一个考生家庭想了解一所大学,主要靠三样东西:纸质《报考指南》、班主任的经验、论坛里学长学姐的口口相传。教育部"阳光工程"早已建立了官方信息平台,提供招生政策与院校基本信息,但对"一所大学读起来到底是什么感觉"这类问题几乎是空白。

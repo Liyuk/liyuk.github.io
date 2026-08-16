@@ -1,18 +1,15 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.mjs';
-import { publishedFilter } from '../../lib/content-model.mjs';
-import { columnUrl } from '../../lib/content-paths.mjs';
-import { localeFromPath } from '../../lib/locale-url.mjs';
-import { getPageCopy } from '../../i18n/page-copy.mjs';
-import { getUiCopy } from '../../i18n/ui.mjs';
+import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.ts';
+import { getColumnCollections } from '../../lib/content-query.ts';
+import { columnUrl } from '../../lib/content-paths.ts';
+import { i18n } from '../../i18n/index.mjs';
 
-const locale = localeFromPath(Astro.url.pathname);
-const copy = getPageCopy(locale).columns;
-const ui = getUiCopy(locale);
-const [writing, research] = await Promise.all([getCollection('writing', publishedFilter), getCollection('research', publishedFilter)]);
-const entries = [...writing, ...research];
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.columns;
+const ui = i18n(locale);
+const { writing, galleries } = await getColumnCollections(locale);
+const entries = [...writing, ...galleries];
 const availableColumns = Object.keys(columns).map((slug) => ({ ...columns[slug], slug, count: getColumnEntries(entries, slug).length })).filter(({ count }) => count > 0);
 ---
 
