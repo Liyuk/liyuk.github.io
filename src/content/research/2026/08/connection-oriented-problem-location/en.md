@@ -6,7 +6,7 @@ version: '0.1'
 status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
-draft: true
+draft: false
 tags: [thinking, problem-framing, decision-making, communication, leadership, work-leadership, strategy]
 locale: en
 translationStatus: draft

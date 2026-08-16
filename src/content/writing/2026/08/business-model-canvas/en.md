@@ -4,7 +4,7 @@ description: "The Business Model Canvas from an enterprise investment class, not
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 type: note
-draft: true
+draft: false
 tags: [strategy, product-thinking, decision-making, learning]
 locale: en
 translationStatus: draft

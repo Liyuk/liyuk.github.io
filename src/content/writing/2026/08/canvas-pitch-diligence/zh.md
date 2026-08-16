@@ -4,7 +4,7 @@ description: 记一个区分：商业模式画布是"做给自己看"，创业�
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 type: note
-draft: true
+draft: false
 tags: [strategy, product-thinking, decision-making, learning]
 ---
 

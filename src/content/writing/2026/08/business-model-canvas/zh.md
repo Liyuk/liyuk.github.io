@@ -4,7 +4,7 @@ description: 企业投资课上学的商业模式画布，记给自己：九个�
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 type: note
-draft: true
+draft: false
 tags: [strategy, product-thinking, decision-making, learning]
 ---
 

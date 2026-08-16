@@ -6,7 +6,7 @@ translationStatus: draft
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 type: note
-draft: true
+draft: false
 tags: [strategy, product-thinking, decision-making, learning]
 translationKey: 2026/08/canvas-pitch-diligence
 ---

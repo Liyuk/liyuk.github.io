@@ -5,7 +5,7 @@ locale: en
 translationStatus: draft
 createdAt: 2026-08-15
 type: essay
-draft: true
+draft: false
 tags: [thinking, problem-framing, decision-making, communication, work-leadership]
 column: { slug: thinking-training, order: 4 }
 translationKey: 2026/08/structured-thinking-practice
