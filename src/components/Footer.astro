@@ -5,8 +5,26 @@ const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props;
 const ui = i18n(locale);
 const currentYear = new Date().getFullYear();
 const yearRange = currentYear > site.since ? `${site.since}–${currentYear}` : `${site.since}`;
+const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
+const elsewhere = [
+  { label: ui.footer.github, href: site.social.github },
+  { label: ui.footer.x, href: site.social.x },
+  { label: ui.footer.linkedin, href: site.social.linkedin },
+  { label: ui.footer.email, href: `mailto:${site.email}` },
+  { label: ui.footer.rss, href: rssHref },
+];
 ---
 <footer class="site-footer">
   <p>© {yearRange} {ui.name}{ui.footer.nameMark}{ui.footer.publishedOpenly}</p>
-  <a href={locale === 'en' ? '/en/rss.xml' : '/rss.xml'}>{ui.footer.rss}</a>
+  <div class="footer-links">
+    <nav class="elsewhere" aria-label={ui.footer.elsewhere}>
+      <span class="elsewhere-label">{ui.footer.elsewhere}</span>
+      {elsewhere.map((item) => (
+        <a href={item.href} {...(item.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+          {item.label} <span aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </nav>
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener">{ui.footer.license}</a>
+  </div>
 </footer>

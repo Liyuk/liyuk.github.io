@@ -1,0 +1,70 @@
+---
+// Share + save row for article detail pages. Native Web Share on mobile
+// (system share sheet), intent links for X / LinkedIn / Facebook on desktop,
+// a copy-link button, and a "save to Pocket" link. No third-party scripts.
+import { i18n } from '../i18n/index.mjs';
+import { site } from '../data/site.mjs';
+
+interface Props {
+  locale?: string;
+  title: string;
+  url: string;
+}
+
+const { locale = Astro.currentLocale ?? 'zh-CN', title, url } = Astro.props as Props;
+const t = i18n(locale).share;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+const via = site.social.x.split('/').at(-1) ?? '';
+
+const shareLinks = [
+  { label: t.x, href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}&via=${via}` },
+  { label: t.linkedin, href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
+  { label: t.facebook, href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
+  { label: t.pocket, href: `https://getpocket.com/save?url=${encodedUrl}&title=${encodedTitle}` },
+];
+---
+<div class="share-row" data-share-row data-copy-url={url} data-copy-label={t.copy}>
+  <button class="share-btn" type="button" data-share-native>{t.native} ↗</button>
+  {shareLinks.map((link) => (
+    <a class="share-btn" href={link.href} target="_blank" rel="noopener">{link.label} ↗</a>
+  ))}
+  <button class="share-btn" type="button" data-share-copy>{t.copy}</button>
+</div>
+
+<script>
+  const row = document.querySelector<HTMLElement>('[data-share-row]');
+  if (row) {
+    const url = row.dataset.copyUrl ?? location.href;
+    const copyLabel = row.dataset.copyLabel ?? 'Copy';
+
+    // Native share: only when supported; otherwise hide the button.
+    const nativeBtn = row.querySelector<HTMLButtonElement>('[data-share-native]');
+    if (nativeBtn) {
+      if (typeof navigator !== 'undefined' && 'share' in navigator) {
+        nativeBtn.addEventListener('click', () => {
+          navigator.share({ title: document.title, url }).catch(() => {});
+        });
+      } else {
+        nativeBtn.hidden = true;
+      }
+    }
+
+    // Copy link, with a fallback for browsers without the async clipboard API.
+    const copyBtn = row.querySelector<HTMLButtonElement>('[data-share-copy]');
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        const input = document.createElement('textarea');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+      }
+      copyBtn.textContent = '✓';
+      setTimeout(() => { copyBtn.textContent = copyLabel; }, 1500);
+    });
+  }
+</script>

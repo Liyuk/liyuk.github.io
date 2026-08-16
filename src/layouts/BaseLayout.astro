@@ -12,6 +12,11 @@ const {
   description: descriptionProp,
   locale = Astro.currentLocale ?? 'zh-CN',
   noindex = false,
+  // Social-share metadata. Detail pages pass these; list/home pages omit them
+  // and fall back to the site defaults below.
+  type = 'website',
+  image,
+  publishedAt,
 } = Astro.props;
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
@@ -24,6 +29,14 @@ const rootPath = Astro.url.pathname.replace(/^\/en(?=\/|$)/, '');
 const zhUrl = new URL(getRelativeLocaleUrl('zh-CN', rootPath), Astro.site);
 const enUrl = new URL(getRelativeLocaleUrl('en', rootPath), Astro.site);
 const defaultUrl = isEnglish ? new URL('/', Astro.site) : new URL(Astro.url.pathname, Astro.site);
+// Canonical URL for social tags: use the canonical (locale) URL we already
+// compute, resolved against the configured site.
+const canonicalUrl = new URL(isEnglish ? enUrl : zhUrl, Astro.site).href;
+// og:image falls back to the brand card; detail pages may override with a
+// project hero / gallery cover.
+const ogImage = image ? new URL(image, Astro.site).href : new URL('/images/og-default.png', Astro.site).href;
+const ogType = type;
+const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
 ---
 
 <!doctype html>
@@ -47,6 +60,34 @@ const defaultUrl = isEnglish ? new URL('/', Astro.site) : new URL(Astro.url.path
       if (storedTheme) document.documentElement.dataset.theme = storedTheme;
     </script>
     <title>{title}</title>
+    <!-- Open Graph (Facebook / LinkedIn / iMessage / WhatsApp …) -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:site_name" content={isEnglish ? site.nameEn : site.brand} />
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <!-- Article structured data (Google rich results / Discover) -->
+    {ogType === 'article' && (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: title,
+        description,
+        image: ogImage,
+        datePublished: publishedAt ?? undefined,
+        author: { '@type': 'Person', name: site.name },
+        publisher: { '@type': 'Organization', name: site.brand },
+      })} />
+    )}
     <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3fce6f5df2fd44549cddc9a34e63d7e4"}'></script>
   </head>
   <body>

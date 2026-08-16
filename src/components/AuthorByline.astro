@@ -1,0 +1,13 @@
+---
+// Author byline — a compact avatar + name, designed to sit inline with the
+// article dates row (Medium-style: [avatar] Name · date · read time). The name
+// links to the about page. Kept tiny so it reads as a signature, not a hero.
+import { site } from '../data/site.mjs';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props;
+const aboutUrl = getRelativeLocaleUrl(locale, '/about/');
+---
+<span class="author-byline">
+  <img class="author-avatar" src="/images/avatar.webp" alt={site.name} width="28" height="28" decoding="async" />
+  <span class="author-name"><a href={aboutUrl}>{site.name}</a></span>
+</span>

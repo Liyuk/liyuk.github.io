@@ -13,6 +13,12 @@ export const site = {
   since: 2018,
   // 联系邮箱：about 页「合作/联系」区块与 mailto 都指向这里。
   email: 'likun.liyuk@gmail.com',
+  // 站外社交链接：Footer「在别处 / Elsewhere」区块与 about 页共用。
+  social: {
+    github: 'https://github.com/Liyuk',
+    x: 'https://x.com/liyukli',
+    linkedin: 'https://www.linkedin.com/in/liyuk/',
+  },
   title: `${brand} — Liyuk`,
   titleEn: `${brandEn} — Liyuk`,
   description: 'Liyuk 关于技术、领导力与日常的现场笔记。',
