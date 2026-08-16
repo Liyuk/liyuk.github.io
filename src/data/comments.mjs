@@ -9,11 +9,11 @@
 // 数据说明：评论以 Discussion 形式存进你的 GitHub 仓库，可用 GitHub GraphQL API
 // 完整导出，之后迁移到自建方案（如 Supabase 段落级评论）不会丢数据。
 export const comments = {
-  enabled: false,
+  enabled: true,
   repo: 'Liyuk/liyuk.github.io',
-  repoId: '', // giscus.app 生成的仓库 id
+  repoId: 'MDEwOlJlcG9zaXRvcnkxMjc1MzY3MzQ=',
   category: 'Announcements',
-  categoryId: '', // giscus.app 生成的分类 id
+  categoryId: 'DIC_kwDOB5oOXs4DDfX8',
   // 主题跟随站点明暗：站点浅色映射到 giscus 的 light，深色映射到 dark_dimmed
   //（偏灰绿，最贴近站点 --paper #1d211e）。可在组件里改映射。
   lightTheme: 'light',
