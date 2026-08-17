@@ -9,9 +9,10 @@
 //   * Change detection  — `git diff` against a base ref (or the last push) picks
 //     up exactly the posts that became published in this change, so we never
 //     spam the whole archive on every push.
-//   * Idempotency        — emails are matched by subject (`[新文章] <标题>`); we
-//     look up existing emails by that subject before sending, so running the
-//     workflow again (manual dispatch, retry) never double-sends.
+//   * Idempotency        — emails are matched by subject (the clean article
+//     title, no prefix); we look up existing emails by that subject before
+//     sending, so running the workflow again (manual dispatch, retry) never
+//     double-sends.
 //   * Dry-run by default — nothing hits the network unless you pass `--apply`.
 //
 // Run locally:      npm run notify:buttondown -- --apply
@@ -38,13 +39,11 @@ function parseArgs(argv) {
   const args = {
     apply: false,           // false = dry-run, true = actually create emails
     baseRef: null,          // git ref to diff against (e.g. github.event.before)
-    subjectPrefix: '[新文章]', // matched for idempotency; tweak to change dedup scope
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--apply') args.apply = true;
     else if (a === '--baseRef') args.baseRef = argv[++i] ?? null;
-    else if (a === '--subjectPrefix') args.subjectPrefix = argv[++i] ?? '[新文章]';
   }
   return args;
 }
@@ -72,17 +71,37 @@ function stripInlineMarkdown(text = '') {
     .trim();
 }
 
-// Build a minimal, self-contained HTML email (works for Buttondown's
+// Build a minimal, self-contained HTML email body (works for Buttondown's
 // auto-detected "fancy" rich body). Keep it plain and dependency-free.
-function buildEmailHtml({ title, summary, url, siteName }) {
-  const safeTitle = esc(title);
+// `blocks` is an array of language sections, each with title/summary/url,
+// so one article can carry both its Chinese and English versions in a single
+// email. Blocks are ordered as passed (zh first by convention).
+//
+// The email header and footer are intentionally NOT rendered here: they are
+// configured in the Buttondown dashboard (Settings → Header/Footer) and get
+// wrapped around every email by Buttondown. The unsubscribe footer is also
+// added automatically by Buttondown, so this function only produces the
+// article content itself.
+export function buildEmailHtml({ blocks }) {
+  const sections = blocks.map(({ lang, title, summary, url, meta }) => {
+    const safeTitle = esc(title);
+    const langLabel = lang === 'zh' ? '中文 · Chinese' : 'English';
+    const metaLine = meta
+      ? `<p style="margin:0 0 14px;font-size:13px;color:#999;">${esc(meta)}</p>`
+      : '';
+    return [
+      `<p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#999;">${langLabel}</p>`,
+      `<h1 style="margin:0 0 16px;font-size:23px;line-height:1.35;color:#222;">${safeTitle}</h1>`,
+      metaLine,
+      `<p style="margin:0 0 20px;font-size:16px;line-height:1.7;color:#444;">${esc(summary)}</p>`,
+      `<p style="margin:0 0 28px;"><a href="${esc(url)}" style="display:inline-block;padding:10px 20px;border-radius:8px;background:#1456F0;color:#ffffff;font-weight:600;font-size:15px;text-decoration:none;">阅读全文 · Read more →</a></p>`,
+    ].join('');
+  });
+
   return [
     `<!doctype html><html><body style="margin:0;padding:0;background:#ffffff;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">`,
     `<div style="max-width:600px;margin:0 auto;padding:32px 20px;">`,
-    `<p style="margin:0 0 8px;font-size:13px;color:#888;">${esc(siteName ?? '')}</p>`,
-    `<h1 style="margin:0 0 16px;font-size:24px;line-height:1.3;color:#222;">${safeTitle}</h1>`,
-    `<p style="margin:0 0 20px;font-size:16px;line-height:1.7;color:#444;">${esc(summary)}</p>`,
-    `<p style="margin:0;"><a href="${esc(url)}" style="display:inline-block;padding:10px 20px;border-radius:8px;background:#1456F0;color:#ffffff;font-weight:600;font-size:15px;text-decoration:none;">阅读全文 · Read more</a></p>`,
+    sections.join(`<hr style="border:none;border-top:1px solid #eee;margin:24px 0;">`),
     `</div></body></html>`,
   ].join('');
 }
@@ -146,6 +165,44 @@ function changedContentPaths(baseRef) {
   return out;
 }
 
+// Extract the body (everything after the frontmatter block) of a content file.
+function extractBody(raw) {
+  const m = raw.match(/^---\n[\s\S]*?\n---\n?([\s\S]*)$/);
+  return m ? m[1] : raw;
+}
+
+// Reading-time estimate. Mirrors src/lib/reading-time.ts, kept dependency-free:
+// count Han characters for zh-CN, word tokens otherwise, at 400/min, min 1.
+export function readingMinutes(body, locale) {
+  if (!body) return 1;
+  const isChinese = locale === 'zh-CN';
+  const count = isChinese
+    ? (body.match(/\p{Script=Han}/gu) ?? []).length
+    : (body.match(/[A-Za-z0-9]+/g) ?? []).length;
+  return Math.max(1, Math.ceil(count / 400));
+}
+
+// Format a `YYYY-MM-DD` date for each language (friendly short form).
+const EN_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export function formatDate(dateStr, locale) {
+  if (!dateStr) return '';
+  const m = String(dateStr).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return String(dateStr);
+  const [, y, mo, d] = m;
+  if (locale === 'zh-CN') return `${y}年${parseInt(mo, 10)}月${parseInt(d, 10)}日`;
+  return `${EN_MONTHS[parseInt(mo, 10) - 1]} ${parseInt(d, 10)}, ${y}`;
+}
+
+// Build the meta line (reading time + publish date) for one language.
+export function buildMeta(fm, body, locale) {
+  const minutes = readingMinutes(body, locale);
+  const date = formatDate(fm.publishedAt, locale);
+  const parts = [];
+  parts.push(locale === 'zh-CN' ? `约 ${minutes} 分钟阅读` : `${minutes} min read`);
+  if (date) parts.push(date);
+  return parts.join(' · ');
+}
+
 // Parse frontmatter of a content file. Returns data or null if unparseable.
 function parseFrontmatter(raw) {
   const match = raw.match(/^---\n([\s\S]*?)\n---/);
@@ -171,11 +228,27 @@ function parseFrontmatter(raw) {
 // Resolve which locale a content file represents. Conventions:
 //   writing/research/projects : <dir>/zh.md  (zh, default)  or <dir>/en.md (en)
 //   galleries                 : <slug>.md    (zh, default)  or <slug>.en.md (en)
-function entryLocale(filePath) {
+export function entryLocale(filePath) {
   const basename = path.basename(filePath);
   const rel = path.relative(CONTENT_ROOT, filePath).split(path.sep);
   if (rel[0] === 'galleries') return basename.endsWith('.en.md') ? 'en' : 'zh';
   return basename === 'en.md' ? 'en' : 'zh';
+}
+
+// Return a locale-independent identifier for one article, shared by its zh.md
+// and en.md so they merge into one email. For dated collections that is
+// `collection/yyyy/mm/slug`; for galleries it is `galleries/<slug>`.
+export function entryKey(filePath) {
+  const rel = path.relative(CONTENT_ROOT, filePath).split(path.sep);
+  const collection = rel[0];
+  if (collection === 'galleries') {
+    const slug = rel[1].replace(/\.en\.md$/, '').replace(/\.md$/, '');
+    if (slug && !slug.startsWith('_')) return `galleries/${slug}`;
+    return null; // ignore template files
+  }
+  const [year, month, slug] = rel.slice(1, 4);
+  if (!slug || slug.startsWith('_')) return null; // ignore templates
+  return `${collection}/${year}/${month}/${slug}`;
 }
 
 // Derive the public URL for a content file given its collection + year/month/slug.
@@ -237,7 +310,6 @@ async function findEmailBySubject(subject, token) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const token = process.env.BUTTONDOWN_API_KEY?.trim();
-  const siteName = process.env.SITE_NAME ?? 'liyuk.com';
 
   if (args.apply && !token) {
     console.error('✘ 需要 BUTTONDOWN_API_KEY 环境变量（只有 --apply 时才需要）。');
@@ -251,18 +323,62 @@ async function main() {
   const changedFiles = changedContentPaths(baseRef);
   console.log(`  变更基准 ref: ${baseRef}，检测到 ${changedFiles.length} 个 content md 变更。`);
 
-  // 2. Parse only the ones that became / are published.
-  const candidates = [];
+  // 2. Parse only the ones that became / are published. Group files by article
+  //    so zh.md and en.md of the same post are merged into one email.
+  const byArticle = new Map(); // key -> { zhUrl?, enUrl?, url, zh?: {fm}, en?: {fm} }
   for (const file of changedFiles) {
     const raw = await readFile(file, 'utf8').catch(() => null);
     if (!raw) continue;
     const fm = parseFrontmatter(raw);
     if (!fm) continue;
     if (fm.draft === 'true') continue; // still a draft, skip
-    candidates.push({ file, fm });
+    const key = entryKey(file);
+    if (!key) { console.warn(`  ⚠ 无法归类，跳过: ${path.relative(process.cwd(), file)}`); continue; }
+    const localeId = entryLocale(file);
+    const bucket = byArticle.get(key) ?? { zhUrl: null, enUrl: null, url: entryUrl(file), zh: null, en: null };
+    bucket[localeId] = { fm, body: extractBody(raw) };
+    if (localeId === 'en') bucket.enUrl = entryUrl(file);
+    else bucket.zhUrl = entryUrl(file);
+    byArticle.set(key, bucket);
   }
 
-  console.log(`  待处理已发布文章: ${candidates.length}`);
+  const candidates = [];
+  for (const [key, bucket] of byArticle) {
+    const zh = bucket.zh?.fm ?? null;
+    const en = bucket.en?.fm ?? null;
+    const zhBody = bucket.zh?.body ?? '';
+    const enBody = bucket.en?.body ?? '';
+    const zhUrl = bucket.zhUrl ?? bucket.url;
+    const enUrl = bucket.enUrl ?? bucket.url.replace(/^\//, '/en/');
+    if (zh && en) {
+      // Both languages edited as published → one bilingual email, zh block first.
+      // Subject is the clean English title (no prefix; brand comes from the
+      // Buttondown From name, not the subject line).
+      candidates.push({
+        label: `[中/EN] ${en.title}`,
+        subject: en.title,
+        url: zhUrl,
+        blocks: [
+          { lang: 'zh', title: zh.title, summary: stripInlineMarkdown(zh.description || '').slice(0, 220), url: zhUrl, meta: buildMeta(zh, zhBody, 'zh-CN') },
+          { lang: 'en', title: en.title, summary: stripInlineMarkdown(en.description || '').slice(0, 220), url: enUrl, meta: buildMeta(en, enBody, 'en') },
+        ],
+      });
+    } else {
+      // Only one language was touched → still single-block mail.
+      const fm = zh || en;
+      const body = zh ? zhBody : enBody;
+      const isEn = !zh && !!en;
+      const url = isEn ? enUrl : zhUrl;
+      candidates.push({
+        label: `${isEn ? '[EN]' : '[中文]'} ${fm.title}`,
+        subject: fm.title,
+        url,
+        blocks: [{ lang: isEn ? 'en' : 'zh', title: fm.title, summary: stripInlineMarkdown(fm.description || '').slice(0, 220), url, meta: buildMeta(fm, body, isEn ? 'en' : 'zh-CN') }],
+      });
+    }
+  }
+
+  console.log(`  待处理已发布文章: ${candidates.length} 篇（合并中/英）`);
   if (candidates.length === 0) {
     console.log('✔ 本次没有新发布的文章，无需发信。');
     return 0;
@@ -273,15 +389,10 @@ async function main() {
   let skipped = 0;
   let failed = 0;
 
-  for (const { file, fm } of candidates) {
-    const localeId = entryLocale(file);
-    const url = entryUrl(file);
-    const { title, description } = fm;
-    const summary = stripInlineMarkdown(description || '').slice(0, 220);
-    if (!title) { console.warn(`  ⚠ 跳过（无标题）: ${path.relative(process.cwd(), file)}`); continue; }
-
-    const subject = `${args.subjectPrefix} ${title}`;
-    const label = `${localeId === 'en' ? '[EN]' : '[中文]'} ${title}`;
+  for (const cand of candidates) {
+    const { label, subject, url, blocks } = cand;
+    const primary = blocks[0]?.title ?? label;
+    if (!primary) { console.warn(`  ⚠ 跳过（无标题）: ${label}`); continue; }
 
     // 4. Idempotency: skip if we already created this post's email.
     let exists = false;
@@ -293,7 +404,7 @@ async function main() {
     }
 
     if (args.apply) {
-      const builtHtml = buildEmailHtml({ title, summary, url: `https://liyuk.com${url}`, siteName });
+      const builtHtml = buildEmailHtml({ blocks });
       const body = { subject, status: 'about_to_send', canonical_url: `https://liyuk.com${url}`, body: builtHtml };
       // Buttondown requires the confirmation header before it will create an
       // email with status 'about_to_send'. It technically only needs to be
@@ -313,8 +424,11 @@ async function main() {
     } else {
       // Dry-run preview
       console.log(`\n  · 将发送: ${label}`);
-      console.log(`    URL   : https://liyuk.com${url}`);
-      console.log(`    摘要  : ${summary}`);
+      for (const b of blocks) {
+        console.log(`    [${b.title}]`);
+        console.log(`      URL   : https://liyuk.com${b.url}`);
+        console.log(`      摘要  : ${b.summary}`);
+      }
       skipped++; // dry-run counts as "not sent"; keep final tally simple
     }
   }

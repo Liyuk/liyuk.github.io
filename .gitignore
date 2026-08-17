@@ -5,6 +5,7 @@
 **/.DS_Store
 output/
 .playwright-cli/
+viz/
 
 # --- 内部原始文档与源素材（不应进入 git / 公开站点） ---
 # 这些目录保留在仓库外（见 README「Legacy site」）：内容已迁移进 src/content，

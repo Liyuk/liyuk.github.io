@@ -39,7 +39,6 @@ jobs:
       - name: Send new-post emails to Buttondown
         env:
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
-          SITE_NAME: ${{ vars.SITE_NAME || 'liyuk.com' }}
         run: |
           set -euo pipefail
           # On push: diff against the commit this push was based on, so we only
