@@ -56,6 +56,7 @@ export const dict = {
       description: '你的支持让我有动力继续写下去。',
       wechat: '微信收款',
       alipay: '支付宝收款',
+      paypal: 'PayPal 收款',
       note: '感谢支持，量力而行。',
     },
     page: {
@@ -106,10 +107,11 @@ export const dict = {
     tip: {
       eyebrow: 'Tip',
       title: 'If this helped',
-      action: 'Buy me a coffee',
+      action: 'Tip with PayPal',
       description: 'Your support keeps me writing.',
       wechat: 'WeChat Pay',
       alipay: 'Alipay',
+      paypal: 'PayPal',
       note: 'Thank you — only if you feel like it.',
     },
     page: {

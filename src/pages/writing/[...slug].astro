@@ -66,7 +66,7 @@ const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2
       {hasOutline && <TableOfContents headings={headings} locale={locale} />}
       <div class="prose" data-pagefind-body><Content /></div>
     </div>
-    {locale !== 'en' && <TipCard locale={locale} />}
+    <TipCard locale={locale} />
     <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="writing" />
     <RssSubscribe locale={locale} />
     {(previousPost || nextPost) && <nav class="post-pagination" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousPost && <a class="prev" href={writingUrl(previousPost.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousPost.data.title}</span></a>}</div><div class="pagination-col">{nextPost && <a class="next" href={writingUrl(nextPost.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextPost.data.title}</span></a>}</div></nav>}

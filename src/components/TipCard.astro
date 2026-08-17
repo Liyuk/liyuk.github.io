@@ -3,9 +3,7 @@
 // payment options. Mirrors the ColumnCard interaction (data-open + toggle).
 //
 // Chinese routes reveal WeChat Pay + Alipay QR codes; English routes reveal a
-// single tip link (PayPal placeholder — fill in before mounting English).
-// Mount Chinese-only for now: `{locale !== 'en' && <TipCard locale={locale} />}`
-// before the article's closing tag.
+// single PayPal.me link (the standard way overseas readers tip).
 import { i18n } from '../i18n/index.mjs';
 
 interface Props {
@@ -15,8 +13,7 @@ interface Props {
 const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props as Props;
 const t = i18n(locale).tip;
 const isEnglish = locale === 'en';
-// TODO: replace with your real PayPal / Ko-fi URL before enabling the English card.
-const tipLink = 'https://paypal.me/YOUR_USERNAME';
+const tipLink = 'https://paypal.me/liyuk7';
 ---
 
 <aside class="tip-card" data-open="false">
@@ -50,7 +47,7 @@ const tipLink = 'https://paypal.me/YOUR_USERNAME';
 
 <style>
   .tip-card {
-    margin: 2.5rem 0;
+    margin: 2.5rem auto;
     max-width: var(--prose-w);
     border: 1px solid var(--line);
     border-radius: 10px;

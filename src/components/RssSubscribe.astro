@@ -31,9 +31,12 @@ const formAction = 'https://buttondown.com/api/emails/embed-subscribe/liyuk';
 
 <style>
   .subscribe {
-    margin: 1.5rem 0 0;
+    margin: 1.5rem auto 0;
     padding-top: 1.25rem;
     border-top: 1px solid var(--line);
+    /* 对齐：文章壳内所有区块（header/prose/share/tip/pagination）都用
+       --prose-w 图书列宽、且水平居中（margin-inline:auto），订阅框这条与正文左缘对齐并居中。 */
+    max-width: var(--prose-w);
   }
   .subscribe-prompt {
     margin: 0 0 .8rem;
