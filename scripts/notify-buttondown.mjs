@@ -200,9 +200,11 @@ function entryUrl(filePath) {
 // Buttondown API
 // ---------------------------------------------------------------------------
 
-// Generic Buttondown API helper.
-async function buttondownApi(pathname, { token, method = 'GET', body } = {}) {
-  const headers = { Authorization: `Token ${token}` };
+// Generic Buttondown API helper. `extraHeaders` lets callers add headers that
+// the endpoint requires on certain mutations, e.g. sending an email needs
+// `X-Buttondown-Live-Dangerously` (confirmed once per API key).
+async function buttondownApi(pathname, { token, method = 'GET', body, extraHeaders } = {}) {
+  const headers = { Authorization: `Token ${token}`, ...extraHeaders };
   if (body) headers['Content-Type'] = 'application/json';
   const resp = await fetch(`${API_BASE}${pathname}`, { method, headers, body: body ? JSON.stringify(body) : undefined });
   const text = await resp.text();
@@ -293,7 +295,10 @@ async function main() {
     if (args.apply) {
       const builtHtml = buildEmailHtml({ title, summary, url: `https://liyuk.com${url}`, siteName });
       const body = { subject, status: 'about_to_send', canonical_url: `https://liyuk.com${url}`, body: builtHtml };
-      const { status, ok, json } = await buttondownApi('/emails', { token, method: 'POST', body });
+      // Buttondown requires the confirmations header before it will create an
+      // email with status 'about_to_send' (it only needs to be passed once per
+      // API key, but it is harmless to always include it).
+      const { status, ok, json } = await buttondownApi('/emails', { token, method: 'POST', body, extraHeaders: { 'X-Buttondown-Live-Dangerously': '1' } });
       if (ok) {
         console.log(`  ✔ 已发送: ${label}`);
         sent++;
