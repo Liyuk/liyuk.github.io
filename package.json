@@ -14,6 +14,7 @@
     "new:gallery": "node scripts/new-gallery.mjs",
     "publish": "node scripts/publish.mjs",
     "publish:check": "node scripts/publish-check.mjs",
+    "notify:buttondown": "node scripts/notify-buttondown.mjs",
     "prepare": "git config core.hooksPath .githooks",
     "test": "node --test",
     "test:e2e": "node tests/e2e-smoke.mjs"

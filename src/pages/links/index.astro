@@ -1,0 +1,57 @@
+---
+// 友链页：常读、也愿意推荐的独立站点（数据在 site.mjs 的 friends）。
+// 分两部分：朋友们的站点卡片 + 「申请友链」说明（引导去留言板或邮件互换）。
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { i18n } from '../../i18n/index.mjs';
+import { site } from '../../data/site.mjs';
+
+const locale = Astro.currentLocale ?? 'zh-CN';
+const isEn = locale === 'en';
+const ui = i18n(locale);
+const copy = ui.page.links;
+const email = site.email;
+// 站点名/URL 跨语言一致，仅一句话介绍按语言取。
+const friends = site.friends.map((friend) => ({
+  ...friend,
+  description: isEn ? friend.descriptionEn : friend.description,
+}));
+// 先取本地化路径再加锚点：直接给 getRelativeLocaleUrl 传含 # 的路径，
+// 会被全局 trailingSlash 拼成 /about/#guestbook/，导致锚点失效。
+const guestbookUrl = getRelativeLocaleUrl(locale, '/about/') + '#guestbook';
+---
+
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
+  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+
+  <section class="shell section links-friends" aria-labelledby="links-friends-heading">
+    <p class="eyebrow">{copy.friendsEyebrow}</p>
+    <h2 id="links-friends-heading">{copy.friendsTitle}</h2>
+    <div class="friends-grid">
+      {friends.map((friend) => (
+        <a class="friend-card" href={friend.url} target="_blank" rel="noopener">
+          <span class="friend-avatar" aria-hidden="true">{friend.name.trim().charAt(0)}</span>
+          <span class="friend-body">
+            <strong>{friend.name}</strong>
+            <span class="friend-desc">{friend.description}</span>
+            <span class="friend-url">{friend.url.replace(/^https?:\/\//, '')} <span aria-hidden="true">↗</span></span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="shell section links-apply" aria-labelledby="links-apply-heading">
+    <p class="eyebrow">{copy.applyEyebrow}</p>
+    <h2 id="links-apply-heading">{copy.applyTitle}</h2>
+    <p class="links-apply-desc">{copy.applyDesc}</p>
+    <ul class="links-apply-rules">
+      {copy.applyRules.map((rule) => <li>{rule}</li>)}
+    </ul>
+    <p class="links-apply-channels">{copy.applyChannels}</p>
+    <div class="links-apply-actions">
+      <a class="text-link" href={guestbookUrl}>{copy.applyGuestbook} <span aria-hidden="true">↗</span></a>
+      <a class="text-link" href={`mailto:${email}`}>{copy.applyEmail} <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+</BaseLayout>

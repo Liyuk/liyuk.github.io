@@ -1,43 +1,104 @@
 ---
-// RSS 订阅入口：一句提示 + 带图标的高亮链接，指向当前语言对应的 feed
-// （中文 /rss.xml，英文 /en/rss.xml）。放在文章详情页分享行之后、首页写作区，
-// 把原本埋在 footer 的订阅动作提到读者读完文章、有订阅意图的位置。
+// 订阅入口：Buttondown 邮件订阅表单 + RSS 链接并存。
+// 表单 POST 到 Buttondown embed-subscribe 端点（username=liyuk），新标签打开
+// 订阅确认页，不打断当前阅读；RSS 链接保留给偏好 feed 的读者。
 import { i18n } from '../i18n/index.mjs';
 
 const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props as { locale?: string };
 const t = i18n(locale).subscribe;
 const rssHref = locale === 'en' ? '/en/rss.xml' : '/rss.xml';
+const formAction = 'https://buttondown.com/api/emails/embed-subscribe/liyuk';
 ---
-<p class="rss-subscribe">
-  <span>{t.prompt}</span>
-  <a href={rssHref}>
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M4 11a9 9 0 0 1 9 9" />
-      <path d="M4 4a16 16 0 0 1 16 16" />
-      <circle cx="5" cy="19" r="1" />
-    </svg>
-    {t.cta}
-  </a>
-</p>
+<div class="subscribe">
+  <p class="subscribe-prompt">{t.prompt}</p>
+  <div class="subscribe-row">
+    <form class="subscribe-form" action={formAction} method="post" target="_blank">
+      <input type="email" name="email" placeholder={t.emailPlaceholder} aria-label={t.emailPlaceholder} required />
+      <input type="hidden" value="1" name="embed" />
+      <button type="submit">{t.submit}</button>
+    </form>
+    <span class="subscribe-or" aria-hidden="true">{t.or}</span>
+    <a class="subscribe-rss" href={rssHref}>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
+      </svg>
+      {t.cta}
+    </a>
+  </div>
+</div>
 
 <style>
-  .rss-subscribe {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    margin: 1.25rem 0 0;
+  .subscribe {
+    margin: 1.5rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .subscribe-prompt {
+    margin: 0 0 .8rem;
     color: var(--muted);
     font-size: .88rem;
   }
-  .rss-subscribe a {
+  .subscribe-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .65rem;
+  }
+  .subscribe-form {
+    display: flex;
+    align-items: stretch;
+    gap: .4rem;
+    flex: 1 1 auto;
+    min-width: min(100%, 18rem);
+  }
+  .subscribe-form input[type="email"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: .5rem .75rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    font-size: .88rem;
+  }
+  .subscribe-form input[type="email"]:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-color: var(--accent);
+  }
+  .subscribe-form button {
+    padding: .5rem 1.1rem;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--paper);
+    font: inherit;
+    font-size: .88rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .subscribe-form button:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .subscribe-or {
+    color: var(--muted);
+    font-size: .85rem;
+  }
+  .subscribe-rss {
     display: inline-flex;
     align-items: center;
     gap: .4rem;
     color: var(--accent);
     font-weight: 700;
+    font-size: .88rem;
     text-decoration: none;
     border-bottom: 1px solid var(--line);
     padding-bottom: .1rem;
   }
-  .rss-subscribe a:hover { color: var(--ink); border-color: var(--accent); }
+  .subscribe-rss:hover { color: var(--ink); border-color: var(--accent); }
 </style>

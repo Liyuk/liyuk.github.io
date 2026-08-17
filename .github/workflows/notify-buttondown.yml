@@ -1,0 +1,55 @@
+# Notify Buttondown subscribers about newly published posts.
+#
+# Runs on every push to master (and on demand via workflow_dispatch). It diffs
+# the pushed content files, finds the posts that became published in that change,
+# and sends a short "new post" email (title + summary + link) to Buttondown via
+# the API. This is the free way to auto-notify readers — a substitute for
+# Buttondown's paid (Basic) RSS-to-email feature.
+#
+# The workflow is independent from deploy.yml so a mail failure never blocks the
+# site deploy. Failures are safe to ignore: re-running re-sends only the posts
+# not already emailed (matched by subject), so it is idempotent.
+
+name: Notify Buttondown
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: # allow manual re-run from the Actions tab
+    inputs: {}
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so we can diff github.event.before...HEAD to find the
+          # posts touched by this push.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Send new-post emails to Buttondown
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          SITE_NAME: ${{ vars.SITE_NAME || 'liyuk.com' }}
+        run: |
+          set -euo pipefail
+          # On push: diff against the commit this push was based on, so we only
+          # email the posts published in this change. On workflow_dispatch the
+          # before-SHA is absent → scan the whole tree; idempotency (subject
+          # match) skips anything already sent, so manual re-runs are safe.
+          BEFORE="${{ github.event.before }}"
+          if [ -n "${BEFORE}" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            BASE_REF="$BEFORE"
+            node scripts/notify-buttondown.mjs --baseRef "$BASE_REF" --apply
+          else
+            node scripts/notify-buttondown.mjs --baseRef HEAD --apply
+          fi

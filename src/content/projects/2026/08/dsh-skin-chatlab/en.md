@@ -11,7 +11,7 @@ hero:
   src: /images/projects/dsh-skin-chatlab/overview-light.webp
   alt: "Feishu skin light main view: project groups and contacts on the left, a bubble chat window on the right."
   caption: "Screenshot of the running skin: the session list and chat window under the Feishu skin."
-draft: true
+draft: false
 tags: [technology, agent-systems, developer-productivity]
 translationKey: 2026/08/dsh-skin-chatlab
 ---
@@ -40,7 +40,7 @@ The whole skin rests on one metaphor: **an agent session is a contact in an IM a
 | Session running state | "Typing…" with bouncing dots |
 | Top bar | DeepSeek brand kept, with a skin-name badge added beside it |
 
-Avatars are not random images: each session's seed derives from its session id (or title), so the same contact always looks the same — that's what makes it a "contact", not "a picture". Avatars use DiceBear's flat-people style, and the project-group square colors are likewise hashed from titles to fixed hues.
+Avatars are not random images: each session's seed derives from its session id (or title), so the same contact always looks the same, which is what gives it that "contact" feel rather than a random picture. Avatars use DiceBear's flat-people style, and the project-group square colors are likewise hashed from titles to fixed hues.
 
 ```mermaid
 graph LR
@@ -114,9 +114,9 @@ Session rows were the hard part. DSH's session row component has **no per-row sl
 .cl-preview  { grid-column: 2 / span 3; grid-row: 2; }  /* 预览占满第二行 */
 ```
 
-For colors, the values were calibrated against Feishu's official design language (Lark design language): the brand blue is **#1456F0** — not the Douyin-family #3370FF; the two are far apart. Tokens go through `--dsw-alias-*` variables where possible, but token resolution turned out to be unreliable in the sidebar scope, so key colors like bubbles and folder icons hardcode the Feishu blue, scoped by the `data-chatlab-skin` attribute and cleaned up uniformly on skin switch or uninstall.
+For colors, the values were calibrated against Feishu's official design language (Lark design language): the brand blue is **#1456F0**, not the Douyin-family #3370FF — the two are far apart. Tokens go through `--dsw-alias-*` variables where possible, but token resolution turned out to be unreliable in the sidebar scope, so key colors like bubbles and folder icons hardcode the Feishu blue, scoped by the `data-chatlab-skin` attribute and cleaned up uniformly on skin switch or uninstall.
 
-Two data features are worth mentioning:
+Two data features deserve their own note:
 
 **Latest-reply preview + unread dot.** Preview text and unread counts come from a loopback RPC (`/dsh-skin-chatlab`); the host reads session logs (live sessions in memory + cold sessions on disk) and the client pulls on demand. Read positions live in localStorage as `{ sessionId: lastSeq }` and advance automatically when a session is opened. The data layer and the skin layer are decoupled: preview is "data", the dot is "skin" — the Feishu skin draws them as an IM would, and another skin may draw them differently.
 
@@ -171,12 +171,12 @@ Four `ready: false` placeholder skins currently sit in the settings panel. Each 
 
 Beyond skins, the **shared capabilities** are worth doing before any single platform skin:
 
-1. **Unread count badges** — today only a dot; the RPC already returns the latest sequence, so the client can compute the delta and upgrade the dot to a number;
-2. **Session pinning / archiving** — not in DSH natively, yet among the most-used IM operations;
-3. **Time separators** — inserting time groups into the message stream is one of the strongest "IM-feel" details;
-4. **Notifications and sounds** — browser Notification + a new-message chime; right now you have to watch the red dots;
-5. **Code block / attachment cards** — rendering code blocks in AI replies as dark cards, like Feishu's rich-text cards;
-6. **Read-state transitions** — translating "AI is generating" into IM delivery semantics: generating = delivering, finished = read;
+1. **Unread count badges.** Today it's only a dot; the RPC already returns the latest sequence, so the client can compute the delta and upgrade the dot to a number.
+2. **Session pinning / archiving.** Not in DSH natively, yet among the most-used IM operations.
+3. **Time separators** — inserting time groups into the message stream is one of the strongest "IM-feel" details.
+4. **Notifications and sounds.** Browser Notification + a new-message chime; right now you have to watch the red dots.
+5. **Code block / attachment cards** — rendering code blocks in AI replies as dark cards, like Feishu's rich-text cards.
+6. **Read-state transitions** — translating "AI is generating" into IM delivery semantics: generating = delivering, finished = read.
 7. **Avatar status indicator** — a "busy" dot overlaid on the avatar while a session is running.
 
 ## Known boundaries
@@ -191,7 +191,7 @@ A few things are unfinished, or deliberate — stated plainly:
 
 ## Takeaways
 
-The genuinely interesting part of this project is not "looking like Feishu" — it's **restyling within the plugin's boundary**: without changing React logic or touching any existing plugin's code, "register + decorate + CSS rearrangement" alone can translate a developer tool's UI into another product's shape. Three judgments worth reusing:
+The genuinely interesting part of this project isn't "looking like Feishu" per se; it's **restyling within the plugin's boundary**: without changing React logic or touching any existing plugin's code, "register + decorate + CSS rearrangement" alone can translate a developer tool's UI into another product's shape. Three judgments worth reusing:
 
 1. **Prefer CSS for restyling first, then "appending your own nodes", and consider touching logic last.** The first two never interfere with React's diffing, so the odds of breakage drop by an order of magnitude.
 2. **Decouple data from skin.** Preview/unread is a data capability, bubbles are visual expression; one base provides the former uniformly, each skin draws it its own way, and adding a new skin doesn't mean rewriting the data logic.

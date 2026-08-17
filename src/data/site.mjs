@@ -19,6 +19,25 @@ export const site = {
     x: 'https://x.com/liyukli',
     linkedin: 'https://www.linkedin.com/in/liyuk/',
   },
+  // 友链（/links 页）：常读、也愿意推荐的独立站点，按「开放互换」维护。
+  // name/url 跨语言一致；description/descriptionEn 分别给中英文一句话介绍。
+  // 友链多了以后，可给每条加 group 字段（值用 i18n key）做分组展示。
+  friends: [
+    {
+      name: 'Malash',
+      url: 'https://malash.me/',
+      // 站点只有 title「Malash's Blog」，无自定义 meta description。
+      description: 'Malash 的个人博客。',
+      descriptionEn: 'Malash’s personal blog.',
+    },
+    {
+      name: 'Iris Luan',
+      url: 'https://www.irisluan.com/',
+      // 取自站点 meta description。
+      description: '笔记、案例研究、旅行日志与 side projects，写作于上海与纽约之间。',
+      descriptionEn: 'Notes, case studies, travel journals, and side products — written between Shanghai and New York City.',
+    },
+  ],
   title: `${brand} — Liyuk`,
   titleEn: `${brandEn} — Liyuk`,
   description: 'Liyuk 关于技术、领导力与日常的现场笔记。',
@@ -31,6 +50,7 @@ export const site = {
     { href: '/research/', key: 'research' },
     { href: '/photos/', key: 'photos' },
     { href: '/about/', key: 'about' },
+    { href: '/links/', key: 'links' },
     { href: '/tags/', key: 'tags' },
   ],
   translation: {

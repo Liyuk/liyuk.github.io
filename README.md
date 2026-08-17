@@ -31,6 +31,29 @@ human-reviewed. Translation conventions live in `docs/translation-spec.md`; the
 English UI shell lives in `src/i18n/index.mjs`. API secrets never belong in this
 repository.
 
+## Subscriber notifications (Buttondown)
+
+Publishing a post also notifies Buttondown subscribers. `.github/workflows/notify-buttondown.yml`
+runs on every push to `master`: it diffs the pushed content, finds the posts that became
+published, and sends a short "new post" email (title + summary + link) via
+`scripts/notify-buttondown.mjs`. This is the free substitute for Buttondown's paid
+RSS-to-email feature; emails are matched by subject, so re-runs never double-send.
+
+Set the API key as a repository secret so it never lands in git:
+
+```sh
+# Repository settings → Secrets and variables → Actions → New repository secret
+#   Name:  BUTTONDOWN_API_KEY
+#   Value: your Buttondown API key (https://app.buttondown.com/settings#api-key)
+```
+
+Test locally without sending (dry-run prints what would be emailed):
+
+```sh
+npm run notify:buttondown          # preview (no network)
+# npm run notify:buttondown -- --apply   # actually send (requires the key)
+```
+
 ## Content capabilities
 
 Markdown entries support the following out of the box. A copy-paste demo lives in
