@@ -295,10 +295,10 @@ async function main() {
     if (args.apply) {
       const builtHtml = buildEmailHtml({ title, summary, url: `https://liyuk.com${url}`, siteName });
       const body = { subject, status: 'about_to_send', canonical_url: `https://liyuk.com${url}`, body: builtHtml };
-      // Buttondown requires the confirmations header before it will create an
-      // email with status 'about_to_send' (it only needs to be passed once per
-      // API key, but it is harmless to always include it).
-      const { status, ok, json } = await buttondownApi('/emails', { token, method: 'POST', body, extraHeaders: { 'X-Buttondown-Live-Dangerously': '1' } });
+      // Buttondown requires the confirmation header before it will create an
+      // email with status 'about_to_send'. It technically only needs to be
+      // supplied once per API key, but it is harmless to always include it.
+      const { status, ok, json } = await buttondownApi('/emails', { token, method: 'POST', body, extraHeaders: { 'X-Buttondown-Live-Dangerously': 'true' } });
       if (ok) {
         console.log(`  ✔ 已发送: ${label}`);
         sent++;
