@@ -4,13 +4,20 @@ import { getCollection } from 'astro:content';
 import { publishedIn } from '../lib/content-model.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EntryCard from '../components/EntryCard.astro';
+import RssSubscribe from '../components/RssSubscribe.astro';
 import { i18n } from '../i18n/index.mjs';
 import { sortByCreatedAt } from '../lib/timeline.ts';
 
 const HOME_POSTS = 3;
 
 const locale = Astro.currentLocale ?? 'zh-CN';
-const writing = sortByCreatedAt(await getCollection('writing', publishedIn(locale)));
+const published = publishedIn(locale);
+const writing = sortByCreatedAt(await getCollection('writing', published));
+const featured = sortByCreatedAt(await getCollection('writing', (entry) => published(entry) && entry.data.featured === true));
+const featuredIds = new Set(featured.map((entry) => entry.id));
+const latest = writing.filter((entry) => !featuredIds.has(entry.id)).slice(0, HOME_POSTS);
+const projectCount = (await getCollection('project', published)).length;
+const researchCount = (await getCollection('research', published)).length;
 const copy = i18n(locale).page.home;
 const path = (p: string) => getRelativeLocaleUrl(locale, p);
 ---
@@ -30,17 +37,25 @@ const path = (p: string) => getRelativeLocaleUrl(locale, p);
     <div class="section-intro">
       <p class="eyebrow">{copy.writing.eyebrow}</p>
       <h2 id="writing-heading">{copy.writing.title[0]}<br />{copy.writing.title[1]}</h2>
+      <p class="writing-scale">{copy.writing.archiveHint(writing.length)}</p>
       <a class="text-link" href={path('/writing/')}>{copy.writing.link} <span aria-hidden="true">↗</span></a>
+      <RssSubscribe locale={locale} />
     </div>
     <div class="entry-list">
-      {writing.length ? writing.slice(0, HOME_POSTS).map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
+      {featured.length > 0 && (
+        <>
+          <h3 class="entry-list-heading">{copy.writing.featured}</h3>
+          {featured.map((entry) => <EntryCard entry={entry} locale={locale} />)}
+        </>
+      )}
+      <h3 class="entry-list-heading">{copy.writing.latest}</h3>
+      {latest.length ? latest.map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
     </div>
   </section>
 
   <section class="section shell practice-grid" aria-label={copy.practiceGridAria}>
-    <a href={path('/projects/')} class="practice-card"><span>{copy.practices.projects.label}</span><strong>{copy.practices.projects.title}</strong><em>{copy.practices.projects.description}</em></a>
-    <a href={path('/research/')} class="practice-card"><span>{copy.practices.research.label}</span><strong>{copy.practices.research.title}</strong><em>{copy.practices.research.description}</em></a>
-    <a href={path('/photos/')} class="practice-card photo-card"><span>{copy.practices.photos.label}</span><strong>{copy.practices.photos.title}</strong><em>{copy.practices.photos.description}</em></a>
+    <a href={path('/projects/')} class="practice-card"><span>{copy.practices.projects.label}</span><strong>{copy.practices.projects.title}</strong><em>{copy.practices.projects.description}</em><small>{copy.practices.projects.count(projectCount)}</small></a>
+    <a href={path('/research/')} class="practice-card"><span>{copy.practices.research.label}</span><strong>{copy.practices.research.title}</strong><em>{copy.practices.research.description}</em><small>{copy.practices.research.count(researchCount)}</small></a>
   </section>
 
   <section class="section shell start-callout">

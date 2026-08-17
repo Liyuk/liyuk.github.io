@@ -44,13 +44,13 @@ CanonLoom models writing as explicit state transitions. A chapter passes through
 The project structure generated after `init`:
 
 ```text
-canonloom.json                     # 项目状态 + 工作流配置（状态机）
-intent/author-setup.json           # 作者确认的题材/受众/视角/边界（作者说了算）
-intent/ai-recognition.json         # AI 识别出的候选人物/世界/线索（AI 只能提案）
-intent/style-profile.json          # 文风约束
-intent/review-policy.md            # 审查政策
-memory/narrative-state/            # 可选叙事状态层：事件/知识/揭示
-tasks/current.md                   # 当前任务（Agent 的入口）
+canonloom.json                     # project state + workflow config (state machine)
+intent/author-setup.json           # author-confirmed genre / audience / viewpoint / boundaries (author decides)
+intent/ai-recognition.json         # AI-recognized candidate characters / world / clues (AI can only propose)
+intent/style-profile.json          # style constraints
+intent/review-policy.md            # review policy
+memory/narrative-state/            # optional narrative state layer: events / knowledge / reveals
+tasks/current.md                   # current task (the Agent's entry point)
 ```
 
 `author-setup.json` (author configuration) and `ai-recognition.json` (AI proposals) are stored separately: author configuration is not mixed with AI inference, and AI inference never automatically enters canon. This is the first boundary of the entire project.
@@ -95,13 +95,13 @@ The chapter contract is not a summary. At minimum it requires:
 ```jsonc
 {
   "id": "chapter-001",
-  "objective": "本章目标",
-  "viewpoint": "视角",
-  "time": "时间",
-  "location": "地点",
-  "required_changes": ["必须发生的变化"],
-  "forbidden_changes": ["禁止发生的变化"],   // 防止过度解决、越权设定
-  "exit_state": "章节出口状态"                // 下一章可继承的事实和开放问题
+  "objective": "chapter objective",
+  "viewpoint": "viewpoint",
+  "time": "time",
+  "location": "location",
+  "required_changes": ["changes that must happen"],
+  "forbidden_changes": ["changes that are forbidden"],   // prevent over-resolution and overstepping
+  "exit_state": "chapter exit state"                     // facts and open questions the next chapter can inherit
 }
 ```
 
@@ -116,15 +116,15 @@ When a work becomes complex enough to need it, three state files can be enabled:
 The author's daily work only needs a short command set:
 
 ```sh
-./bin/canonloom --root ~/my-novel status       # 现在处于什么阶段？下一步做什么？
-./bin/canonloom --root ~/my-novel continue     # 按 next_action 继续（最常用）
-./bin/canonloom --root ~/my-novel idea         # 开始创意：2–5 个候选方向
-./bin/canonloom --root ~/my-novel planning     # 层级规划
-./bin/canonloom --root ~/my-novel work         # 开始一个工作单元（一章）
-./bin/canonloom --root ~/my-novel revision     # 问题驱动修订
-./bin/canonloom --root ~/my-novel review       # 审查
-./bin/canonloom --root ~/my-novel diagnose     # 检查结构和状态（出问题时先跑这个）
-./bin/canonloom --root ~/my-novel repair       # 修复白名单内的结构问题
+./bin/canonloom --root ~/my-novel status       # what stage am I in? what's next?
+./bin/canonloom --root ~/my-novel continue     # continue along next_action (most common)
+./bin/canonloom --root ~/my-novel idea         # start ideation: 2–5 candidate directions
+./bin/canonloom --root ~/my-novel planning     # hierarchical planning
+./bin/canonloom --root ~/my-novel work         # start one unit of work (one chapter)
+./bin/canonloom --root ~/my-novel revision     # problem-driven revision
+./bin/canonloom --root ~/my-novel review       # review
+./bin/canonloom --root ~/my-novel diagnose     # check structure and state (run this first when something breaks)
+./bin/canonloom --root ~/my-novel repair       # fix structural problems within the whitelist
 ```
 
 One complete chapter production: `idea`/`work`/`continue` generates `tasks/current.md` → the Agent produces 2–5 creative options → the author chooses (`select / merge / edit / reject / defer`) and writes the reasoning → runs through the S0–S6 gates → settles into `manuscript/`. There are clear fallbacks when something goes wrong: an S4 failure returns to S3 for re-validation, an S5b divergence keeps both reports for a human decision, and reopening an already-settled chapter uses `retry S0` to keep the old artifacts and start a new run.
@@ -154,9 +154,9 @@ No third-party packages required, Python 3.9+:
 git clone https://github.com/Liyuk/canonloom
 cd canonloom
 ./bin/canonloom init ~/my-novel --name "My Novel"
-./bin/canonloom --root ~/my-novel setup --confirm   # 确认作者配置
-./bin/canonloom --root ~/my-novel idea              # 开始创意
-./bin/canonloom --root ~/my-novel continue          # 按 next_action 继续
+./bin/canonloom --root ~/my-novel setup --confirm   # confirm author configuration
+./bin/canonloom --root ~/my-novel idea              # start ideation
+./bin/canonloom --root ~/my-novel continue          # continue along next_action
 ```
 
 The complete minimal chain can be run directly via the repo's bundled example (prints `MINIMAL PROJECT SMOKE: OK`):

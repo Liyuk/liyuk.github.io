@@ -6,6 +6,7 @@ translationStatus: draft
 createdAt: 2022-06-18
 publishedAt: 2022-06-18
 type: essay
+featured: true
 tags: [thinking, decision-making, communication, work-leadership]
 column: { slug: one-on-one-conversations, order: 7 }
 translationKey: 2022/06/structured-thinking-at-work

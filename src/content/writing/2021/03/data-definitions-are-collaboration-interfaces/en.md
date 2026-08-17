@@ -6,6 +6,7 @@ translationStatus: draft
 createdAt: 2021-03-15
 publishedAt: 2021-03-15
 type: essay
+featured: true
 tags: [data, metrics, collaboration, measurement, technology]
 column: { slug: data-metrics-guide, order: 1 }
 translationKey: 2021/03/data-definitions-are-collaboration-interfaces

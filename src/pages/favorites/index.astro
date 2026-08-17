@@ -1,0 +1,100 @@
+---
+// 站内收藏页：读取 localStorage（key: liyuk-favorites）渲染收藏列表。
+// 纯客户端渲染（收藏是本地数据，无后端），支持跳转、单条删除、清空。
+// 加 noindex：个人收藏数据不应被搜索引擎索引。
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { i18n } from '../../i18n/index.mjs';
+
+const locale = Astro.currentLocale ?? 'zh-CN';
+const ui = i18n(locale);
+const copy = ui.favorites;
+---
+
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription} noindex>
+  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+
+  <div class="shell favorites-shell">
+    <p class="favorites-empty" data-favorites-empty>{copy.empty}</p>
+    <p class="favorites-empty-hint" data-favorites-empty-hint>{copy.emptyHint}</p>
+    <ol class="favorites-list" data-favorites-list></ol>
+    <div class="favorites-toolbar" data-favorites-toolbar hidden>
+      <button class="favorites-clear" type="button" data-favorites-clear>{copy.clearAll}</button>
+    </div>
+  </div>
+</BaseLayout>
+
+<script define:vars={{ copy, locale }}>
+  // define:vars 使脚本按 is:inline 处理（禁 TS 语法），保持纯 JS。
+  const FAV_KEY = 'liyuk-favorites';
+  const listEl = document.querySelector('[data-favorites-list]');
+  const emptyEl = document.querySelector('[data-favorites-empty]');
+  const hintEl = document.querySelector('[data-favorites-empty-hint]');
+  const toolbar = document.querySelector('[data-favorites-toolbar]');
+  const clearBtn = document.querySelector('[data-favorites-clear]');
+
+  const read = () => {
+    try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
+    catch { return []; }
+  };
+  const write = (items) => localStorage.setItem(FAV_KEY, JSON.stringify(items));
+  const typeLabel = (t) => (copy.types && copy.types[t]) || t || '';
+  const fmtDate = (ts) => {
+    try { return new Date(ts).toLocaleDateString(locale === 'en' ? 'en-US' : 'zh-CN'); }
+    catch { return ''; }
+  };
+
+  const render = () => {
+    const items = read();
+    const has = items.length > 0;
+    emptyEl.hidden = has;
+    hintEl.hidden = has;
+    toolbar.hidden = !has;
+    listEl.innerHTML = '';
+
+    items.forEach((item) => {
+      const li = document.createElement('li');
+      li.className = 'favorites-item';
+
+      const a = document.createElement('a');
+      a.className = 'favorites-item-main';
+      a.href = item.url || '#';
+
+      const type = document.createElement('span');
+      type.className = 'favorites-item-type';
+      type.textContent = typeLabel(item.type);
+      a.appendChild(type);
+
+      const title = document.createElement('strong');
+      title.className = 'favorites-item-title';
+      title.textContent = item.title || '';
+      a.appendChild(title);
+
+      const date = document.createElement('span');
+      date.className = 'favorites-item-date';
+      date.textContent = item.savedAt ? (copy.savedAt || '') + ' ' + fmtDate(item.savedAt) : '';
+      a.appendChild(date);
+
+      li.appendChild(a);
+
+      const remove = document.createElement('button');
+      remove.className = 'favorites-item-remove';
+      remove.type = 'button';
+      remove.textContent = copy.remove || 'Remove';
+      remove.setAttribute('aria-label', (copy.remove || 'Remove') + ': ' + (item.title || ''));
+      remove.addEventListener('click', () => {
+        write(read().filter((f) => f.url !== item.url));
+        render();
+      });
+      li.appendChild(remove);
+
+      listEl.appendChild(li);
+    });
+  };
+
+  clearBtn?.addEventListener('click', () => {
+    write([]);
+    render();
+  });
+
+  render();
+</script>

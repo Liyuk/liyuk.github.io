@@ -7,7 +7,8 @@ import { i18n } from '../../i18n/index.mjs';
 import { site } from '../../data/site.mjs';
 import { publishedIn } from '../../lib/content-model.ts';
 const locale = Astro.currentLocale ?? 'zh-CN';
-const copy = i18n(locale).page.about;
+const ui = i18n(locale);
+const copy = ui.page.about;
 const url = (p: string) => getRelativeLocaleUrl(locale, p);
 const email = site.email;
 const [writing, research, projects] = await Promise.all([
@@ -58,15 +59,22 @@ const [writing, research, projects] = await Promise.all([
         </li>
       ))}
     </ul>
-    <a class="text-link" href={`mailto:${email}`}>{copy.cooperateContact} <span aria-hidden="true">↗</span></a>
+  </section>
+
+  <section class="shell section about-contact" aria-labelledby="about-contact-heading">
+    <p class="eyebrow">{copy.contactEyebrow}</p>
+    <h2 id="about-contact-heading">{copy.contactTitle}</h2>
+    <ul class="about-contact-list">
+      <li><a class="text-link" href={`mailto:${email}`}>{ui.footer.email} <span aria-hidden="true">↗</span></a></li>
+      <li><a class="text-link" href={site.social.x} target="_blank" rel="noopener">{ui.footer.x} <span aria-hidden="true">↗</span></a></li>
+      <li><a class="text-link" href={site.social.linkedin} target="_blank" rel="noopener">{ui.footer.linkedin} <span aria-hidden="true">↗</span></a></li>
+      <li><a class="text-link" href={site.social.github} target="_blank" rel="noopener">{ui.footer.github} <span aria-hidden="true">↗</span></a></li>
+    </ul>
   </section>
 
   <section class="shell section about-boundary">
     <p class="eyebrow">{copy.boundaryEyebrow}</p>
     <p>{copy.boundary}</p>
-    <a class="text-link" href={`mailto:${email}`}>{copy.contact} <span aria-hidden="true">↗</span></a>
-    <a class="text-link" href="https://x.com/liyukli" target="_blank" rel="noopener">{copy.xLink} <span aria-hidden="true">↗</span></a>
-    <p class="about-x-note">{copy.xNote}</p>
   </section>
 
   <section class="shell section about-guestbook">

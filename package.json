@@ -21,10 +21,12 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.3",
+    "@types/qrcode": "^1.5.6",
     "astro": "^5.13.7",
     "katex": "^0.18.4",
     "pagefind": "^1.5.2",
     "playwright": "^1.62.1",
+    "qrcode": "^1.5.4",
     "rehype-katex": "^7.0.1",
     "rehype-mermaid": "^3.0.0",
     "remark-math": "^6.0.0"

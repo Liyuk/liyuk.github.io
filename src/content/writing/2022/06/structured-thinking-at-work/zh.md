@@ -4,6 +4,7 @@ description: 结构化不是套模板，是让问题、证据、取舍和决定�
 createdAt: 2022-06-18
 publishedAt: 2022-06-18
 type: essay
+featured: true
 tags: [thinking, decision-making, communication, work-leadership]
 column: { slug: one-on-one-conversations, order: 7 }
 ---

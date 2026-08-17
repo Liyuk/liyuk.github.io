@@ -1,70 +1,91 @@
 ---
-// Share + save row for article detail pages. Native Web Share on mobile
-// (system share sheet), intent links for X / LinkedIn / Facebook on desktop,
-// a copy-link button, and a "save to Pocket" link. No third-party scripts.
+// Share + save row for article detail pages.
+//
+// 页尾只留三个主操作：「分享」「收藏」「复制链接」。点「分享」展开浮动面板，
+// 列出中英文主要渠道直链（X / 微博 / Telegram / WhatsApp / LinkedIn /
+// Facebook），以及系统分享（移动端）和微信（构建期生成的二维码）。全部无
+// 第三方脚本、无外部请求。
+//
+// 收藏：站内收藏，用 localStorage 存列表（key: liyuk-favorites），按钮在
+// 所有端可见，点击切换「收藏/已收藏」，收藏页 /favorites/ 读回。
+import QRCode from 'qrcode';
 import { i18n } from '../i18n/index.mjs';
 import { site } from '../data/site.mjs';
+import { brandIcons, type ShareChannel } from '../lib/brand-icons';
+import shareRowUrl from '../lib/share-row.js?url';
 
 interface Props {
   locale?: string;
   title: string;
   url: string;
+  type?: string;
 }
 
-const { locale = Astro.currentLocale ?? 'zh-CN', title, url } = Astro.props as Props;
+const { locale = Astro.currentLocale ?? 'zh-CN', title, url, type = 'writing' } = Astro.props as Props;
 const t = i18n(locale).share;
-const encodedUrl = encodeURIComponent(url);
 const encodedTitle = encodeURIComponent(title);
 const via = site.social.x.split('/').at(-1) ?? '';
 
-const shareLinks = [
-  { label: t.x, href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}&via=${via}` },
-  { label: t.linkedin, href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
-  { label: t.facebook, href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-  { label: t.pocket, href: `https://getpocket.com/save?url=${encodedUrl}&title=${encodedTitle}` },
+// 分享外链统一带 UTM：utm_source=渠道 + utm_medium=social。这样 Cloudflare
+// Web Analytics（或任意统计）能按来源拆分，分清「微博来的 / X 来的 / Telegram
+// 来的」。复制链接（copy）与系统分享（native）也带识别符——它们标记的是「读者
+// 手动转发」这条行为而非终点平台，但能把「靠手动转发带来的流量」单独成桶，
+// 与「点分享按钮带来的流量」区分开。
+const shareUrl = (source: string) =>
+  `${url}${url.includes('?') ? '&' : '?'}utm_source=${encodeURIComponent(source)}&utm_medium=social`;
+const encoded = (source: string) => encodeURIComponent(shareUrl(source));
+
+// 微信二维码 SVG：构建期由当前页 URL（带 utm_source=wechat）生成。二维码本就
+// 每页不同，属于每页固有 HTML，直接预渲染进隐藏弹窗；脚本不再经 define:vars
+// 携带它，因此可以打包成全站共享的哈希模块（缓存一次），而非在每个详情页重复内联。
+let qrSvg = '';
+try {
+  qrSvg = await QRCode.toString(shareUrl('wechat'), { type: 'svg', margin: 1 });
+} catch {
+  qrSvg = '';
+}
+
+const shareLinks: Array<{ key: ShareChannel; label: string; href: string }> = [
+  { key: 'x', label: t.x, href: `https://twitter.com/intent/tweet?url=${encoded('x')}&text=${encodedTitle}&via=${via}` },
+  { key: 'weibo', label: t.weibo, href: `https://service.weibo.com/share/share.php?url=${encoded('weibo')}&title=${encodedTitle}` },
+  { key: 'telegram', label: t.telegram, href: `https://t.me/share/url?url=${encoded('telegram')}&text=${encodedTitle}` },
+  { key: 'whatsapp', label: t.whatsapp, href: `https://api.whatsapp.com/send?text=${encodedTitle}%20${encoded('whatsapp')}` },
+  { key: 'linkedin', label: t.linkedin, href: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded('linkedin')}` },
+  { key: 'facebook', label: t.facebook, href: `https://www.facebook.com/sharer/sharer.php?u=${encoded('facebook')}` },
 ];
 ---
-<div class="share-row" data-share-row data-copy-url={url} data-copy-label={t.copy}>
-  <button class="share-btn" type="button" data-share-native>{t.native} ↗</button>
-  {shareLinks.map((link) => (
-    <a class="share-btn" href={link.href} target="_blank" rel="noopener">{link.label} ↗</a>
-  ))}
-  <button class="share-btn" type="button" data-share-copy>{t.copy}</button>
+
+<div class="share-row" data-share-row
+  data-copy-url={shareUrl('copy')}
+  data-native-url={shareUrl('native')}
+  data-copy-label={t.copy}
+  data-copied-label={t.copied}>
+  <div class="share-popover-wrap">
+    <button class="share-btn share-btn-primary" type="button" data-share-toggle aria-haspopup="menu" aria-controls="share-popover" aria-expanded="false"><svg class="share-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8 12 4l4.5 4M5 12v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>{t.shareLabel}<svg class="share-caret" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3.2l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="share-popover" id="share-popover" role="menu" aria-label={t.shareTo} data-share-popover hidden>
+      <p class="share-popover-label" aria-hidden="true">{t.shareTo}</p>
+      <button class="share-popover-item" role="menuitem" type="button" data-share-native><svg class="share-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 14.5h14V19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-4.5Z"/><path d="M12 2.2 16.6 7.6h-2.8v7.4h-3.6V7.6H7.4Z"/></svg>{t.system}</button>
+      {shareLinks.map((link) => (
+        <a class="share-popover-item" role="menuitem" style={`--brand:${brandIcons[link.key].hex};--brand-dark:${brandIcons[link.key].dark}`} href={link.href} target="_blank" rel="noopener noreferrer"><svg class="share-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={brandIcons[link.key].path}/></svg>{link.label}</a>
+      ))}
+      {qrSvg && <button class="share-popover-item" role="menuitem" style={`--brand:${brandIcons.wechat.hex};--brand-dark:${brandIcons.wechat.dark}`} type="button" data-share-wechat><svg class="share-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={brandIcons.wechat.path}/></svg>{t.wechat}</button>}
+    </div>
+  </div>
+  <button class="share-btn" type="button" data-share-favorite data-fav-title={title} data-type={type} data-fav-label={t.favorite} data-fav-label-on={t.favorited} data-fav-added={t.favoriteAdded} data-fav-removed={t.favoriteRemoved} aria-pressed="false"><svg class="share-btn-icon share-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L12 16.9l-5.2 2.61.99-5.79-4.21-4.1 5.82-.85z"/></svg><span data-fav-text>{t.favorite}</span></button>
+  <button class="share-btn" type="button" data-share-copy><svg class="share-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-text>{t.copy}</span></button>
+  <p class="share-toast" role="status" aria-live="polite" hidden></p>
 </div>
 
-<script>
-  const row = document.querySelector<HTMLElement>('[data-share-row]');
-  if (row) {
-    const url = row.dataset.copyUrl ?? location.href;
-    const copyLabel = row.dataset.copyLabel ?? 'Copy';
+{qrSvg && (
+  <div class="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-modal-title" data-share-modal hidden>
+    <div class="share-modal-card">
+      <button class="share-modal-close" type="button" data-share-modal-close aria-label={t.wechatModalClose}>×</button>
+      <p class="share-modal-eyebrow" id="share-modal-title">{t.wechat}</p>
+      <div class="share-modal-qr" set:html={qrSvg}></div>
+      <h2 class="share-modal-title">{t.wechatModalTitle}</h2>
+      <p class="share-modal-desc">{t.wechatModalDesc}</p>
+    </div>
+  </div>
+)}
 
-    // Native share: only when supported; otherwise hide the button.
-    const nativeBtn = row.querySelector<HTMLButtonElement>('[data-share-native]');
-    if (nativeBtn) {
-      if (typeof navigator !== 'undefined' && 'share' in navigator) {
-        nativeBtn.addEventListener('click', () => {
-          navigator.share({ title: document.title, url }).catch(() => {});
-        });
-      } else {
-        nativeBtn.hidden = true;
-      }
-    }
-
-    // Copy link, with a fallback for browsers without the async clipboard API.
-    const copyBtn = row.querySelector<HTMLButtonElement>('[data-share-copy]');
-    copyBtn?.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(url);
-      } catch {
-        const input = document.createElement('textarea');
-        input.value = url;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-      }
-      copyBtn.textContent = '✓';
-      setTimeout(() => { copyBtn.textContent = copyLabel; }, 1500);
-    });
-  }
-</script>
+<script src={shareRowUrl} defer></script>

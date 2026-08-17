@@ -58,7 +58,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
       </ol>
     </section>
     {gallery.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(gallery.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug)}</a>{previousColumnEntry && <a href={entryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={entryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
-    <ShareRow locale={locale} title={gallery.data.title} url={shareUrl} />
+    <ShareRow locale={locale} title={gallery.data.title} url={shareUrl} type="gallery" />
     <Comments lang={locale} />
   </article>
 </BaseLayout>

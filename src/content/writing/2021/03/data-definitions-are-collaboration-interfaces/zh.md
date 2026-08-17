@@ -4,6 +4,7 @@ description: 指标不是报表上的数字，而是团队用来描述同一件�
 createdAt: 2021-03-15
 publishedAt: 2021-03-15
 type: essay
+featured: true
 tags: [data, metrics, collaboration, measurement, technology]
 column: { slug: data-metrics-guide, order: 1 }
 ---

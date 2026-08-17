@@ -4,8 +4,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TagList from '../../components/TagList.astro';
 import AuthorByline from '../../components/AuthorByline.astro';
 import ShareRow from '../../components/ShareRow.astro';
+import RssSubscribe from '../../components/RssSubscribe.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Comments from '../../components/Comments.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
 import { contentSlug } from '../../lib/content-paths.ts';
 import { contentUrl } from '../../lib/content-paths.ts';
 import { getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
@@ -43,9 +45,11 @@ const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 <BaseLayout title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description} type="article" publishedAt={isoDate(publishedDate(entry))}>
+  <ReadingProgress />
   <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time>{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header><div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose"><Content /></div></div>
-  <ShareRow locale={locale} title={entry.data.title} url={shareUrl} />
-  {relatedEntries.length > 0 && <section class="related-entries" aria-labelledby="related-heading"><p class="eyebrow">{pageCopy.writingDetail.relatedEyebrow}</p><h2 id="related-heading">{pageCopy.writingDetail.relatedTitle}</h2><ol>{relatedEntries.map(({ entry: related, reasons }) => <li><a href={researchUrl(related.id, locale)}>{related.data.title}</a>{related.data.description && <p class="related-desc">{related.data.description}</p>}{reasons.length > 0 && <p class="related-reason">{reasons.join(' · ')}</p>}</li>)}</ol></section>}
+  <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="research" />
+  <RssSubscribe locale={locale} />
   <Comments lang={locale} />
+  {relatedEntries.length > 0 && <section class="related-entries" aria-labelledby="related-heading"><p class="eyebrow">{pageCopy.writingDetail.relatedEyebrow}</p><h2 id="related-heading">{pageCopy.writingDetail.relatedTitle}</h2><ol>{relatedEntries.map(({ entry: related, reasons }) => <li><a href={researchUrl(related.id, locale)}>{related.data.title}</a>{related.data.description && <p class="related-desc">{related.data.description}</p>}{reasons.length > 0 && <p class="related-reason">{reasons.join(' · ')}</p>}</li>)}</ol></section>}
   </article>
 </BaseLayout>

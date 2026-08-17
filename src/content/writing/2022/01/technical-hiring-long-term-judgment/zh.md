@@ -4,6 +4,7 @@ description: 招聘不只是填补一个空缺，而是持续澄清团队需要�
 createdAt: 2022-01-01
 publishedAt: 2022-01-01
 type: essay
+featured: true
 tags: [leadership, team, decision-making, communication, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 1 }
 ---

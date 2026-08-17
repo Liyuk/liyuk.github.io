@@ -6,8 +6,10 @@ import TagList from '../../components/TagList.astro';
 import TipCard from '../../components/TipCard.astro';
 import AuthorByline from '../../components/AuthorByline.astro';
 import ShareRow from '../../components/ShareRow.astro';
+import RssSubscribe from '../../components/RssSubscribe.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Comments from '../../components/Comments.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
 import { notDraft } from '../../lib/content-model.ts';
 import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { writingSlug } from '../../lib/content-paths.ts';
@@ -56,6 +58,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 ---
 <BaseLayout title={`${entry.data.title} — ${ui.name}`} description={entry.data.description} type="article" publishedAt={isoDate(publishedDate(entry))}>
+  <ReadingProgress />
   <article class="article shell">
     <header><p class="eyebrow">{ui.navigation.writing}</p><h1>{entry.data.title}</h1><p class="article-dek" data-pagefind-meta="description">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{ui.entry.publishedAt} {formatDate(publishedDate(entry))}</time>{entry.data.updatedAt && <time datetime={isoDate(entry.data.updatedAt)}>{ui.entry.updatedAt} {formatDate(entry.data.updatedAt)}</time>}<span>{ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span></div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" pagefindFilter /></header>
     {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={[...allWriting, ...allGalleries]} />}
@@ -64,7 +67,8 @@ const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2
       <div class="prose" data-pagefind-body><Content /></div>
     </div>
     {locale !== 'en' && <TipCard locale={locale} />}
-    <ShareRow locale={locale} title={entry.data.title} url={shareUrl} />
+    <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="writing" />
+    <RssSubscribe locale={locale} />
     {(previousPost || nextPost) && <nav class="post-pagination" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousPost && <a class="prev" href={writingUrl(previousPost.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousPost.data.title}</span></a>}</div><div class="pagination-col">{nextPost && <a class="next" href={writingUrl(nextPost.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextPost.data.title}</span></a>}</div></nav>}
     {entry.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(entry.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(entry.data.column.slug, locale)?.label ?? '')}</a>{previousColumnEntry && <a href={entryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={entryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
     <Comments lang={locale} />

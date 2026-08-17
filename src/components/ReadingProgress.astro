@@ -1,0 +1,25 @@
+---
+// 阅读进度条：视口顶部一条随滚动 0→100% 增长的细线（Medium 式）。
+// 纯视觉、无交互（aria-hidden），只在长文详情页引入（写作/研究/项目）。
+// 用 transform:scaleX 而非改 width，走合成层，滚动时无 layout 抖动。
+---
+<div class="reading-progress" aria-hidden="true"><div class="reading-progress-bar"></div></div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('.reading-progress-bar');
+  if (bar) {
+    let ticking = false;
+    const update = () => {
+      const root = document.documentElement;
+      const total = root.scrollHeight - root.clientHeight;
+      const pct = total > 0 ? Math.min(1, Math.max(0, window.scrollY / total)) : 0;
+      bar.style.transform = `scaleX(${pct})`;
+    };
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { update(); ticking = false; });
+    }, { passive: true });
+    update();
+  }
+</script>

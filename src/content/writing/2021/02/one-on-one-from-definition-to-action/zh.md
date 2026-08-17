@@ -4,6 +4,7 @@ description: 一次对话解决一个问题，每个主题 30 到 60 分钟。�
 createdAt: 2021-02-10
 publishedAt: 2021-02-10
 type: essay
+featured: true
 tags: [communication, collaboration, self-reflection, work-leadership]
 column: { slug: one-on-one-conversations, order: 1 }
 ---

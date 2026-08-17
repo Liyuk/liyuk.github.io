@@ -2,16 +2,61 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { i18n } from '../../i18n/index.mjs';
+import { getColumn, getColumnEntries, startGroups } from '../../lib/taxonomy.ts';
+import { getColumnCollections } from '../../lib/content-query.ts';
+import { columnUrl } from '../../lib/content-paths.ts';
 
 const locale = Astro.currentLocale ?? 'zh-CN';
-const copy = i18n(locale).page.start;
+const ui = i18n(locale);
+const copy = ui.page.start;
+const countCopy = ui.page.columns.count;
 
-const cards = copy.cards.map((card) => ({ ...card, url: getRelativeLocaleUrl(locale, card.url) }));
+const { writing, galleries } = await getColumnCollections(locale);
+const entries = [...writing, ...galleries];
+
+const groups = startGroups.map((group) => ({
+  key: group.key,
+  head: copy.groups[group.key],
+  columns: group.columns.flatMap((slug) => {
+    const column = getColumn(slug, locale);
+    const count = getColumnEntries(entries, slug).length;
+    return column && count > 0 ? [{ ...column, url: columnUrl(slug, locale), count }] : [];
+  }),
+}));
+
+const anchorUrl = getRelativeLocaleUrl(locale, copy.anchor.url);
+const moreWays = copy.moreWays.items.map((item) => ({ ...item, url: getRelativeLocaleUrl(locale, item.url) }));
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
   <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
-  <section class="shell start-grid archive-list">
-    {cards.map((card) => <a href={card.url}><span>{card.label}</span><strong>{card.title}</strong><p>{card.description}</p></a>)}
-  </section>
+
+  <div class="shell start-groups">
+    <div class="start-intro">
+      <p class="start-anchor"><span class="start-anchor-eyebrow">{copy.anchor.eyebrow}</span><a href={anchorUrl}>{copy.anchor.title} <span aria-hidden="true">↗</span></a></p>
+      <p class="start-howto-copy">{copy.howToRead}</p>
+    </div>
+
+    {groups.map((group) => (
+      <section class="start-group">
+        <div class="start-group-head"><h2>{group.head.title}</h2><p>{group.head.description}</p></div>
+        <div class="start-group-list">
+          {group.columns.map((column) => (
+            <a class="start-path" href={column.url}>
+              <strong>{column.label}</strong>
+              <p>{column.description}</p>
+              <em>{countCopy(column.count)}</em>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <nav class="start-moreways" aria-label={copy.moreWays.label}>
+      <span class="start-moreways-label">{copy.moreWays.label}</span>
+      {moreWays.map((item) => (
+        <a href={item.url}>{item.label}<em>{item.desc}</em></a>
+      ))}
+    </nav>
+  </div>
 </BaseLayout>

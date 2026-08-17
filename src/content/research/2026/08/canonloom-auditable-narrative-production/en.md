@@ -130,15 +130,15 @@ Figure 1 shows the main data flow from author intent to the canonical manuscript
 A project's core directory can be simplified to:
 
 ```text
-intent/                 作者意图、边界、风格和自动化偏好
-canon/                  已确认的角色、规则、时间线和来源
-plan/                   卷、篇章、章契、Beat 和开放问题
-workspace/              当前上下文包、任务包和中间产物
-drafts/                 候选正文与修订版本
-reviews/                结构、连续性、风格和读者承诺审查
-memory/narrative-state/ 事件、知识状态和揭示记录（可选）
-manuscript/             作者批准后结算的正文
-traces/                 run manifest、provenance、handoff 和结算轨迹
+intent/                 author intent, boundaries, style, and automation preferences
+canon/                  confirmed characters, rules, timelines, and sources
+plan/                   volumes, arcs, chapter contracts, Beats, and open questions
+workspace/              current context packages, task packages, and intermediate artifacts
+drafts/                 candidate prose and revision versions
+reviews/                structure, continuity, style, and reader-commitment reviews
+memory/narrative-state/ events, knowledge state, and reveal records (optional)
+manuscript/             prose settled after author approval
+traces/                 run manifests, provenance, handoff, and settlement traces
 ```
 
 Markdown suits author reading and editing; JSON suits schema validation and tool reading; JSONL suits append-only events and state records; hashes and manifests are used to reproduce contexts. Directory names themselves are not implicit permissions; the real write boundaries are defined jointly by the stage protocol and command constraints.

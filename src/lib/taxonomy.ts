@@ -166,6 +166,31 @@ export const columns: Record<string, { label: { 'zh-CN': string; en: string }; d
   },
 };
 
+// start 页把注册过的专栏按「目标」分成几条阅读路径。每个专栏必须恰好落在
+// 一个分组里——tests/column-audit.test.mjs 会校验这一点，避免新增专栏时
+// 悄悄漏掉 start 页入口。
+export const startGroups: { key: 'method' | 'management' | 'engineering'; columns: string[] }[] = [
+  { key: 'method', columns: ['data-metrics-guide', 'thinking-training'] },
+  {
+    key: 'management',
+    columns: [
+      'one-on-one-conversations',
+      'team-building',
+      'recruiting-and-professional-relationships',
+      'growth-self-assessment',
+    ],
+  },
+  {
+    key: 'engineering',
+    columns: [
+      'technical-systems',
+      'engineering-collaboration',
+      'documentation',
+      'product-judgment',
+    ],
+  },
+];
+
 // 相关推荐用简单规则：同专栏优先，其次共享标签数量。
 // 有意不引入 IDF 加权、标题分词或时间衰减——对这些启发式没有验证过的
 // 收益，简单规则更可预期（设计取舍见 docs）。

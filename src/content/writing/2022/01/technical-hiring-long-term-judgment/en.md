@@ -6,6 +6,7 @@ translationStatus: draft
 createdAt: 2022-01-01
 publishedAt: 2022-01-01
 type: essay
+featured: true
 tags: [leadership, team, decision-making, communication, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 1 }
 translationKey: 2022/01/technical-hiring-long-term-judgment

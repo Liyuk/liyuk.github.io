@@ -159,4 +159,4 @@ Note: this table doesn't mean "the business model matters less as you go later" 
 
 ## Wrapping up
 
-From "business model canvas" to "what investors focus on," the gap isn't just the amount of information — the **purpose changes**: from "make it work" to "persuade" to "verify." The canvas answers "does this business hold up?," the pitch answers "why is it worth investing?," and due diligence answers "is it actually worth it, and how much?" Three lenses — don't mix them up.
+From "business model canvas" to "what investors focus on," the gap isn't just the amount of information — the **purpose changes**: from "make it work" to "persuade" to "verify." The canvas answers "does this business hold up?," the pitch answers "why is it worth investing?," and due diligence answers "is it actually worth it, and how much?"

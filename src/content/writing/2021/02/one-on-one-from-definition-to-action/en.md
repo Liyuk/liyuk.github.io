@@ -6,6 +6,7 @@ translationStatus: draft
 createdAt: 2021-02-10
 publishedAt: 2021-02-10
 type: essay
+featured: true
 tags: [communication, collaboration, self-reflection, work-leadership]
 column: { slug: one-on-one-conversations, order: 1 }
 translationKey: 2021/02/one-on-one-from-definition-to-action
