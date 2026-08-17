@@ -18,7 +18,11 @@ export function extractImageReferences(source) {
   // .astro 组件里的 <img src="..."> 引用（如 TipCard 的打赏码）。
   const htmlImg = [...source.matchAll(/<img[^>]+src=["']([^"']+)["']/g)]
     .map((match) => match[1]);
-  return [...markdown, ...frontmatter, ...cover, ...htmlImg];
+  // 编程方式引用的图片路径（如 BaseLayout 的 og:image 兜底
+  // new URL('/images/og-default.png', ...)）：任何带引号的 /images/... 字面量。
+  const urlRef = [...source.matchAll(/['"`](\/images\/[^'"`\s]+)['"`]/g)]
+    .map((match) => match[1]);
+  return [...markdown, ...frontmatter, ...cover, ...htmlImg, ...urlRef];
 }
 
 async function walk(directory) {
