@@ -7,8 +7,15 @@ export function contentSlug(entryId: string): string {
 
 export const writingSlug = contentSlug;
 
+// 集合名 → 路由目录前缀。绝大多数同名；project 是例外：集合名单数，但路由
+// 目录是复数 /projects/。此处集中映射，避免调用方各自拼错成 /project/ 死链。
+const ROUTE_FOR_COLLECTION: Record<string, string> = {
+  project: 'projects',
+};
+
 export function contentUrl(collection: string, entryId: string, locale = 'zh-CN'): string {
-  const prefix = locale === 'en' ? `/en/${collection}` : `/${collection}`;
+  const route = ROUTE_FOR_COLLECTION[collection] ?? collection;
+  const prefix = locale === 'en' ? `/en/${route}` : `/${route}`;
   return `${prefix}/${contentSlug(entryId)}/`;
 }
 

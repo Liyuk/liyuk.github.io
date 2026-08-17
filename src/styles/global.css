@@ -262,14 +262,18 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 .related-entries { max-width: var(--prose-w); margin: 4rem auto 0; padding-top: 2.5rem; border-top: 1px solid var(--line); }
-.related-entries h2, .start-callout h2 { margin: 0 0 1.25rem; font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.05; }
-.related-entries ol { margin: 0; padding: 0; list-style: none; }
-.related-entries li { padding: 1rem 0; border-top: 1px solid var(--line); }
-.related-entries li:last-child { border-bottom: 1px solid var(--line); }
-.related-entries a { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; text-decoration: none; }
-.related-entries p { margin: .35rem 0 0; color: var(--muted); }
-.related-entries .related-desc { margin-top: .3rem; font-size: .95rem; line-height: 1.5; }
-.related-entries .related-reason { font-size: .9rem; letter-spacing: .01em; }
+.related-entries h2, .start-callout h2 { margin: 0 0 .25rem; font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.05; }
+.related-entries .eyebrow { margin-bottom: .75rem; }
+.related-grid { margin: 1.75rem 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; }
+.related-card { position: relative; display: flex; flex-direction: column; padding: 1.15rem 1.25rem 1rem; background: var(--paper-strong); border: 1px solid var(--line); border-radius: 12px; transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+.related-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0, 0, 0, .08); }
+.related-card-link { display: flex; min-height: 7.5rem; flex-direction: column; text-decoration: none; color: var(--ink); }
+.related-type { align-self: flex-start; color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.related-card-title { margin-top: .55rem; font-family: var(--serif); font-size: 1.15rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.3; }
+.related-card .related-desc { margin: .5rem 0 0; color: var(--muted); font-family: var(--sans); font-size: .9rem; line-height: 1.5; }
+.related-card .related-cta { margin-top: auto; padding-top: .9rem; color: var(--accent); font-size: .9rem; font-weight: 650; }
+.related-card .related-reason { margin: .55rem 0 0; color: var(--muted); font-size: .78rem; letter-spacing: .01em; font-family: var(--sans); }
+@media (max-width: 38rem) { .related-grid { grid-template-columns: 1fr; } }
 /* 文章尾部上一篇/下一篇（时间序），irisluan 风格：左右两栏，标签+标题。 */
 .post-pagination { max-width: var(--prose-w); display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .post-pagination .pagination-col { display: flex; min-width: 0; }

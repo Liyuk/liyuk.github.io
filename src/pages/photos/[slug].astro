@@ -5,9 +5,10 @@ import TagList from '../../components/TagList.astro';
 import AuthorByline from '../../components/AuthorByline.astro';
 import ShareRow from '../../components/ShareRow.astro';
 import Comments from '../../components/Comments.astro';
+import RelatedEntries from '../../components/RelatedEntries.astro';
 import { getGalleryCover } from '../../lib/gallery.ts';
 import { columnUrl, entryUrl } from '../../lib/content-paths.ts';
-import { getColumn, getColumnEntries, getIndexableTags } from '../../lib/taxonomy.ts';
+import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { notDraft } from '../../lib/content-model.ts';
 import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
@@ -31,8 +32,15 @@ const cover = getGalleryCover(gallery);
 const coverIndex = Math.max(0, gallery.data.images.findIndex((image) => image.id === cover.id));
 const formatDate = (date: Date) => formatFullDate(date, locale);
 const localeFilter = ({ data }: { data: { draft: boolean; locale: string } }) => !data.draft && data.locale === gallery.data.locale;
-const [writing, galleries] = await Promise.all([getCollection('writing', localeFilter), getCollection('gallery', localeFilter)]);
+const [writing, galleries, research, projects] = await Promise.all([
+  getCollection('writing', localeFilter),
+  getCollection('gallery', localeFilter),
+  getCollection('research', localeFilter),
+  getCollection('project', localeFilter),
+]);
 const indexableTags = getIndexableTags([...writing, ...galleries]).map(({ slug }) => slug);
+const all = [...writing, ...galleries, ...research, ...projects];
+const relatedEntries = getRelatedEntries(all, gallery, RELATED_LIMIT, gallery.data.locale);
 const columnEntries = gallery.data.column ? getColumnEntries([...writing, ...galleries], gallery.data.column.slug) : [];
 const columnIndex = columnEntries.findIndex((entry) => entry.id === gallery.id);
 const previousColumnEntry = columnEntries[columnIndex - 1];
@@ -60,6 +68,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
     {gallery.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(gallery.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug)}</a>{previousColumnEntry && <a href={entryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={entryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
     <ShareRow locale={locale} title={gallery.data.title} url={shareUrl} type="gallery" />
     <Comments lang={locale} />
+    {relatedEntries.length > 0 && <RelatedEntries items={relatedEntries} locale={locale} />}
   </article>
 </BaseLayout>
 

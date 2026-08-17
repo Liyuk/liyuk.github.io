@@ -8,11 +8,11 @@ import RssSubscribe from '../../components/RssSubscribe.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Comments from '../../components/Comments.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
+import RelatedEntries from '../../components/RelatedEntries.astro';
 import { contentSlug } from '../../lib/content-paths.ts';
-import { contentUrl } from '../../lib/content-paths.ts';
 import { getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
 import { notDraft } from '../../lib/content-model.ts';
-import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
+import { getAllPublished, groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate } from '../../lib/timeline.ts';
@@ -31,10 +31,10 @@ const entry = pickLocaleVariant(variants, locale)!;
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
 const { Content, headings } = await render(entry);
-const allResearch = await getCollection('research', ({ data }) => !data.draft && data.locale === entry.data.locale);
-const indexableTags = getIndexableTags(allResearch).map(({ slug }) => slug);
-const relatedEntries = getRelatedEntries(allResearch, entry, RELATED_LIMIT, locale);
-const researchUrl = (entryId: string, entryLocale?: string) => contentUrl('research', entryId, entryLocale ?? 'zh-CN');
+const { writing, research, projects, galleries } = await getAllPublished(entry.data.locale);
+const all = [...writing, ...research, ...projects, ...galleries];
+const indexableTags = getIndexableTags(all).map(({ slug }) => slug);
+const relatedEntries = getRelatedEntries(all, entry, RELATED_LIMIT, entry.data.locale);
 const formatDate = (date: Date) => formatFullDate(date, locale);
 // 论文/仓库链接：多数 research 的 paperUrl/repositoryUrl 是占位值，指向本博客
 // 仓库本身（无意义的循环跳转）。仅当指向真实外部仓库时才展示对应链接。
@@ -50,6 +50,6 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
   <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="research" />
   <RssSubscribe locale={locale} />
   <Comments lang={locale} />
-  {relatedEntries.length > 0 && <section class="related-entries" aria-labelledby="related-heading"><p class="eyebrow">{pageCopy.writingDetail.relatedEyebrow}</p><h2 id="related-heading">{pageCopy.writingDetail.relatedTitle}</h2><ol>{relatedEntries.map(({ entry: related, reasons }) => <li><a href={researchUrl(related.id, locale)}>{related.data.title}</a>{related.data.description && <p class="related-desc">{related.data.description}</p>}{reasons.length > 0 && <p class="related-reason">{reasons.join(' · ')}</p>}</li>)}</ol></section>}
+  {relatedEntries.length > 0 && <RelatedEntries items={relatedEntries} locale={locale} />}
   </article>
 </BaseLayout>
