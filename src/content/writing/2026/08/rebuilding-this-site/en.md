@@ -41,7 +41,7 @@ And some things genuinely cannot be recovered. Some context was never backed up 
 
 The technical design also revolves around this goal. Content is stored as Markdown, with dates, topics, and tags described by explicit metadata; pages, archives, and RSS are generated from that content. Adding a new post no longer requires re-laying-out anything, and does not depend on some backend or platform. The site can still have its own look, but writing should not be tied down by appearance.
 
-Chinese-first comes from the same consideration. The Chinese draft is where thinking and revision actually happen; if an English version appears, it should be a separately reviewed text, not a by-product produced at publish time. I would rather have a single language version for now than have two texts that look parallel but whose tone and judgment have not been aligned.
+Language of drafting comes from the same consideration. I write the first draft in Chinese — it is where thinking and revision actually happen; if an English version appears, it should be a separately reviewed text, not a by-product produced at publish time. I would rather have a single language version for now than have two texts that look parallel but whose tone and judgment have not been aligned.
 
 This architecture might one day be tidied into a reference demo: not just the page code, but the content model, migration trade-offs, publishing process, and maintenance habits explained together. But that should happen after it has actually survived some time of writing and maintenance. For now I treat it as a working method in use; once the practice is complete enough, I will look back and see which designs held up and which need to be redone.
 

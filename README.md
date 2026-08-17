@@ -1,6 +1,6 @@
 # liyuk.github.io
 
-Chinese-first personal publication for writing, projects, research, and photography.
+Personal site for writing, research, projects & photography — bilingual, built with Astro.
 
 ## Publishing
 
