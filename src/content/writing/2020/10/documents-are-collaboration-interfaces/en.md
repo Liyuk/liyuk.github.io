@@ -8,11 +8,11 @@ type: essay
 tags: [writing, technical-writing, communication, work-leadership]
 column: { slug: documentation, order: 1 }
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2020/10/documents-are-collaboration-interfaces
 ---
 
-> This article is an expansion of the "context" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article is an expansion of the "context" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 Writing a document is not dumping out everything you know. A genuinely useful document lets someone who wasn't involved in the background quickly understand: why this thing needs to be done, how you plan to do it now, and where I need to weigh in with judgment.
 

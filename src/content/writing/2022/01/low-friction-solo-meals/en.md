@@ -2,7 +2,7 @@
 title: "A Low-Friction System for Solo Meals"
 description: "Don't treat cooking as a test of willpower: with a small set of fixed choices, turn shopping, prep, cleanup, and unexpected changes into a sustainable routine."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2022/01/low-friction-solo-meals
 createdAt: 2022-01-30
 publishedAt: 2022-01-30

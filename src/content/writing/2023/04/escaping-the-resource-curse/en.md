@@ -2,7 +2,7 @@
 title: "Why Organizations Still Slow Down When Resources Are Abundant"
 description: "The resource curse isn't having too much money or too many people; it's resources making goals more granular, structure heavier, and low-quality decisions more common, until the organization loses the ability to find and solve high-ROI problems."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-04-09
 publishedAt: 2023-04-09
 type: essay
@@ -10,7 +10,7 @@ tags: [organization, decision-making, prioritization, work-leadership]
 translationKey: 2023/04/escaping-the-resource-curse
 ---
 
-> This essay expands on the “Resources and Capacity” thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This essay expands on the “Resources and Capacity” thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 There is a rather counterintuitive phenomenon: when a team suddenly has enough people and budget, things actually get slower. More resources should bring more possibilities, yet the result is that work gets sliced finer, reporting lines multiply, coordination grows longer, and genuinely high-return projects become rarer and rarer.
 

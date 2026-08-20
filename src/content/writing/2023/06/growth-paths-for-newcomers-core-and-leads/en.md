@@ -7,11 +7,11 @@ type: essay
 tags: [career, growth, team, leadership, work-leadership]
 column: { slug: team-building, order: 5 }
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/06/growth-paths-for-newcomers-core-and-leads
 ---
 
-> This article expands on the "Team and Growth" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "Team and Growth" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 When a team discusses growth paths, it is easy to start by drawing a hierarchy: from junior to senior, from member to lead, with each level listing more skills and greater influence. It provides direction, but it can also create misunderstanding: as if everyone must walk the same path, or as if completing a checklist item by item is the same as growing.
 

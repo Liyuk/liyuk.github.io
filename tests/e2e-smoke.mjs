@@ -1,8 +1,9 @@
-// E2E smoke checks against the built site (npm run preview).
+// E2E smoke checks against the built site served by run-browser-checks.mjs.
 // Verifies page health, the date-formatting changes, and locale parity.
 import { chromium } from 'playwright';
 
 const BASE = process.env.E2E_BASE ?? 'http://localhost:4321';
+const ARTIFACTS = process.env.E2E_ARTIFACTS_DIR ?? 'artifacts/browser-checks';
 const results = { pass: 0, fail: 0, failures: [] };
 
 function check(name, cond, detail = '') {
@@ -11,7 +12,15 @@ function check(name, cond, detail = '') {
 }
 
 const browser = await chromium.launch();
-const page = await browser.newPage();
+const context = await browser.newContext();
+await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
+const page = await context.newPage();
+const consoleErrors = [];
+page.on('console', (msg) => {
+  if (msg.type() === 'error' && !msg.text().includes('cloudflareinsights.com') && !msg.text().includes('Failed to load resource')) {
+    consoleErrors.push(msg.text());
+  }
+});
 
 try {
   // 1. Home page
@@ -85,23 +94,44 @@ try {
   const columnCount = await page.locator('.column-grid a').count();
   check('columns index lists columns', columnCount > 0, `count=${columnCount}`);
 
-  // 12. Photos index
+  // 12. Column reading context: chapter navigation replaces chronological navigation.
+  await page.goto(`${BASE}/columns/data-metrics-guide/`, { waitUntil: 'networkidle' });
+  const chapters = page.locator('.column-chapters a');
+  const chapterCount = await chapters.count();
+  check('column fixture has chapters', chapterCount >= 2, `count=${chapterCount}`);
+  const firstChapter = await chapters.first().getAttribute('href');
+  const lastChapter = await chapters.last().getAttribute('href');
+  await page.goto(`${BASE}${firstChapter}`, { waitUntil: 'networkidle' });
+  check('column entry carries reading context', new URL(page.url()).searchParams.get('context') === 'column', page.url());
+  check('column pagination is visible in column mode', await page.locator('[data-reading-nav="column"]').evaluate((node) => getComputedStyle(node).display !== 'none'));
+  check('chronological pagination is hidden in column mode', await page.locator('[data-reading-nav="chronological"]').evaluate((node) => getComputedStyle(node).display === 'none'));
+  const columnNext = page.locator('[data-reading-nav="column"] a.next');
+  if (await columnNext.count()) {
+    const nextHref = await columnNext.getAttribute('href');
+    check('column next link preserves context', new URL(nextHref, BASE).searchParams.get('context') === 'column', nextHref);
+  }
+  await page.goto(`${BASE}${lastChapter}`, { waitUntil: 'networkidle' });
+  check('final column chapter keeps column mode', new URL(page.url()).searchParams.get('context') === 'column', page.url());
+  check('final column chapter has no next chapter', await page.locator('[data-reading-nav="column"] a.next').count() === 0);
+  check('final column chapter hides chronological pagination', await page.locator('[data-reading-nav="chronological"]').evaluate((node) => getComputedStyle(node).display === 'none'));
+
+  const cleanArticle = new URL(lastChapter, BASE);
+  cleanArticle.search = '';
+  await page.goto(cleanArticle.href, { waitUntil: 'networkidle' });
+  check('normal article entry uses chronological mode', await page.locator('[data-reading-nav="chronological"]').evaluate((node) => getComputedStyle(node).display !== 'none'));
+  check('normal article entry hides column pagination', await page.locator('[data-reading-nav="column"]').evaluate((node) => getComputedStyle(node).display === 'none'));
+
+  // 13. Photos index
   await page.goto(`${BASE}/photos/`, { waitUntil: 'networkidle' });
   const galleryCount = await page.locator('.gallery-card').count();
   check('photos index renders', galleryCount > 0 || await page.locator('.photo-placeholder').count() > 0, `gallery=${galleryCount}`);
 
-  // 13. No console errors on key pages (ignore Cloudflare beacon CORS noise on localhost)
-  const consoleErrors = [];
-  page.on('console', (msg) => {
-    if (msg.type() === 'error' && !msg.text().includes('cloudflareinsights.com') && !msg.text().includes('Failed to load resource')) {
-      consoleErrors.push(msg.text());
-    }
-  });
+  // 14. No console errors on key pages (ignore Cloudflare beacon CORS noise on localhost)
   await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
   await page.goto(`${BASE}/writing/`, { waitUntil: 'networkidle' });
   check('no console errors on home+writing', consoleErrors.length === 0, consoleErrors.slice(0, 3).join(' | '));
 
-  // 14. 404 page
+  // 15. 404 page
   await page.goto(`${BASE}/definitely-not-a-page/`, { waitUntil: 'networkidle' });
   check('404 renders', (await page.title()).length > 0, await page.title());
 
@@ -109,7 +139,21 @@ try {
   results.fail++;
   results.failures.push({ name: 'script error', detail: err.message });
   console.error('  ✗ script error:', err.message);
+  try {
+    const { mkdir } = await import('node:fs/promises');
+    await mkdir(ARTIFACTS, { recursive: true });
+    await page.screenshot({ path: `${ARTIFACTS}/e2e-failure.png`, fullPage: true });
+  } catch (artifactError) {
+    console.error('  ⚠ failed to save screenshot:', artifactError.message);
+  }
 } finally {
+  try {
+    const { mkdir } = await import('node:fs/promises');
+    await mkdir(ARTIFACTS, { recursive: true });
+    await context.tracing.stop({ path: `${ARTIFACTS}/e2e-trace.zip` });
+  } catch (artifactError) {
+    console.error('  ⚠ failed to save trace:', artifactError.message);
+  }
   await browser.close();
 }
 

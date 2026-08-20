@@ -6,7 +6,7 @@ publishedAt: 2026-08-14
 updatedAt: 2026-08-14
 status: active
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/novel-yuanwang-zhihou
 repositoryUrl: https://www.qidian.com/book/1050031941/
 workUrl: https://www.qidian.com/book/1050031941/

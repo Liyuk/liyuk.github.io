@@ -2,7 +2,7 @@
 title: "Cultivation Is Not Training: How Team Capability Compounds"
 description: "The purpose of developing a team is not to pour experience into everyone, but to make judgment, collaboration, and responsibility things that can be practiced, given feedback on, and passed on."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-06-01
 publishedAt: 2023-06-01
 type: essay
@@ -11,7 +11,7 @@ column: { slug: team-building, order: 4 }
 translationKey: 2023/06/team-development-compounds
 ---
 
-> This article expands on the "Team and Growth" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "Team and Growth" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 When a team gets busy, development is easily pushed into "later": wait until the project wraps up, wait until there's time for a sharing session, wait until newcomers are familiar before assigning harder work. But if development only happens in these gaps, it usually doesn't really happen.
 

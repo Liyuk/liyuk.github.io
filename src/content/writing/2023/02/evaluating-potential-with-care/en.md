@@ -2,7 +2,7 @@
 title: "What We Should Really Look for When Assessing Potential"
 description: 'Potential is not a label drawn from a résumé or a single performance. Rather than judging whether someone is "smart enough," observe how they learn, act, think, and recover from setbacks.'
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-02-15
 publishedAt: 2023-02-15
 type: essay

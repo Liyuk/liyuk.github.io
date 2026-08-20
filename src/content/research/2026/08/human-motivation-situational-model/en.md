@@ -9,7 +9,7 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [psychology, motivation, behavior, work-leadership, management]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/human-motivation-situational-model
 ---
 

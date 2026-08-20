@@ -9,7 +9,7 @@ repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [data, machine-learning, housing, reproducibility, provenance]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/china-housing-price-data-methods
 ---
 

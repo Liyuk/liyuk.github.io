@@ -2,7 +2,7 @@
 title: "Good Mentoring Relationships and a 90-Day Plan for New Hires"
 description: "A mentor's value lies not in planning everything for the new hire, but in jointly building goals, feedback, and a rhythm of gradually stepping back; a workable 90-day plan makes this traceable."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2020-10-01
 publishedAt: 2020-10-01
 type: essay
@@ -11,7 +11,7 @@ column: { slug: team-building, order: 6 }
 translationKey: 2020/10/mentor-relationship-and-first-90-days
 ---
 
-> This article expands on the "Team and Growth" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "Team and Growth" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 New hires most often get one of two opposite experiences when they join: either they are buried under a long list of materials and tasks without knowing what matters, or they are told "just ask whenever you have questions" but don't know what to ask or what counts as progress. The common problem behind both is that expectations are never made explicit.
 

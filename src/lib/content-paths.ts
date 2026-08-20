@@ -37,6 +37,11 @@ export function entryUrl(entry: ColumnMember, locale = 'zh-CN'): string {
     : writingUrl(entry.id, locale);
 }
 
+export function columnEntryUrl(entry: ColumnMember, locale = 'zh-CN'): string {
+  const url = entryUrl(entry, locale);
+  return `${url}?context=column`;
+}
+
 export function tagUrl(slug: string, locale = 'zh-CN'): string {
   const prefix = locale === 'en' ? '/en' : '';
   return `${prefix}/tags/${slug}/`;

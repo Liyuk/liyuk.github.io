@@ -9,10 +9,9 @@
 //   * Change detection  — `git diff` against a base ref (or the last push) picks
 //     up exactly the posts that became published in this change, so we never
 //     spam the whole archive on every push.
-//   * Idempotency        — emails are matched by subject (the clean article
-//     title, no prefix); we look up existing emails by that subject before
-//     sending, so running the workflow again (manual dispatch, retry) never
-//     double-sends.
+//   * Idempotency        — emails are matched by subject and canonical URL when
+//     Buttondown returns it; old subject-only records remain compatible, so a
+//     retry never knowingly double-sends.
 //   * Dry-run by default — nothing hits the network unless you pass `--apply`.
 //
 // Run locally:      npm run notify:buttondown -- --apply
@@ -21,12 +20,14 @@
 //                     --baseRef <sha> --apply
 //
 import { readFile } from 'node:fs/promises';
-import { readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
+import { galleryUrl, contentUrl } from '../src/lib/content-paths.ts';
+import { site } from '../src/data/site.mjs';
 
 const API_BASE = 'https://api.buttondown.com/v1';
+const SITE_ORIGIN = site.url.replace(/\/$/, '');
 
 // Root of all content collections.
 const CONTENT_ROOT = path.join(process.cwd(), 'src/content');
@@ -37,8 +38,8 @@ const CONTENT_ROOT = path.join(process.cwd(), 'src/content');
 
 function parseArgs(argv) {
   const args = {
-    apply: false,           // false = dry-run, true = actually create emails
-    baseRef: null,          // git ref to diff against (e.g. github.event.before)
+    apply: false, // false = dry-run, true = actually create emails
+    baseRef: null, // git ref to diff against (e.g. github.event.before)
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -53,20 +54,17 @@ function parseArgs(argv) {
 // ---------------------------------------------------------------------------
 
 function esc(str = '') {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function stripInlineMarkdown(text = '') {
   return text
-    .replace(/\[(.*?)\]\(.*?\)/g, '$1')   // [label](url) -> label
-    .replace(/`([^`]*)`/g, '$1')          // `code`
-    .replace(/\*\*([^*]*)\*\*/g, '$1')    // **bold**
-    .replace(/\*([^*]*)\*/g, '$1')        // *italic*
-    .replace(/^>+\s?/gm, '')              // blockquotes
-    .replace(/#{1,6}\s+/g, '')            // headings
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // [label](url) -> label
+    .replace(/`([^`]*)`/g, '$1') // `code`
+    .replace(/\*\*([^*]*)\*\*/g, '$1') // **bold**
+    .replace(/\*([^*]*)\*/g, '$1') // *italic*
+    .replace(/^>+\s?/gm, '') // blockquotes
+    .replace(/#{1,6}\s+/g, '') // headings
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -130,20 +128,29 @@ function resolveBaseRef(baseRef) {
 // Diff against an empty tree, uniform with the rest of the script.
 const EMPTY_TREE = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
 
-// Recursively list .md files under a directory (pure sync Node, no glob races).
-function listMdRecursive(dir) {
-  const found = [];
-  let entries;
-  try { entries = readdirSync(dir, { withFileTypes: true }); } catch { return found; }
-  for (const e of entries) {
-    const p = path.join(dir, e.name);
-    if (e.isDirectory()) found.push(...listMdRecursive(p));
-    else if (e.isFile() && e.name.endsWith('.md')) found.push(p);
+// Read the base version of a content file when it exists. A missing base file
+// means this is a newly added content entry.
+function gitShow(ref, filePath) {
+  const relative = path.relative(process.cwd(), filePath).split(path.sep).join('/');
+  try {
+    return git(`show ${ref}:${relative}`);
+  } catch {
+    return null;
   }
-  return found;
 }
 
-// Return the list of touched md paths under src/content for a diff range.
+function isPublishedFrontmatter(frontmatter) {
+  return frontmatter && frontmatter.draft !== 'true';
+}
+
+export function becamePublished(baseRaw, currentRaw) {
+  const current = parseFrontmatter(currentRaw);
+  if (!isPublishedFrontmatter(current)) return false;
+  if (baseRaw === null) return true;
+  return parseFrontmatter(baseRaw)?.draft === 'true';
+}
+
+// Return touched Markdown/MDX paths under src/content for a diff range.
 // `--diff-filter=ACMRT` keeps adds/copies/moves/renames (re-created drafts that
 // were already known to Buttondown are still deduped by subject lookup).
 function changedContentPaths(baseRef) {
@@ -152,17 +159,13 @@ function changedContentPaths(baseRef) {
   try {
     const diff = git(`diff --name-only --diff-filter=ACMRT ${base} -- src/content`);
     for (const line of diff.split('\n')) {
-      if (line.trim() && line.endsWith('.md')) out.push(path.join(process.cwd(), line.trim()));
+      if (line.trim() && /\.mdx?$/.test(line.trim()))
+        out.push(path.join(process.cwd(), line.trim()));
     }
-  } catch {
-    // If diffing fails, fall back to scanning the whole content tree and letting
-    // idempotency skip anything already sent (safer than sending nothing).
-    for (const c of ['writing', 'research', 'projects']) {
-      out.push(...listMdRecursive(path.join(CONTENT_ROOT, c)));
-    }
-    out.push(...listMdRecursive(path.join(CONTENT_ROOT, 'galleries')));
+    return { files: out, error: null };
+  } catch (error) {
+    return { files: [], error };
   }
-  return out;
 }
 
 // Extract the body (everything after the frontmatter block) of a content file.
@@ -183,7 +186,20 @@ export function readingMinutes(body, locale) {
 }
 
 // Format a `YYYY-MM-DD` date for each language (friendly short form).
-const EN_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const EN_MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 export function formatDate(dateStr, locale) {
   if (!dateStr) return '';
   const m = String(dateStr).match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -217,7 +233,11 @@ function parseFrontmatter(raw) {
     let value = m[2].trim();
     if (!value) continue;
     // Remove surrounding double/single quotes if the whole value is quoted.
-    if (value.length >= 2 && ((value[0] === '"' && value[value.length - 1] === '"') || (value[0] === "'" && value[value.length - 1] === "'"))) {
+    if (
+      value.length >= 2 &&
+      ((value[0] === '"' && value[value.length - 1] === '"') ||
+        (value[0] === "'" && value[value.length - 1] === "'"))
+    ) {
       value = value.slice(1, -1);
     }
     fm[key] = value;
@@ -231,8 +251,8 @@ function parseFrontmatter(raw) {
 export function entryLocale(filePath) {
   const basename = path.basename(filePath);
   const rel = path.relative(CONTENT_ROOT, filePath).split(path.sep);
-  if (rel[0] === 'galleries') return basename.endsWith('.en.md') ? 'en' : 'zh';
-  return basename === 'en.md' ? 'en' : 'zh';
+  if (rel[0] === 'galleries') return /\.en\.mdx?$/.test(basename) ? 'en' : 'zh';
+  return /^en\.mdx?$/.test(basename) ? 'en' : 'zh';
 }
 
 // Return a locale-independent identifier for one article, shared by its zh.md
@@ -242,7 +262,7 @@ export function entryKey(filePath) {
   const rel = path.relative(CONTENT_ROOT, filePath).split(path.sep);
   const collection = rel[0];
   if (collection === 'galleries') {
-    const slug = rel[1].replace(/\.en\.md$/, '').replace(/\.md$/, '');
+    const slug = rel[1].replace(/\.en\.mdx?$/, '').replace(/\.mdx?$/, '');
     if (slug && !slug.startsWith('_')) return `galleries/${slug}`;
     return null; // ignore template files
   }
@@ -252,21 +272,19 @@ export function entryKey(filePath) {
 }
 
 // Derive the public URL for a content file given its collection + year/month/slug.
-function entryUrl(filePath) {
+export function entryUrl(filePath) {
   const rel = path.relative(CONTENT_ROOT, filePath).split(path.sep);
   // rel: [writing|research|projects, yyyy, mm, slug, zh|en.md]  or
   //      [galleries, <slug>.md | <slug>.en.md]
   const collection = rel[0];
   const isEn = entryLocale(filePath) === 'en';
   if (collection === 'galleries') {
-    const slug = rel[1].replace(/\.en\.md$/, '').replace(/\.md$/, '');
-    return isEn ? `/en/galleries/${slug}/` : `/galleries/${slug}/`;
+    const slug = rel[1].replace(/\.en\.mdx?$/, '').replace(/\.mdx?$/, '');
+    return galleryUrl(slug, isEn ? 'en' : 'zh-CN');
   }
   const [year, month, slug] = rel.slice(1, 4);
-  const base = isEn
-    ? `/en/${collection}/${year}/${month}/${slug}/`
-    : `/${collection}/${year}/${month}/${slug}/`;
-  return base; // trailingSlash always → keep trailing slash
+  const routeCollection = collection === 'projects' ? 'project' : collection;
+  return contentUrl(routeCollection, `${year}/${month}/${slug}`, isEn ? 'en' : 'zh-CN');
 }
 
 // ---------------------------------------------------------------------------
@@ -279,28 +297,64 @@ function entryUrl(filePath) {
 async function buttondownApi(pathname, { token, method = 'GET', body, extraHeaders } = {}) {
   const headers = { Authorization: `Token ${token}`, ...extraHeaders };
   if (body) headers['Content-Type'] = 'application/json';
-  const resp = await fetch(`${API_BASE}${pathname}`, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  const resp = await fetch(`${API_BASE}${pathname}`, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
   const text = await resp.text();
   let json = null;
-  try { json = text ? JSON.parse(text) : {}; } catch { /* non-JSON error body */ }
+  try {
+    json = text ? JSON.parse(text) : {};
+  } catch {
+    /* non-JSON error body */
+  }
   return { status: resp.status, ok: resp.ok, json };
 }
 
-// Look up whether an email with the given subject already exists (any status).
-async function findEmailBySubject(subject, token) {
+export function emailMatchesCandidate(email, { subject, canonicalUrl }) {
+  if (!email || email.subject !== subject) return false;
+  // New Buttondown records may expose canonical_url directly; older responses
+  // can retain it only in the serialized body.
+  if (!canonicalUrl) return true;
+  if (email.canonical_url === canonicalUrl) return true;
+  return JSON.stringify(email).includes(canonicalUrl);
+}
+
+export function isLegacySubjectOnlyEmail(email, subject) {
+  if (!email || email.subject !== subject) return false;
+  return !email.canonical_url && !JSON.stringify(email).includes(`${SITE_ORIGIN}/`);
+}
+
+// Look up whether an email for this candidate already exists (any status).
+export async function findEmailBySubject(subject, canonicalUrl, token, request = buttondownApi) {
   let page = 1;
   let seen = 0;
-  for (; ; ) {
-    const { ok, json } = await buttondownApi(`/emails?subject=${encodeURIComponent(subject)}&ordering=-creation_date&page=${page}`, { token });
-    if (!ok || !Array.isArray(json?.results)) return false;
-    for (const em of json.results) {
-      seen++;
-      if (typeof em.subject === 'string' && em.subject === subject) return true;
+  try {
+    for (;;) {
+      const { ok, json, status } = await request(
+        `/emails?subject=${encodeURIComponent(subject)}&ordering=-creation_date&page=${page}`,
+        { token },
+      );
+      if (!ok || !Array.isArray(json?.results)) {
+        return {
+          ok: false,
+          found: false,
+          error: `Buttondown lookup failed (HTTP ${status ?? 'unknown'})`,
+        };
+      }
+      for (const em of json.results) {
+        seen++;
+        if (emailMatchesCandidate(em, { subject, canonicalUrl })) return { ok: true, found: true };
+        if (isLegacySubjectOnlyEmail(em, subject)) return { ok: true, found: true };
+      }
+      if (!json.next || json.results.length === 0 || seen > 2000) break;
+      page++;
     }
-    if (!json.next || json.results.length === 0 || seen > 2000) break;
-    page++;
+    return { ok: true, found: false };
+  } catch (error) {
+    return { ok: false, found: false, error: error.message };
   }
-  return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -316,12 +370,21 @@ async function main() {
     process.exit(2);
   }
 
-  console.log(args.apply ? '● 真实模式（将调用 Buttondown API）' : '○ 预览模式（dry-run，加 --apply 触发真实发送）');
+  console.log(
+    args.apply
+      ? '● 真实模式（将调用 Buttondown API）'
+      : '○ 预览模式（dry-run，加 --apply 触发真实发送）',
+  );
 
   // 1. Which content md files changed in this push?
   const baseRef = resolveBaseRef(args.baseRef);
-  const changedFiles = changedContentPaths(baseRef);
-  console.log(`  变更基准 ref: ${baseRef}，检测到 ${changedFiles.length} 个 content md 变更。`);
+  const changed = changedContentPaths(baseRef);
+  if (changed.error) {
+    console.error(`✘ 无法读取 content 变更：${changed.error.message}`);
+    return 1;
+  }
+  const changedFiles = changed.files;
+  console.log(`  变更基准 ref: ${baseRef}，检测到 ${changedFiles.length} 个 content md/mdx 变更。`);
 
   // 2. Parse only the ones that became / are published. Group files by article
   //    so zh.md and en.md of the same post are merged into one email.
@@ -330,12 +393,21 @@ async function main() {
     const raw = await readFile(file, 'utf8').catch(() => null);
     if (!raw) continue;
     const fm = parseFrontmatter(raw);
-    if (!fm) continue;
-    if (fm.draft === 'true') continue; // still a draft, skip
+    const baseRaw = baseRef === 'HEAD' ? null : gitShow(baseRef, file);
+    if (!becamePublished(baseRaw, raw)) continue;
     const key = entryKey(file);
-    if (!key) { console.warn(`  ⚠ 无法归类，跳过: ${path.relative(process.cwd(), file)}`); continue; }
+    if (!key) {
+      console.warn(`  ⚠ 无法归类，跳过: ${path.relative(process.cwd(), file)}`);
+      continue;
+    }
     const localeId = entryLocale(file);
-    const bucket = byArticle.get(key) ?? { zhUrl: null, enUrl: null, url: entryUrl(file), zh: null, en: null };
+    const bucket = byArticle.get(key) ?? {
+      zhUrl: null,
+      enUrl: null,
+      url: entryUrl(file),
+      zh: null,
+      en: null,
+    };
     bucket[localeId] = { fm, body: extractBody(raw) };
     if (localeId === 'en') bucket.enUrl = entryUrl(file);
     else bucket.zhUrl = entryUrl(file);
@@ -343,7 +415,7 @@ async function main() {
   }
 
   const candidates = [];
-  for (const [key, bucket] of byArticle) {
+  for (const [, bucket] of byArticle) {
     const zh = bucket.zh?.fm ?? null;
     const en = bucket.en?.fm ?? null;
     const zhBody = bucket.zh?.body ?? '';
@@ -359,8 +431,20 @@ async function main() {
         subject: en.title,
         url: zhUrl,
         blocks: [
-          { lang: 'zh', title: zh.title, summary: stripInlineMarkdown(zh.description || '').slice(0, 220), url: zhUrl, meta: buildMeta(zh, zhBody, 'zh-CN') },
-          { lang: 'en', title: en.title, summary: stripInlineMarkdown(en.description || '').slice(0, 220), url: enUrl, meta: buildMeta(en, enBody, 'en') },
+          {
+            lang: 'zh',
+            title: zh.title,
+            summary: stripInlineMarkdown(zh.description || '').slice(0, 220),
+            url: zhUrl,
+            meta: buildMeta(zh, zhBody, 'zh-CN'),
+          },
+          {
+            lang: 'en',
+            title: en.title,
+            summary: stripInlineMarkdown(en.description || '').slice(0, 220),
+            url: enUrl,
+            meta: buildMeta(en, enBody, 'en'),
+          },
         ],
       });
     } else {
@@ -373,7 +457,15 @@ async function main() {
         label: `${isEn ? '[EN]' : '[中文]'} ${fm.title}`,
         subject: fm.title,
         url,
-        blocks: [{ lang: isEn ? 'en' : 'zh', title: fm.title, summary: stripInlineMarkdown(fm.description || '').slice(0, 220), url, meta: buildMeta(fm, body, isEn ? 'en' : 'zh-CN') }],
+        blocks: [
+          {
+            lang: isEn ? 'en' : 'zh',
+            title: fm.title,
+            summary: stripInlineMarkdown(fm.description || '').slice(0, 220),
+            url,
+            meta: buildMeta(fm, body, isEn ? 'en' : 'zh-CN'),
+          },
+        ],
       });
     }
   }
@@ -392,11 +484,22 @@ async function main() {
   for (const cand of candidates) {
     const { label, subject, url, blocks } = cand;
     const primary = blocks[0]?.title ?? label;
-    if (!primary) { console.warn(`  ⚠ 跳过（无标题）: ${label}`); continue; }
+    if (!primary) {
+      console.warn(`  ⚠ 跳过（无标题）: ${label}`);
+      continue;
+    }
 
     // 4. Idempotency: skip if we already created this post's email.
     let exists = false;
-    if (args.apply && token) exists = await findEmailBySubject(subject, token);
+    if (args.apply && token) {
+      const lookup = await findEmailBySubject(subject, `${SITE_ORIGIN}${url}`, token);
+      if (!lookup.ok) {
+        console.error(`  ✘ 无法确认是否已存在，停止发送: ${label} (${lookup.error})`);
+        failed++;
+        continue;
+      }
+      exists = lookup.found;
+    }
     if (exists) {
       console.log(`  → 已存在，跳过: ${label}`);
       skipped++;
@@ -405,11 +508,21 @@ async function main() {
 
     if (args.apply) {
       const builtHtml = buildEmailHtml({ blocks });
-      const body = { subject, status: 'about_to_send', canonical_url: `https://liyuk.com${url}`, body: builtHtml };
+      const body = {
+        subject,
+        status: 'about_to_send',
+        canonical_url: `${SITE_ORIGIN}${url}`,
+        body: builtHtml,
+      };
       // Buttondown requires the confirmation header before it will create an
       // email with status 'about_to_send'. It technically only needs to be
       // supplied once per API key, but it is harmless to always include it.
-      const { status, ok, json } = await buttondownApi('/emails', { token, method: 'POST', body, extraHeaders: { 'X-Buttondown-Live-Dangerously': 'true' } });
+      const { status, ok, json } = await buttondownApi('/emails', {
+        token,
+        method: 'POST',
+        body,
+        extraHeaders: { 'X-Buttondown-Live-Dangerously': 'true' },
+      });
       if (ok) {
         console.log(`  ✔ 已发送: ${label}`);
         sent++;
@@ -426,7 +539,7 @@ async function main() {
       console.log(`\n  · 将发送: ${label}`);
       for (const b of blocks) {
         console.log(`    [${b.title}]`);
-        console.log(`      URL   : https://liyuk.com${b.url}`);
+        console.log(`      URL   : ${SITE_ORIGIN}${b.url}`);
         console.log(`      摘要  : ${b.summary}`);
       }
       skipped++; // dry-run counts as "not sent"; keep final tally simple
@@ -435,7 +548,9 @@ async function main() {
 
   if (!args.apply) {
     console.log(`\n○ 预览完成：本次将发送 ${candidates.length} 封（内容如上）。`);
-    console.log('  运行 `BUTTONDOWN_API_KEY=... npm run notify:buttondown -- --apply` 真实发送。');
+    console.log(
+      `  运行 \`BUTTONDOWN_API_KEY=... npm run notify:buttondown -- --apply\` 真实发送。`,
+    );
   } else {
     console.log(`\n● 完成：发送 ${sent}，幂等跳过 ${skipped}，失败 ${failed}`);
   }
@@ -443,5 +558,10 @@ async function main() {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  main().then((code) => process.exit(code)).catch((e) => { console.error(e); process.exit(1); });
+  main()
+    .then((code) => process.exit(code))
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    });
 }

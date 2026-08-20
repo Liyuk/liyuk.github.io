@@ -2,7 +2,7 @@
 title: "When Business Growth Slows: Turn Anxiety into 'Set the Tone First, Then Solve the Critical Path'"
 description: "When business growth slows, teams get anxious together. First set the tone of 'respond positively, analyze the problem, solve the critical path,' then talk through what's going wrong item by item."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-12-10
 publishedAt: 2023-12-10
 type: essay

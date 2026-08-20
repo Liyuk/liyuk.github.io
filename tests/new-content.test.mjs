@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { buildSlug, buildFrontmatter, isValidDate, validateSlug, validateTags } from '../scripts/lib/cli.mjs';
 import { buildPostFrontmatter, parseTags, postPath, pickSlug } from '../scripts/new-post.mjs';
 import { buildGalleryFrontmatter, galleryFilePath, imageIdFromName, scanImageFiles } from '../scripts/new-gallery.mjs';
-import { unDraft, findEntriesBySlug } from '../scripts/publish.mjs';
+import { publishFrontmatter, findEntriesBySlug } from '../scripts/publish.mjs';
 
 test('buildSlug turns English titles into kebab-case', () => {
   assert.equal(buildSlug('Hello World'), 'hello-world');
@@ -134,12 +134,16 @@ test('scanImageFiles filters non-images and dotfiles', async () => {
   assert.ok(files.every((f) => f.endsWith('.webp')), files.join(','));
 });
 
-test('unDraft flips draft true to false only', () => {
-  assert.match(unDraft('---\ntitle: T\ndraft: true\n---\nbody'), /draft: false/);
-  assert.equal(unDraft('---\ntitle: T\ndraft: false\n---\nbody'), null); // already published
-  assert.equal(unDraft('---\ntitle: T\n---\nbody'), null); // no draft line → default false
-  assert.equal(unDraft('no frontmatter'), null);
+test('publishing normalizes draft and translation status by locale', () => {
+  const english = publishFrontmatter('---\ntitle: T\ndraft: true\ntranslationStatus: draft\n---\nbody', 'en');
+  assert.match(english, /draft: false/);
+  assert.match(english, /translationStatus: reviewed/);
+  const chinese = publishFrontmatter('---\ntitle: T\ndraft: true\n---\nbody', 'zh-CN');
+  assert.match(chinese, /draft: false/);
+  assert.match(chinese, /translationStatus: original/);
+  assert.equal(publishFrontmatter('---\ntitle: T\ndraft: false\ntranslationStatus: reviewed\n---\nbody', 'en'), null);
 });
+
 
 test('findEntriesBySlug locates a real gallery', async () => {
   const matches = await findEntriesBySlug('maomao');

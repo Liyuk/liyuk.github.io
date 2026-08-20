@@ -2,7 +2,7 @@
 title: "OurBook · Universities Through Our Eyes"
 description: "A public-interest project started by Nankai graduates: current students and alumni write down their real college experiences to help gaokao applicants see a more three-dimensional picture of each university when filling in their preferences. By 2018 the project had been passed down for many years, with its content hosted on a third-party platform; in 2018 I rebuilt it, brought the data back in-house on a self-built site, and archived it along the way—this article also uses it to trace the 2011–2026 market for college-admissions information products."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/ourbook
 createdAt: 2018-05-19
 publishedAt: 2018-05-19

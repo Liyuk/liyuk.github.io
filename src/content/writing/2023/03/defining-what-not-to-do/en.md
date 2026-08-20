@@ -2,7 +2,7 @@
 title: "Saying \"No\" Isn't Laziness: Setting Boundaries on Commitments"
 description: "Time management isn't about packing your calendar full; it's about clarifying your commitments—and what you won't do right now—based on role, value, and opportunity cost."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/03/defining-what-not-to-do
 createdAt: 2023-03-21
 publishedAt: 2023-03-21
@@ -10,7 +10,7 @@ type: essay
 tags: [prioritization, time-management, leadership, work-leadership]
 ---
 
-> This essay expands on the "Boundaries and Responsibility" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This essay expands on the "Boundaries and Responsibility" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 Many people mistake busyness for responsibility: reply to every message, attend every meeting, and refuse no opportunity. I've been through that phase myself, believing that "catching everything" was what being dedicated meant. The result is usually that no single important thing gets enough investment, while commitments quietly break down—when you say yes to too much, you end up either slipping deadlines or lowering quality, and both erode trust.
 

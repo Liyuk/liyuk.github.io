@@ -2,7 +2,7 @@
 title: "How to Communicate Well: From 'Not Knowing What to Talk About' to Making Things Clear"
 description: "Communication is a broad topic, but it can be made concrete. Starting with 'clarify first, then give feedback, then commit,' plus a complete list of questions for workplace communication."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-01-14
 publishedAt: 2023-01-14
 type: essay

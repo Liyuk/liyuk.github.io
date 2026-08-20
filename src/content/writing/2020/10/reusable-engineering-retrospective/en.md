@@ -2,7 +2,7 @@
 title: "What a Reusable Engineering Retrospective Should Leave Behind"
 description: "The value of an engineering retrospective is not in retelling what happened or blaming individuals, but in turning an experience into improvements that can be verified, maintained, and reused."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2020/10/reusable-engineering-retrospective
 createdAt: 2020-10-22
 publishedAt: 2020-10-22
@@ -11,7 +11,7 @@ type: essay
 tags: [engineering, retrospective, learning, collaboration, technology]
 ---
 
-> This article expands on the "retrospective" thread in [*Management Retrospective*](/writing/2026/08/management-retrospective/).
+> This article expands on the "retrospective" thread in [*Management Retrospective*](/en/writing/2026/08/management-retrospective/).
 
 Retrospectives most easily degenerate into two kinds of useless documents: one that retells what happened in chronological order, leaving readers with no idea what should change; and another that rushes to a seemingly clear attribution, compressing a complex problem into someone being "not careful enough." Both leave a record behind, but neither leaves behind reusable capability.
 

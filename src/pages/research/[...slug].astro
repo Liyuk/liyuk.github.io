@@ -11,14 +11,14 @@ import ReadingProgress from '../../components/ReadingProgress.astro';
 import RelatedEntries from '../../components/RelatedEntries.astro';
 import { contentSlug } from '../../lib/content-paths.ts';
 import { getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
-import { notDraft } from '../../lib/content-model.ts';
+import { previewable } from '../../lib/content-model.ts';
 import { getAllPublished, groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate } from '../../lib/timeline.ts';
 
 export async function getStaticPaths() {
-  const research = await getCollection('research', notDraft);
+  const research = await getCollection('research', previewable);
   return groupByLocaleVariant(research, (entry) => contentSlug(entry.id)).map(({ slug, variants }) => ({
     params: { slug },
     props: { variants },
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
 
 const { variants } = Astro.props;
 const locale = Astro.currentLocale ?? 'zh-CN';
-const entry = pickLocaleVariant(variants, locale)!;
+const entry = pickLocaleVariant(variants, locale, true)!;
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
 const { Content, headings } = await render(entry);
@@ -44,7 +44,7 @@ const repositoryUrl = entry.data.repositoryUrl && entry.data.repositoryUrl !== B
 const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
-<BaseLayout title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description} type="article" publishedAt={isoDate(publishedDate(entry))}>
+<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description} type="article" pageKind="research" section="research" articleTitle={entry.data.title} keywords={entry.data.tags} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)} repositoryUrl={repositoryUrl} paperUrl={paperUrl} status={entry.data.status} version={entry.data.version}>
   <ReadingProgress />
   <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time>{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header><div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose"><Content /></div></div>
   <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="research" />

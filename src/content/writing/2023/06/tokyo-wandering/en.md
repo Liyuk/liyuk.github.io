@@ -2,7 +2,7 @@
 title: "Tokyo Wandering"
 description: "Six days in June 2023: Ginza, Shibuya, Yokohama, and Kamakura, plus density, walking, and \"why is area priced separately\"."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-06-11
 publishedAt: 2023-06-11
 type: essay

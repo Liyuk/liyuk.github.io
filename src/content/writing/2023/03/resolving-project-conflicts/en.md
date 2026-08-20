@@ -2,7 +2,7 @@
 title: "When Project Collaboration Hits Conflict: Which Three Things to Align On First"
 description: "Most project conflicts are not about someone failing to cooperate, but about goals, facts, or decision authority never being made explicit. Only by clarifying these three things first can disagreements return to something solvable."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-19
 publishedAt: 2023-03-19
 type: essay
@@ -11,7 +11,7 @@ column: { slug: engineering-collaboration, order: 1 }
 translationKey: 2023/03/resolving-project-conflicts
 ---
 
-> This article is an expansion of the "alignment" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article is an expansion of the "alignment" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 "They won't cooperate" is an easy thing to say and a nearly impossible thing to act on in moving a project forward. Every time I hear it, I instinctively get wary — it shrinks a complex working relationship into a judgment of character. Whatever follows — more meetings, pushing for progress, or escalating the conflict — is likely only to make both sides more defensive.
 

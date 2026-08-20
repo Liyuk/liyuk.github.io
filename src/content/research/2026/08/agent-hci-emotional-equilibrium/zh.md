@@ -7,7 +7,7 @@ version: '0.3'
 status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 locale: zh-CN
-translationStatus: draft
+translationStatus: original
 translationKey: 2026/08/agent-hci-emotional-equilibrium
 draft: false
 tags: [hci, agent, agency, emotion, trust-calibration, cognitive-offloading, deskilling, observability]

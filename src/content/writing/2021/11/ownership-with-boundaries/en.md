@@ -2,7 +2,7 @@
 title: "Ownership and Responsibility: Framing 'Initiative' with Clear Boundaries"
 description: "Responsibility isn't mindless overtime or mindlessly taking on work. This set of questions makes clear 'who decides, who executes, when to escalate, and where accountability ends.'"
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-11-05
 publishedAt: 2021-11-05
 type: essay
@@ -11,7 +11,7 @@ column: { slug: one-on-one-conversations, order: 5 }
 translationKey: 2021/11/ownership-with-boundaries
 ---
 
-> This article expands on the "Boundaries and Responsibility" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "Boundaries and Responsibility" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 If "having a sense of ownership" is understood as always taking on work and always staying online, the boundary of responsibility disappears. Responsibility is a reasonable commitment and delivery. This topic came from a real observation — a colleague mentioned that, compared with a year or two ago, fewer people on the team were proactively taking on responsibility. The real way to judge "whether this is a problem" is to ask clearly: who can decide, who executes, when risks must be escalated, and where one's own responsibility ends.
 

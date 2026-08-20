@@ -7,7 +7,7 @@ version: '0.2'
 status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 locale: zh-CN
-translationStatus: draft
+translationStatus: original
 translationKey: 2026/08/agent-interface-feedback-architecture
 draft: false
 tags: [hci, agent, feedback, observability, recoverability, authorization, human-ai-collaboration, systems-design]

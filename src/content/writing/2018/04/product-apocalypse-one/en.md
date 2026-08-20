@@ -2,7 +2,7 @@
 title: "Product Revelations I: From Complaints Back to the Problem"
 description: "An old case from a Double Eleven shopping scenario: before rushing to a solution, first identify the problem the user is actually facing."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2018-04-05
 publishedAt: 2018-04-05
 updatedAt: 2026-08-14

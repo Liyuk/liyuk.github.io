@@ -6,7 +6,7 @@ publishedAt: 2023-11-14
 type: note
 tags: [reading, books, notes, learning, archive, field-notes]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/11/my-reading-archives
 ---
 

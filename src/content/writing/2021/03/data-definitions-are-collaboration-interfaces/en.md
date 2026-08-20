@@ -2,7 +2,7 @@
 title: "Data Measurement Guide (Part 1): Data Definitions Are the Interface of Collaboration"
 description: "Metrics are not numbers on a report; they are the shared language a team uses to describe the same thing. Only after defining the object, event, denominator, and time can data participate in decisions."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-03-15
 publishedAt: 2021-03-15
 type: essay

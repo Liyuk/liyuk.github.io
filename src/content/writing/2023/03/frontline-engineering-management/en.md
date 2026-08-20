@@ -2,7 +2,7 @@
 title: "The Three Outputs of Frontline Engineering Management"
 description: "Frontline management is not about doing a bit more work for the team; it is about continuously producing better judgment, predictable delivery, and a collaboration system that can repair itself."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-01
 publishedAt: 2023-03-01
 type: essay
@@ -11,7 +11,7 @@ column: { slug: team-building, order: 1 }
 translationKey: 2023/03/frontline-engineering-management
 ---
 
-> This article expands on the "Team and Growth" thread from [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "Team and Growth" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 When you first start leading a team, it is easiest to understand management as "what you used to do, plus some coordination work": when a project gets stuck, push it forward yourself; when a plan is unclear, finish it yourself; when a teammate runs into a difficulty, give the answer immediately; when the schedule is at risk, follow up on every item one by one.
 

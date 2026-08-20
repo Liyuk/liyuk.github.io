@@ -2,7 +2,7 @@
 title: "Veylumi"
 description: "An AI beauty decision product for users in China and the U.S.: from a single front-facing photo to explainable makeup suggestions, real products, and tutorials."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/veylumi
 createdAt: 2026-08-13
 publishedAt: 2026-08-13

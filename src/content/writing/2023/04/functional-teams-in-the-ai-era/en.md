@@ -2,7 +2,7 @@
 title: "After AI Acceleration: How to Redraw Functional and Business Lines"
 description: "Functional lines once made specialized capability run efficiently; once tools lower workflow barriers, organizations should redesign around end-to-end business capability rather than cling to historical divisions of labor."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-04-06
 publishedAt: 2023-04-06
 type: essay
@@ -40,4 +40,4 @@ The goal is always one thing: stronger end-to-end execution capability, not what
 
 ## A Fuller Argument
 
-This short essay is a condensed version of the position paper "[When AI Lowers Workflow Barriers, How to Redraw Functional and Business Lines](/research/functional-lines-versus-business-lines/)". The paper covers: a four-quadrant spectrum of organizational forms and the signals to watch, comparisons with Team Topologies and Netflix, the differences between Chinese and American organizational starting points, and a falsifiable pilot protocol. If you are considering whether to change your functional lines, read the paper directly.
+This short essay is a condensed version of the position paper "[When AI Lowers Workflow Barriers, How to Redraw Functional and Business Lines](/en/research/2026/08/functional-lines-versus-business-lines/)". The paper covers: a four-quadrant spectrum of organizational forms and the signals to watch, comparisons with Team Topologies and Netflix, the differences between Chinese and American organizational starting points, and a falsifiable pilot protocol. If you are considering whether to change your functional lines, read the paper directly.

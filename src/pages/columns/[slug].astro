@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.ts';
 import { getColumnCollections } from '../../lib/content-query.ts';
-import { entryUrl } from '../../lib/content-paths.ts';
+import { columnEntryUrl } from '../../lib/content-paths.ts';
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate } from '../../lib/timeline.ts';
@@ -33,5 +33,5 @@ const chapterDates = (entry: CollectionEntry<'writing'> | CollectionEntry<'galle
 
 <BaseLayout title={copy.title(column?.label ?? '')} description={column?.description}>
   <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{column?.label}</h1><p>{column?.description}</p></section>
-  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}><ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column!.order)}</span><h2><a href={entryUrl(entry, locale)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol></section>
+  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}><ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column!.order)}</span><h2><a href={columnEntryUrl(entry, locale)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol></section>
 </BaseLayout>

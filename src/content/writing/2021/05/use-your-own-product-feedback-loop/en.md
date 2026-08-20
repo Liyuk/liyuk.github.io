@@ -2,7 +2,7 @@
 title: "Use Your Own Product First: How Developers Build a Real Feedback Loop"
 description: "Self-use isn't about 'spending more time in the product'; it's a feedback system spanning real tasks, valid evidence, and verified fixes."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-05-15
 publishedAt: 2021-05-15
 type: essay
@@ -10,7 +10,7 @@ tags: [product-thinking, engineering, feedback, work-leadership]
 translationKey: 2021/05/use-your-own-product-feedback-loop
 ---
 
-> This article expands on the "closed loop" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "closed loop" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 "Developers should use their own product more" is something almost no one would object to. But it can easily devolve into a requirement with no outcome: everyone opens the product one evening, scrolls through content for ten minutes, raises a few scattered issues, and then starts from scratch again next time. The "experience nights" I organized myself went through exactly this kind of spinning in place—until I turned them into a full loop with an entry point and an exit, and only then did they begin to produce things that actually pushed the product forward.
 

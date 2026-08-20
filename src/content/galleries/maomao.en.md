@@ -3,7 +3,7 @@ title: Maomao
 description: Maomao, the cat at home, sits on a chair and looks up, curiously sizing up her surroundings.
 slug: maomao
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: maomao
 createdAt: 2026-08-15
 draft: false

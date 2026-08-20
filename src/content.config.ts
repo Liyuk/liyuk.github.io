@@ -22,6 +22,7 @@ const writing = defineCollection({
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
+    citationUrls: z.array(z.string().url()).default([]),
     column: z.object({ slug: z.string(), order: z.number().int().positive() }).optional(),
     translationKey: z.string().optional(),
   }).strict(),
@@ -67,6 +68,7 @@ const research = defineCollection({
     description: z.string(),
     createdAt: contentDate,
     publishedAt: contentDate.optional(),
+    updatedAt: contentDate.optional(),
     version: z.string(),
     status: z.enum(['preprint', 'published', 'in-progress']),
     repositoryUrl: z.string().url().optional(),
@@ -75,6 +77,7 @@ const research = defineCollection({
     translationStatus: z.enum(['original', 'draft', 'reviewed']).default('original'),
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
+    citationUrls: z.array(z.string().url()).default([]),
     translationKey: z.string().optional(),
   }).refine((data) => data.repositoryUrl || data.paperUrl, {
     message: 'research 至少需要 repositoryUrl 或 paperUrl 中的一个。',

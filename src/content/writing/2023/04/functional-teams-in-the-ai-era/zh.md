@@ -37,4 +37,4 @@ column: { slug: technical-systems, order: 5 }
 
 ## 更完整的论证
 
-这篇短文是立场论文《[当 AI 降低工作流壁垒，职能线与业务线怎样重新划分](/research/functional-lines-versus-business-lines/)》的精简版。论文里有：组织形态的四格谱系与判断信号、与 Team Topologies 和 Netflix 的对比、中美两种组织起点的差异、以及一份可否证的试点协议。如果你正在考虑组织是否要动职能线，直接看论文。
+这篇短文是立场论文《[当 AI 降低工作流壁垒，职能线与业务线怎样重新划分](/research/2026/08/functional-lines-versus-business-lines/)》的精简版。论文里有：组织形态的四格谱系与判断信号、与 Team Topologies 和 Netflix 的对比、中美两种组织起点的差异、以及一份可否证的试点协议。如果你正在考虑组织是否要动职能线，直接看论文。

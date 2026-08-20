@@ -2,7 +2,7 @@
 title: "An Eight-Step Routine for Everyday Full Makeup"
 description: "From skin prep to finishing touches, a practical full-makeup routine that leans natural and emphasizes long wear and bone-structure definition."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2025-04-12
 publishedAt: 2025-04-12
 type: note

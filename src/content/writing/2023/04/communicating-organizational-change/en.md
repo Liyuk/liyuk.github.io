@@ -6,7 +6,7 @@ publishedAt: 2023-04-04
 type: essay
 tags: [management, communication, organizational-change, work-leadership]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/04/communicating-organizational-change
 ---
 

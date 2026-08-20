@@ -4,7 +4,18 @@
 // locale-independent identifier shared by a post's zh.md and en.md.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { entryKey, entryLocale, readingMinutes, formatDate, buildMeta } from '../scripts/notify-buttondown.mjs';
+import {
+  buildMeta,
+  emailMatchesCandidate,
+  entryKey,
+  entryLocale,
+  entryUrl,
+  becamePublished,
+  findEmailBySubject,
+  formatDate,
+  isLegacySubjectOnlyEmail,
+  readingMinutes,
+} from '../scripts/notify-buttondown.mjs';
 
 const CONTENT = 'src/content/';
 
@@ -24,6 +35,7 @@ test('entryKey distinguishes different posts and collections', () => {
 test('entryKey handles galleries (tiny <slug>.md / <slug>.en.md)', () => {
   assert.equal(entryKey(`${CONTENT}galleries/maomao.md`), 'galleries/maomao');
   assert.equal(entryKey(`${CONTENT}galleries/maomao.en.md`), 'galleries/maomao');
+  assert.equal(entryKey(`${CONTENT}galleries/maomao.en.mdx`), 'galleries/maomao');
 });
 
 test('entryKey ignores template files (returns null)', () => {
@@ -36,8 +48,52 @@ test('entryLocale assigns zh/en from the file-name convention', () => {
   assert.equal(entryLocale(`${CONTENT}writing/2026/08/dsh-plugin-toolbox/en.md`), 'en');
   assert.equal(entryLocale(`${CONTENT}galleries/maomao.md`), 'zh');
   assert.equal(entryLocale(`${CONTENT}galleries/maomao.en.md`), 'en');
+  assert.equal(entryLocale(`${CONTENT}writing/2026/08/example/en.mdx`), 'en');
+  assert.equal(entryLocale(`${CONTENT}galleries/maomao.en.mdx`), 'en');
 });
 
+test('entryUrl follows canonical routes for dated content and galleries', () => {
+  assert.equal(
+    entryUrl(`${CONTENT}writing/2026/08/dsh-plugin-toolbox/zh.md`),
+    '/writing/2026/08/dsh-plugin-toolbox/',
+  );
+  assert.equal(
+    entryUrl(`${CONTENT}projects/2026/08/dsh-skin-chatlab/en.md`),
+    '/en/projects/2026/08/dsh-skin-chatlab/',
+  );
+  assert.equal(entryUrl(`${CONTENT}galleries/maomao.md`), '/photos/maomao/');
+  assert.equal(entryUrl(`${CONTENT}galleries/maomao.en.md`), '/en/photos/maomao/');
+});
+
+test('publish notifications only include new or newly published files', () => {
+  const published = '---\ndraft: false\n---\n';
+  const draft = '---\ndraft: true\n---\n';
+  assert.equal(becamePublished(null, published), true);
+  assert.equal(becamePublished(draft, published), true);
+  assert.equal(
+    becamePublished(published, published.replace('false', 'false\nupdatedAt: 2026-08-20')),
+    false,
+  );
+  assert.equal(becamePublished(published, draft), false);
+});
+
+test('Buttondown lookup errors fail closed', async () => {
+  const result = await findEmailBySubject(
+    'Same title',
+    'https://liyuk.com/writing/a/',
+    'token',
+    async () => ({
+      ok: false,
+      status: 503,
+      json: null,
+    }),
+  );
+  assert.deepEqual(result, {
+    ok: false,
+    found: false,
+    error: 'Buttondown lookup failed (HTTP 503)',
+  });
+});
 test('readingMinutes counts Han chars for zh, word tokens for en', () => {
   const zh = '这是一段用来测试阅读时长的中文内容，需要足够的汉字数量。'.repeat(5);
   const hanzi = (zh.match(/\p{Script=Han}/gu) ?? []).length;
@@ -67,4 +123,30 @@ test('buildMeta combines reading time and date per language', () => {
 
 test('buildMeta omits the date when publishedAt is missing', () => {
   assert.equal(buildMeta({}, 'word', 'en'), '1 min read');
+});
+
+test('email idempotency prefers canonical URL and remains compatible with legacy subject records', () => {
+  const candidate = { subject: 'Same title', canonicalUrl: 'https://liyuk.com/writing/2026/08/a/' };
+  assert.equal(
+    emailMatchesCandidate(
+      { subject: 'Same title', canonical_url: candidate.canonicalUrl },
+      candidate,
+    ),
+    true,
+  );
+  assert.equal(
+    emailMatchesCandidate(
+      { subject: 'Same title', body: 'https://liyuk.com/writing/2026/08/other/' },
+      candidate,
+    ),
+    false,
+  );
+  assert.equal(isLegacySubjectOnlyEmail({ subject: 'Same title' }, candidate.subject), true);
+  assert.equal(
+    isLegacySubjectOnlyEmail(
+      { subject: 'Same title', canonical_url: 'https://liyuk.com/writing/2026/08/other/' },
+      candidate.subject,
+    ),
+    false,
+  );
 });
