@@ -2,7 +2,7 @@
 title: "Self-iteration is not hype, but a feedback system"
 description: "What we call self-iteration is not endlessly pushing yourself to go faster; it is seeing your goals clearly, observing results, adjusting your actions, and continuously recalibrating amid uncertainty."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-06-01
 publishedAt: 2023-06-01
 type: essay

@@ -7,11 +7,11 @@ type: essay
 tags: [capacity-planning, management, prioritization, delivery, work-leadership]
 column: { slug: engineering-collaboration, order: 3 }
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/03/working-under-resource-constraints
 ---
 
-> This essay expands the "resources and capacity" thread from [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This essay expands the "resources and capacity" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 When resources are short, the most common patch is to make a few people work harder: take on more requests, cut back on checks, and handle the leftover issues at night. In the short term it looks like the delivery is protected, but in the long term it disguises a capacity problem as individual performance — until fatigue, complaints, and incidents arrive together.
 

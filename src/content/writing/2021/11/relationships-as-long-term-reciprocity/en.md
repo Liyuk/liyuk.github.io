@@ -2,7 +2,7 @@
 title: "Recruiting and Professional Relationships (Part 3): Turning 'Connections' into Long-Term Reciprocity"
 description: "Professional relationships are not a resource pool to be tapped, but a network of trust built slowly through real collaboration, measured help, and clear boundaries."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2021/11/relationships-as-long-term-reciprocity
 createdAt: 2021-11-15
 publishedAt: 2021-11-15

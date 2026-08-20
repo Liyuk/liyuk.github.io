@@ -144,4 +144,4 @@ There are also several frameworks with **similar names but which are actually a 
   ```
 - **GE–McKinsey nine-box / talent nine-box**: it is a 3×3 matrix (industry attractiveness × competitive position; performance × potential), used to rank "whom to keep and whom to cut," and does not describe how a business runs.
 
-> Extension: this canvas and "startup pitch, investor due diligence" are three different perspectives; see [Three Perspectives on a Project: Canvas, Pitch, Due Diligence](/writing/2026/08/canvas-pitch-diligence/).
+> Extension: this canvas and "startup pitch, investor due diligence" are three different perspectives; see [Three Perspectives on a Project: Canvas, Pitch, Due Diligence](/en/writing/2026/08/canvas-pitch-diligence/).

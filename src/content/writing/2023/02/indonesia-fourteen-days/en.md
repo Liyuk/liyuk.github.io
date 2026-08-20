@@ -2,7 +2,7 @@
 title: "Fourteen Days in Indonesia"
 description: "Fourteen days in Jakarta in February 2023: a city folded and cut apart, where high-rises and street stalls each live out their own everyday."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/02/indonesia-fourteen-days
 createdAt: 2023-02-20
 publishedAt: 2023-02-20

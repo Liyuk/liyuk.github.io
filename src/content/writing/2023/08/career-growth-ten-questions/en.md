@@ -2,7 +2,7 @@
 title: "Career Development Questions: A Complete Self-Checklist Before Promotion and Interviews"
 description: "An uncompressed question bank: prepare promotion materials, interview answers, and stage reviews item by item across business, technology, team, individual judgment, and organizational capability."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-08-01
 publishedAt: 2023-08-01
 updatedAt: 2026-08-14

@@ -2,7 +2,7 @@
 title: "Capability Models and Self-Assessment: How to Know Where You Stand"
 description: "The worst thing for a capability model is to be treated as fog. Break 'where am I now, where are the gaps, where do I go next' into questions you can measure yourself, rather than relying on others to label you."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2022-09-25
 publishedAt: 2022-09-25
 type: essay

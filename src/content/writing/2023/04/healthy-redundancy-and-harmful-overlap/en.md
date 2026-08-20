@@ -2,7 +2,7 @@
 title: "Collaboration Overlap Is Not Busyness: How to Tell Healthy Redundancy from Harmful Overlap"
 description: "Disaster recovery and review are healthy redundancy; the horse race caused by grabbing resources, grabbing projects, and unclear authority pushes an organization into zero-sum exhaustion."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-04-10
 publishedAt: 2023-04-10
 type: essay
@@ -10,7 +10,7 @@ tags: [collaboration, organization, management, work-leadership]
 translationKey: 2023/04/healthy-redundancy-and-harmful-overlap
 ---
 
-> This essay expands on the "Boundaries and Responsibility" thread in [*Management Retrospective*](/writing/2026/08/management-retrospective/).
+> This essay expands on the "Boundaries and Responsibility" thread in [*Management Retrospective*](/en/writing/2026/08/management-retrospective/).
 
 Not all duplication is waste. After moving into management it took me a while to accept this — "avoid duplication" sounds so obviously correct that you forget its other side.
 

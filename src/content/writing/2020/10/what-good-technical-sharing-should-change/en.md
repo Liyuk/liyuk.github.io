@@ -2,7 +2,7 @@
 title: "Technical Sharing Is Not an Event, but a Method of Knowledge Collaboration"
 description: "Turn technical sharing from a regular talk into a knowledge-collaboration system that connects topic selection, research, discussion, and consolidation."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2020-10-22
 publishedAt: 2020-10-22
 updatedAt: 2026-08-14

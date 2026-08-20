@@ -2,7 +2,7 @@
 title: "Goals, Planning, and Retrospective: Turning 'Handing in Homework' into Your Own Growth"
 description: "Planning and retrospective are not about completing tasks. From the difficulty of setting goals, to methods for retrospective, and on to orienting around your own growth — a complete list of topics."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-07-16
 publishedAt: 2023-07-16
 type: essay
@@ -11,7 +11,7 @@ column: { slug: one-on-one-conversations, order: 11 }
 translationKey: 2023/07/goals-retrospectives-and-next-actions
 ---
 
-> This article expands on the "retrospective" thread from [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "retrospective" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 The background for this topic: work involves a lot of problem retrospectives, incident retrospectives, and the writing of many plans. But on the whole, teammates lean heavily toward doing these things "just to complete the task," and invest less in self-reflection, exploration, and growth. So I organized this topic around five things:
 

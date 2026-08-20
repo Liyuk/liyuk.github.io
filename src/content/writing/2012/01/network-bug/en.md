@@ -2,7 +2,7 @@
 title: "A Bug on the Network"
 description: "A sci-fi short written in early university: when a bug in a two-dimensional network gains three-dimensional knowledge, what it loses is not ignorance but the ability to act."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2012/01/network-bug
 createdAt: 2012-01-01
 publishedAt: 2012-01-01

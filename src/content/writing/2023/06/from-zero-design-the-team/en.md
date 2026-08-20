@@ -8,7 +8,7 @@ type: essay
 tags: [leadership, collaboration, management, work-leadership]
 column: { slug: team-building, order: 2 }
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/06/from-zero-design-the-team
 ---
 

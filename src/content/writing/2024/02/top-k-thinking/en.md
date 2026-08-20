@@ -2,7 +2,7 @@
 title: "Thinking Training (I): The Top K Problem — First Find What Matters Most"
 description: "When facing a long list of tasks, problems, and opinions, first define the standard of judgment, then find the few things that truly rank at the top."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2024-02-09
 publishedAt: 2024-02-09
 type: essay
@@ -11,7 +11,7 @@ column: { slug: thinking-training, order: 1 }
 translationKey: 2024/02/top-k-thinking
 ---
 
-> This essay expands on the "Judgment" thread from [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This essay expands on the "Judgment" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 The problem with many documents, reports, and discussions is not a lack of information, but a lack of order. Everything is written down and every difficulty is mentioned, yet in the end they never answer a more important question: **under the same standard of judgment, what matters most?**
 

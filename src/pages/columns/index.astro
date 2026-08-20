@@ -13,7 +13,7 @@ const entries = [...writing, ...galleries];
 const availableColumns = Object.keys(columns).map((slug) => ({ ...columns[slug], slug, count: getColumnEntries(entries, slug).length })).filter(({ count }) => count > 0);
 ---
 
-<BaseLayout title={`${copy.eyebrow} — ${ui.brand}`} description={copy.description}>
+<BaseLayout title={`${copy.eyebrow} — ${ui.brand}`} description={copy.description} pageKind="collection" section="columns">
   <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   <section class="shell taxonomy-section archive-list"><div class="column-grid">{availableColumns.map(({ slug, count }) => { const column = getColumn(slug, locale); return <a href={columnUrl(slug, locale)}><span>{copy.seriesLabel}</span><strong>{column?.label}</strong><p>{column?.description}</p><em>{copy.count(count)}</em></a>; })}</div></section>
 </BaseLayout>

@@ -1,5 +1,5 @@
 ---
-title: "Workplace Relationship Risk Analysis Protocol: From Power Structures to Authority, Responsibility, and Career Safety"
+title: "Workplace Relationship Analysis Protocol: Power, Responsibility, and Structural Positions"
 description: "A research-design and protocol paper proposing a safety-action-oriented framework for organizing material and annotating risk in workplace settings, covering top-middle-bottom three-tier safety, power structures, horizontal competition, authority-responsibility misalignment, career safety, career development, and occupational mental health."
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
@@ -9,8 +9,8 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [workplace, power, professional-relationships, risk-analysis, human-ai-collaboration, work-leadership]
 locale: en
-translationStatus: draft
-translationKey: 2026/08/workplace-relationship-risk-protocol
+translationStatus: reviewed
+translationKey: 2026/08/workplace-relationship-analysis-protocol
 ---
 
 **Version:** 0.1 (preprint)

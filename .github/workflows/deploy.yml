@@ -1,44 +1,61 @@
-name: Deploy to GitHub Pages
+name: Verify, deploy, and notify
 
 on:
+  pull_request:
   push:
     branches: [master]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
-  build:
+  verify:
+    name: verify
+    concurrency:
+      group: pages-verify-${{ github.ref }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          # Node 24 (matches local dev): `src/lib/*.ts` is imported directly by
-          # `node --test` and the content scripts, which rely on Node's built-in
-          # type stripping (enabled by default since Node 23.6).
-          node-version: 24
+          node-version-file: '.node-version'
           cache: npm
       - run: npm ci
-      # Mermaid diagrams are rendered at build time (rehype-mermaid) via Playwright.
+      # Mermaid diagrams render through Playwright at build time; browser smoke
+      # checks run against the generated dist/ directory in a deterministic server.
       - run: npx playwright install --with-deps chromium
-      # Full publish gate (image audit → column audit → tests → type check → build).
-      # Mirrors the local pre-push hook so `--no-verify` / manual dispatch still verify.
       - run: npm run publish:check
+      - run: npm run test:draft:dev
+      - run: npm run test:browser:ci
+      - name: Upload browser diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-diagnostics
+          path: artifacts/browser-checks/
+          if-no-files-found: ignore
+          retention-days: 14
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
   deploy:
-    needs: build
+    name: Deploy GitHub Pages
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+    needs: verify
+    if: ${{ needs.verify.result == 'success' && github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -46,3 +63,40 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  notify:
+    name: Notify Buttondown subscribers
+    concurrency:
+      group: buttondown-notify
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    needs: deploy
+    # A notification failure is intentionally visible and retryable, but it
+    # cannot roll back the completed Pages deployment.
+    if: ${{ needs.deploy.result == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+      - name: Send new-post emails after deployment
+        if: ${{ env.BUTTONDOWN_API_KEY != '' }}
+        run: |
+          set -euo pipefail
+          BEFORE="${{ github.event.before }}"
+          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            node scripts/notify-buttondown.mjs --baseRef "$BEFORE" --apply
+          else
+            # For manual dispatch, the script scans the tree and skips existing
+            # messages through its Buttondown idempotency check.
+            node scripts/notify-buttondown.mjs --baseRef HEAD --apply
+          fi
+      - name: Explain skipped notification
+        if: ${{ env.BUTTONDOWN_API_KEY == '' }}
+        run: echo "BUTTONDOWN_API_KEY is not configured; site deployed without subscriber notification."

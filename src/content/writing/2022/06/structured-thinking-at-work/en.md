@@ -2,7 +2,7 @@
 title: "Structured Thinking: Turning 'Being Organized' into Something You Can Train"
 description: "Structure isn't about applying a template; it's about making problems, evidence, trade-offs, and decisions checkable by others. A ready-to-use training and questioning checklist."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2022-06-18
 publishedAt: 2022-06-18
 type: essay
@@ -12,7 +12,7 @@ column: { slug: one-on-one-conversations, order: 7 }
 translationKey: 2022/06/structured-thinking-at-work
 ---
 
-> This article expands on the "judgment" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "judgment" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 The topic of structured thinking came from a real one-on-one—talking about how it applies to problem analysis, problem decomposition, planning, and execution. Its purpose is to let others know: what you are answering, what your basis is, and where things still remain uncertain.
 

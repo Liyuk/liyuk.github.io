@@ -2,7 +2,7 @@
 title: "Quality Is Not One Team's Job: Shared Accountability for the Outcome"
 description: "Every role owns its own delivery, and everyone shares accountability for production outcomes. A quality loop depends on monitoring, fast containment, precise fixes, and retrospectives."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-17
 publishedAt: 2023-03-17
 type: essay
@@ -10,7 +10,7 @@ tags: [quality, reliability, engineering, technology]
 translationKey: 2023/03/quality-is-shared-accountability
 ---
 
-> This essay expands on the "closed loop" thread from [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This essay expands on the "closed loop" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 When quality slips, an organization's first reaction is almost always "whose fault is this?" Drawing clear boundaries is fair enough, but if only one role ends up accountable for the production outcome while everyone else is accountable only for their part of the process, quality gets lost at the handoffs — because every segment has someone responsible for process, but no segment is responsible for the outcome.
 

@@ -2,7 +2,7 @@
 title: "First Ride into Frontend: The Kindergarten Bus"
 description: "An old signpost written for frontend beginners: information gathering, study logs, algorithm practice, interviews, and internships are all just the beginning."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2018-07-04
 publishedAt: 2018-07-04
 updatedAt: 2026-08-14

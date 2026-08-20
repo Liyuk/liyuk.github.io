@@ -2,7 +2,7 @@
 title: A Fresh Start
 description: This site is being rebuilt from an old static blog into a personal publication about technology, work, and life — and it also records the trade-offs made along the way.
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 type: note

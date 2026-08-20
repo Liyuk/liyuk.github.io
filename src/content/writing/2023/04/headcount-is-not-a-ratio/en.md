@@ -2,7 +2,7 @@
 title: "Headcount Planning Is Not a Ratio Game: Align When Resources Appear"
 description: "Headcount ratios are only a dynamic concept. What matters more is aligning goals, markets, and resource constraints in time when expanding, contracting, or changing plans."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-04-02
 publishedAt: 2023-04-02
 type: essay
@@ -11,7 +11,7 @@ column: { slug: engineering-collaboration, order: 4 }
 translationKey: 2023/04/headcount-is-not-a-ratio
 ---
 
-> This article expands on the "Resources and Capacity" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "Resources and Capacity" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 "How many engineers per product" and "how many developers per tester" — ratios like these are often treated as a yardstick of efficiency in discussions. They are indeed easy to compute, easy to compare, and easy to make look well-grounded in reports. But at best they can only describe a state at a single point in time, and they rarely support decisions — the moment the business stage, complexity, risk, or existing assets change, an old ratio will mislead new decisions.
 

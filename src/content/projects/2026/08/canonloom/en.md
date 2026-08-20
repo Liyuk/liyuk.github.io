@@ -2,7 +2,7 @@
 title: CanonLoom
 description: "A command-driven workflow for long-form novel production: the author drives with short commands, an Agent does the creative work, Python performs deterministic validation, and the author makes choices and approvals at every key checkpoint."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-03
 publishedAt: 2026-08-03
 status: active

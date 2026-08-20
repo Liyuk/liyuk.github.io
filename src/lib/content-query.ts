@@ -45,9 +45,13 @@ export function groupByLocaleVariant<T extends { data: { locale: string } }>(
   return [...bySlug.entries()].map(([slug, variants]) => ({ slug, variants }));
 }
 
-// Pick the variant for a locale, falling back to the zh-CN source (and finally
-// any available variant) so an untranslated entry still resolves on /en/ routes
-// instead of 404ing.
-export function pickLocaleVariant<T>(variants: Record<string, T>, locale: string): T | undefined {
-  return variants[locale] ?? variants['zh-CN'] ?? Object.values(variants)[0];
+// Pick the requested language variant. Only research detail pages may opt into
+// the documented Chinese fallback while an English translation is pending;
+// callers must not silently publish Chinese under an English writing/project/gallery URL.
+export function pickLocaleVariant<T>(
+  variants: Record<string, T>,
+  locale: string,
+  allowChineseFallback = false,
+): T | undefined {
+  return variants[locale] ?? (allowChineseFallback ? variants['zh-CN'] : undefined);
 }

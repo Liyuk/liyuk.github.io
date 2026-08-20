@@ -2,7 +2,7 @@
 title: Neo Matrix
 description: "On top of a conventional relay (an OpenAI-compatible gateway), add a personal supply side: consumers use a single sk- token to access the platform's models by model, while suppliers host their idle API keys as channels to join routing and are paid by real usage, withdrawable. At its core are cost-optimal routing, a trust-climb closed loop, and auditable revenue-settlement."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 status: active

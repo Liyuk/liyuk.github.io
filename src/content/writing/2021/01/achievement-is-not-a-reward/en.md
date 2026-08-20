@@ -2,7 +2,7 @@
 title: "Achievement Is Not a Reward: On Pressure, Delivery, and Self-Recognition"
 description: "A sense of achievement comes not only from results or praise from others; it also comes from keeping commitments, identifying with your profession, helping others, and believing that what you do matters."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-01-01
 publishedAt: 2021-01-01
 type: essay

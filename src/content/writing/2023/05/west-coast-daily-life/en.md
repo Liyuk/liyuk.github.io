@@ -2,7 +2,7 @@
 title: "West Coast Daily Life"
 description: "Fifteen days in May 2023: working in another time zone while driving, refueling, parking, and keeping accounts. The deepest impression was not the sights but the jet lag and the expense."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-05-15
 publishedAt: 2023-05-15
 type: essay

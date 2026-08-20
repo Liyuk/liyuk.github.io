@@ -2,7 +2,7 @@
 title: "What Screeners and Interviewers Are Really Looking At"
 description: "From the resume and fundamentals to the project presentation: an interview is not about guessing a standard answer, but about letting people see your facts, judgment, learning style, and way of collaborating."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2022-07-01
 publishedAt: 2022-07-01
 type: essay

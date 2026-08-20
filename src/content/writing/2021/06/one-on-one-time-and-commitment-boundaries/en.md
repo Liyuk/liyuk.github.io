@@ -2,7 +2,7 @@
 title: "Time Management: A Conversation About Being 'Busy'"
 description: "'I've been really busy' is a genuine feeling, but it isn't good enough as communication. These questions break 'busy' into scheduling, capacity, trade-offs, and commitments, so both managers and reports can ask them."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-06-10
 publishedAt: 2021-06-10
 type: essay

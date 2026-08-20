@@ -2,7 +2,7 @@
 title: "How to Write a Product Overview Without Piling Material Into an Encyclopedia"
 description: "The job of a product overview is not to collect as many facts as possible, but to help readers build a shared question, form judgments, and understand what evidence is still missing within a limited time."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-09-15
 publishedAt: 2021-09-15
 updatedAt: 2026-08-14

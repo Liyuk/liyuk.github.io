@@ -121,6 +121,46 @@ export const tags: Record<string, [string, string]> = {
   power: ['权力', 'Power'],
   'professional-relationships': ['职业关系', 'Professional Relationships'],
   'risk-analysis': ['风险分析', 'Risk Analysis'],
+  // Project and search-growth tags are registered here so tag pages and
+  // repository-wide content audits use one bilingual vocabulary.
+  agency: ['主体性', 'Agency'],
+  agent: ['智能体', 'Agents'],
+  'ai-relay': ['AI 中继', 'AI Relay'],
+  'api-key': ['API 密钥', 'API Key'],
+  authorization: ['授权', 'Authorization'],
+  backlinks: ['反向链接', 'Backlinks'],
+  china: ['中国', 'China'],
+  'coding-agent': ['编程智能体', 'Coding Agents'],
+  'cognitive-offloading': ['认知卸载', 'Cognitive Offloading'],
+  community: ['社区', 'Community'],
+  'computer-vision': ['计算机视觉', 'Computer Vision'],
+  'creative-writing': ['创意写作', 'Creative Writing'],
+  deskilling: ['去技能化', 'Deskilling'],
+  education: ['教育', 'Education'],
+  emotion: ['情绪', 'Emotion'],
+  explainability: ['可解释性', 'Explainability'],
+  forecasting: ['预测', 'Forecasting'],
+  hci: ['人机交互', 'Human-Computer Interaction'],
+  'image-seo': ['图片 SEO', 'Image SEO'],
+  novel: ['小说', 'Novel'],
+  privacy: ['隐私', 'Privacy'],
+  provenance: ['溯源', 'Provenance'],
+  'public-good': ['公共利益', 'Public Good'],
+  python: ['Python', 'Python'],
+  recoverability: ['可恢复性', 'Recoverability'],
+  'revenue-sharing': ['收益分成', 'Revenue Sharing'],
+  routing: ['路由', 'Routing'],
+  seo: ['SEO', 'SEO'],
+  settlement: ['结算', 'Settlement'],
+  'static-site': ['静态站点', 'Static Site'],
+  'technical-management': ['技术管理', 'Technical Management'],
+  'technical-seo': ['技术 SEO', 'Technical SEO'],
+  'time-series': ['时间序列', 'Time Series'],
+  'trust-calibration': ['信任校准', 'Trust Calibration'],
+  typescript: ['TypeScript', 'TypeScript'],
+  'video-seo': ['视频 SEO', 'Video SEO'],
+  vuepress: ['VuePress', 'VuePress'],
+  workflow: ['工作流', 'Workflow'],
 };
 
 export const columns: Record<string, { label: { 'zh-CN': string; en: string }; description: { 'zh-CN': string; en: string } }> = {
@@ -148,6 +188,10 @@ export const columns: Record<string, { label: { 'zh-CN': string; en: string }; d
     label: { 'zh-CN': '团队建设与管理', en: 'Building Teams' },
     description: { 'zh-CN': '从一线管理到团队设计：如何搭建、培养并延续一个有判断力的梯队。', en: 'From frontline management to team design: building, growing, and sustaining a strong team.' },
   },
+  'multi-team-management': {
+    label: { 'zh-CN': '管理管理者与多团队结果', en: 'Managing Managers & Multi-Team Outcomes' },
+    description: { 'zh-CN': '直接管理多个一线负责人，并设计目标、边界、授权、资源和接班安排，让多个团队不靠逐项介入也能持续作出好判断。', en: 'Managing managers and the systems around them: setting goals, boundaries, authority, resources, and succession so multiple teams can deliver shared outcomes without constant intervention.' },
+  },
   'engineering-collaboration': {
     label: { 'zh-CN': '工程协作与交付', en: 'Engineering Collaboration' },
     description: { 'zh-CN': '冲突、容量、资源与动力：在真实约束中让团队稳定交付。', en: 'Conflict, capacity, resources, and motivation: delivering reliably under real constraints.' },
@@ -164,6 +208,10 @@ export const columns: Record<string, { label: { 'zh-CN': string; en: string }; d
     label: { 'zh-CN': '成长与自我评估', en: 'Growth & Self-Assessment' },
     description: { 'zh-CN': '不靠标签评价自己：从潜力、成长到诚实的自我评估。', en: 'Beyond labels: assessing potential, growth, and honest self-evaluation.' },
   },
+  'search-engine-growth': {
+    label: { 'zh-CN': '搜索引擎增长工程', en: 'Search Engine Growth' },
+    description: { 'zh-CN': '从给 Google 爬虫优化到给 AI 引擎优化：一条可观测、可工程的搜索引擎增长线。', en: 'From optimizing for Google crawlers to optimizing for AI engines: an observable, engineerable growth line.' },
+  },
 };
 
 // start 页把注册过的专栏按「目标」分成几条阅读路径。每个专栏必须恰好落在
@@ -176,6 +224,7 @@ export const startGroups: { key: 'method' | 'management' | 'engineering'; column
     columns: [
       'one-on-one-conversations',
       'team-building',
+      'multi-team-management',
       'recruiting-and-professional-relationships',
       'growth-self-assessment',
     ],
@@ -187,6 +236,7 @@ export const startGroups: { key: 'method' | 'management' | 'engineering'; column
       'engineering-collaboration',
       'documentation',
       'product-judgment',
+      'search-engine-growth',
     ],
   },
 ];

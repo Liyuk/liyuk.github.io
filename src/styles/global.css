@@ -42,6 +42,12 @@
   --accent-soft: #28443d;
 }
 
+html:not([data-reading-context]) [data-reading-nav="column"],
+html[data-reading-context="chronological"] [data-reading-nav="column"],
+html[data-reading-context="column"] [data-reading-nav="chronological"] {
+  display: none;
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.55; text-rendering: optimizeLegibility; }
@@ -211,7 +217,7 @@ h1, h2, h3, p { margin-top: 0; }
 .column-chapters h2 a { text-decoration: none; }
 .column-chapters time { display: block; margin-bottom: .65rem; font-size: .82rem; color: var(--muted); }
 .column-chapters p { max-width: 54ch; margin-bottom: 0; color: var(--muted); }
-.column-pagination { max-width: var(--prose-w); margin-top: 4rem; padding-top: 1.3rem; border-top: 1px solid var(--line); display: grid; gap: .75rem; }
+.column-pagination { max-width: var(--prose-w); margin: 4rem auto 0; padding-top: 1.3rem; border-top: 1px solid var(--line); display: grid; gap: .75rem; }
 .column-pagination a { color: var(--ink); font-size: .9rem; font-weight: 700; text-decoration: none; }
 .column-pagination a:hover { color: var(--accent); }
 /* 文章左侧悬浮目录（飞书/Notion 风格）。
@@ -228,7 +234,7 @@ h1, h2, h3, p { margin-top: 0; }
 
 /* 正文单栏（目录 fixed 后不再需要两栏 grid）。 */
 .article-body { position: relative; }
-.article-body > .prose { max-width: var(--prose-w); }
+.article-body > .prose { max-width: var(--prose-w); margin-inline: auto; }
 
 /* 宽屏：目录初始定位在正文第一段同高的左侧空白（absolute，相对 .article-body），
    滚动到正文第一段高于阈值后，由 JS 加 .is-fixed 切为 fixed 悬浮。 */
@@ -261,17 +267,21 @@ h1, h2, h3, p { margin-top: 0; }
   .article-toc.is-open { display: block; }
 }
 
-.related-entries { max-width: var(--prose-w); margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--line); }
-.related-entries h2, .start-callout h2 { margin: 0 0 1.25rem; font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.05; }
-.related-entries ol { margin: 0; padding: 0; list-style: none; }
-.related-entries li { padding: 1rem 0; border-top: 1px solid var(--line); }
-.related-entries li:last-child { border-bottom: 1px solid var(--line); }
-.related-entries a { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; text-decoration: none; }
-.related-entries p { margin: .35rem 0 0; color: var(--muted); }
-.related-entries .related-desc { margin-top: .3rem; font-size: .95rem; line-height: 1.5; }
-.related-entries .related-reason { font-size: .9rem; letter-spacing: .01em; }
+.related-entries { max-width: var(--prose-w); margin: 4rem auto 0; padding-top: 2.5rem; border-top: 1px solid var(--line); }
+.related-entries h2, .start-callout h2 { margin: 0 0 .25rem; font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.05; }
+.related-entries .eyebrow { margin-bottom: .75rem; }
+.related-grid { margin: 1.75rem 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; }
+.related-card { position: relative; display: flex; flex-direction: column; padding: 1.15rem 1.25rem 1rem; background: var(--paper-strong); border: 1px solid var(--line); border-radius: 12px; transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+.related-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0, 0, 0, .08); }
+.related-card-link { display: flex; min-height: 7.5rem; flex-direction: column; text-decoration: none; color: var(--ink); }
+.related-type { align-self: flex-start; color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.related-card-title { margin-top: .55rem; font-family: var(--serif); font-size: 1.15rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.3; }
+.related-card .related-desc { margin: .5rem 0 0; color: var(--muted); font-family: var(--sans); font-size: .9rem; line-height: 1.5; }
+.related-card .related-cta { margin-top: auto; padding-top: .9rem; color: var(--accent); font-size: .9rem; font-weight: 650; }
+.related-card .related-reason { margin: .55rem 0 0; color: var(--muted); font-size: .78rem; letter-spacing: .01em; font-family: var(--sans); }
+@media (max-width: 38rem) { .related-grid { grid-template-columns: 1fr; } }
 /* 文章尾部上一篇/下一篇（时间序），irisluan 风格：左右两栏，标签+标题。 */
-.post-pagination { max-width: var(--prose-w); display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.post-pagination { max-width: var(--prose-w); display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .post-pagination .pagination-col { display: flex; min-width: 0; }
 .post-pagination .pagination-col:last-child { justify-content: flex-end; }
 .post-pagination a { display: flex; flex-direction: column; gap: .35rem; min-width: 0; color: var(--ink); text-decoration: none; }
@@ -280,7 +290,7 @@ h1, h2, h3, p { margin-top: 0; }
 .post-pagination .nav-title { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; line-height: 1.3; overflow-wrap: anywhere; }
 .post-pagination a:hover .nav-title { color: var(--accent); }
 /* 文章分享/收藏行：三个主按钮（分享面板 + 收藏 + 复制链接），无第三方脚本。 */
-.share-row { position: relative; max-width: var(--prose-w); display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.share-row { position: relative; max-width: var(--prose-w); margin: 2.5rem auto 0; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .share-btn { display: inline-flex; align-items: center; gap: .35rem; padding: .45rem .95rem; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--muted); font: inherit; font-size: .84rem; text-decoration: none; cursor: pointer; transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease; }
 .share-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 .share-btn[hidden] { display: none; }
@@ -326,7 +336,7 @@ h1, h2, h3, p { margin-top: 0; }
 .share-modal-title { margin: 0 0 .35rem; font-family: var(--serif); font-size: 1.2rem; font-weight: 600; }
 .share-modal-desc { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
 /* 收藏页：本地收藏列表（localStorage 客户端渲染）。 */
-.favorites-shell { max-width: var(--prose-w); margin-bottom: clamp(4rem, 10vw, 9rem); }
+.favorites-shell { max-width: var(--prose-w); margin: 0 auto clamp(4rem, 10vw, 9rem); }
 .favorites-empty { margin: 2rem 0 .5rem; font-family: var(--serif); font-size: 1.4rem; font-weight: 500; }
 .favorites-empty[hidden] { display: none; }
 .favorites-empty-hint { margin: 0; color: var(--muted); font-size: .92rem; }
@@ -372,7 +382,7 @@ h1, h2, h3, p { margin-top: 0; }
 .article-tags { margin-top: 1.35rem; font-size: .9rem; }
 
 /* 评论区（giscus）。未启用时不渲染，因此这里只兜底间距与宽度约束。 */
-.comments { max-width: var(--prose-w); margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--line); }
+.comments { max-width: var(--prose-w); margin: 4rem auto 0; padding-top: 2.5rem; border-top: 1px solid var(--line); }
 .comments .giscus { min-height: 8rem; }
 .search-heading { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
 .search-page { min-height: 40rem; margin-bottom: clamp(4rem, 10vw, 9rem); }
@@ -395,7 +405,7 @@ h1, h2, h3, p { margin-top: 0; }
 .pagination { display: flex; flex-wrap: wrap; align-items: baseline; gap: 1rem; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
 .pagination-link { color: var(--ink); font-size: .85rem; font-weight: 700; text-decoration: none; }
 .pagination-link:hover { color: var(--accent); }
-.pagination-link.is-disabled { color: var(--line); cursor: default; }
+.pagination-link.is-disabled { color: var(--muted); cursor: default; }
 .pagination-status { margin-left: auto; color: var(--muted); font-size: .8rem; }
 .photos-load-more { margin: 0 auto clamp(4rem, 10vw, 9rem); }
 .photos-load-more-btn { padding: .65rem 1.4rem; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: inherit; font-size: .85rem; font-weight: 700; cursor: pointer; }
@@ -696,16 +706,18 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 .article { max-width: var(--article-w); padding-block: clamp(5rem, 11vw, 9rem); }
-.article header { max-width: var(--prose-w); margin-bottom: clamp(3rem, 7vw, 6rem); }
+/* 文章壳（宽居中）+ 壳内正文列（窄居中）：壳 860 居中、正文 720 在壳内再次水平居中，
+   保持长文列宽的阅读舒适度（>= .prose 以下各级块统一 max-width + margin-inline:auto）。 */
+.article header { max-width: var(--prose-w); margin: 0 auto clamp(3rem, 7vw, 6rem); }
 .article h1 { margin: 0 0 1.75rem; font-family: var(--serif); font-size: clamp(3rem, 6vw, 5.7rem); font-weight: 500; letter-spacing: -.07em; line-height: .98; }
-.article-dek { max-width: var(--prose-w); color: var(--muted); font-size: 1.2rem; line-height: 1.65; }
+.article-dek { max-width: var(--prose-w); margin-inline: auto; color: var(--muted); font-size: 1.2rem; line-height: 1.65; }
 .article-dates { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem 1rem; color: var(--muted); font-size: .82rem; }
 .author-byline { display: inline-flex; align-items: center; gap: .5rem; }
 .author-avatar { width: 1.75rem; height: 1.75rem; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); background: var(--paper-strong); }
 .author-name { font-size: .82rem; font-weight: 600; }
 .author-name a { color: var(--ink); text-decoration: none; }
 .author-name a:hover { color: var(--accent); }
-.prose { max-width: var(--prose-w); font-family: var(--serif); font-size: clamp(1.15rem, 1.5vw, 1.32rem); line-height: 1.9; }
+.prose { max-width: var(--prose-w); margin-inline: auto; font-family: var(--serif); font-size: clamp(1.15rem, 1.5vw, 1.32rem); line-height: 1.9; }
 .prose p + p { margin-top: 1.4em; }
 .prose a { color: var(--accent); }
 .prose h2 { margin-top: 2em; margin-bottom: .9em; font-family: var(--sans); font-size: 1.5rem; font-weight: 600; line-height: 1.3; letter-spacing: -.02em; }

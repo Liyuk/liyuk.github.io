@@ -2,7 +2,7 @@
 title: "dsh-skin-chatlab: An Extensible Chat Skin for the DSH Web"
 description: "Using a base-plus-skin architecture to give the DSH Web GUI a switchable, uninstallable Feishu-style chat skin that touches no existing plugin: workspaces become project groups, sessions become contacts, and the chat becomes bubbles."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-16
 publishedAt: 2026-08-16
 status: active

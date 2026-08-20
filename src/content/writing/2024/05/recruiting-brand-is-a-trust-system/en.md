@@ -2,7 +2,7 @@
 title: "Recruiting Branding: Building the Shared Belief That \"We Can Make It Happen Together\""
 description: "Recruiting branding is not about polishing a job posting; it is about making the right people believe: the work is worth doing, the team has a chance to make it happen, and they can push it into reality together with their peers."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2024-05-20
 publishedAt: 2024-05-20
 type: essay

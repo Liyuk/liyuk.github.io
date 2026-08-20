@@ -17,16 +17,30 @@
     "notify:buttondown": "node scripts/notify-buttondown.mjs",
     "prepare": "git config core.hooksPath .githooks",
     "test": "node --test",
-    "test:e2e": "node tests/e2e-smoke.mjs"
+    "test:e2e": "node tests/e2e-smoke.mjs",
+    "audit:content": "node scripts/audit-content.mjs",
+    "audit:links": "node scripts/audit-links.mjs",
+    "audit:seo": "node scripts/audit-seo.mjs",
+    "format": "node scripts/format-project-files.mjs --write",
+    "format:check": "node scripts/format-project-files.mjs --check",
+    "test:e2e:ci": "node scripts/run-browser-checks.mjs tests/e2e-smoke.mjs",
+    "test:e2e:fresh": "npm run build && npm run test:e2e:ci",
+    "test:a11y": "node scripts/run-browser-checks.mjs tests/a11y-smoke.mjs",
+    "test:a11y:fresh": "npm run build && npm run test:a11y",
+    "test:browser:ci": "node scripts/run-browser-checks.mjs tests/e2e-smoke.mjs tests/a11y-smoke.mjs",
+    "test:draft:dev": "node scripts/run-dev-browser-checks.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/markdown-remark": "^7.2.2",
     "@astrojs/sitemap": "^3.7.3",
+    "@axe-core/playwright": "^4.13.0",
     "@types/qrcode": "^1.5.6",
-    "astro": "^5.13.7",
+    "astro": "^7.2.2",
     "katex": "^0.18.4",
     "pagefind": "^1.5.2",
     "playwright": "^1.62.1",
+    "prettier": "^3.9.6",
     "qrcode": "^1.5.4",
     "rehype-katex": "^7.0.1",
     "rehype-mermaid": "^3.0.0",
@@ -34,5 +48,8 @@
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19"
+  },
+  "engines": {
+    "node": ">=24.18.0 <25"
   }
 }

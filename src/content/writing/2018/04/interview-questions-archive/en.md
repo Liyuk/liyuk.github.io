@@ -2,7 +2,7 @@
 title: "Interview Questions and an Engineer's Growth Path"
 description: "An index of interview and engineering fundamentals compiled after the spring 2018 job search; keeping it as a reminder that interview questions are never just interview questions."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2018-04-02
 publishedAt: 2018-04-02
 updatedAt: 2026-08-14

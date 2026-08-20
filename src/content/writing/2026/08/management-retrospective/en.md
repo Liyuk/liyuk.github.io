@@ -2,7 +2,7 @@
 title: "Management Retrospective: Eight Judgments from Execution to System"
 description: "Condensing the judgments that have recurred over the past few years in management, collaboration, and decision-making into a single master summary told just once: judgment, boundaries, alignment, context, closed loop, resources, team, and retrospective — each pointing to one expanded article."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 type: essay
@@ -25,9 +25,9 @@ Another side of this is prioritization: faced with a long list of tasks, you fir
 
 Further reading:
 
-- [The Top K Problem](/writing/2024/02/top-k-thinking/) · [Structured Thinking](/writing/2022/06/structured-thinking-at-work/) · [The Counting Game](/writing/2025/08/counting-practice/) · [How to Ask Yourself Better Questions](/writing/2023/04/how-to-ask-yourself-better-questions/)
-- [Why Engineers Need Product Judgment](/writing/2022/02/engineer-product-judgment/) · [Product Sense](/writing/2022/03/product-judgment-for-engineers/) · [When a Team Can't Articulate Its Unique Value](/writing/2023/03/engineering-without-unique-value/) · [The First Map of an Unfamiliar Field](/writing/2023/03/mapping-an-unfamiliar-value-chain/) · [How to Write a Product Overview](/writing/2021/09/product-overview-is-a-decision-model/) · [From Complaints Back to Problems](/writing/2018/04/product-apocalypse-one/)
-- [Frontend Engineers: From Execution to System Judgment](/writing/2023/08/frontend-engineer-system-judgment/) · [Three Outputs of Frontline Engineering Management](/writing/2023/03/frontline-engineering-management/)
+- [The Top K Problem](/en/writing/2024/02/top-k-thinking/) · [Structured Thinking](/en/writing/2022/06/structured-thinking-at-work/) · [The Counting Game](/en/writing/2025/08/counting-practice/) · [How to Ask Yourself Better Questions](/en/writing/2023/04/how-to-ask-yourself-better-questions/)
+- [Why Engineers Need Product Judgment](/en/writing/2022/02/engineer-product-judgment/) · [Product Sense](/en/writing/2022/03/product-judgment-for-engineers/) · [When a Team Can't Articulate Its Unique Value](/en/writing/2023/03/engineering-without-unique-value/) · [The First Map of an Unfamiliar Field](/en/writing/2023/03/mapping-an-unfamiliar-value-chain/) · [How to Write a Product Overview](/en/writing/2021/09/product-overview-is-a-decision-model/) · [From Complaints Back to Problems](/en/writing/2018/04/product-apocalypse-one/)
+- [Frontend Engineers: From Execution to System Judgment](/en/writing/2023/08/frontend-engineer-system-judgment/) · [Three Outputs of Frontline Engineering Management](/en/writing/2023/03/frontline-engineering-management/)
 
 ## 2. Boundaries and Responsibility: Before taking initiative, sort out the boundaries first
 
@@ -39,8 +39,8 @@ This point also explains duplication in collaboration: the difference between he
 
 Further reading:
 
-- [Ownership Mindset and Responsibility](/writing/2021/11/ownership-with-boundaries/) · ["Definitely Not Doing Something" Is Not Laziness](/writing/2023/03/defining-what-not-to-do/) · [Collaboration Overlap Is Not Busyness](/writing/2023/04/healthy-redundancy-and-harmful-overlap/)
-- [Engineering POC: Responsibilities, Boundaries, and the Delivery Loop](/writing/2021/08/requirement-poc-responsibilities/) · [Engineering POC in Practice: FAQ](/writing/2021/04/engineering-poc-faq-responsibility-boundaries/)
+- [Ownership Mindset and Responsibility](/en/writing/2021/11/ownership-with-boundaries/) · ["Definitely Not Doing Something" Is Not Laziness](/en/writing/2023/03/defining-what-not-to-do/) · [Collaboration Overlap Is Not Busyness](/en/writing/2023/04/healthy-redundancy-and-harmful-overlap/)
+- [Engineering POC: Responsibilities, Boundaries, and the Delivery Loop](/en/writing/2021/08/requirement-poc-responsibilities/) · [Engineering POC in Practice: FAQ](/en/writing/2021/04/engineering-poc-faq-responsibility-boundaries/)
 
 ## 3. Alignment: Information sync isn't CC'ing people — it's enabling the other person to make a decision
 
@@ -52,9 +52,9 @@ When conflict appears, most of the time it's not that someone refuses to coopera
 
 Further reading (those 13 one-on-one articles form a complete topic map; here are the main ones):
 
-- [1-on-1s Are Not Routine Meetings](/writing/2023/03/one-on-ones-and-decision-rights/) · [Information Sync Is Not CC](/writing/2023/03/information-sync-for-decisions/) · [The Three Things to Align First in a Project Conflict](/writing/2023/03/resolving-project-conflicts/)
-- [The Product–Engineering Relationship Isn't "Cooperation"](/writing/2023/03/product-engineering-trust/) · [How to Sync Without Breeding Speculation When Org Changes Happen](/writing/2023/04/communicating-organizational-change/) · [How to Communicate Well](/writing/2023/01/clarify-feedback-and-commitment/)
-- [One-on-One Conversations (the entire series)](/columns/one-on-one-conversations/): from [how to open](/writing/2021/03/shared-problem-definition/), [talking about busyness](/writing/2021/06/one-on-one-time-and-commitment-boundaries/), [talking about growth](/writing/2021/08/specific-growth-milestones/), and [talking about anxiety](/writing/2023/04/anxiety-and-work-boundaries/), to [business slowdown](/writing/2023/12/anxiety-when-growth-slows/) and [insecurity and comparison](/writing/2024/01/insecurity-comparison-and-long-term-capability/)
+- [1-on-1s Are Not Routine Meetings](/en/writing/2023/03/one-on-ones-and-decision-rights/) · [Information Sync Is Not CC](/en/writing/2023/03/information-sync-for-decisions/) · [The Three Things to Align First in a Project Conflict](/en/writing/2023/03/resolving-project-conflicts/)
+- [The Product–Engineering Relationship Isn't "Cooperation"](/en/writing/2023/03/product-engineering-trust/) · [How to Sync Without Breeding Speculation When Org Changes Happen](/en/writing/2023/04/communicating-organizational-change/) · [How to Communicate Well](/en/writing/2023/01/clarify-feedback-and-commitment/)
+- [One-on-One Conversations (the entire series)](/columns/one-on-one-conversations/): from [how to open](/en/writing/2021/03/shared-problem-definition/), [talking about busyness](/en/writing/2021/06/one-on-one-time-and-commitment-boundaries/), [talking about growth](/en/writing/2021/08/specific-growth-milestones/), and [talking about anxiety](/en/writing/2023/04/anxiety-and-work-boundaries/), to [business slowdown](/en/writing/2023/12/anxiety-when-growth-slows/) and [insecurity and comparison](/en/writing/2024/01/insecurity-comparison-and-long-term-capability/)
 
 ## 4. Context: Almost all collaboration loss happens at handoff points
 
@@ -66,8 +66,8 @@ Thinking along this line, documentation isn't a record either, but a collaborati
 
 Further reading:
 
-- [How Distributed Teams Reduce Context Loss](/writing/2023/03/reducing-context-loss-in-distributed-teams/) · [Documents Are Not Records, They're Collaboration Interfaces](/writing/2020/10/documents-are-collaboration-interfaces/) · [Why Technical Knowledge Bases Need Entry Pages](/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/)
-- [Technical Sharing Is Not an Event](/writing/2020/10/what-good-technical-sharing-should-change/) · [Turning Spoken Ideas into Decision-Making Documents](/writing/2025/12/turn-spoken-ideas-into-decision-documents/)
+- [How Distributed Teams Reduce Context Loss](/en/writing/2023/03/reducing-context-loss-in-distributed-teams/) · [Documents Are Not Records, They're Collaboration Interfaces](/en/writing/2020/10/documents-are-collaboration-interfaces/) · [Why Technical Knowledge Bases Need Entry Pages](/en/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/)
+- [Technical Sharing Is Not an Event](/en/writing/2020/10/what-good-technical-sharing-should-change/) · [Turning Spoken Ideas into Decision-Making Documents](/en/writing/2025/12/turn-spoken-ideas-into-decision-documents/)
 
 ## 5. Closed Loop: From "done" to "actually effective"
 
@@ -79,8 +79,8 @@ The value of the closed loop is letting the team continually revise old assumpti
 
 Further reading:
 
-- [Quality Is Not One Team's Job](/writing/2023/03/quality-is-shared-accountability/) · [Use Your Own Product First](/writing/2021/05/use-your-own-product-feedback-loop/) · [How Engineering Standards Avoid Creating Bureaucratic Processes](/writing/2023/03/engineering-standards-without-bureaucracy/)
-- [A Guide to Data Metrics at Work (five-article series)](/columns/data-metrics-guide/): from definitions and metric tiers to periodic retrospectives — the data-flavored version of the "supporting decisions with a single shared set of definitions" thread
+- [Quality Is Not One Team's Job](/en/writing/2023/03/quality-is-shared-accountability/) · [Use Your Own Product First](/en/writing/2021/05/use-your-own-product-feedback-loop/) · [How Engineering Standards Avoid Creating Bureaucratic Processes](/en/writing/2023/03/engineering-standards-without-bureaucracy/)
+- [A Guide to Data Metrics at Work (five-article series)](/en/columns/data-metrics-guide/): from definitions and metric tiers to periodic retrospectives — the data-flavored version of the "supporting decisions with a single shared set of definitions" thread
 
 ## 6. Resources and Capacity: The problem isn't headcount, but the gap between goals and capability
 
@@ -92,8 +92,8 @@ Interestingly, both resource scarcity and resource abundance cause problems: whe
 
 Further reading:
 
-- [How to Run Without Overdrive When Resources Are Scarce](/writing/2023/03/working-under-resource-constraints/) · [Why Organizations Still Slow Down When Resources Are Abundant](/writing/2023/04/escaping-the-resource-curse/) · [Headcount Planning Is Not a Ratio Game](/writing/2023/04/headcount-is-not-a-ratio/)
-- [Time Management: A Conversation About "Busyness"](/writing/2021/06/one-on-one-time-and-commitment-boundaries/)
+- [How to Run Without Overdrive When Resources Are Scarce](/en/writing/2023/03/working-under-resource-constraints/) · [Why Organizations Still Slow Down When Resources Are Abundant](/en/writing/2023/04/escaping-the-resource-curse/) · [Headcount Planning Is Not a Ratio Game](/en/writing/2023/04/headcount-is-not-a-ratio/)
+- [Time Management: A Conversation About "Busyness"](/en/writing/2021/06/one-on-one-time-and-commitment-boundaries/)
 
 ## 7. Team and Growth: Development is passing on judgment, not instilling experience
 
@@ -105,10 +105,10 @@ Frontline management, in the end, is about shifting effort from "substitute labo
 
 Further reading:
 
-- [Team Growth Is Not Expansion](/writing/2022/01/team-growth-is-not-expansion/) · [Development Is Not Training](/writing/2023/06/team-development-compounds/) · [Three Growth Paths: Newcomers, Core Members, and Leads](/writing/2023/06/growth-paths-for-newcomers-core-and-leads/) · [Good Mentor Relationships and the First 90 Days for Newcomers](/writing/2020/10/mentor-relationship-and-first-90-days/)
-- [Three Outputs of Frontline Engineering Management](/writing/2023/03/frontline-engineering-management/) · [What to Design First When Building a Team from Zero](/writing/2023/06/from-zero-design-the-team/) · [How Far from Code Should Managers Stay](/writing/2023/03/how-close-managers-should-stay-to-code/) · [When Someone Loses Motivation](/writing/2023/03/when-a-team-member-loses-motivation/)
-- [How to Tell Whether Work Helps You Grow](/writing/2022/01/how-to-tell-if-work-helps-you-grow/) · [Capability Models and Honest Self-Assessment](/writing/2022/09/honest-self-assessment/) · [What to Look For When Evaluating Potential](/writing/2023/02/evaluating-potential-with-care/) · [Self-Iteration Is Not Pep Talk](/writing/2023/06/self-iteration-feedback-system/) · [Achievement Is Not a Reward](/writing/2021/01/achievement-is-not-a-reward/) · [A Self-Check List Before Promotion and Interviews](/writing/2023/08/career-growth-ten-questions/) · [Growth Milestones](/writing/2021/08/specific-growth-milestones/)
-- [Recruiting and Professional Relationships (series)](/columns/recruiting-and-professional-relationships/): from [technical hiring](/writing/2022/01/technical-hiring-long-term-judgment/), [referrals](/writing/2025/03/referral-is-mutual-recognition/), and [networking](/writing/2021/11/relationships-as-long-term-reciprocity/) to [recruiting branding](/writing/2024/05/recruiting-brand-is-a-trust-system/) and [campus recruiting](/writing/2022/07/campus-recruitment-training/)
+- [Team Growth Is Not Expansion](/en/writing/2022/01/team-growth-is-not-expansion/) · [Development Is Not Training](/en/writing/2023/06/team-development-compounds/) · [Three Growth Paths: Newcomers, Core Members, and Leads](/en/writing/2023/06/growth-paths-for-newcomers-core-and-leads/) · [Good Mentor Relationships and the First 90 Days for Newcomers](/en/writing/2020/10/mentor-relationship-and-first-90-days/)
+- [Three Outputs of Frontline Engineering Management](/en/writing/2023/03/frontline-engineering-management/) · [What to Design First When Building a Team from Zero](/en/writing/2023/06/from-zero-design-the-team/) · [How Far from Code Should Managers Stay](/en/writing/2023/03/how-close-managers-should-stay-to-code/) · [When Someone Loses Motivation](/en/writing/2023/03/when-a-team-member-loses-motivation/)
+- [How to Tell Whether Work Helps You Grow](/en/writing/2022/01/how-to-tell-if-work-helps-you-grow/) · [Capability Models and Honest Self-Assessment](/en/writing/2022/09/honest-self-assessment/) · [What to Look For When Evaluating Potential](/en/writing/2023/02/evaluating-potential-with-care/) · [Self-Iteration Is Not Pep Talk](/en/writing/2023/06/self-iteration-feedback-system/) · [Achievement Is Not a Reward](/en/writing/2021/01/achievement-is-not-a-reward/) · [A Self-Check List Before Promotion and Interviews](/en/writing/2023/08/career-growth-ten-questions/) · [Growth Milestones](/en/writing/2021/08/specific-growth-milestones/)
+- [Recruiting and Professional Relationships (series)](/en/columns/recruiting-and-professional-relationships/): from [technical hiring](/en/writing/2022/01/technical-hiring-long-term-judgment/), [referrals](/en/writing/2025/03/referral-is-mutual-recognition/), and [networking](/en/writing/2021/11/relationships-as-long-term-reciprocity/) to [recruiting branding](/en/writing/2024/05/recruiting-brand-is-a-trust-system/) and [campus recruiting](/en/writing/2022/07/campus-recruitment-training/)
 
 ## 8. Retrospective: Let experience return to the next decision
 
@@ -118,7 +118,7 @@ An effective retrospective cares about only one thing: the next time we face a s
 
 Further reading:
 
-- [A Reusable Engineering Retrospective](/writing/2020/10/reusable-engineering-retrospective/) · [Goals, Planning, and Retrospectives](/writing/2023/07/goals-retrospectives-and-next-actions/) · [Self-Iteration Is Not Pep Talk](/writing/2023/06/self-iteration-feedback-system/)
+- [A Reusable Engineering Retrospective](/en/writing/2020/10/reusable-engineering-retrospective/) · [Goals, Planning, and Retrospectives](/en/writing/2023/07/goals-retrospectives-and-next-actions/) · [Self-Iteration Is Not Pep Talk](/en/writing/2023/06/self-iteration-feedback-system/)
 
 ## This skeleton isn't a process — it's a sequence of judgments
 

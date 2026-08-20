@@ -2,7 +2,7 @@
 title: "Recruiting and Professional Relationships (I): Technical Hiring, from \"Filling a Seat\" to Building Long-Term Judgment"
 description: "Recruiting is not just about filling a vacancy; it is about continuously clarifying what the team needs and can offer, and calibrating judgment with every choice."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2022-01-01
 publishedAt: 2022-01-01
 type: essay

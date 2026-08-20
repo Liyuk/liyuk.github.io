@@ -2,7 +2,7 @@
 title: "Building a Return-to-China Proxy from Scratch: VLESS + Reality Pitfall Notes"
 description: From a temporary SSH direct connection, to accommodating phones and family, and finally converging on sing-box as a maintainable return-to-China network setup.
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 type: case-study

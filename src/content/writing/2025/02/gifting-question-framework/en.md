@@ -6,7 +6,7 @@ publishedAt: 2025-02-20
 type: note
 tags: [relationships, gifts, everyday-life, guide, field-notes]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2025/02/gifting-question-framework
 ---
 

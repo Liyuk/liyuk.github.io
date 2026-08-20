@@ -3,7 +3,7 @@
 // bolding the current entry; collapsible (expanded by default).
 import type { CollectionEntry } from 'astro:content';
 import { getColumn, getColumnEntries } from '../lib/taxonomy.ts';
-import { entryUrl } from '../lib/content-paths.ts';
+import { columnEntryUrl } from '../lib/content-paths.ts';
 import { i18n } from '../i18n/index.mjs';
 
 type ColumnMember = CollectionEntry<'writing'> | CollectionEntry<'gallery'>;
@@ -51,7 +51,7 @@ const currentId = entry.id;
               <em class="column-card-you">{ui.column.current}</em>
             </span>
           ) : (
-            <a href={entryUrl(colEntry, locale)}>
+            <a href={columnEntryUrl(colEntry, locale)}>
               <span class="column-card-order">{colEntry.data.column!.order}</span>
               <span>{colEntry.data.title}</span>
             </a>
@@ -65,7 +65,7 @@ const currentId = entry.id;
 
 <style>
   .column-card {
-    margin: 1.25rem 0 2.5rem;
+    margin: 1.25rem auto 2.5rem;
     max-width: var(--prose-w);
     border: 1px solid var(--line);
     border-radius: 10px;

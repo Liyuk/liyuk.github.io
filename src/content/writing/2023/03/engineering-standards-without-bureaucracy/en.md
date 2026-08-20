@@ -2,7 +2,7 @@
 title: "How Engineering Standards Reduce Rework Without Creating Bureaucracy"
 description: "Good standards don't turn every step into an approval; they make the key handoff points — where distortion, rework, and accidents are most likely — visible, discussable, and reusable."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-13
 publishedAt: 2023-03-13
 type: essay
@@ -11,7 +11,7 @@ column: { slug: technical-systems, order: 3 }
 translationKey: 2023/03/engineering-standards-without-bureaucracy
 ---
 
-> This article expands on the "closed loop" thread from [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "closed loop" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 Teams often swing between two kinds of failure: with no standards, everyone moves forward on personal experience and problems only surface at the last moment; once standards multiply, people get busy filling forms, attending meetings, and waiting for approvals, and delivery slows down instead.
 

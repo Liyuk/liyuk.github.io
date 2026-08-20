@@ -2,7 +2,7 @@
 title: "Information Sync Is Not CC: How to Help the Other Person Decide"
 description: "The goal of effective sync is not to send out everything you know, but to give a specific reader, at the right time, the information needed to judge, collaborate, or act."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-27
 publishedAt: 2023-03-27
 type: essay
@@ -10,7 +10,7 @@ tags: [communication, documentation, collaboration, work-leadership]
 translationKey: 2023/03/information-sync-for-decisions
 ---
 
-> This essay expands on the "alignment" thread in [*Management Retrospective*](/writing/2026/08/management-retrospective/).
+> This essay expands on the "alignment" thread in [*Management Retrospective*](/en/writing/2026/08/management-retrospective/).
 
 Pasting a long status update into a group chat does not mean the information sync is done. In the early days of leading collaborations, I kept falling into this trap: I thought I had "explained everything clearly," but the recipients couldn't see the conclusion, couldn't assess the risk, and didn't know whether they needed to act. The more information there is, the harder the key content can sometimes be to find.
 

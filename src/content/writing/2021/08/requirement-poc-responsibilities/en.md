@@ -2,7 +2,7 @@
 title: "Engineering POC: Responsibilities, Boundaries, and Delivery Loops in Cross-Functional Requirements"
 description: "An engineering POC is neither a project secretary nor someone who covers for everyone else; the role exists to keep goals, commitments, risks, and decisions clear in cross-functional collaboration."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-08-17
 publishedAt: 2021-08-17
 updatedAt: 2026-08-14
@@ -132,4 +132,4 @@ A POC's work should not stop at "code merged" or "task closed." Before exiting, 
 
 In the end, a POC's value lies not in how many things one person pushed forward, but in whether the team sees problems earlier, makes trade-offs more clearly, and can keep collaborating even when that person is not present.
 
-If you want to put these principles into everyday collaboration, you can continue reading [Engineering POC FAQ: Scheduling, Synchronization, Risk, and Delivery](/writing/2021/04/engineering-poc-faq-responsibility-boundaries/).
+If you want to put these principles into everyday collaboration, you can continue reading [Engineering POC FAQ: Scheduling, Synchronization, Risk, and Delivery](/en/writing/2021/04/engineering-poc-faq-responsibility-boundaries/).

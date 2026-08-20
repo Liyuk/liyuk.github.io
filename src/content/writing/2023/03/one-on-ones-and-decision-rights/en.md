@@ -2,7 +2,7 @@
 title: "1-on-1s Aren't Routine Meetings: Aligning Information, Expectations, and Decision Rights"
 description: "The core of a 1-on-1 is helping managers and reports understand each other's goals and needs; authorization must follow information and role boundaries rather than mistaking context for transferred decision rights."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-31
 publishedAt: 2023-03-31
 type: essay
@@ -10,7 +10,7 @@ tags: [management, communication, ownership, work-leadership]
 translationKey: 2023/03/one-on-ones-and-decision-rights
 ---
 
-> This article expands on the "alignment" thread from [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article expands on the "alignment" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 A 1-on-1 is not rehashing the weekly meeting. What it solves is aligning managers' and reports' goals and expectations: what opportunities and support the report wants, what results and risk information the manager needs, and whether each side's expectations of the other are realistic.
 

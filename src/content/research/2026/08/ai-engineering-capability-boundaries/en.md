@@ -2,7 +2,7 @@
 title: "Defining the Boundaries Before Bringing AI Capability into an Engineering Organization"
 description: "A position paper based on the author's experience driving AI infrastructure and pilots in a real engineering organization: it proposes four kinds of boundaries—context, responsibility, authorization, and measurement—and offers a falsifiable pilot protocol plus a minimal harness as a demonstration of putting them into practice."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.3'
