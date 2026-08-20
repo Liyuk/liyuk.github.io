@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   verify:
-    name: Verify site
+    name: verify
     concurrency:
       group: pages-verify-${{ github.ref }}
       cancel-in-progress: true
