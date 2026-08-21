@@ -12,7 +12,7 @@ hero:
   alt: "Fourfold homepage preview showing publication positioning, featured content, recent updates, and content-type navigation."
   caption: "Fourfold homepage preview from the neutral example site."
 draft: false
-tags: [Astro, static-site, personal-publication, information-architecture, open-source]
+tags: [astro, static-site, personal-publication, information-architecture, open-source]
 translationKey: 2026/08/astro-fourfold
 ---
 

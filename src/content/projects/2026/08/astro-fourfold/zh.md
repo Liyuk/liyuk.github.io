@@ -2,7 +2,7 @@
 title: Fourfold
 description: 面向独立作者、工程师、研究者和创作者的静态优先个人出版物 starter，把写作、专栏、项目、研究、影像与发现组织成可持续的内容系统。
 locale: zh-CN
-translationStatus: reviewed
+translationStatus: original
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 status: active
@@ -12,7 +12,7 @@ hero:
   alt: Fourfold 首页预览，展示出版物定位、精选内容、最近更新和内容类型导航。
   caption: 来自中性示例站点的 Fourfold 首页预览。
 draft: false
-tags: [Astro, 静态网站, 个人出版物, 信息架构, 开源]
+tags: [astro, static-site, personal-publication, information-architecture, open-source]
 translationKey: 2026/08/astro-fourfold
 ---
 
