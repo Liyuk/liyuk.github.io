@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { i18n } from '../../i18n/index.mjs';
+import { site } from '../../data/site.mjs';
+
+const locale = Astro.currentLocale ?? 'zh-CN';
+const copy = i18n(locale).page.consulting;
+---
+
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
+  <section class="page-heading shell about">
+    <p class="eyebrow">{copy.label}</p>
+    <h1>{copy.title[0]}<br />{copy.title[1]}</h1>
+    <p>{copy.description}</p>
+    <p class="about-intro">{copy.intro}</p>
+  </section>
+
+  <section class="shell section about-cooperate" aria-labelledby="consulting-services-heading">
+    <p class="eyebrow">{copy.servicesEyebrow}</p>
+    <h2 id="consulting-services-heading">{copy.servicesTitle}</h2>
+    <ul class="about-cooperate-list">
+      {copy.services.map((service) => (
+        <li>
+          <strong>{service.title}</strong>
+          <span>{service.description}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="shell section about-cooperate" aria-labelledby="consulting-format-heading">
+    <p class="eyebrow">{copy.formatEyebrow}</p>
+    <h2 id="consulting-format-heading">{copy.formatTitle}</h2>
+    <p class="about-cooperate-desc">{copy.formatDescription}</p>
+  </section>
+
+  <section class="shell section about-cooperate" aria-labelledby="consulting-pricing-heading">
+    <p class="eyebrow">{copy.pricingEyebrow}</p>
+    <h2 id="consulting-pricing-heading">{copy.pricingTitle}</h2>
+    <p class="about-cooperate-desc">{copy.pricingDescription}</p>
+  </section>
+
+  <section class="shell section about-contact" aria-labelledby="consulting-contact-heading">
+    <p class="eyebrow">{copy.contactEyebrow}</p>
+    <h2 id="consulting-contact-heading">{copy.contactTitle}</h2>
+    <p class="about-cooperate-desc">{copy.contactDescription}</p>
+    <a class="text-link" href={`mailto:${site.email}`}>{copy.contactAction}: {site.email} <span aria-hidden="true">↗</span></a>
+    {locale !== 'en' && <p class="about-cooperate-desc">微信：{site.wechat}</p>}
+  </section>
+</BaseLayout>
