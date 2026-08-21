@@ -9,7 +9,7 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [data, metrics, measurement, collaboration, reproducibility, technology]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/data-measurement-organizational-protocol
 ---
 

@@ -11,18 +11,18 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import Comments from '../../components/Comments.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import RelatedEntries from '../../components/RelatedEntries.astro';
-import { notDraft } from '../../lib/content-model.ts';
+import { previewable } from '../../lib/content-model.ts';
 import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { writingSlug } from '../../lib/content-paths.ts';
-import { columnUrl, entryUrl, writingUrl } from '../../lib/content-paths.ts';
+import { columnUrl, columnEntryUrl, writingUrl } from '../../lib/content-paths.ts';
 import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
-import { publishedDate, getChronologicalNeighbors } from '../../lib/timeline.ts';
+import { publishedDate } from '../../lib/timeline.ts';
 import { readingMinutes } from '../../lib/reading-time.ts';
 
 export async function getStaticPaths() {
-  const writing = await getCollection('writing', notDraft);
+  const writing = await getCollection('writing', previewable);
   return groupByLocaleVariant(writing, (entry) => writingSlug(entry.id)).map(({ slug, variants }) => ({
     params: { slug },
     props: { variants },
@@ -46,19 +46,26 @@ const [allResearch, allProjects] = await Promise.all([
   getCollection('research', ({ data }) => !data.draft && data.locale === entry.data.locale),
   getCollection('project', ({ data }) => !data.draft && data.locale === entry.data.locale),
 ]);
-const allEntries = [...allWriting, ...allResearch, ...allProjects, ...allGalleries];
-const relatedEntries = getRelatedEntries(allEntries, entry, RELATED_LIMIT, locale);
+const relatedEntries = getRelatedEntries([...allWriting, ...allResearch, ...allProjects, ...allGalleries], entry, RELATED_LIMIT, locale);
 const formatDate = (date: Date) => formatFullDate(date, locale);
 // 时间序上一篇/下一篇（按发布时间，含打赏后导航）。与专栏章节导航分开：
 // 专栏文章两者都显示——章节导航走专栏顺序，时间序导航走发布时间顺序。
-const { previous: previousPost, next: nextPost } = getChronologicalNeighbors(allWriting, entry);
+const chronological = allWriting
+  .slice()
+  .sort((a, b) => publishedDate(b).valueOf() - publishedDate(a).valueOf());
+const chronoIndex = chronological.findIndex((e) => e.id === entry.id);
+const previousPost = chronoIndex >= 0 ? chronological[chronoIndex - 1] : undefined;
+const nextPost = chronoIndex >= 0 ? chronological[chronoIndex + 1] : undefined;
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 // Show the TOC only when there is a real outline: at least two h2 sections.
 // (Previously gated on raw heading count, which could trigger on a long flat
 // list of h3s while the TOC only ever renders depth ≤ 3.)
 const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 ---
-<BaseLayout title={`${entry.data.title} — ${ui.name}`} description={entry.data.description} type="article" publishedAt={isoDate(publishedDate(entry))}>
+<script is:inline>
+  document.documentElement.dataset.readingContext = new URLSearchParams(window.location.search).get('context') === 'column' ? 'column' : 'chronological';
+</script>
+<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.name}`} description={entry.data.description} type="article" pageKind="writing" section="writing" articleTitle={entry.data.title} keywords={entry.data.tags} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)}>
   <ReadingProgress />
   <article class="article shell">
     <header><p class="eyebrow">{ui.navigation.writing}</p><h1>{entry.data.title}</h1><p class="article-dek" data-pagefind-meta="description">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{ui.entry.publishedAt} {formatDate(publishedDate(entry))}</time>{entry.data.updatedAt && <time datetime={isoDate(entry.data.updatedAt)}>{ui.entry.updatedAt} {formatDate(entry.data.updatedAt)}</time>}<span>{ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span></div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" pagefindFilter /></header>
@@ -70,8 +77,8 @@ const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2
     <TipCard locale={locale} />
     <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="writing" />
     <RssSubscribe locale={locale} />
-    {(previousPost || nextPost) && <nav class="post-pagination" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousPost && <a class="prev" href={writingUrl(previousPost.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousPost.data.title}</span></a>}</div><div class="pagination-col">{nextPost && <a class="next" href={writingUrl(nextPost.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextPost.data.title}</span></a>}</div></nav>}
-    {entry.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(entry.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(entry.data.column.slug, locale)?.label ?? '')}</a>{previousColumnEntry && <a href={entryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={entryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
+    {(previousPost || nextPost) && <nav class="post-pagination" data-reading-nav="chronological" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousPost && <a class="prev" href={writingUrl(previousPost.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousPost.data.title}</span></a>}</div><div class="pagination-col">{nextPost && <a class="next" href={writingUrl(nextPost.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextPost.data.title}</span></a>}</div></nav>}
+    {entry.data.column && <nav class="column-pagination" data-reading-nav="column" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(entry.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(entry.data.column.slug, locale)?.label ?? '')}</a>{previousColumnEntry && <a class="prev" href={columnEntryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a class="next" href={columnEntryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
     <Comments lang={locale} />
     {relatedEntries.length > 0 && <RelatedEntries items={relatedEntries} locale={locale} />}
   </article>

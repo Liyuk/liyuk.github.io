@@ -2,7 +2,7 @@
 title: "How to Tell if a Job Is Actually Helping You Grow"
 description: "Don't judge a job by title, busyness, or short-term evaluation. Look at whether it leaves portable changes in how you understand, spend time, and execute."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2022/01/how-to-tell-if-work-helps-you-grow
 createdAt: 2022-01-01
 publishedAt: 2022-01-01

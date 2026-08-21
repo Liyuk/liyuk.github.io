@@ -2,7 +2,7 @@
 title: "Why Engineers Need Product Judgment"
 description: "From completing requirements to taking part in planning, how engineers place technical implementation between user problems and business outcomes."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2022-02-01
 publishedAt: 2022-02-01
 type: essay

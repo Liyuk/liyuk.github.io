@@ -2,7 +2,7 @@
 title: "Start by Defining the Problem: How to Open a One-on-One"
 description: "When you don't know how to open or what to talk about, begin by defining the problem clearly. A question-and-answer checklist that managers and reports alike can follow."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-03-15
 publishedAt: 2021-03-15
 type: essay

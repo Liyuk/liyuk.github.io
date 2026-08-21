@@ -2,7 +2,7 @@
 title: "Departure Under Sunlit Flames"
 description: "A farewell, reflection, and word of thanks at the end of an eight-and-a-half-year career journey."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-05-29
 publishedAt: 2026-05-29
 type: essay

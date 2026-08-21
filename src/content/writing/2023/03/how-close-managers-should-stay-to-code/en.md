@@ -6,7 +6,7 @@ publishedAt: 2023-03-09
 type: essay
 tags: [engineering-management, leadership, engineering, work-leadership]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/03/how-close-managers-should-stay-to-code
 ---
 

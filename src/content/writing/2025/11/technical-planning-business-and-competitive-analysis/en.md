@@ -8,7 +8,7 @@ type: essay
 tags: [technical-planning, engineering-management, strategy, decision-making, technology]
 column: { slug: technical-systems, order: 1 }
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2025/11/technical-planning-business-and-competitive-analysis
 ---
 

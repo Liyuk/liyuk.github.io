@@ -2,7 +2,7 @@
 title: "How Distributed Teams Reduce Context Loss"
 description: "The most expensive cost of remote collaboration is often not the time difference but the repeated loss of context. Clear closed-loop responsibility, asynchronous documentation, and limited overlap time make collaboration more stable."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-25
 publishedAt: 2023-03-25
 type: essay
@@ -11,7 +11,7 @@ column: { slug: engineering-collaboration, order: 2 }
 translationKey: 2023/03/reducing-context-loss-in-distributed-teams
 ---
 
-> This essay expands on the "context" thread from [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This essay expands on the "context" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 Two teams can work as if separated by great distance even in the same time zone. It is not because the network is slow, but because as a decision moves from proposal, to explanation, to handoff, to execution, its context keeps getting compressed — until only a sentence like "could you help change this" remains.
 

@@ -2,42 +2,44 @@
 
 Personal site for writing, research, projects & photography — bilingual, built with Astro.
 
-## Publishing
+## Architecture at a glance
+
+The repository is a static Astro site with four content collections. The source of truth is the schema and shared helpers in `src/content.config.ts` and `src/lib/`; pages should consume those helpers instead of duplicating routing or filtering rules.
+
+| Collection | Source directory                       | Public route              | Content shape               |
+| ---------- | -------------------------------------- | ------------------------- | --------------------------- |
+| `writing`  | `src/content/writing/YYYY/MM/<slug>/`  | `/writing/<dated-slug>/`  | essays, notes, case studies |
+| `research` | `src/content/research/YYYY/MM/<slug>/` | `/research/<dated-slug>/` | papers and research notes   |
+| `project`  | `src/content/projects/YYYY/MM/<slug>/` | `/projects/<dated-slug>/` | projects and works          |
+| `gallery`  | `src/content/galleries/<slug>.md`      | `/photos/<slug>/`         | image galleries             |
+
+`project` is the collection name but its public route is `/projects/`; use `src/lib/content-paths.ts` for every content URL. Locale-free source paths use `zh.md` and `en.md`; English routes add the `/en/` prefix, while the default Chinese routes do not. `src/lib/taxonomy.ts` owns registered tags and columns, and `src/i18n/index.mjs` owns shared UI copy.
+
+At build time, content flows through schema validation, collection filters, Astro rendering, sitemap generation, and Pagefind indexing. Draft content is never part of the production build, search index, RSS, or sitemap. In development, only direct detail routes for real drafts are previewable; they are `noindex`, while lists and archives remain published-only.
 
 Content is created interactively, gated by a pre-push check, then deployed automatically.
 
 ```sh
 npm run new:post        # create a writing / research / project entry (draft by default)
 npm run new:gallery     # create a photography gallery (drops images into the terminal)
-npm run publish <slug>  # flip a drafted entry to published (draft: false)
+npm run publish <slug>  # publish the sibling pair and normalize original/reviewed status
 ```
 
 All new content is `draft: true` — flip it to `false` (or run `npm run publish <slug>`) to publish. Pushing to `master`
-runs the full publish gate (image audit + tests + build) via a pre-push hook, then
-deploys through `.github/workflows/deploy.yml`.
+runs the full publish gate (format + content/image/column audits + tests + build + SEO/GEO/link audits) via a pre-push hook. Pull requests run the same verification; a successful push to `master` deploys through `.github/workflows/deploy.yml`.
 
 ```sh
 git commit -m "publish: ..."
 git push                # publish:check runs automatically; push is blocked on failure
 ```
 
-Skip the gate in an emergency with `git push --no-verify`. Full workflow, including
-field-by-field details for each content type, lives in `docs/publishing-workflow.md`.
+Skip the gate in an emergency with `git push --no-verify`. Personal workflow notes may live under local `docs/`, but they are ignored by Git and are not repository contracts.
 
-The site is bilingual. Chinese is the source of truth; every published article has an
-English `en.md` sibling served under the same URL with the `/en/` prefix. English
-translations are machine-generated and marked `translationStatus: draft` until
-human-reviewed. Translation conventions live in `docs/translation-spec.md`; the
-English UI shell lives in `src/i18n/index.mjs`. API secrets never belong in this
-repository.
+The site is bilingual. Chinese is the source of truth. Published Chinese files use `translationStatus: original`, published English files use `translationStatus: reviewed`, and only unpublished English files may use `translationStatus: draft`. Writing, projects, galleries, and current research entries require an English sibling before publication; English archives and RSS remain English-only. `npm run audit:content` enforces these rules. The English UI shell lives in `src/i18n/index.mjs`. API secrets never belong in this repository.
 
 ## Subscriber notifications (Buttondown)
 
-Publishing a post also notifies Buttondown subscribers. `.github/workflows/notify-buttondown.yml`
-runs on every push to `master`: it diffs the pushed content, finds the posts that became
-published, and sends a short "new post" email (title + summary + link) via
-`scripts/notify-buttondown.mjs`. This is the free substitute for Buttondown's paid
-RSS-to-email feature; emails are matched by subject, so re-runs never double-send.
+After GitHub Pages deploys successfully, the `notify` job in `.github/workflows/deploy.yml` diffs the pushed content and sends a short "new post" email (title + summary + link) through `scripts/notify-buttondown.mjs`. It only notifies newly added published entries or `draft: true → false` transitions; ordinary edits to already published entries do not trigger a new-post email. This sequencing prevents a subscriber email from preceding a failed deployment. Verification runs may be cancelled for newer pushes, but deploy and notify jobs are queued independently so a completed deployment's notification is not cancelled by a later verify run. A notification failure remains visible and can be retried without rolling back the deployed site; existing emails are matched by subject and canonical URL; legacy subject-only records remain compatible.
 
 Set the API key as a repository secret so it never lands in git:
 
@@ -54,28 +56,52 @@ npm run notify:buttondown          # preview (no network)
 # npm run notify:buttondown -- --apply   # actually send (requires the key)
 ```
 
-## Content capabilities
+## Verification commands
+
+Use Node `24.18.0` from `.node-version` and `npm ci` so local dependencies and the GitHub Actions graph match. The main checks are:
+
+```sh
+npm test                 # pure Node contracts and audit tests
+npm run check            # Astro schema and type diagnostics
+npm run build            # production HTML, sitemap, and Pagefind output
+npm run publish:check    # format, content/image/column audits, tests, build, SEO, links
+npm run test:e2e:ci      # browser smoke against the existing dist/ build
+npm run test:e2e:fresh   # build, then browser smoke
+npm run test:a11y        # axe scan against the existing dist/ build
+npm run test:a11y:fresh  # build, then axe scan
+npm run test:draft:dev   # isolated Astro dev server and draft-route smoke
+```
+
+`publish:check` does not start a browser or install Chromium; CI builds once in `publish:check`, then runs `test:draft:dev` and `test:browser:ci` against the intended development and existing `dist/` contracts. Use the `:fresh` browser commands when running those checks outside the publish gate. `npm run test:e2e` is the interactive variant and expects an already running server at `E2E_BASE` (default `http://localhost:4321`). Build-dependent audits such as `audit:seo` and `audit:links` must run after a fresh `npm run build`.
 
 Markdown entries support the following out of the box. A copy-paste demo lives in
 `src/content/writing/_template.md`.
 
-| Capability | Syntax | Notes |
-| ---------- | ------ | ----- |
-| Code blocks | ```` ```ts ```` … ```` ``` ```` | Shiki syntax highlighting, light/dark aware |
-| Mermaid | ```` ```mermaid ```` … ```` ``` ```` | Rendered to inline SVG at build time |
-| Images | `![alt](./images/x.webp)` | Auto-optimized (WebP, resized) |
-| LaTeX math | `$E=mc^2$` / `$$…$$` | Rendered by KaTeX at build time |
+| Capability  | Syntax                    | Notes                                       |
+| ----------- | ------------------------- | ------------------------------------------- |
+| Code blocks | ` ```ts ` … ` ``` `       | Shiki syntax highlighting, light/dark aware |
+| Mermaid     | ` ```mermaid ` … ` ``` `  | Rendered to inline SVG at build time        |
+| Images      | `![alt](./images/x.webp)` | Auto-optimized (WebP, resized)              |
+| LaTeX math  | `$E=mc^2$` / `$$…$$`      | Rendered by KaTeX at build time             |
 
 Only `mermaid` is excluded from syntax highlighting; every other fenced block gets
 Shiki highlighting. Frontmatter `hero` / `cover` images and Mermaid/KaTeX are all
 rendered statically — no client-side JavaScript is shipped for them.
 
-## Local development
+## Draft preview in development
+
+Run the Astro development server and open a draft's locale-free detail URL directly:
 
 ```sh
-npm install
-npm run dev
+npm run dev -- --host 127.0.0.1
+# http://127.0.0.1:4321/writing/2026/08/dsh-plugin-architecture-stability/
 ```
+
+Development-only draft detail pages are not listed in public archives, are marked `noindex`, and are never emitted by `npm run build`. Template files are excluded from this preview path. If a page returns `Tsconfig not found astro/tsconfigs/strict`, reinstall dependencies with `npm ci` before debugging the content; the error means Astro is not resolvable locally and is not a draft-content error.
+
+## Local notes
+
+The `docs/` directory is intentionally ignored. It contains personal workflow notes, editorial plans, and source material that are not part of the repository or its automated checks.
 
 ## Legacy site
 

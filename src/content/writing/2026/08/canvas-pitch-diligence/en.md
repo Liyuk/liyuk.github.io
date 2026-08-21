@@ -25,7 +25,7 @@ These three are lenses with different purposes — **partly overlapping, partly 
 
 ## 1. Business model canvas: made for yourself
 
-The nine boxes, and the "four on each side with one in the middle" layout — see [Business model canvas: nine boxes](/writing/2026/08/business-model-canvas/).
+The nine boxes, and the "four on each side with one in the middle" layout — see [Business model canvas: nine boxes](/en/writing/2026/08/business-model-canvas/).
 
 - Purpose: draw the business logic clearly and check whether any box is empty or any two boxes contradict each other;
 - Perspective: **structural self-consistency** (the nine boxes explain each other), but it cannot verify "empirical truth" — whether customers really have this pain and really will pay must be tested by the market;
@@ -122,7 +122,7 @@ First get one thing straight: the fraud was not uncovered by "investor due dilig
 
 Apply the same three lenses to Meituan and the outcome is different:
 
-- **Canvas**: a multi-sided platform (consumers × merchants × riders); for the nine boxes see "Business model archetypes and examples" in [Business model canvas: nine boxes](/writing/2026/08/business-model-canvas/).
+- **Canvas**: a multi-sided platform (consumers × merchants × riders); for the nine boxes see "Business model archetypes and examples" in [Business model canvas: nine boxes](/en/writing/2026/08/business-model-canvas/).
 - **Pitch**: a growth story of "high-frequency food delivery builds the user base, low-frequency high-margin in-store / hotel-travel monetizes."
 - **Due diligence**: the key checks are rider fulfillment costs, per-order economics, merchant commission rates, and the competitive landscape — these **hold up under scrutiny**, so it passed. But Meituan isn't a "clean" sample either: the 2021 "either-or" (exclusivity) antitrust penalty, disputes over rider employment and social-security compliance, and long-running losses plus huge losses in new businesses are all red flags on the DD checklist under "compliance, cash flow, earnings sustainability."
 

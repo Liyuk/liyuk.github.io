@@ -33,18 +33,34 @@ export async function findEntriesBySlug(slug) {
   return results;
 }
 
-// Flip draft true→false in a frontmatter block. Returns the new content, or null if unchanged.
-export function unDraft(content) {
+// Update publication and translation fields in a frontmatter block. Returns the
+// new content, or null when the entry already satisfies the public contract.
+export function publishFrontmatter(content, locale) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
   if (!match) return null;
   const frontmatter = match[1];
-  if (/^draft:[ \t]*true$/m.test(frontmatter)) {
-    const updated = frontmatter.replace(/^draft:[ \t]*true$/m, 'draft: false');
-    return content.replace(match[0], `---\n${updated}\n---`);
+  const expectedStatus = locale === 'zh-CN' ? 'original' : 'reviewed';
+  let updated = frontmatter;
+
+  if (/^draft:[ \t]*true$/m.test(updated)) {
+    updated = updated.replace(/^draft:[ \t]*true$/m, 'draft: false');
   }
-  if (/^draft:[ \t]*false$/m.test(frontmatter)) return null; // already published
-  // No draft line → treat as published (default false); nothing to change.
-  return null;
+  if (/^draft:[ \t]*false$/m.test(updated)) {
+    // Already public; keep the explicit field stable while normalizing status.
+  }
+  if (/^translationStatus:[ \t]*[^\n]+$/m.test(updated)) {
+    updated = updated.replace(/^translationStatus:[ \t]*[^\n]+$/m, `translationStatus: ${expectedStatus}`);
+  } else {
+    updated = `translationStatus: ${expectedStatus}\n${updated}`;
+  }
+  if (updated === frontmatter) return null;
+  return content.replace(match[0], `---\n${updated}\n---`);
+}
+
+export const unDraft = (content, locale = 'en') => publishFrontmatter(content, locale);
+
+function localeForFile(file) {
+  return file.endsWith('/en.md') || file.endsWith('.en.md') ? 'en' : 'zh-CN';
 }
 
 export async function publishBySlug(slug) {
@@ -54,7 +70,7 @@ export async function publishBySlug(slug) {
   const published = [];
   for (const entry of matches) {
     const content = await readFile(entry.file, 'utf8');
-    const next = unDraft(content);
+    const next = publishFrontmatter(content, localeForFile(entry.file));
     if (next) {
       await writeFile(entry.file, next, 'utf8');
       published.push({ ...entry, changed: true });

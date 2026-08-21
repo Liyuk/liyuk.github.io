@@ -2,7 +2,7 @@
 title: "Interpersonal Risk Analysis Protocol: From Relationship Material to Facts, Hypotheses, and Actions"
 description: "A research-design and protocol paper: it proposes a material-organization and risk-annotation protocol aimed at safety actions, covering intimate and general interpersonal relationships, and defines AI's role as a structured co-pilot."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/relationship-material-analysis-m1-m5
 createdAt: 2026-08-14
 publishedAt: 2026-08-14

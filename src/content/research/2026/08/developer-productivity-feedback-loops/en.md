@@ -2,7 +2,7 @@
 title: "Developer Productivity Is Not a Tool Catalog, but a Feedback System"
 description: "A research synthesis and position paper: defining engineering productivity as a continuously shortening \"propose change — get trustworthy feedback — correct safely\" loop, with metrics, a default path, and a falsifiable pilot protocol."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/developer-productivity-feedback-loops
 createdAt: 2026-08-14
 publishedAt: 2026-08-14

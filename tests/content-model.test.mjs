@@ -2,14 +2,26 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-import { notDraft, publishedIn } from '../src/lib/content-model.ts';
+import { hasValidPublishedTranslationStatus, isPreviewable, notDraft, previewable, publishedIn, translationStatusForLocale } from '../src/lib/content-model.ts';
 import { site } from '../src/data/site.mjs';
 import { i18n } from '../src/i18n/index.mjs';
 import { groupByYear, groupByYearMonth, getChronologicalNeighbors, sortByCreatedAt, sortByLastUpdatedAt } from '../src/lib/timeline.ts';
-import { columnUrl, contentUrl, entryUrl, galleryUrl, projectUrl, researchUrl, tagUrl, writingUrl } from '../src/lib/content-paths.ts';
+import { columnEntryUrl, columnUrl, contentUrl, entryUrl, galleryUrl, projectUrl, researchUrl, tagUrl, writingUrl } from '../src/lib/content-paths.ts';
 import { parseContentDate } from '../src/lib/content-date.ts';
 import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, getTag } from '../src/lib/taxonomy.ts';
 import { getGalleryCover } from '../src/lib/gallery.ts';
+
+test('previewable exposes real drafts only in development', () => {
+  const draft = { id: '2026/08/example/zh', data: { draft: true, locale: 'zh-CN' } };
+  const published = { id: '2026/08/example/zh', data: { draft: false, locale: 'zh-CN' } };
+  const template = { id: '_template', data: { draft: true, locale: 'zh-CN' } };
+
+  assert.equal(isPreviewable(draft, true), true);
+  assert.equal(isPreviewable(draft, false), false);
+  assert.equal(isPreviewable(published, false), true);
+  assert.equal(previewable(draft), false);
+  assert.equal(isPreviewable(template, true), false);
+});
 
 test('the published predicates select non-draft content for the right locale', () => {
   assert.equal(notDraft({ data: { draft: false, locale: 'zh-CN' } }), true);
@@ -19,6 +31,13 @@ test('the published predicates select non-draft content for the right locale', (
   assert.equal(publishedIn('en')({ data: { draft: false, locale: 'en' } }), true);
 });
 
+test('published translation status matches the page locale', () => {
+  assert.equal(translationStatusForLocale('zh-CN'), 'original');
+  assert.equal(translationStatusForLocale('en'), 'reviewed');
+  assert.equal(hasValidPublishedTranslationStatus({ data: { draft: false, locale: 'en', translationStatus: 'reviewed' } }), true);
+  assert.equal(hasValidPublishedTranslationStatus({ data: { draft: false, locale: 'en', translationStatus: 'draft' } }), false);
+  assert.equal(hasValidPublishedTranslationStatus({ data: { draft: true, locale: 'en', translationStatus: 'draft' } }), true);
+});
 test('shared public copy lives in one site configuration', () => {
   assert.equal(site.locale, 'zh-CN');
   assert.equal(site.name, 'Liyuk');
@@ -45,7 +64,6 @@ test('chronological neighbors follow publication order and omit missing sides', 
   const newest = { id: 'newest', data: { createdAt: new Date('2020-01-01'), publishedAt: new Date('2026-08-20') } };
   const middle = { id: 'middle', data: { createdAt: new Date('2020-01-02'), publishedAt: new Date('2026-08-19') } };
   const oldest = { id: 'oldest', data: { createdAt: new Date('2020-01-03'), publishedAt: new Date('2026-08-18') } };
-
   assert.deepEqual(getChronologicalNeighbors([oldest, newest, middle], newest), { previous: undefined, next: middle });
   assert.deepEqual(getChronologicalNeighbors([oldest, newest, middle], middle), { previous: newest, next: oldest });
   assert.deepEqual(getChronologicalNeighbors([oldest, newest, middle], oldest), { previous: middle, next: undefined });
@@ -58,6 +76,8 @@ test('detail URL helpers map collection keys to public routes', () => {
   assert.equal(researchUrl('2026/08/example/zh'), '/research/2026/08/example/');
   assert.equal(researchUrl('2026/08/example/en', 'en'), '/en/research/2026/08/example/');
 });
+
+
 test('writing is ordered by publication date', () => {
   const olderPublishedLater = { data: { createdAt: new Date('2012-06-01'), publishedAt: new Date('2026-08-14') } };
   const newer = { data: { createdAt: new Date('2018-04-02'), publishedAt: new Date('2018-04-02') } };
@@ -105,6 +125,14 @@ test('column members resolve to writing or gallery URLs in the current locale', 
   assert.equal(entryUrl(gallery, 'en'), '/en/photos/maomao/');
 });
 
+test('column chapter URLs preserve an explicit reading context', () => {
+  const essay = { id: '2026/08/example/zh', collection: 'writing', data: { locale: 'zh-CN' } };
+  const gallery = { id: 'maomao', collection: 'gallery', data: { slug: 'maomao', locale: 'zh-CN' } };
+  assert.equal(columnEntryUrl(essay), '/writing/2026/08/example/?context=column');
+  assert.equal(columnEntryUrl(essay, 'en'), '/en/writing/2026/08/example/?context=column');
+  assert.equal(columnEntryUrl(gallery, 'en'), '/en/photos/maomao/?context=column');
+  assert.equal(entryUrl(essay, 'en'), '/en/writing/2026/08/example/');
+});
 test('dated content can be grouped into year and month archives', () => {
   const august = { data: { createdAt: new Date('2026-08-13') } };
   const earlierAugust = { data: { createdAt: new Date('2026-08-03') } };

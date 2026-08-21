@@ -2,7 +2,7 @@
 title: "Product Sense: How Engineers and PMs Get Clear on Whether a Feature Is Worth Building"
 description: "Product sense isn't guessing at requirements. A ready-to-use list of talking points, from two angles: how engineers should understand the product, and what product managers actually do."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2022-03-12
 publishedAt: 2022-03-12
 type: essay

@@ -2,7 +2,7 @@
 title: "Team Growth Is Not Expansion: Efficiency, Succession, and Continuity"
 description: "A team is not simply the sum of its headcount and abilities. Real growth means forming, over time, more reliable collaboration, transferable experience, and the capacity to keep solving problems when circumstances change."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2022-01-01
 publishedAt: 2022-01-01
 type: essay
@@ -11,7 +11,7 @@ column: { slug: team-building, order: 3 }
 translationKey: 2022/01/team-growth-is-not-expansion
 ---
 
-> This essay expands on the "Team and Growth" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This essay expands on the "Team and Growth" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 Team growth is often mistaken for two things: having more people, or bringing in a few very experienced ones. These can certainly raise the team's ceiling, but they do not automatically form a team that can keep solving problems.
 

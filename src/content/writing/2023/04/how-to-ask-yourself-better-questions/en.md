@@ -7,7 +7,7 @@ type: essay
 tags: [thinking, learning, reflection, problem-solving, work-leadership]
 column: { slug: thinking-training, order: 3 }
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/04/how-to-ask-yourself-better-questions
 ---
 

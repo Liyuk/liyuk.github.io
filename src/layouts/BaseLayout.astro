@@ -6,6 +6,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site.mjs';
 import { i18n } from '../i18n/index.mjs';
+import { buildStructuredData, type PageKind, type StructuredDataImage } from '../lib/structured-data.ts';
 
 const {
   title: titleProp,
@@ -17,7 +18,39 @@ const {
   type = 'website',
   image,
   publishedAt,
-} = Astro.props;
+  updatedAt,
+  articleTitle,
+  keywords = [],
+  pageKind = type === 'article' ? 'writing' : 'website',
+  section,
+  citations = [],
+  repositoryUrl,
+  paperUrl,
+  status,
+  version,
+  isWork = false,
+  galleryImages = [],
+} = Astro.props as {
+  title?: string;
+  description?: string;
+  locale?: string;
+  noindex?: boolean;
+  type?: string;
+  image?: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  articleTitle?: string;
+  keywords?: string[];
+  pageKind?: PageKind;
+  section?: string;
+  citations?: string[];
+  repositoryUrl?: string;
+  paperUrl?: string;
+  status?: string;
+  version?: string;
+  isWork?: boolean;
+  galleryImages?: StructuredDataImage[];
+};
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
 const isEnglish = locale === 'en';
@@ -28,7 +61,7 @@ const description = descriptionProp ?? (isEnglish ? site.descriptionEn : site.de
 const rootPath = Astro.url.pathname.replace(/^\/en(?=\/|$)/, '');
 const zhUrl = new URL(getRelativeLocaleUrl('zh-CN', rootPath), Astro.site);
 const enUrl = new URL(getRelativeLocaleUrl('en', rootPath), Astro.site);
-const defaultUrl = isEnglish ? new URL('/', Astro.site) : new URL(Astro.url.pathname, Astro.site);
+const defaultUrl = zhUrl;
 // Canonical URL for social tags: use the canonical (locale) URL we already
 // compute, resolved against the configured site.
 const canonicalUrl = new URL(isEnglish ? enUrl : zhUrl, Astro.site).href;
@@ -76,25 +109,34 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <meta property="og:image:height" content="630" />
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content={ogLocale} />
-    <meta property="og:site_name" content={isEnglish ? site.nameEn : site.brand} />
+    <meta property="og:site_name" content={isEnglish ? site.brandEn : site.brand} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <!-- Article structured data (Google rich results / Discover) -->
-    {ogType === 'article' && (
-      <script type="application/ld+json" is:inline set:html={JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: title,
-        description,
-        image: ogImage,
-        datePublished: publishedAt ?? undefined,
-        author: { '@type': 'Person', name: site.name },
-        publisher: { '@type': 'Organization', name: site.brand },
-      })} />
-    )}
+    <!-- Structured data graph: stable site entities plus the page's typed content node. -->
+    {!noindex && <script type="application/ld+json" is:inline set:html={JSON.stringify(buildStructuredData({
+      origin: Astro.site?.origin ?? 'https://liyuk.com',
+      locale,
+      canonicalUrl,
+      title: articleTitle ?? title,
+      description,
+      pageKind,
+      section,
+      image: ogImage,
+      galleryImages,
+      publishedAt,
+      updatedAt,
+      keywords,
+      citations,
+      repositoryUrl,
+      paperUrl,
+      status,
+      version,
+      isWork,
+    }))} />}
     <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3fce6f5df2fd44549cddc9a34e63d7e4"}'></script>
   </head>
   <body>

@@ -2,7 +2,7 @@
 title: "Why Technical Knowledge Bases Need Entry Pages"
 description: "An entry page is not a pile of links, but the shared memory a constantly changing project leaves for its team: it helps readers enter by task, judge whether information is still valid, and find the people responsible for maintaining it."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2020-01-06
 publishedAt: 2020-01-06
 updatedAt: 2026-08-14
@@ -12,7 +12,7 @@ column: { slug: documentation, order: 2 }
 translationKey: 2020/01/why-technical-knowledge-bases-need-entry-pages
 ---
 
-> This article is an expansion of the "context" thread in [Management Retrospective](/writing/2026/08/management-retrospective/).
+> This article is an expansion of the "context" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).
 
 A technical knowledge base often starts with a shared folder or a search box. When there aren't many documents, this is enough; but as systems, business lines, and participants keep growing, the problem quickly shifts from "is there documentation" to "where should I start reading." I came to realize the value of an entry page in a team with a lot of documentation — the content was rich enough, but every newcomer still had to rely on senior colleagues to point them, one by one, to what they should read.
 

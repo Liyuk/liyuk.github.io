@@ -7,7 +7,7 @@ type: essay
 tags: [management, team, growth, work-leadership]
 column: { slug: engineering-collaboration, order: 5 }
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2023/03/when-a-team-member-loses-motivation
 ---
 

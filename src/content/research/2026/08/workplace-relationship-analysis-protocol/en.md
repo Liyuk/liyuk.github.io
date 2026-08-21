@@ -9,7 +9,7 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [workplace, power, professional-relationships, risk-analysis, human-ai-collaboration, work-leadership]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/workplace-relationship-analysis-protocol
 ---
 

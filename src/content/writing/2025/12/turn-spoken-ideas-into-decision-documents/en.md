@@ -2,7 +2,7 @@
 title: "Turning Spoken Ideas into Decision-Ready Documents"
 description: "Distill scattered thoughts into a document that can be discussed and acted on: tools handle the organizing, people handle the judgment."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2025-12-31
 publishedAt: 2025-12-31
 type: essay

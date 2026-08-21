@@ -45,7 +45,7 @@ graph TD
 ![图片的替代文字](./images/example.webp)
 ```
 
-文章头图用 frontmatter 的 `hero` 字段（见 `docs/publishing-workflow.md`）。
+文章头图用 frontmatter 的 `hero` 字段（见 `docs/engineering/content-publishing-workflow.md`）。
 
 ## 数学公式（LaTeX / KaTeX）
 

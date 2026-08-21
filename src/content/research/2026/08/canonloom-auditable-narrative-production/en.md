@@ -9,7 +9,7 @@ repositoryUrl: https://github.com/Liyuk/canonloom
 paperUrl: https://github.com/Liyuk/canonloom/blob/main/docs/paper-0.2.0/paper.md
 tags: [human-ai-collaboration, agent-systems, narrative, auditability, technology]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/canonloom-auditable-narrative-production
 ---
 

@@ -2,7 +2,7 @@
 title: "From Skin Observation to Product Selection"
 description: "Choosing makeup doesn't require memorizing shade numbers or brands first: observe your skin tone, lightness, and how your skin feels that day in natural light, then narrow your choices down to colors and textures that suit you."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2025-04-12
 publishedAt: 2025-04-12
 type: note

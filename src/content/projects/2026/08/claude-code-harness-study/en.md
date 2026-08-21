@@ -2,7 +2,7 @@
 title: "Coding Agent Harness Study (I): Architecture Comparison and Restricted File Execution"
 description: "Starting from public material, observable behavior, and a runnable microkernel, learn how to turn a coding agent's permissions, tool calls, and execution traces into a verifiable system boundary."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-13
 publishedAt: 2026-08-13
 updatedAt: 2026-08-14

@@ -2,7 +2,7 @@
 title: "Why Code Decays: From Local Convenience to Systemic Debt"
 description: Code decay rarely comes from any single moment of bad writing; it comes from local changes repeatedly bypassing shared boundaries. What truly needs maintaining is the consistency between design and collaboration.
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-07
 publishedAt: 2023-03-07
 type: essay

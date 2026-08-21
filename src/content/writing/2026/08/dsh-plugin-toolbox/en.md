@@ -2,7 +2,7 @@
 title: "My DSH Workbench: Nine Plugins"
 description: "DSH has been out only a few days, and I've already installed nine plugins on it. Notes on what each one fills in, how it works, and which one is the most useful."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-16
 publishedAt: 2026-08-16
 draft: false
@@ -67,7 +67,7 @@ The most striking bit is the mounting: the official UI leaves no room for a righ
 
 ## Give it a conversational feel: `@liyuk/dsh-skin-chatlab` (the plug)
 
-The last one is my own: [dsh-skin-chatlab](/writing/2026/08/dsh-skin-chatlab/) wraps DSH in a Feishu skin — workspaces become project groups, sessions become contacts (deterministic avatars), chat becomes 1:1 bubbles, and there's "typing…".
+The last one is my own: [dsh-skin-chatlab](/en/projects/2026/08/dsh-skin-chatlab/) wraps DSH in a Feishu skin — workspaces become project groups, sessions become contacts (deterministic avatars), chat becomes 1:1 bubbles, and there's "typing…".
 
 The motivation, put plainly, is simple: I've been using Feishu for too long. If a tool feels like talking to a person, a lot of the interaction experience comes ready-made — contacts have faces, chats have bubbles, "read" means the other side got it, and none of this do I need to relearn. Add that I'm delegating a lot of work these days; briefing it on a task and waiting for its reply the whole process feels a lot like being a boss. That counts as a professional after-effect, not a metaphor.
 

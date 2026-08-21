@@ -2,7 +2,7 @@
 title: "Engineering POC in Practice FAQ: Scheduling, Sync, Risk, and Delivery"
 description: "Facing cross-functional requirements, how should an engineering POC divide work, surface risks, handle changes, and manage their own workload? A public FAQ for real-world collaboration."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2021-04-21
 publishedAt: 2021-04-21
 updatedAt: 2026-08-14
@@ -13,7 +13,7 @@ translationKey: 2021/04/engineering-poc-faq-responsibility-boundaries
 
 A development POC is easily misunderstood as "the person responsible for pushing everything forward." That understanding is neither accurate nor sustainable. A good POC is not the project's bottleneck or firefighting squad, but someone who helps participants build shared context so that responsibilities, risks, and decisions are not lost in collaboration.
 
-This article is the hands-on companion to [Engineering POC: Responsibilities, Boundaries, and Delivery Loop in Cross-Functional Requirements](/writing/2021/08/requirement-poc-responsibilities/). The earlier piece first answers what the role is responsible for; here we focus on the questions that most easily stall collaboration in practice. The questions below all come from real collaboration scenarios—when they come up, this piece will be useful.
+This article is the hands-on companion to [Engineering POC: Responsibilities, Boundaries, and Delivery Loop in Cross-Functional Requirements](/en/writing/2021/08/requirement-poc-responsibilities/). The earlier piece first answers what the role is responsible for; here we focus on the questions that most easily stall collaboration in practice. The questions below all come from real collaboration scenarios—when they come up, this piece will be useful.
 
 The questions below are organized around this boundary. They are not a fixed process; the approach should be adjusted according to work scale, team division of labor, and risk.
 

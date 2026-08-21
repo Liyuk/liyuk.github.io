@@ -1,16 +1,20 @@
-// Publish gate: run the full verification pipeline before pushing content.
+// Publish gate: run the full SEO + GEO discoverability contract before pushing content.
 // Run: npm run publish:check
-// Executes, in order: image audit → column audit → unit tests → type check → build.
-// Any failure stops the pipeline and exits non-zero.
+// Executes, in order: scoped format → content/image/column audits → unit tests → type check → build → SEO/GEO → link audit.
+// A failure stops the pipeline and exits non-zero.
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const STEPS = [
+  { name: '工程文件格式检查', command: 'npm', args: ['run', 'format:check'] },
+  { name: '内容与双语审计', command: 'npm', args: ['run', 'audit:content'] },
   { name: '图片引用审计', command: 'npm', args: ['run', 'audit:images'] },
   { name: '专栏顺序审计', command: 'npm', args: ['run', 'audit:columns'] },
   { name: '单元测试', command: 'npm', args: ['test'] },
   { name: '类型检查', command: 'npm', args: ['run', 'check'] },
   { name: '生产构建', command: 'npm', args: ['run', 'build'] },
+  { name: 'SEO 元数据审计', command: 'npm', args: ['run', 'audit:seo'] },
+  { name: '站内链接审计', command: 'npm', args: ['run', 'audit:links'] },
 ];
 
 function run(command, args) {
@@ -28,7 +32,7 @@ function summarize(output, maxLines = 12) {
 }
 
 async function main() {
-  console.log('发布前检查 — 全绿才能发布。\n');
+  console.log('发布前检查（SEO + GEO discoverability contract）— 全绿才能发布。\n');
   let failed = false;
 
   for (const step of STEPS) {
@@ -41,6 +45,7 @@ async function main() {
       failed = true;
       const detail = (stderr || stdout || '').trim();
       console.log(`\n--- ${step.name} 输出（末尾） ---\n${summarize(detail)}\n`);
+      break;
     }
   }
 

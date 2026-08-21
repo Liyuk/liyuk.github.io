@@ -9,7 +9,7 @@ repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [housing, forecasting, time-series, explainability, china]
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/08/housing-price-five-year-forecast
 ---
 

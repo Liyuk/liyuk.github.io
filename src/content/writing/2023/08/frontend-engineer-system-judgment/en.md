@@ -2,7 +2,7 @@
 title: "How Frontend Engineers Move from Execution to Systems Judgment"
 description: "Career growth isn't just shipping more requirements—it's gradually expanding your responsibility for defining problems, making trade-offs, and collaborating."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-08-01
 publishedAt: 2023-08-01
 type: essay

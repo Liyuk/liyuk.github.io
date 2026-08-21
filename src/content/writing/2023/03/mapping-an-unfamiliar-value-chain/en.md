@@ -2,7 +2,7 @@
 title: "The First Map of an Unfamiliar Field: How to Understand a Complete Value Chain"
 description: "When entering an unfamiliar business or system, don't rush to start from a local solution. First map the users, the process, inputs and outputs, key constraints, and value, so you know what to ask."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2023-03-03
 publishedAt: 2023-03-03
 type: essay
