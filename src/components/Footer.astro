@@ -1,6 +1,7 @@
 ---
 import { i18n } from '../i18n/index.mjs';
 import { site } from '../data/site.mjs';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props;
 const ui = i18n(locale);
 const currentYear = new Date().getFullYear();
@@ -11,6 +12,8 @@ const elsewhere = [
   { label: ui.footer.x, href: site.social.x },
   { label: ui.footer.linkedin, href: site.social.linkedin },
   { label: ui.footer.email, href: `mailto:${site.email}` },
+  { label: ui.navigation.links, href: getRelativeLocaleUrl(locale, '/links/') },
+  { label: ui.favorites.label, href: getRelativeLocaleUrl(locale, '/favorites/') },
   { label: ui.footer.rss, href: rssHref },
 ];
 ---

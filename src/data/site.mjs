@@ -11,8 +11,10 @@ export const site = {
   // 站点首次公开发布年份：Footer 用它渲染版权区间（© 2018–2026）。
   // 起始年保持不变；末年是构建时的当前年（new Date().getFullYear()）。
   since: 2018,
-  // 联系邮箱：about 页「合作/联系」区块与 mailto 都指向这里。
-  email: 'likun.liyuk@gmail.com',
+  // 联系邮箱：首页、about、咨询页与 mailto 都指向这里。
+  email: 'hello@liyuk.com',
+  // 中文咨询入口使用的微信号；英文入口仍以邮箱为主。
+  wechat: 'leeyvk',
   // 站外社交链接：Footer「在别处 / Elsewhere」区块与 about 页共用。
   social: {
     github: 'https://github.com/Liyuk',
@@ -50,8 +52,7 @@ export const site = {
     { href: '/research/', key: 'research' },
     { href: '/photos/', key: 'photos' },
     { href: '/about/', key: 'about' },
-    { href: '/links/', key: 'links' },
-    { href: '/tags/', key: 'tags' },
+    { href: '/consulting/', key: 'consulting' },
   ],
   translation: {
     sourceLocale: 'zh-CN',
