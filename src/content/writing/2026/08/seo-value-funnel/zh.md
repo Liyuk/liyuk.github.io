@@ -2,6 +2,7 @@
 title: SEO 价值不是流量：把搜索接到业务漏斗
 description: 从指标字典、页面消费到 Web2App，建立可解释的 SEO 价值模型，而不是用曝光乘出一个漂亮数字。
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, growth, engineering, metrics]

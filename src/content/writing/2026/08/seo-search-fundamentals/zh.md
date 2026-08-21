@@ -2,6 +2,7 @@
 title: SEO 搜索基础地图：从被发现到产生价值
 description: 用一条真实项目链路理解发现、抓取、索引、点击和业务转化，并启动第一个可复盘的 SEO 项目。
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, engineering, learning, systems-thinking, metrics]

@@ -5,6 +5,7 @@ locale: en
 translationStatus: reviewed
 translationKey: 2026/08/seo-content-engineering
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, writing, ai, governance]

@@ -2,6 +2,7 @@
 title: 结构化数据与媒体 SEO：让页面事实可被理解
 description: 从页面事实模型到图片、视频、结构化数据和内链，建立可验证的多形态内容入口。
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, image-seo, video-seo, architecture]

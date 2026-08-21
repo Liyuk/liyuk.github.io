@@ -6,6 +6,7 @@ locale: en
 translationStatus: reviewed
 translationKey: maomao
 createdAt: 2026-08-15
+publishedAt: 2026-08-15
 draft: false
 featured: true
 tags: []

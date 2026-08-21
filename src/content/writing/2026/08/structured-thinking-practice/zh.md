@@ -2,6 +2,7 @@
 title: 思维训练（四）：结构化思维实践
 description: 五镜法的实战篇：用面试、晋升、汇报、项目合作四个场景，演示怎么把结构化工具和五镜套到真实问题上。
 createdAt: 2026-08-15
+publishedAt: 2026-08-15
 type: essay
 draft: false
 tags: [thinking, problem-framing, decision-making, communication, work-leadership]

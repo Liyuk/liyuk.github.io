@@ -4,6 +4,7 @@ description: "A hands-on companion to the Five Lenses method: four scenarios —
 locale: en
 translationStatus: reviewed
 createdAt: 2026-08-15
+publishedAt: 2026-08-15
 type: essay
 draft: false
 tags: [thinking, problem-framing, decision-making, communication, work-leadership]

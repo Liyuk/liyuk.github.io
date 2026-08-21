@@ -2,6 +2,7 @@
 title: 提交、收录与流量恢复：把搜索运营做成可靠系统
 description: 从 URL 状态机到流量事故排查，区分提交、抓取、索引和算法背景，建立可恢复的搜索运营流程。
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, engineering, reliability, observability]
