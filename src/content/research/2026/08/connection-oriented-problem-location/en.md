@@ -2,6 +2,7 @@
 title: "The Five Lenses: Connection-Oriented Problem Location"
 description: A framework paper that advances structured thinking from the generic expression of "conclusion first, mutually exclusive and collectively exhaustive" into a four-stage problem-location method — Structure → Surface connections → Infer root problem → Find solution — with the causal, duality, dialectical, position, and interest lenses at its core, offering a testable training protocol and its boundaries of use.
 createdAt: 2026-08-15
+publishedAt: 2026-08-15
 version: '0.1'
 status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io

@@ -23,6 +23,14 @@ export function writingUrl(entryId: string, locale = 'zh-CN'): string {
   return contentUrl('writing', entryId, locale);
 }
 
+export function projectUrl(entryId: string, locale = 'zh-CN'): string {
+  return contentUrl('project', entryId, locale);
+}
+
+export function researchUrl(entryId: string, locale = 'zh-CN'): string {
+  return contentUrl('research', entryId, locale);
+}
+
 // One URL helper for the writing/gallery collections that can share a column.
 // Columns mix essays and galleries, so callers must not assume which
 // collection a column member belongs to. Gallery entries carry a `slug`; writing

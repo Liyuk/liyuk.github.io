@@ -2,6 +2,7 @@
 title: SEO 实验与异常排查：用时间线保护判断
 description: 结合搜索处理延迟、CUPED、页面版本和流量事故排查，建立不急于宣布结果的 SEO 学习协议。
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, growth, engineering, metrics]

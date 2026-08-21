@@ -2,6 +2,7 @@
 title: 技术 SEO 底盘：URL、渲染、迁移与性能
 description: 把页面身份、抓取边界、渲染内容、迁移映射和 Core Web Vitals 收敛成一份可验收的页面合同。
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, engineering, systems, reliability]

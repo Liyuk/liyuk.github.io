@@ -2,6 +2,7 @@
 title: 外链与来源权威：从链接数量转向可引用关系
 description: 用来源质量、编辑语境、真实引荐和目标页价值治理外链，不把 DR、DA 或 Authority Score 当成排名公式。
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, backlinks, growth, trust]

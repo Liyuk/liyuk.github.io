@@ -1,0 +1,47 @@
+:root {
+  color-scheme: light;
+  --paper: #f7f4ee;
+  --paper-strong: #efeae1;
+  --ink: #232522;
+  --muted: #696a65;
+  --line: #ddd8ce;
+  --accent: #35685d;
+  --accent-soft: #dcebe5;
+  --serif: "Iowan Old Style", "Baskerville", "Noto Serif SC", "Songti SC", serif;
+  --sans: Inter, "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --shell-w: 1180px;
+  --wide-w: 1280px;
+  --article-w: 860px;
+  --prose-w: 720px;
+  --article-prose-inset: calc((var(--article-w) - var(--prose-w)) / 2);
+  --soft: var(--paper-strong);
+  --focus-ring: var(--accent);
+  --icon-size-sm: 1rem;
+  --icon-size-md: 1.2rem;
+  --icon-size-lg: 1.5rem;
+  --control-size: 2.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --paper: #1d211e;
+    --paper-strong: #282d29;
+    --ink: #eeece5;
+    --muted: #b9b9b0;
+    --line: #414740;
+    --accent: #9acbbb;
+    --accent-soft: #28443d;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1d211e;
+  --paper-strong: #282d29;
+  --ink: #eeece5;
+  --muted: #b9b9b0;
+  --line: #414740;
+  --accent: #9acbbb;
+  --accent-soft: #28443d;
+}

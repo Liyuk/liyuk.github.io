@@ -2,6 +2,7 @@
 title: 五镜法：联系导向的问题定位
 description: 一篇方法框架论文：把结构化思维从"结论先行、不重不漏"的通用表达，推进为"结构化→发觉联系→推论底层问题→找到解决方案"四阶段问题定位方法，以因果、二元、辩证、立场、利益五镜为核心透镜，给出可检验的训练协议与使用边界。
 createdAt: 2026-08-15
+publishedAt: 2026-08-15
 version: '0.1'
 status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io

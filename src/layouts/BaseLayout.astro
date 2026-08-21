@@ -90,8 +90,14 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     </>}
     <link rel="alternate" type="application/rss+xml" title={`${pageCopy.rss.title} RSS`} href={isEnglish ? '/en/rss.xml' : '/rss.xml'} />
     <script is:inline>
-      const storedTheme = localStorage.getItem('liyuk-theme');
-      if (storedTheme) document.documentElement.dataset.theme = storedTheme;
+      try {
+        const storedTheme = localStorage.getItem('liyuk-theme');
+        if (storedTheme === 'light' || storedTheme === 'dark') {
+          document.documentElement.dataset.theme = storedTheme;
+        }
+      } catch {
+        // The system color scheme remains active when storage is unavailable.
+      }
     </script>
     <title>{title}</title>
     <!-- Open Graph (Facebook / LinkedIn / iMessage / WhatsApp …) -->

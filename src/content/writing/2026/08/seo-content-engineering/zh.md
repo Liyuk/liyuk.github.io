@@ -2,6 +2,7 @@
 title: 关键词与内容规模：从需求发现到页面治理
 description: 把关键词扩展、存量激活、多语言和 AIGC 放进同一条内容供给与退出链路，而不是追求页面数量。
 createdAt: 2026-08-20
+publishedAt: 2026-08-20
 type: case-study
 draft: false
 tags: [seo, writing, ai, governance]

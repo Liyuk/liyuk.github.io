@@ -12,6 +12,7 @@ import QRCode from 'qrcode';
 import { i18n } from '../i18n/index.mjs';
 import { site } from '../data/site.mjs';
 import { brandIcons, type ShareChannel } from '../lib/brand-icons';
+import Icon from './Icon.astro';
 import shareRowUrl from '../lib/share-row.js?url';
 
 interface Props {
@@ -61,25 +62,25 @@ const shareLinks: Array<{ key: ShareChannel; label: string; href: string }> = [
   data-copy-label={t.copy}
   data-copied-label={t.copied}>
   <div class="share-popover-wrap">
-    <button class="share-btn share-btn-primary" type="button" data-share-toggle aria-haspopup="menu" aria-controls="share-popover" aria-expanded="false"><svg class="share-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8 12 4l4.5 4M5 12v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>{t.shareLabel}<svg class="share-caret" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3.2l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="share-btn share-btn-primary" type="button" data-share-toggle aria-haspopup="menu" aria-controls="share-popover" aria-expanded="false"><Icon name="share" class="share-btn-icon" />{t.shareLabel}<Icon name="chevronDown" size="sm" class="share-caret" /></button>
     <div class="share-popover" id="share-popover" role="menu" aria-label={t.shareTo} data-share-popover hidden>
       <p class="share-popover-label" aria-hidden="true">{t.shareTo}</p>
-      <button class="share-popover-item" role="menuitem" type="button" data-share-native><svg class="share-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 14.5h14V19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-4.5Z"/><path d="M12 2.2 16.6 7.6h-2.8v7.4h-3.6V7.6H7.4Z"/></svg>{t.system}</button>
+      <button class="share-popover-item" role="menuitem" type="button" data-share-native><Icon name="nativeShare" class="share-icon" />{t.system}</button>
       {shareLinks.map((link) => (
         <a class="share-popover-item" role="menuitem" style={`--brand:${brandIcons[link.key].hex};--brand-dark:${brandIcons[link.key].dark}`} href={link.href} target="_blank" rel="noopener noreferrer"><svg class="share-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={brandIcons[link.key].path}/></svg>{link.label}</a>
       ))}
       {qrSvg && <button class="share-popover-item" role="menuitem" style={`--brand:${brandIcons.wechat.hex};--brand-dark:${brandIcons.wechat.dark}`} type="button" data-share-wechat><svg class="share-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={brandIcons.wechat.path}/></svg>{t.wechat}</button>}
     </div>
   </div>
-  <button class="share-btn" type="button" data-share-favorite data-fav-title={title} data-type={type} data-fav-label={t.favorite} data-fav-label-on={t.favorited} data-fav-added={t.favoriteAdded} data-fav-removed={t.favoriteRemoved} aria-pressed="false"><svg class="share-btn-icon share-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L12 16.9l-5.2 2.61.99-5.79-4.21-4.1 5.82-.85z"/></svg><span data-fav-text>{t.favorite}</span></button>
-  <button class="share-btn" type="button" data-share-copy><svg class="share-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-copy-text>{t.copy}</span></button>
+  <button class="share-btn" type="button" data-share-favorite data-fav-title={title} data-type={type} data-fav-label={t.favorite} data-fav-label-on={t.favorited} data-fav-added={t.favoriteAdded} data-fav-removed={t.favoriteRemoved} aria-pressed="false"><Icon name="star" class="share-btn-icon share-star" /><span data-fav-text>{t.favorite}</span></button>
+  <button class="share-btn" type="button" data-share-copy><Icon name="copy" class="share-btn-icon" /><span data-copy-text>{t.copy}</span></button>
   <p class="share-toast" role="status" aria-live="polite" hidden></p>
 </div>
 
 {qrSvg && (
   <div class="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-modal-title" data-share-modal hidden>
     <div class="share-modal-card">
-      <button class="share-modal-close" type="button" data-share-modal-close aria-label={t.wechatModalClose}>×</button>
+      <button class="share-modal-close" type="button" data-share-modal-close aria-label={t.wechatModalClose}><Icon name="close" size="sm" /></button>
       <p class="share-modal-eyebrow" id="share-modal-title">{t.wechat}</p>
       <div class="share-modal-qr" set:html={qrSvg}></div>
       <h2 class="share-modal-title">{t.wechatModalTitle}</h2>

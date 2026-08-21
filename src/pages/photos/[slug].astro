@@ -7,13 +7,13 @@ import ShareRow from '../../components/ShareRow.astro';
 import Comments from '../../components/Comments.astro';
 import RelatedEntries from '../../components/RelatedEntries.astro';
 import { getGalleryCover } from '../../lib/gallery.ts';
-import { columnUrl, columnEntryUrl } from '../../lib/content-paths.ts';
+import { columnUrl, columnEntryUrl, galleryUrl } from '../../lib/content-paths.ts';
 import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { previewable } from '../../lib/content-model.ts';
 import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { i18n } from '../../i18n/index.mjs';
-import { publishedDate } from '../../lib/timeline.ts';
+import { publishedDate, getChronologicalNeighbors } from '../../lib/timeline.ts';
 
 export async function getStaticPaths() {
   const galleries = await getCollection('gallery', previewable);
@@ -41,6 +41,7 @@ const [writing, galleries, research, projects] = await Promise.all([
 const indexableTags = getIndexableTags([...writing, ...galleries]).map(({ slug }) => slug);
 const all = [...writing, ...galleries, ...research, ...projects];
 const relatedEntries = getRelatedEntries(all, gallery, RELATED_LIMIT, gallery.data.locale);
+const { previous: previousGallery, next: nextGallery } = getChronologicalNeighbors(galleries, gallery);
 const columnEntries = gallery.data.column ? getColumnEntries([...writing, ...galleries], gallery.data.column.slug) : [];
 const columnIndex = columnEntries.findIndex((entry) => entry.id === gallery.id);
 const previousColumnEntry = columnEntries[columnIndex - 1];
@@ -66,6 +67,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
       </ol>
     </section>
     {gallery.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(gallery.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug)}</a>{previousColumnEntry && <a href={columnEntryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={columnEntryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
+    {(previousGallery || nextGallery) && <nav class="post-pagination" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousGallery && <a class="prev" href={galleryUrl(previousGallery.data.slug, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousGallery.data.title}</span></a>}</div><div class="pagination-col">{nextGallery && <a class="next" href={galleryUrl(nextGallery.data.slug, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextGallery.data.title}</span></a>}</div></nav>}
     <ShareRow locale={locale} title={gallery.data.title} url={shareUrl} type="gallery" />
     <Comments lang={locale} />
     {relatedEntries.length > 0 && <RelatedEntries items={relatedEntries} locale={locale} />}

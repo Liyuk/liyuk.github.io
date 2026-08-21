@@ -1,8 +1,10 @@
 ---
+import Icon from './Icon.astro';
+
 const { labels } = Astro.props;
 ---
 <button class="theme-toggle" type="button" data-theme-toggle data-light-label={labels.toDark} data-dark-label={labels.toLight} aria-label={labels.toDark} title={labels.toDark}>
-  <span aria-hidden="true">◐</span>
+  <Icon name="theme" size="sm" />
 </button>
 
 <script>
@@ -18,13 +20,24 @@ const { labels } = Astro.props;
     }
   }
 
-  const savedTheme = localStorage.getItem(storageKey);
+  const savedTheme = (() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      return stored === 'light' || stored === 'dark' ? stored : null;
+    } catch {
+      return null;
+    }
+  })();
   const initialTheme: string = savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   applyTheme(initialTheme);
 
   button?.addEventListener('click', () => {
     const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem(storageKey, nextTheme);
+    try {
+      localStorage.setItem(storageKey, nextTheme);
+    } catch {
+      // Theme still applies for the current page when storage is unavailable.
+    }
     applyTheme(nextTheme);
   });
 </script>
