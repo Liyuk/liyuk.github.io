@@ -20,6 +20,17 @@ try {
   check('home loads', homeTitle.length > 0, homeTitle);
   const h1 = await page.textContent('h1');
   check('home has hero heading', h1.includes('烹饪指南') || h1.length > 0, h1);
+  const themeIcon = page.locator('[data-theme-toggle] [data-icon="theme"]');
+  check('theme toggle uses shared icon', await themeIcon.count() === 1, `count=${await themeIcon.count()}`);
+  check('shared theme icon uses standard SVG contract',
+    await themeIcon.getAttribute('viewBox') === '0 0 24 24' &&
+    await themeIcon.getAttribute('aria-hidden') === 'true',
+    `viewBox=${await themeIcon.getAttribute('viewBox')} aria-hidden=${await themeIcon.getAttribute('aria-hidden')}`);
+  await page.evaluate(() => localStorage.setItem('liyuk-theme', 'invalid-theme'));
+  await page.reload({ waitUntil: 'networkidle' });
+  const recoveredTheme = await page.locator('html').getAttribute('data-theme');
+  check('invalid stored theme falls back to light or dark', recoveredTheme === 'light' || recoveredTheme === 'dark', recoveredTheme ?? 'missing');
+  await page.evaluate(() => localStorage.removeItem('liyuk-theme'));
 
   // 2. Writing index
   await page.goto(`${BASE}/writing/`, { waitUntil: 'networkidle' });
@@ -52,7 +63,21 @@ try {
     check('project detail link exists', false, 'no non-work project found');
   }
 
-  // 6. Work (novel) project card renders
+  // 5b. Detail reading navigation + related recommendations
+  await page.goto(`${BASE}/projects/2026/08/canonloom/`, { waitUntil: 'networkidle' });
+  check('project detail has previous/next navigation', await page.locator('.post-pagination a').count() > 0);
+  check('project detail has related recommendations', await page.locator('.related-entries li').count() > 0);
+  check('project navigation/recommendations stay internal', (await page.locator('.post-pagination a, .related-entries a').evaluateAll((links) => links.every((link) => link.getAttribute('href')?.startsWith('/')))));
+
+  await page.goto(`${BASE}/research/2026/08/canonloom-auditable-narrative-production/`, { waitUntil: 'networkidle' });
+  check('research detail has previous/next navigation', await page.locator('.post-pagination a').count() > 0);
+  check('research detail has related recommendations', await page.locator('.related-entries li').count() > 0);
+
+  await page.goto(`${BASE}/photos/maomao/`, { waitUntil: 'networkidle' });
+  check('gallery detail keeps image carousel controls', await page.locator('[data-gallery-previous], [data-gallery-next]').count() === 2);
+  check('singleton gallery has no empty entry navigation', await page.locator('.post-pagination a').count() === 0);
+  check('singleton gallery has no empty related section', await page.locator('.related-entries').count() === 0);
+
   await page.goto(`${BASE}/projects/`, { waitUntil: 'networkidle' });
   const workCards = await page.locator('.work-card').count();
   check('work (novel) cards render', workCards >= 2, `count=${workCards}`);

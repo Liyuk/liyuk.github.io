@@ -18,6 +18,18 @@ export function sortByCreatedAt<T extends DatedEntry>(entries: T[]): T[] {
   );
 }
 
+export function getChronologicalNeighbors<T extends DatedEntry & { id: string }>(
+  entries: T[],
+  currentEntry: T,
+): { previous?: T; next?: T } {
+  const chronological = sortByCreatedAt(entries);
+  const index = chronological.findIndex((entry) => entry.id === currentEntry.id);
+  return {
+    previous: index > 0 ? chronological[index - 1] : undefined,
+    next: index >= 0 ? chronological[index + 1] : undefined,
+  };
+}
+
 export function sortByLastUpdatedAt<T extends DatedEntry>(entries: T[]): T[] {
   return [...entries].sort(
     (a, b) => lastUpdatedDate(b).valueOf() - lastUpdatedDate(a).valueOf(),

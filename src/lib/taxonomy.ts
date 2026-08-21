@@ -160,6 +160,10 @@ export const columns: Record<string, { label: { 'zh-CN': string; en: string }; d
     label: { 'zh-CN': '产品判断', en: 'Product Judgment' },
     description: { 'zh-CN': '从用户问题到产品概览：工程师如何参与并练习产品判断。', en: 'From user problems to product overviews: how engineers practice product judgment.' },
   },
+  'search-engine-growth': {
+    label: { 'zh-CN': '搜索与生成式发现', en: 'Search & Generative Discovery' },
+    description: { 'zh-CN': '从搜索基础、页面工程到 GEO：让内容可发现、可理解、可引用并能产生后续行动。', en: 'From search fundamentals and page engineering to GEO: making content discoverable, understandable, citable, and actionable.' },
+  },
   'growth-self-assessment': {
     label: { 'zh-CN': '成长与自我评估', en: 'Growth & Self-Assessment' },
     description: { 'zh-CN': '不靠标签评价自己：从潜力、成长到诚实的自我评估。', en: 'Beyond labels: assessing potential, growth, and honest self-evaluation.' },
@@ -187,6 +191,7 @@ export const startGroups: { key: 'method' | 'management' | 'engineering'; column
       'engineering-collaboration',
       'documentation',
       'product-judgment',
+      'search-engine-growth',
     ],
   },
 ];

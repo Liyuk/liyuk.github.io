@@ -3,6 +3,7 @@
 // 表单 POST 到 Buttondown embed-subscribe 端点（username=liyuk），新标签打开
 // 订阅确认页，不打断当前阅读；RSS 链接保留给偏好 feed 的读者。
 import { i18n } from '../i18n/index.mjs';
+import Icon from './Icon.astro';
 
 const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props as { locale?: string };
 const t = i18n(locale).subscribe;
@@ -19,11 +20,7 @@ const formAction = 'https://buttondown.com/api/emails/embed-subscribe/liyuk';
     </form>
     <span class="subscribe-or" aria-hidden="true">{t.or}</span>
     <a class="subscribe-rss" href={rssHref}>
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M4 11a9 9 0 0 1 9 9" />
-        <path d="M4 4a16 16 0 0 1 16 16" />
-        <circle cx="5" cy="19" r="1" />
-      </svg>
+      <Icon name="rss" size="sm" />
       {t.cta}
     </a>
   </div>

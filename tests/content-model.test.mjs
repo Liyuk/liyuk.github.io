@@ -5,8 +5,8 @@ import { readFile } from 'node:fs/promises';
 import { notDraft, publishedIn } from '../src/lib/content-model.ts';
 import { site } from '../src/data/site.mjs';
 import { i18n } from '../src/i18n/index.mjs';
-import { groupByYear, groupByYearMonth, sortByCreatedAt, sortByLastUpdatedAt } from '../src/lib/timeline.ts';
-import { columnUrl, contentUrl, entryUrl, galleryUrl, tagUrl, writingUrl } from '../src/lib/content-paths.ts';
+import { groupByYear, groupByYearMonth, getChronologicalNeighbors, sortByCreatedAt, sortByLastUpdatedAt } from '../src/lib/timeline.ts';
+import { columnUrl, contentUrl, entryUrl, galleryUrl, projectUrl, researchUrl, tagUrl, writingUrl } from '../src/lib/content-paths.ts';
 import { parseContentDate } from '../src/lib/content-date.ts';
 import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, getTag } from '../src/lib/taxonomy.ts';
 import { getGalleryCover } from '../src/lib/gallery.ts';
@@ -41,6 +41,23 @@ test('public page copy is centrally managed for both languages', () => {
   assert.equal(i18n('en').page.home.byline, 'Liyuk · Field Notes on Technology, Leadership & Life');
 });
 
+test('chronological neighbors follow publication order and omit missing sides', () => {
+  const newest = { id: 'newest', data: { createdAt: new Date('2020-01-01'), publishedAt: new Date('2026-08-20') } };
+  const middle = { id: 'middle', data: { createdAt: new Date('2020-01-02'), publishedAt: new Date('2026-08-19') } };
+  const oldest = { id: 'oldest', data: { createdAt: new Date('2020-01-03'), publishedAt: new Date('2026-08-18') } };
+
+  assert.deepEqual(getChronologicalNeighbors([oldest, newest, middle], newest), { previous: undefined, next: middle });
+  assert.deepEqual(getChronologicalNeighbors([oldest, newest, middle], middle), { previous: newest, next: oldest });
+  assert.deepEqual(getChronologicalNeighbors([oldest, newest, middle], oldest), { previous: middle, next: undefined });
+  assert.deepEqual(getChronologicalNeighbors([newest], newest), { previous: undefined, next: undefined });
+});
+
+test('detail URL helpers map collection keys to public routes', () => {
+  assert.equal(projectUrl('2026/08/example/zh'), '/projects/2026/08/example/');
+  assert.equal(projectUrl('2026/08/example/en', 'en'), '/en/projects/2026/08/example/');
+  assert.equal(researchUrl('2026/08/example/zh'), '/research/2026/08/example/');
+  assert.equal(researchUrl('2026/08/example/en', 'en'), '/en/research/2026/08/example/');
+});
 test('writing is ordered by publication date', () => {
   const olderPublishedLater = { data: { createdAt: new Date('2012-06-01'), publishedAt: new Date('2026-08-14') } };
   const newer = { data: { createdAt: new Date('2018-04-02'), publishedAt: new Date('2018-04-02') } };

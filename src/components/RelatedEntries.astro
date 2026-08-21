@@ -1,0 +1,59 @@
+---
+import { contentUrl, galleryUrl } from '../lib/content-paths.ts';
+import { i18n } from '../i18n/index.mjs';
+
+type RelatedItem = {
+  entry: {
+    id: string;
+    collection: string;
+    data: { slug?: string; title: string; description?: string };
+  };
+  reasons: string[];
+};
+
+interface Props {
+  items: RelatedItem[];
+  locale?: string;
+}
+
+const { items, locale: localeProp } = Astro.props;
+const locale = localeProp ?? Astro.currentLocale ?? 'zh-CN';
+const pageCopy = i18n(locale).page;
+const cardCopy = pageCopy.tagCards;
+
+function href(collection: string, entry: RelatedItem['entry']): string {
+  return collection === 'gallery'
+    ? galleryUrl(entry.data.slug ?? entry.id, locale)
+    : contentUrl(collection, entry.id, locale);
+}
+
+const cards = items.map(({ entry, reasons }) => {
+  const copy = cardCopy[entry.collection as keyof typeof cardCopy] ?? { label: entry.collection, action: '阅读全文' };
+  return {
+    href: href(entry.collection, entry),
+    label: copy.label,
+    action: copy.action,
+    title: entry.data.title,
+    description: entry.data.description,
+    reasons,
+  };
+});
+---
+
+<section class="related-entries" aria-labelledby="related-heading">
+  <p class="eyebrow">{pageCopy.writingDetail.relatedEyebrow}</p>
+  <h2 id="related-heading">{pageCopy.writingDetail.relatedTitle}</h2>
+  <ul class="related-grid">
+    {cards.map((card) => (
+      <li class="related-card">
+        <a class="related-card-link" href={card.href}>
+          <span class="related-type">{card.label}</span>
+          <span class="related-card-title">{card.title}</span>
+          {card.description && <span class="related-desc">{card.description}</span>}
+          <span class="related-cta">{card.action} <span aria-hidden="true">→</span></span>
+        </a>
+        {card.reasons.length > 0 && <p class="related-reason">{card.reasons.join(' · ')}</p>}
+      </li>
+    ))}
+  </ul>
+</section>

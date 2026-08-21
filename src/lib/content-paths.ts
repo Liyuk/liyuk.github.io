@@ -7,13 +7,26 @@ export function contentSlug(entryId: string): string {
 
 export const writingSlug = contentSlug;
 
+const ROUTE_FOR_COLLECTION: Record<string, string> = {
+  project: 'projects',
+};
+
 export function contentUrl(collection: string, entryId: string, locale = 'zh-CN'): string {
-  const prefix = locale === 'en' ? `/en/${collection}` : `/${collection}`;
+  const route = ROUTE_FOR_COLLECTION[collection] ?? collection;
+  const prefix = locale === 'en' ? `/en/${route}` : `/${route}`;
   return `${prefix}/${contentSlug(entryId)}/`;
 }
 
 export function writingUrl(entryId: string, locale = 'zh-CN'): string {
   return contentUrl('writing', entryId, locale);
+}
+
+export function projectUrl(entryId: string, locale = 'zh-CN'): string {
+  return contentUrl('project', entryId, locale);
+}
+
+export function researchUrl(entryId: string, locale = 'zh-CN'): string {
+  return contentUrl('research', entryId, locale);
 }
 
 // One URL helper for the writing/gallery collections that can share a column.

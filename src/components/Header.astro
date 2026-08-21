@@ -3,6 +3,7 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import { site } from '../data/site.mjs';
 import { i18n } from '../i18n/index.mjs';
 import ThemeToggle from './ThemeToggle.astro';
+import Icon from './Icon.astro';
 import { searchUrl } from '../lib/content-paths.ts';
 const { currentPath = '/', locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props;
 const ui = i18n(locale);
@@ -15,7 +16,7 @@ const favoritesUrl = getRelativeLocaleUrl(locale, '/favorites/');
 <header class="site-header">
   <a class="wordmark" href={locale === 'en' ? '/en/' : '/'} aria-label={ui.accessibility.home}>{ui.brandShort}<span>.</span></a>
   <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label={ui.navigation.menuOpen} data-menu-toggle data-menu-open={ui.navigation.menuOpen} data-menu-close={ui.navigation.menuClose}>
-    <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+    <Icon name="menu" size="md" />
   </button>
   <div class="utility-controls" aria-label={ui.accessibility.siteSettings}>
     <a class="search-link" href={searchUrl(locale)}>{ui.navigation.search}</a>
