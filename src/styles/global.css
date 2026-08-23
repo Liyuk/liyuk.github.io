@@ -130,7 +130,7 @@ h1, h2, h3, p { margin-top: 0; }
 .tag-list a { color: var(--accent); text-decoration: none; }
 .tag-list span { color: var(--muted); }
 
-.practice-grid { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); }
+.practice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
 .practice-card { display: flex; min-height: 20rem; padding: 1.5rem; flex-direction: column; border-right: 1px solid var(--line); color: var(--ink); text-decoration: none; transition: background-color 180ms ease; }
 .practice-card:first-child { border-left: 1px solid var(--line); }
 .practice-card:hover { background: var(--paper-strong); color: var(--ink); }

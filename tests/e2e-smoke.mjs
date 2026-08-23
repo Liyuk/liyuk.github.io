@@ -41,6 +41,13 @@ try {
   check('invalid stored theme falls back to light or dark', recoveredTheme === 'light' || recoveredTheme === 'dark', recoveredTheme ?? 'missing');
   await page.evaluate(() => localStorage.removeItem('liyuk-theme'));
 
+  const practiceCards = page.locator('.practice-card');
+  check('home practice cards share one desktop row', await practiceCards.count() === 3 &&
+    (await practiceCards.evaluateAll((nodes) => {
+      const tops = nodes.map((node) => Math.round(node.getBoundingClientRect().top));
+      return new Set(tops).size === 1;
+    })));
+
   // 2. Writing index
   await page.goto(`${BASE}/writing/`, { waitUntil: 'networkidle' });
   const writingCount = await page.locator('.entry-card').count();
