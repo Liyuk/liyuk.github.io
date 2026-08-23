@@ -179,7 +179,8 @@ $$
 创建令牌 → 用标准 OpenAI 接口调用：
 
 ```bash
-curl http://localhost:3000/v1/chat/completions \
+export NEO_MATRIX_BASE_URL=http://your-neomatrix-host:3000
+curl "${NEO_MATRIX_BASE_URL}/v1/chat/completions" \
   -H "Authorization: Bearer sk-你的令牌" \
   -H "Content-Type: application/json" \
   -d '{"model":"gpt-4o-mini","messages":[{"role":"user","content":"你好"}]}'

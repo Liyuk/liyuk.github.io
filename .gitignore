@@ -5,6 +5,7 @@
 **/.DS_Store
 output/
 .playwright-cli/
+.playwright-mcp/
 viz/
 artifacts/
 

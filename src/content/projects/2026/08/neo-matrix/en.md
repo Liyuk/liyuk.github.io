@@ -179,10 +179,11 @@ A deviation exceeding the 20% threshold is judged a "reconciliation exception" â
 
 ### I am a consumer
 
-Create a token â†’ call via the standard OpenAI interface:
+Create a token, set the deployment URL, and call the standard OpenAI interface:
 
 ```bash
-curl http://localhost:3000/v1/chat/completions \
+export NEO_MATRIX_BASE_URL=http://your-neomatrix-host:3000
+curl "${NEO_MATRIX_BASE_URL}/v1/chat/completions" \
   -H "Authorization: Bearer sk-your-token" \
   -H "Content-Type: application/json" \
   -d '{"model":"gpt-4o-mini","messages":[{"role":"user","content":"Hello"}]}'
