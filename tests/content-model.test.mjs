@@ -264,6 +264,23 @@ test('writing detail pages show publication and optional update dates without cr
   assert.match(ui, /updatedAt: '更新于'/);
 });
 
+test('homepage puts latest writing before a capped, deduplicated recommendation list', async () => {
+  const page = await readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
+
+  assert.match(page, /const latest = writing\.slice\(0, HOME_POSTS\)/);
+  assert.match(page, /const HOME_FEATURED = 3/);
+  assert.match(page, /\.filter\(\(entry\) => !latestIds\.has\(entry\.id\)\)/);
+  assert.match(page, /\.slice\(0, HOME_FEATURED\)/);
+  assert.ok(page.indexOf('copy.writing.latest') < page.indexOf('copy.writing.featured'));
+});
+
+test('start page includes every column-bearing content collection', async () => {
+  const page = await readFile(new URL('../src/pages/start/index.astro', import.meta.url), 'utf8');
+
+  assert.match(page, /const \{ writing, consulting, research, galleries \} = await getColumnCollections\(locale\)/);
+  assert.match(page, /const entries = \[\.\.\.writing, \.\.\.consulting, \.\.\.research, \.\.\.galleries\]/);
+});
+
 test('project detail pages render an optional editorial visual with meaningful alternative text', async () => {
   const page = await readFile(new URL('../src/pages/projects/[...slug].astro', import.meta.url), 'utf8');
   assert.match(page, /entry\.data\.hero/);
