@@ -11,6 +11,7 @@ translationStatus: original
 translationKey: 2026/08/agent-hci-emotional-equilibrium
 draft: false
 tags: [hci, agent, agency, emotion, trust-calibration, cognitive-offloading, deskilling, observability]
+column: { slug: engineering-ai-judgment, order: 8 }
 ---
 
 > **版本：v0.3（preprint）。** 这是一篇项目驱动的概念框架与设计研究。材料来自相关理论、我的 Agent 使用记录和已有设计材料；本文报告设计原则与可实施的实验协议，不报告用户实验数据或结果。

@@ -8,6 +8,7 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [developer-productivity, platform-engineering, feedback-loops, software-engineering, technology]
+column: { slug: engineering-ai-judgment, order: 3 }
 ---
 
 **版本：** 0.1（preprint）

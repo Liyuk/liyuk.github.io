@@ -1,6 +1,6 @@
 ---
 title: 关键词与内容规模：从需求发现到页面治理
-description: 把关键词扩展、存量激活、多语言和 AIGC 放进同一条内容供给与退出链路，而不是追求页面数量。
+description: 页面数量涨了，真正被读、被用的页面却没有变多——这篇写给关键词扩展和内容生产装上台账、闸门和退出机制。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -83,9 +83,6 @@ $$
 
 例如 1,000 个已发布页面里，420 个同时有独立任务和过去 90 天的有效使用，那么 Useful Page Rate 是 42%。这个比例下降时，先查内容分流和退出治理，不要立刻用生成速度补页面。
 
-## 公开资料
+## 参考资料
 
-- [Google Helpful content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)
-- [Google Using generative AI](https://developers.google.com/search/docs/fundamentals/using-gen-ai-content)
-- [Google Managing multilingual sites](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites)
-- [Google Consolidate duplicate URLs](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls)
+内容质量标准参考 [Google Helpful content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) 和 [Google Using generative AI](https://developers.google.com/search/docs/fundamentals/using-gen-ai-content)；多语言页面验收参考 [Google Managing multilingual sites](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites)；重复页面处理参考 [Google Consolidate duplicate URLs](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls)。

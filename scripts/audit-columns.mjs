@@ -1,5 +1,5 @@
-// Column-integrity audit: every `column` assignment in writing/gallery content
-// must reference a registered column and use a positive, unique `order`.
+// Column-integrity audit: every `column` assignment in writing/consulting/research/gallery
+// content must reference a registered column and use a positive, unique `order`.
 // Run: npm run audit:columns
 //
 // The content schema already rejects `order <= 0` at build time; this check runs
@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { columns as columnRegistry } from '../src/lib/taxonomy.ts';
 
-const CONTENT_DIRS = ['src/content/writing', 'src/content/galleries'];
+const CONTENT_DIRS = ['src/content/writing', 'src/content/consulting', 'src/content/research', 'src/content/galleries'];
 const COLUMN_RE = /^column:\s*\{\s*slug:\s*([A-Za-z0-9-]+)\s*,\s*order:\s*(\d+)\s*\}/m;
 
 async function walk(dir) {

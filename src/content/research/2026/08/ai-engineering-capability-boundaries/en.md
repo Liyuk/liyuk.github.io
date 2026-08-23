@@ -10,6 +10,7 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [ai, software-engineering, agent-systems, developer-productivity, governance, technology]
+column: { slug: engineering-ai-judgment, order: 4 }
 translationKey: 2026/08/ai-engineering-capability-boundaries
 ---
 
@@ -137,7 +138,7 @@ flowchart TD
   D --> E["Stage diff + structured events"]
 ```
 
-The key design is: **writes do not land directly on disk**—they first produce a staged diff that is applied only after human approval; every call leaves an append-only event trail that can be re-examined and recovered. It does not claim to be a complete platform, only to demonstrate that boundaries such as "authorization, audit, recovery" can be put into practice with contract tests—unauthorized writes are rejected, nothing executes before approval, and paths cannot escape the workspace. [8]
+The key design is: **writes do not go directly to disk**—they first produce a staged diff that is applied only after human approval; every call leaves an append-only event trail that can be re-examined and recovered. It does not claim to be a complete platform, only to demonstrate that boundaries such as "authorization, audit, recovery" can be put into practice with contract tests—unauthorized writes are rejected, nothing executes before approval, and paths cannot escape the workspace. [8]
 
 For an organization, its significance is not this one tool, but this: **common capability can first be built as a testable vertical slice and then extended, rather than committing up front to a full-featured platform.** Going from "boundaries" to "system boundaries" is the last layer this paper wants to emphasize.
 

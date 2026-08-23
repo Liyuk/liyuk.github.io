@@ -1,5 +1,5 @@
 ---
-import { writingUrl } from '../lib/content-paths.ts';
+import { contentUrl, writingUrl } from '../lib/content-paths.ts';
 import { getColumn } from '../lib/taxonomy.ts';
 import { formatFullDate, isoDate } from '../lib/format-dates.ts';
 import { i18n } from '../i18n/index.mjs';
@@ -8,7 +8,7 @@ import TagList from './TagList.astro';
 
 const MAX_CARD_TAGS = 3;
 
-const { entry, indexableTags = [], locale: localeProp } = Astro.props;
+const { entry, indexableTags = [], locale: localeProp, urlPrefix = 'writing' } = Astro.props;
 const locale = localeProp ?? entry.data.locale ?? Astro.currentLocale ?? 'zh-CN';
 const ui = i18n(locale);
 const published = publishedDate(entry);
@@ -20,7 +20,7 @@ const lastUpdatedLabel = entry.data.updatedAt ? `${ui.entry.updatedAt} ${lastUpd
 
 <article class="entry-card" data-published-at={isoDate(published)} data-last-updated-at={isoDate(lastUpdated)} data-published-label={`${ui.entry.publishedAt} ${date}`} data-last-updated-label={lastUpdatedLabel}>
   <div class="entry-meta"><time data-entry-date datetime={isoDate(published)}>{ui.entry.publishedAt} {date}</time></div>
-  <h2><a href={writingUrl(entry.id, locale)}>{entry.data.title}</a></h2>
+  <h2><a href={urlPrefix === 'writing' ? writingUrl(entry.id, locale) : contentUrl(urlPrefix, entry.id, locale)}>{entry.data.title}</a></h2>
   <p>{entry.data.description}</p>
   {entry.data.column && <p class="column-reference">{ui.entry.columnIn(getColumn(entry.data.column.slug, locale)?.label ?? entry.data.column.slug, entry.data.column.order)}</p>}
   <TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} max={MAX_CARD_TAGS} />

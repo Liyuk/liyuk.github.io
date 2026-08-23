@@ -12,7 +12,7 @@ export interface DatedEntry {
   };
 }
 
-// An entry that can carry tags and/or a column assignment (writing + gallery).
+// An entry that can carry tags and/or a column assignment.
 export interface ColumnableEntry {
   id: string;
   collection: string;

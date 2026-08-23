@@ -58,6 +58,7 @@ const path = (p: string) => getRelativeLocaleUrl(locale, p);
   <section class="section shell practice-grid" aria-label={copy.practiceGridAria}>
     <a href={path('/projects/')} class="practice-card"><span>{copy.practices.projects.label}</span><strong>{copy.practices.projects.title}</strong><em>{copy.practices.projects.description}</em><small>{copy.practices.projects.count(projectCount)}</small></a>
     <a href={path('/research/')} class="practice-card"><span>{copy.practices.research.label}</span><strong>{copy.practices.research.title}</strong><em>{copy.practices.research.description}</em><small>{copy.practices.research.count(researchCount)}</small></a>
+    <a href={path('/consulting/')} class="practice-card"><span>{copy.practices.consulting.label}</span><strong>{copy.practices.consulting.title}</strong><em>{copy.practices.consulting.description}</em><small>{copy.practices.consulting.cta}</small></a>
   </section>
 
   <section class="section shell start-callout">

@@ -141,6 +141,7 @@ h1, h2, h3, p { margin-top: 0; }
 .photo-card { background: var(--accent-soft); }
 
 .page-heading { max-width: var(--shell-w); padding-block: clamp(5rem, 12vw, 10rem) clamp(3rem, 7vw, 6rem); }
+.consulting-heading { max-width: 950px; }
 .page-heading h1 { margin-bottom: 2rem; }
 .page-heading > p { max-width: 42rem; }
 .archive-list { margin-bottom: clamp(4rem, 10vw, 9rem); }
@@ -237,6 +238,17 @@ h1, h2, h3, p { margin-top: 0; }
 .related-card .related-cta { margin-top: auto; padding-top: .9rem; color: var(--accent); font-size: .9rem; font-weight: 650; }
 .related-card .related-reason { margin: .55rem 0 0; color: var(--muted); font-size: .78rem; letter-spacing: .01em; font-family: var(--sans); }
 @media (max-width: 38rem) { .related-grid { grid-template-columns: 1fr; } }
+.consulting-column-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.75rem; }
+.consulting-column-card { padding: 1.25rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-strong); }
+.consulting-column-card h3 { margin: .35rem 0 .65rem; font-family: var(--serif); font-size: 1.5rem; font-weight: 550; line-height: 1.2; }
+.consulting-column-card h3 span { display: block; margin-top: .45rem; color: var(--accent); font-family: var(--sans); font-size: .76rem; font-weight: 700; letter-spacing: .04em; }
+.consulting-column-card h3 a, .consulting-column-card li a { color: var(--ink); text-decoration: none; }
+.consulting-column-card h3 a:hover, .consulting-column-card li a:hover { color: var(--accent); }
+.consulting-column-card > p:not(.eyebrow) { margin: 0; color: var(--muted); line-height: 1.55; }
+.consulting-column-card ol { margin: 1rem 0 1.25rem; padding-left: 1.25rem; }
+.consulting-column-card li { margin: .55rem 0; line-height: 1.4; }
+.consulting-column-empty { margin: 1rem 0 1.25rem !important; font-size: .9rem; }
+@media (max-width: 42rem) { .consulting-column-grid { grid-template-columns: 1fr; } }
 /* 文章尾部上一篇/下一篇（时间序），irisluan 风格：左右两栏，标签+标题。 */
 .post-pagination { max-width: var(--prose-w); display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .post-pagination .pagination-col { display: flex; min-width: 0; }
@@ -424,6 +436,8 @@ h1, h2, h3, p { margin-top: 0; }
 .about-map,
 .about-fiction,
 .about-cooperate,
+.about-background,
+.consulting-columns,
 .about-contact,
 .about-boundary,
 .about-guestbook {
@@ -433,6 +447,8 @@ h1, h2, h3, p { margin-top: 0; }
 .about-map h2,
 .about-fiction h2,
 .about-cooperate h2,
+.about-background h2,
+.consulting-columns h2,
 .about-contact h2,
 .about-guestbook h2 {
   margin: 0 0 1.5rem;
@@ -506,7 +522,16 @@ h1, h2, h3, p { margin-top: 0; }
 }
 .about-cooperate-desc {
   max-width: 42rem;
+  margin-bottom: 1.5rem;
   color: var(--muted);
+  line-height: 1.7;
+}
+.about-background-metrics {
+  max-width: 52rem;
+  margin: 1.25rem 0 0;
+  color: var(--ink);
+  font-size: .9rem;
+  font-weight: 600;
   line-height: 1.7;
 }
 .about-cooperate-list {
@@ -515,6 +540,12 @@ h1, h2, h3, p { margin-top: 0; }
   padding: 0;
   display: grid;
   gap: .75rem;
+}
+/* The list has no bottom margin (it's usually the section's last child) and
+   `p { margin-top: 0 }` zeroes the paragraph's own top margin, so a
+   description paragraph that follows a list needs its gap added explicitly. */
+.about-cooperate-list + .about-cooperate-desc {
+  margin-top: 1.5rem;
 }
 .about-cooperate-list li {
   display: flex;

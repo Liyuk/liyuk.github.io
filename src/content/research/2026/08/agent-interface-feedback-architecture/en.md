@@ -11,6 +11,7 @@ translationStatus: reviewed
 translationKey: 2026/08/agent-interface-feedback-architecture
 draft: false
 tags: [hci, agent, feedback, observability, recoverability, authorization, human-ai-collaboration, systems-design]
+column: { slug: engineering-ai-judgment, order: 7 }
 ---
 
 > **Version: 0.2 (preprint).** This is a project-driven conceptual architecture and design study. It organizes design experience from ChatLab, Coding Agent Harness Study, and CanonLoom, proposes a feedback architecture to be tested, and reports a follow-up experimental protocol; it does not report user-experiment data or results.

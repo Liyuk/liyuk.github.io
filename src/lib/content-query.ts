@@ -5,26 +5,30 @@
 import { getCollection } from 'astro:content';
 import { publishedIn } from './content-model.ts';
 
-// Load every published entry across all four collections in parallel, for one
+// Load every published entry across all five collections in parallel, for one
 // locale. Shared by the tag index, tag detail, and cross-collection queries.
 export async function getAllPublished(locale = 'zh-CN') {
-  const [writing, research, projects, galleries] = await Promise.all([
+  const [writing, consulting, research, projects, galleries] = await Promise.all([
     getCollection('writing', publishedIn(locale)),
+    getCollection('consulting', publishedIn(locale)),
     getCollection('research', publishedIn(locale)),
     getCollection('project', publishedIn(locale)),
     getCollection('gallery', publishedIn(locale)),
   ]);
-  return { writing, research, projects, galleries };
+  return { writing, consulting, research, projects, galleries };
 }
 
-// Columns can mix writing and gallery entries (see taxonomy.ts). Projects and
-// research never carry a `column`, so they are deliberately excluded here.
+// Columns can mix writing, consulting, research, and gallery entries (see
+// taxonomy.ts). Projects never carry a `column`, so they are deliberately
+// excluded here.
 export async function getColumnCollections(locale = 'zh-CN') {
-  const [writing, galleries] = await Promise.all([
+  const [writing, consulting, research, galleries] = await Promise.all([
     getCollection('writing', publishedIn(locale)),
+    getCollection('consulting', publishedIn(locale)),
+    getCollection('research', publishedIn(locale)),
     getCollection('gallery', publishedIn(locale)),
   ]);
-  return { writing, galleries };
+  return { writing, consulting, research, galleries };
 }
 
 // Group entries of one collection by their locale-free slug, keeping every

@@ -10,5 +10,10 @@ artifacts/
 
 # --- Personal local notes and workflows ---
 # The entire docs/ tree is local-only and never enters Git or repository checks.
+# No subdirectory is exempt — see agent/adr/0005-public-content-and-private-material-boundary.md.
 docs/
 .agent-teams/
+
+# --- Personal Claude Code settings (machine-specific permissions) ---
+# .claude/skills/ is git-tracked project standard; this file is not.
+.claude/settings.local.json

@@ -6,7 +6,7 @@ import { getColumn, getColumnEntries } from '../lib/taxonomy.ts';
 import { columnEntryUrl } from '../lib/content-paths.ts';
 import { i18n } from '../i18n/index.mjs';
 
-type ColumnMember = CollectionEntry<'writing'> | CollectionEntry<'gallery'>;
+type ColumnMember = CollectionEntry<'writing'> | CollectionEntry<'consulting'> | CollectionEntry<'research'> | CollectionEntry<'gallery'>;
 
 interface Props {
   entry: ColumnMember;

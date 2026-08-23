@@ -17,6 +17,8 @@ export async function findEntriesBySlug(slug) {
   const patterns = [
     `${CONTENT_ROOT}/writing/*/*/${slug}/zh.md`,
     `${CONTENT_ROOT}/writing/*/*/${slug}/en.md`,
+    `${CONTENT_ROOT}/consulting/*/*/${slug}/zh.md`,
+    `${CONTENT_ROOT}/consulting/*/*/${slug}/en.md`,
     `${CONTENT_ROOT}/research/*/*/${slug}/zh.md`,
     `${CONTENT_ROOT}/research/*/*/${slug}/en.md`,
     `${CONTENT_ROOT}/projects/*/*/${slug}/zh.md`,
@@ -26,7 +28,7 @@ export async function findEntriesBySlug(slug) {
   ];
   for (const pattern of patterns) {
     for await (const file of glob(pattern)) {
-      const collection = file.includes('/galleries/') ? 'gallery' : file.includes('/writing/') ? 'writing' : file.includes('/research/') ? 'research' : 'project';
+      const collection = file.includes('/galleries/') ? 'gallery' : file.includes('/writing/') ? 'writing' : file.includes('/consulting/') ? 'consulting' : file.includes('/research/') ? 'research' : 'project';
       results.push({ file, slug, collection });
     }
   }

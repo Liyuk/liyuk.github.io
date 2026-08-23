@@ -1,6 +1,6 @@
 import { site } from '../data/site.mjs';
 
-export type PageKind = 'website' | 'collection' | 'writing' | 'research' | 'project' | 'gallery';
+export type PageKind = 'website' | 'collection' | 'writing' | 'consulting' | 'research' | 'project' | 'gallery';
 
 export interface StructuredDataImage {
   src: string;
@@ -188,7 +188,7 @@ export function buildStructuredData(input: StructuredDataInput) {
       codeRepository: isWork ? undefined : repositoryUrl,
       isBasedOn: paperUrl ? [paperUrl] : undefined,
     });
-  } else if (pageKind === 'writing') {
+  } else if (pageKind === 'writing' || pageKind === 'consulting') {
     graph.push({
       '@type': 'Article',
       '@id': contentId,

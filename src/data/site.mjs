@@ -50,9 +50,9 @@ export const site = {
     { href: '/columns/', key: 'columns' },
     { href: '/projects/', key: 'projects' },
     { href: '/research/', key: 'research' },
+    { href: '/consulting/', key: 'consulting' },
     { href: '/photos/', key: 'photos' },
     { href: '/about/', key: 'about' },
-    { href: '/consulting/', key: 'consulting' },
   ],
   translation: {
     sourceLocale: 'zh-CN',
