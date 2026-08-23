@@ -12,6 +12,7 @@ import { translationStatusForLocale } from '../src/lib/content-model.ts';
 
 export const TRANSLATION_POLICY = {
   writing: 'required',
+  consulting: 'required',
   projects: 'required',
   galleries: 'required',
   // Research English routes deliberately use the documented zh-CN fallback while

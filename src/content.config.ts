@@ -28,6 +28,28 @@ const writing = defineCollection({
   }).strict(),
 });
 
+const consulting = defineCollection({
+  loader: glob({ base: './src/content/consulting', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    locale: z.enum(['zh-CN', 'en']).default('zh-CN'),
+    translationStatus: z.enum(['original', 'draft', 'reviewed']).default('original'),
+    createdAt: contentDate,
+    publishedAt: contentDate.optional(),
+    updatedAt: contentDate.optional(),
+    episode: z.number().int().positive().optional(),
+    guest: z.string().optional(),
+    format: z.enum(['career-case', 'interview', 'mock-interview', 'management-case']).default('career-case'),
+    featured: z.boolean().default(false),
+    draft: z.boolean().default(false),
+    tags: z.array(z.string()).default([]),
+    citationUrls: z.array(z.string().url()).default([]),
+    column: z.object({ slug: z.string(), order: z.number().int().positive() }).optional(),
+    translationKey: z.string().optional(),
+  }).strict(),
+});
+
 const project = defineCollection({
   loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
@@ -41,6 +63,7 @@ const project = defineCollection({
     status: z.enum(['active', 'maintained', 'archived']),
     repositoryUrl: z.string().url(),
     paperUrl: z.string().url().optional(),
+    support: z.boolean().default(false),
     hero: z.object({
       src: z.string().startsWith('/'),
       alt: z.string().min(1),
@@ -78,6 +101,7 @@ const research = defineCollection({
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
     citationUrls: z.array(z.string().url()).default([]),
+    column: z.object({ slug: z.string(), order: z.number().int().positive() }).optional(),
     translationKey: z.string().optional(),
   }).refine((data) => data.repositoryUrl || data.paperUrl, {
     message: 'research 至少需要 repositoryUrl 或 paperUrl 中的一个。',
@@ -127,4 +151,4 @@ const gallery = defineCollection({
   }),
 });
 
-export const collections = { writing, project, research, gallery };
+export const collections = { writing, consulting, project, research, gallery };

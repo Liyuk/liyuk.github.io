@@ -23,6 +23,10 @@ export function writingUrl(entryId: string, locale = 'zh-CN'): string {
   return contentUrl('writing', entryId, locale);
 }
 
+export function consultingUrl(entryId: string, locale = 'zh-CN'): string {
+  return contentUrl('consulting', entryId, locale);
+}
+
 export function projectUrl(entryId: string, locale = 'zh-CN'): string {
   return contentUrl('project', entryId, locale);
 }
@@ -31,18 +35,14 @@ export function researchUrl(entryId: string, locale = 'zh-CN'): string {
   return contentUrl('research', entryId, locale);
 }
 
-// One URL helper for the writing/gallery collections that can share a column.
-// Columns mix essays and galleries, so callers must not assume which
-// collection a column member belongs to. Gallery entries carry a `slug`; writing
-// entries are addressed by their dated id.
+// One URL helper for collections that can share a column. Gallery entries carry
+// a `slug`; dated entries are addressed by their id.
 export type ColumnMember =
   | { collection: 'gallery'; id: string; data: { slug: string } }
-  | { collection: 'writing'; id: string; data: Record<string, unknown> };
+  | { collection: 'writing' | 'consulting' | 'research'; id: string; data: Record<string, unknown> };
 
 export function entryUrl(entry: ColumnMember, locale = 'zh-CN'): string {
-  return entry.collection === 'gallery'
-    ? galleryUrl(entry.data.slug, locale)
-    : writingUrl(entry.id, locale);
+  return entry.collection === 'gallery' ? galleryUrl(entry.data.slug, locale) : contentUrl(entry.collection, entry.id, locale);
 }
 
 export function columnEntryUrl(entry: ColumnMember, locale = 'zh-CN'): string {

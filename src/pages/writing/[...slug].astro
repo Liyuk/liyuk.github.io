@@ -12,7 +12,7 @@ import Comments from '../../components/Comments.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import RelatedEntries from '../../components/RelatedEntries.astro';
 import { previewable } from '../../lib/content-model.ts';
-import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
+import { getColumnCollections, groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { writingSlug } from '../../lib/content-paths.ts';
 import { columnUrl, columnEntryUrl, writingUrl } from '../../lib/content-paths.ts';
 import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
@@ -35,10 +35,10 @@ const entry = pickLocaleVariant(variants, locale)!;
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
 const { Content, headings } = await render(entry);
-const allWriting = await getCollection('writing', ({ data }) => !data.draft && data.locale === entry.data.locale);
-const allGalleries = await getCollection('gallery', ({ data }) => !data.draft && data.locale === entry.data.locale);
+const { writing: allWriting, consulting: allConsulting, galleries: allGalleries } = await getColumnCollections(entry.data.locale);
+const columnMembers = [...allWriting, ...allConsulting, ...allGalleries];
 const indexableTags = getIndexableTags(allWriting).map(({ slug }) => slug);
-const columnEntries = entry.data.column ? getColumnEntries([...allWriting, ...allGalleries], entry.data.column.slug) : [];
+const columnEntries = entry.data.column ? getColumnEntries(columnMembers, entry.data.column.slug) : [];
 const columnIndex = columnEntries.findIndex((columnEntry) => columnEntry.id === entry.id);
 const previousColumnEntry = columnEntries[columnIndex - 1];
 const nextColumnEntry = columnEntries[columnIndex + 1];
@@ -69,7 +69,7 @@ const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2
   <ReadingProgress />
   <article class="article shell">
     <header><p class="eyebrow">{ui.navigation.writing}</p><h1>{entry.data.title}</h1><p class="article-dek" data-pagefind-meta="description">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{ui.entry.publishedAt} {formatDate(publishedDate(entry))}</time>{entry.data.updatedAt && <time datetime={isoDate(entry.data.updatedAt)}>{ui.entry.updatedAt} {formatDate(entry.data.updatedAt)}</time>}<span>{ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span></div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" pagefindFilter /></header>
-    {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={[...allWriting, ...allGalleries]} />}
+    {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={columnMembers} />}
     <div class="article-body">
       {hasOutline && <TableOfContents headings={headings} locale={locale} />}
       <div class="prose" data-pagefind-body><Content /></div>

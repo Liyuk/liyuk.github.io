@@ -1,6 +1,6 @@
 ---
 title: 外链与来源权威：从链接数量转向可引用关系
-description: 用来源质量、编辑语境、真实引荐和目标页价值治理外链，不把 DR、DA 或 Authority Score 当成排名公式。
+description: 外链数量和真实引荐是两件事：来源语境、目标页价值，比 DR、DA 这类第三方分数更值得盯。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -64,7 +64,7 @@ flowchart LR
 
 这张图能防止外链工作只盯着来源数量。目标页换了 URL、事实过期或不再承接原意图时，右边的维护动作同样重要。可以把引荐价值拆成来源相关性、有效到达率和页面任务完成率三个指标，不用一个第三方权威分数代替它们。
 
-## 公开资料
+## 引用来源
 
 - [Google Crawlable links](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)
 - [Google Spam policies](https://developers.google.com/search/docs/essentials/spam-policies)

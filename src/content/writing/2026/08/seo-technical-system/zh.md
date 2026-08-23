@@ -1,6 +1,6 @@
 ---
 title: 技术 SEO 底盘：URL、渲染、迁移与性能
-description: 把页面身份、抓取边界、渲染内容、迁移映射和 Core Web Vitals 收敛成一份可验收的页面合同。
+description: 一篇内容如果有好几个能打开的地址，canonical、迁移和内链就会各说各话；页面合同先解决"谁是这个页面"。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -91,7 +91,7 @@ $$
 
 分子里的“tested actions”必须包括最终状态和目标页检查，只有写进 CSV 但没有回放过的映射不算覆盖。
 
-## 公开资料
+## 参考资料
 
 - [Google Crawling and Indexing](https://developers.google.com/search/docs/crawling-indexing)
 - [Google Robots.txt specifications](https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt)

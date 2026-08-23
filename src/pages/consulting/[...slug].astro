@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TagList from '../../components/TagList.astro';
+import ColumnCard from '../../components/ColumnCard.astro';
+import AuthorByline from '../../components/AuthorByline.astro';
+import ShareRow from '../../components/ShareRow.astro';
+import RssSubscribe from '../../components/RssSubscribe.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import Comments from '../../components/Comments.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
+import { previewable, publishedIn } from '../../lib/content-model.ts';
+import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
+import { contentSlug, consultingUrl } from '../../lib/content-paths.ts';
+import { getIndexableTags } from '../../lib/taxonomy.ts';
+import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
+import { i18n } from '../../i18n/index.mjs';
+import { publishedDate } from '../../lib/timeline.ts';
+import { readingMinutes } from '../../lib/reading-time.ts';
+import { getColumnCollections } from '../../lib/content-query.ts';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('consulting', previewable);
+  return groupByLocaleVariant(entries, (entry) => contentSlug(entry.id)).map(({ slug, variants }) => ({ params: { slug }, props: { variants } }));
+}
+
+const { variants } = Astro.props;
+const locale = Astro.currentLocale ?? 'zh-CN';
+const entry = pickLocaleVariant(variants, locale)!;
+const ui = i18n(locale);
+const { Content, headings } = await render(entry);
+const allEntries = await getCollection('consulting', publishedIn(locale));
+const { writing: columnWriting, consulting: columnConsulting, galleries: columnGalleries } = await getColumnCollections(locale);
+const columnEntries = [...columnWriting, ...columnConsulting, ...columnGalleries];
+const indexableTags = getIndexableTags(allEntries).map(({ slug }) => slug);
+const related = allEntries.filter((candidate) => candidate.id !== entry.id).slice(0, 3);
+const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
+const formatDate = (date: Date) => formatFullDate(date, locale);
+---
+<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.name}`} description={entry.data.description} type="article" pageKind="consulting" section="consulting" articleTitle={entry.data.title} keywords={entry.data.tags} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)}>
+  <ReadingProgress />
+  <article class="article shell">
+    <header><p class="eyebrow">{ui.navigation.consulting}{entry.data.episode ? ` · ${entry.data.episode}` : ''}</p><h1>{entry.data.title}</h1><p class="article-dek" data-pagefind-meta="description">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{ui.entry.publishedAt} {formatDate(publishedDate(entry))}</time><span>{ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span></div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" pagefindFilter /></header>
+    {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={columnEntries} />}
+    <div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose" data-pagefind-body><Content /></div></div>
+    <ShareRow locale={locale} title={entry.data.title} url={new URL(Astro.url.pathname, Astro.site).href} type="writing" />
+    <RssSubscribe locale={locale} />
+    <Comments lang={locale} />
+    {related.length > 0 && <nav class="post-pagination" aria-label={ui.navigation.consulting}><div class="pagination-col">{related[0] && <a class="next" href={consultingUrl(related[0].id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{related[0].data.title}</span></a>}</div></nav>}
+  </article>
+</BaseLayout>

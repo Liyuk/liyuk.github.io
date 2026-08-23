@@ -8,8 +8,8 @@ import { i18n } from '../../i18n/index.mjs';
 const locale = Astro.currentLocale ?? 'zh-CN';
 const copy = i18n(locale).page.tags;
 const ui = i18n(locale);
-const { writing, research, projects, galleries } = await getAllPublished(locale);
-const tags = getIndexableTags([...writing, ...research, ...projects, ...galleries]);
+const { writing, consulting, research, projects, galleries } = await getAllPublished(locale);
+const tags = getIndexableTags([...writing, ...consulting, ...research, ...projects, ...galleries]);
 ---
 
 <BaseLayout title={`${copy.eyebrow} — ${ui.brand}`} description={copy.description} pageKind="collection" section="tags">

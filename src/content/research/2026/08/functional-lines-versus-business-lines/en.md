@@ -8,6 +8,7 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [organization-design, ai, engineering, functional-teams, business-lines, work-leadership]
+column: { slug: engineering-ai-judgment, order: 5 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/functional-lines-versus-business-lines
@@ -105,7 +106,7 @@ This kind of division has several clear opposites that organizational judgment m
 - **It is not abolishing functional lines indiscriminately.** In domains with high skill barriers that require depth, functional lines may still be the better form of organization. This is a signal-based judgment, not an ideology.
 - **It is not turning "end-to-end" into the disappearance of responsibility.** Cross-domain delivery expands scope, not responsibility — judgments about data models, security, performance, and user experience still need someone accountable. If "end-to-end" only means interfaces disappearing from the org chart, it leaves a nobody-is-accountable void on the risk side.
 
-## 7. How to land it: a small-scope, falsifiable pilot
+## 7. How to put it into practice: a small-scope, falsifiable pilot
 
 Organizational redesign should not begin with a full restructuring. A pilot path suited to one clearly defined business chain:
 
@@ -185,7 +186,7 @@ It should be noted that "functional lines have been substantially abolished in C
 
 ## 10. What talent the future needs
 
-Changes in organizational form ultimately land on talent needs. This paper's spectrum points to a relatively clear set of capability combinations — not "everyone must be full-stack," but several roles each with a distinct emphasis:
+Changes in organizational form ultimately shape talent needs. This paper's spectrum points to a relatively clear set of capability combinations — not "everyone must be full-stack," but several roles each with a distinct emphasis:
 
 **1. People who can run the full chain (cross-domain deliverers).** Corresponding to C/D on the spectrum. They need not be proficient at everything, but can understand the whole business, organize resources, complete delivery, and take responsibility for outcomes. AI lowers the threshold for "crossing functional boundaries," making such people a scarce resource — what is scarce is not coding ability, but the ability to **translate business problems into executable judgment**. Public discussion corroborates this direction: industry demand for talent is turning toward the compound "algorithm + application + agent" capability [8], and compound AI talent is increasingly favored by companies [9].
 

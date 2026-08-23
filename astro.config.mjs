@@ -18,7 +18,7 @@ for await (const file of glob('src/content/**/*.{md,mdx}')) {
   const date = value('updatedAt') ?? value('publishedAt') ?? value('createdAt');
   if (!date) continue;
   const normalized = file.replaceAll('\\\\', '/');
-  const match = normalized.match(/^src\/content\/(writing|research|projects)\/(\d{4}\/\d{2}\/[^/]+)\/(?:zh|en)\.(?:md|mdx)$/);
+  const match = normalized.match(/^src\/content\/(writing|consulting|research|projects)\/(\d{4}\/\d{2}\/[^/]+)\/(?:zh|en)\.(?:md|mdx)$/);
   const gallery = normalized.match(/^src\/content\/galleries\/([^/]+?)(\.en)?\.(?:md|mdx)$/);
   const route = match
     ? `/${match[1] === 'projects' ? 'projects' : match[1]}/${match[2]}/`

@@ -5,18 +5,20 @@ import { lastUpdatedDate, publishedDate } from './timeline.ts';
 
 type FeedEntry =
   | CollectionEntry<'writing'>
+  | CollectionEntry<'consulting'>
   | CollectionEntry<'research'>
   | CollectionEntry<'project'>
   | CollectionEntry<'gallery'>;
 type FeedRecord = {
   entry: FeedEntry;
-  collection: 'writing' | 'research' | 'project' | 'gallery';
+  collection: 'writing' | 'consulting' | 'research' | 'project' | 'gallery';
 };
 
 export async function getFeedItems(locale: string) {
-  const { writing, research, projects, galleries } = await getAllPublished(locale);
+  const { writing, consulting, research, projects, galleries } = await getAllPublished(locale);
   const entries: FeedRecord[] = [
     ...writing.map((entry) => ({ entry, collection: 'writing' as const })),
+    ...consulting.map((entry) => ({ entry, collection: 'consulting' as const })),
     ...research.map((entry) => ({ entry, collection: 'research' as const })),
     ...projects.map((entry) => ({ entry, collection: 'project' as const })),
     ...galleries.map((entry) => ({ entry, collection: 'gallery' as const })),

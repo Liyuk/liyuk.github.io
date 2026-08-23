@@ -13,18 +13,16 @@ const copy = i18n(locale).page.columnsDetail;
 const ui = i18n(locale);
 
 export async function getStaticPaths() {
-  const { writing, galleries } = await getColumnCollections('zh-CN');
-  const entries = [...writing, ...galleries];
-  return Object.keys(columns).filter((slug) => getColumnEntries(entries, slug).length > 0).map((slug) => ({ params: { slug }, props: {} }));
+  return Object.keys(columns).map((slug) => ({ params: { slug }, props: {} }));
 }
 
 const { slug } = Astro.params;
-const { writing, galleries } = await getColumnCollections(locale);
-const entries = [...writing, ...galleries];
+const { writing, consulting, research, galleries } = await getColumnCollections(locale);
+const entries = [...writing, ...consulting, ...research, ...galleries];
 const column = getColumn(slug, locale);
 const chapters = getColumnEntries(entries, slug);
 const formatDate = (date: Date) => formatFullDate(date, locale);
-const chapterDates = (entry: CollectionEntry<'writing'> | CollectionEntry<'gallery'>) => {
+const chapterDates = (entry: CollectionEntry<'writing'> | CollectionEntry<'consulting'> | CollectionEntry<'research'> | CollectionEntry<'gallery'>) => {
   const published = `${ui.entry.publishedAt} ${formatDate(publishedDate(entry))}`;
   const updated = entry.data.updatedAt ? `${ui.entry.updatedAt} ${formatDate(entry.data.updatedAt)}` : undefined;
   return copy.chapterDate(published, updated);
@@ -33,5 +31,5 @@ const chapterDates = (entry: CollectionEntry<'writing'> | CollectionEntry<'galle
 
 <BaseLayout title={copy.title(column?.label ?? '')} description={column?.description}>
   <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{column?.label}</h1><p>{column?.description}</p></section>
-  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}><ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column!.order)}</span><h2><a href={columnEntryUrl(entry, locale)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol></section>
+  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}>{chapters.length > 0 ? <ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column!.order)}</span><h2><a href={columnEntryUrl(entry, locale)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol> : <p class="about-cooperate-desc">{copy.empty}</p>}</section>
 </BaseLayout>

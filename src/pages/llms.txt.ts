@@ -9,6 +9,7 @@ export const prerender = true;
 
 type LlmsEntry =
   | (CollectionEntry<'writing'> & { collection: 'writing' })
+  | (CollectionEntry<'consulting'> & { collection: 'consulting' })
   | (CollectionEntry<'research'> & { collection: 'research' })
   | (CollectionEntry<'project'> & { collection: 'project' })
   | (CollectionEntry<'gallery'> & { collection: 'gallery' });
@@ -45,6 +46,8 @@ export async function GET() {
   const enProjects = withCollection(en.projects, 'project');
   const zhWriting = withCollection(zh.writing, 'writing');
   const enWriting = withCollection(en.writing, 'writing');
+  const zhConsulting = withCollection(zh.consulting, 'consulting');
+  const enConsulting = withCollection(en.consulting, 'consulting');
   const zhGalleries = withCollection(zh.galleries, 'gallery');
   const enGalleries = withCollection(en.galleries, 'gallery');
   const body = [
@@ -57,6 +60,7 @@ export async function GET() {
     `- [About Liyuk](${absolute('/about/')}) — engineer, writer, and researcher focused on technology, leadership, AI systems, and Agent HCI.`,
     `- [English profile](${absolute('/en/about/')})`,
     `- [Writing](${absolute('/writing/')}) · [English](${absolute('/en/writing/')})`,
+    `- [Consulting](${absolute('/consulting/')}) · [English](${absolute('/en/consulting/')})`,
     `- [Research](${absolute('/research/')}) · [English](${absolute('/en/research/')})`,
     `- [Projects](${absolute('/projects/')}) · [English](${absolute('/en/projects/')})`,
     `- [Photos](${absolute('/photos/')}) · [English](${absolute('/en/photos/')})`,
@@ -68,6 +72,8 @@ export async function GET() {
     section('Projects — English', enProjects, 'en'),
     section('Recent writing — 中文', zhWriting.slice(0, 40), 'zh-CN'),
     section('Recent writing — English', enWriting.slice(0, 40), 'en'),
+    section('Consulting — 中文', zhConsulting, 'zh-CN'),
+    section('Consulting — English', enConsulting, 'en'),
     section('Photography — 中文', zhGalleries, 'zh-CN'),
     section('Photography — English', enGalleries, 'en'),
     '## Machine-readable resources',

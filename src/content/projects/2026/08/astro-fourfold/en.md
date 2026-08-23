@@ -48,6 +48,8 @@ This project does not include the reference site's articles, images, brand, pers
 
 ## Design principles
 
+The principles came from a concrete maintenance problem. Imagine a personal blog that has accumulated tags for several years. When its author wants to give a group of articles a reading order, the only available tool is the tag system, so tags such as `series-xxx-01` and `series-xxx-02` get added. The tag index is immediately polluted: it answers neither what a piece is about nor the order in which it should be read. Projects and research run into the same problem when maintenance or freshness status gets stuffed into titles or summaries because the content model has nowhere else to put it. A one-off fix is easy; having to invent another field convention every time a new reading mode appears is the reason to settle the content model before shaping the pages.
+
 ### 1. Content model before page model
 
 Pages are different projections of content collections. Adding a tag or year should not require hand-writing a new page; pages should be derived from schemas and query functions.
@@ -64,9 +66,19 @@ The build handles pages, RSS, sitemaps, SEO, and search data. The browser handle
 
 Comments, email subscriptions, login, cloud favorites, analytics, and a CMS are not part of the core template. They should be connected through configuration or independent components without polluting the content layer or static build layer.
 
-### 5. Honest examples
+### 5. A few honest examples
 
 Template examples demonstrate structure and capability; they do not simulate a real author's experience, work, or social relationships. Before publishing, users should replace the author, domain, social links, license, and example content.
+
+## Why not use an existing solution?
+
+Before building Fourfold, three easier options were available:
+
+- **Use a CMS such as Ghost or WordPress.** The editing experience, comments, and subscriptions are ready-made, but the trade-off is maintaining a database and an administrative backend. Content and presentation become tightly coupled, and a semantic field such as column order usually means modifying a plugin or embedding HTML in the body.
+- **Use Hugo or Jekyll with an existing theme.** The static-first direction is sound and avoids writing a build pipeline, but most themes model only articles, categories, and tags. Adding columns or project status either misuses frontmatter or couples custom fields to the theme.
+- **Publish directly from Notion or Feishu Docs.** This removes almost all build work, but gives up an independent domain, RSS, sitemap, durable archives, and the ability to organize content through site-wide tags and columns.
+
+Fourfold therefore sits between “I need semantic content types and reading modes” and “I do not want to maintain a backend.” Static builds retain the deployment simplicity of a Hugo-style site, while the schema and query layers are designed around columns, tags, and project status. The cost is a slower start: the author has to build schema checks and query logic instead of installing a theme.
 
 ## User model
 
@@ -98,7 +110,7 @@ The current version does not aim to:
 - become a social network or infinite feed;
 - copy the brand or content of any specific site.
 
-## Current delivery
+## What is currently shipped
 
 - Astro static-build foundation.
 - Six content collections: writing, columns, projects, research, photos, and links.
@@ -357,6 +369,6 @@ All pages and components should prefer these semantic tokens over isolated color
 - Removing example content does not make an empty collection crash the build.
 - The README lets another person start their own blog by changing only configuration and content.
 
-## In one sentence
+## Current state and limitations
 
-> Fourfold is not a blog that writes for you; it is a personal-publication skeleton that makes long-term writing easier to organize, discover, and continue reading.
+Fourfold now has the content schema, query layer, pages for six content types, static search, RSS, sitemap, and consistency checks. Comments, email subscriptions, and cross-device favorites are not connected yet; they require external services, so the template only leaves room for them. If the goal is simply to launch a personal writing site without columns or project status, an existing static-blog theme will probably be faster. Fourfold is meant for a long-term publication whose content types and reading modes will keep expanding.

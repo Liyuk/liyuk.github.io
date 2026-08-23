@@ -61,6 +61,7 @@ export const tags: Record<string, [string, string]> = {
   ai: ['AI', 'AI'],
   astro: ['Astro', 'Astro'],
   architecture: ['Architecture', 'Architecture'],
+  algorithms: ['算法', 'Algorithms'],
   beauty: ['Beauty', 'Beauty'],
   books: ['Books', 'Books'],
   'capacity-planning': ['Capacity Planning', 'Capacity Planning'],
@@ -211,9 +212,29 @@ export const columns: Record<string, { label: { 'zh-CN': string; en: string }; d
     label: { 'zh-CN': '成长与自我评估', en: 'Growth & Self-Assessment' },
     description: { 'zh-CN': '不靠标签评价自己：从潜力、成长到诚实的自我评估。', en: 'Beyond labels: assessing potential, growth, and honest self-evaluation.' },
   },
+  'early-career-start': {
+    label: { 'zh-CN': '校招与职业起步', en: 'Early Career & Starting Out' },
+    description: { 'zh-CN': '围绕校招、实习、offer 选择和进入职场后第一步的咨询记录。', en: 'Consultation records about internships, campus recruiting, offer choices, and the first step into work.' },
+  },
+  'interview-job-search': {
+    label: { 'zh-CN': '面试与求职准备', en: 'Interview & Job Search Preparation' },
+    description: { 'zh-CN': '围绕目标岗位、简历、项目经历、表达和面试案例的咨询记录。', en: 'Consultation records about target roles, resumes, project stories, communication, and interview cases.' },
+  },
+  'career-management-growth': {
+    label: { 'zh-CN': '职业路径与管理成长', en: 'Career Paths & Management Growth' },
+    description: { 'zh-CN': '围绕职业选择、晋升、转管理和管理者成长的咨询记录。', en: 'Consultation records about career choices, promotion, management transitions, and manager growth.' },
+  },
+  'engineering-team-judgment': {
+    label: { 'zh-CN': '工程团队与技术判断', en: 'Engineering Teams & Technical Judgment' },
+    description: { 'zh-CN': '围绕团队职责、工程协作、技术规划和产品判断的咨询记录。', en: 'Consultation records about team responsibilities, engineering collaboration, technical planning, and product judgment.' },
+  },
   'search-engine-growth': {
     label: { 'zh-CN': '搜索引擎增长工程', en: 'Search Engine Growth' },
     description: { 'zh-CN': '从给 Google 爬虫优化到给 AI 引擎优化：一条可观测、可工程的搜索引擎增长线。', en: 'From optimizing for Google crawlers to optimizing for AI engines: an observable, engineerable growth line.' },
+  },
+  'engineering-ai-judgment': {
+    label: { 'zh-CN': '工程与 AI 判断', en: 'Engineering & AI Judgment' },
+    description: { 'zh-CN': '从问题定位方法到数据度量协议、AI 工程边界、组织重划与 Agent 协作设计——一组研究论文记录的技术与组织判断路径。', en: 'From a problem-framing method to measurement protocols, AI engineering boundaries, org redesign, and agent collaboration — a research thread on technical and organizational judgment.' },
   },
 };
 
@@ -230,6 +251,10 @@ export const startGroups: { key: 'method' | 'management' | 'engineering'; column
       'multi-team-management',
       'recruiting-and-professional-relationships',
       'growth-self-assessment',
+      'early-career-start',
+      'interview-job-search',
+      'career-management-growth',
+      'engineering-team-judgment',
     ],
   },
   {
@@ -240,6 +265,7 @@ export const startGroups: { key: 'method' | 'management' | 'engineering'; column
       'documentation',
       'product-judgment',
       'search-engine-growth',
+      'engineering-ai-judgment',
     ],
   },
 ];

@@ -30,12 +30,12 @@ Draft preview is deliberately limited to real detail entries in development. Dra
 
 ## Content workflow
 
-Use `npm run new:post` for writing, research, or projects and `npm run new:gallery` for galleries. New entries start as `draft: true`.
+Use `npm run new:post` for writing, research, consulting, or projects and `npm run new:gallery` for galleries. New entries start as `draft: true`. Before drafting, read the relevant `agent/category-guides/*.md` and, if using Claude Code, the matching `write-*` skill in `.claude/skills/`; both encode structure and evidentiary/comparative expectations specific to that collection that this file doesn't repeat.
 
-| Kind                         | Source convention                                            | Public route                            |
-| ---------------------------- | ------------------------------------------------------------ | --------------------------------------- |
-| Writing / research / project | `src/content/<collection>/YYYY/MM/<slug>/zh.md` plus `en.md` | `/writing/`, `/research/`, `/projects/` |
-| Gallery                      | `src/content/galleries/<slug>.md` plus `<slug>.en.md`        | `/photos/<slug>/`                       |
+| Kind                                      | Source convention                                            | Public route                                            |
+| ----------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------- |
+| Writing / research / project / consulting | `src/content/<collection>/YYYY/MM/<slug>/zh.md` plus `en.md` | `/writing/`, `/research/`, `/projects/`, `/consulting/` |
+| Gallery                                   | `src/content/galleries/<slug>.md` plus `<slug>.en.md`        | `/photos/<slug>/`                                       |
 
 Use `src/lib/content-paths.ts` rather than assembling content URLs. The `project` collection is singular but the directory and public route are plural. Gallery creation requires macOS `sips` and `cwebp`; its generated WebP files belong under `public/images/galleries/`.
 
@@ -48,6 +48,7 @@ Before an editor changes `draft: true` to `false`, confirm:
 - locale filenames, frontmatter, `translationKey`, and translation status pass `npm run audit:content`; Chinese source files are `original`, published English files are `reviewed`, and `translationStatus: draft` is reserved for unpublished English work;
 - published writing, projects, and galleries have their required English sibling; research fallback is only for English detail pages, not English archives or RSS;
 - public wording contains no secret, private contact detail, unreviewed local URL, or unpublished material;
+- `.claude/skills/content-review` (or an equivalent manual pass) has been run and its public-risk and category-fit findings addressed;
 - the site owner explicitly approved publication.
 
 `npm run publish <slug>` publishes the sibling pair and normalizes Chinese `original` / English `reviewed` translation status after editorial approval. Do not use `git push --no-verify` as a routine publishing workflow.

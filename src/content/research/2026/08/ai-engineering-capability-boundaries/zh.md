@@ -8,6 +8,7 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [ai, software-engineering, agent-systems, developer-productivity, governance, technology]
+column: { slug: engineering-ai-judgment, order: 4 }
 ---
 
 **版本：** 0.3（preprint）

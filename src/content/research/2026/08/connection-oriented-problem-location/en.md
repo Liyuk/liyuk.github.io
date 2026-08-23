@@ -9,6 +9,7 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 draft: false
 tags: [thinking, problem-framing, decision-making, communication, leadership, work-leadership, strategy]
+column: { slug: engineering-ai-judgment, order: 1 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/connection-oriented-problem-location
@@ -123,7 +124,7 @@ The Dialectical lens requires **stepping outside both sides and asking what is o
 
 The Dialectical lens is the antidote to the Duality lens: the Duality lens lays out pro and con, while the Dialectical lens steps outside both and returns to objective fact. The pro side says A is good, the con side says A is bad; objectively it is often "under what conditions A is good, and under what conditions it is bad." The dialectical judgment a manager needs most is **returning to the facts**: set the dispute over positions aside, confirm what the verifiable, reproducible objective part is, and only then discuss judgment.
 
-The misuse the Dialectical lens must guard against is **using "dialectical unity" as a shield**: calling any conflict "both opposed and unified" is saying nothing at all. Dialectical judgment must land on **verifiable facts** — "what is objectively true" must point to specific, checkable facts, or it is just muddling through.
+The misuse the Dialectical lens must guard against is **using "dialectical unity" as a shield**: calling any conflict "both opposed and unified" is saying nothing at all. Dialectical judgment must rest on **verifiable facts** — "what is objectively true" must point to specific, checkable facts, or it is just muddling through.
 
 ### 4.4 The Position lens: what are their goals and needs
 
@@ -190,7 +191,7 @@ When there are multiple candidate solutions, use a **decision matrix** to score 
 
 ### 6.3 SMART: bring the solution down to verifiable, assignable granularity
 
-A solution must ultimately become actions, and actions must be verifiable. **SMART** (Specific, Measurable, Achievable, Relevant, Time-bound) rewrites an unverifiable statement like "improve user experience" into "raise the first-load completion rate from 82% to 95% before June, without increasing wait for the upper segments." This is the natural landing point of structured thinking in Stage 4 — the output of thinking must land at verifiable granularity.
+A solution must ultimately become actions, and actions must be verifiable. **SMART** (Specific, Measurable, Achievable, Relevant, Time-bound) rewrites an unverifiable statement like "improve user experience" into "raise the first-load completion rate from 82% to 95% before June, without increasing wait for the upper segments." This is the natural endpoint of structured thinking in Stage 4 — the output of thinking must be specific enough to verify.
 
 ### 6.4 No investigation, no right to speak
 
@@ -279,7 +280,7 @@ A sharper question still needs answering: the market already has several full-pr
 | Design thinking | Empathize → define → ideate → prototype → test | Locates the problem; design thinking mainly produces and iterates solutions | Lacks prototyping and user testing |
 | First principles | Decompose to basic facts that can be broken down no further | Adds a layer of "connection," not just decomposition | Less direct than first principles for physics/engineering problems |
 
-Positioning in one sentence: **the Five Lenses method does not replace these full processes; it patches the one link they share as a weakness — at the "analysis" step, making connections (causal/duality/dialectical/position/interest) explicit and landing them in a single actionable question.** For data-rich, quantifiable problems, DMAIC or A3 is more appropriate; for problems that lean on people and judgment and lack data, the Five Lenses method is lighter and more general.
+In one sentence: **the Five Lenses method does not replace these full processes; it strengthens their shared weak link — the "analysis" step — by making causal, dual, dialectical, positional, and interest-based connections explicit and turning them into one actionable question.** For data-rich, quantifiable problems, DMAIC or A3 is more appropriate; for problems that lean on people and judgment and lack data, the Five Lenses method is lighter and more general.
 
 ## 9. Conclusion
 

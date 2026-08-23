@@ -1,6 +1,6 @@
 ---
 title: 提交、收录与流量恢复：把搜索运营做成可靠系统
-description: 从 URL 状态机到流量事故排查，区分提交、抓取、索引和算法背景，建立可恢复的搜索运营流程。
+description: 提交成功、抓取成功、索引成功和排名回升是四件不同的事；把它们混成一句"收录了"，流量事故就没法排查。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -88,10 +88,9 @@ $$
 
 这两个比例也要按错误类别拆开。限流导致的重试和 canonical 冲突导致的重试，不应由同一个负责人处理。
 
-## 公开资料
+## 相关文档
 
 - [Google Sitemaps overview](https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview)
 - [Google Ask to recrawl](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl)
 - [Google Indexing API](https://developers.google.com/search/apis/indexing-api/v3/quickstart)
 - [Google Search Status Dashboard](https://status.search.google.com/)
-- [Google Spam policies](https://developers.google.com/search/docs/essentials/spam-policies)
