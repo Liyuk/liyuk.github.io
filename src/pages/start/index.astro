@@ -11,8 +11,8 @@ const ui = i18n(locale);
 const copy = ui.page.start;
 const countCopy = ui.page.columns.count;
 
-const { writing, galleries } = await getColumnCollections(locale);
-const entries = [...writing, ...galleries];
+const { writing, consulting, research, galleries } = await getColumnCollections(locale);
+const entries = [...writing, ...consulting, ...research, ...galleries];
 
 const groups = startGroups.map((group) => ({
   key: group.key,

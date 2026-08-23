@@ -10,13 +10,16 @@ import { site } from '../data/site.mjs';
 import { sortByCreatedAt } from '../lib/timeline.ts';
 
 const HOME_POSTS = 3;
+const HOME_FEATURED = 3;
 
 const locale = Astro.currentLocale ?? 'zh-CN';
 const published = publishedIn(locale);
 const writing = sortByCreatedAt(await getCollection('writing', published));
-const featured = sortByCreatedAt(await getCollection('writing', (entry) => published(entry) && entry.data.featured === true));
-const featuredIds = new Set(featured.map((entry) => entry.id));
-const latest = writing.filter((entry) => !featuredIds.has(entry.id)).slice(0, HOME_POSTS);
+const latest = writing.slice(0, HOME_POSTS);
+const latestIds = new Set(latest.map((entry) => entry.id));
+const featured = sortByCreatedAt(await getCollection('writing', (entry) => published(entry) && entry.data.featured === true))
+  .filter((entry) => !latestIds.has(entry.id))
+  .slice(0, HOME_FEATURED);
 const projectCount = (await getCollection('project', published)).length;
 const researchCount = (await getCollection('research', published)).length;
 const copy = i18n(locale).page.home;
@@ -44,14 +47,14 @@ const path = (p: string) => getRelativeLocaleUrl(locale, p);
       <RssSubscribe locale={locale} />
     </div>
     <div class="entry-list">
+      <h3 class="entry-list-heading">{copy.writing.latest}</h3>
+      {latest.length ? latest.map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
       {featured.length > 0 && (
         <>
           <h3 class="entry-list-heading">{copy.writing.featured}</h3>
           {featured.map((entry) => <EntryCard entry={entry} locale={locale} />)}
         </>
       )}
-      <h3 class="entry-list-heading">{copy.writing.latest}</h3>
-      {latest.length ? latest.map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
     </div>
   </section>
 
