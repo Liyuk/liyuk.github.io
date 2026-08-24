@@ -230,7 +230,7 @@ h1, h2, h3, p { margin-top: 0; }
 .related-entries .eyebrow { margin-bottom: .75rem; }
 .related-grid { margin: 1.75rem 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; }
 .related-card { position: relative; display: flex; flex-direction: column; padding: 1.15rem 1.25rem 1rem; background: var(--paper-strong); border: 1px solid var(--line); border-radius: 12px; transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
-.related-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0, 0, 0, .08); }
+.related-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 22px rgba(var(--shadow-rgb), .14); }
 .related-card-link { display: flex; min-height: 7.5rem; flex-direction: column; text-decoration: none; color: var(--ink); }
 .related-type { align-self: flex-start; color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .related-card-title { margin-top: .55rem; font-family: var(--serif); font-size: 1.15rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.3; }
@@ -274,7 +274,7 @@ h1, h2, h3, p { margin-top: 0; }
 
 /* 分享渠道弹出面板：锚定在「分享」按钮正上方，向上浮出。 */
 .share-popover-wrap { position: relative; display: inline-flex; }
-.share-popover { position: absolute; left: 0; bottom: calc(100% + .6rem); z-index: 30; width: 13.5rem; padding: .55rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-strong); box-shadow: 0 12px 32px rgba(0, 0, 0, .14); }
+.share-popover { position: absolute; left: 0; bottom: calc(100% + .6rem); z-index: 30; width: 13.5rem; padding: .55rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-strong); box-shadow: 0 12px 32px rgba(var(--shadow-rgb), .22); }
 .share-popover[hidden] { display: none; }
 .share-popover-label { margin: .2rem .65rem .35rem; color: var(--muted); font-size: .66rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .share-popover-item { display: flex; align-items: center; width: 100%; padding: .45rem .65rem; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font: inherit; font-size: .88rem; text-align: left; text-decoration: none; cursor: pointer; transition: background-color 140ms ease; }
@@ -292,11 +292,11 @@ h1, h2, h3, p { margin-top: 0; }
 :root[data-theme='dark'] .share-popover-item:hover .share-icon,
 :root[data-theme='dark'] .share-popover-item:focus-visible .share-icon { color: var(--brand-dark); }
 /* 复制/收藏提示 toast：固定底部居中，短时出现。 */
-.share-toast { position: fixed; left: 50%; bottom: 2rem; z-index: 40; transform: translateX(-50%); max-width: min(90vw, 26rem); margin: 0; padding: .55rem 1rem; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: .85rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .18); }
+.share-toast { position: fixed; left: 50%; bottom: 2rem; z-index: 40; transform: translateX(-50%); max-width: min(90vw, 26rem); margin: 0; padding: .55rem 1rem; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: .85rem; box-shadow: 0 6px 24px rgba(var(--shadow-rgb), .28); }
 /* 微信二维码模态框。 */
 .share-modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1.5rem; background: rgba(0, 0, 0, .45); backdrop-filter: blur(2px); }
 .share-modal[hidden] { display: none; }
-.share-modal-card { position: relative; width: min(100%, 21rem); padding: 2rem 1.75rem 1.75rem; border-radius: 14px; background: var(--paper); color: var(--ink); text-align: center; box-shadow: 0 18px 50px rgba(0, 0, 0, .25); }
+.share-modal-card { position: relative; width: min(100%, 21rem); padding: 2rem 1.75rem 1.75rem; border-radius: 14px; background: var(--paper); color: var(--ink); text-align: center; box-shadow: 0 18px 50px rgba(var(--shadow-rgb), .38); }
 .share-modal-close { position: absolute; top: .7rem; right: .9rem; border: 0; background: transparent; color: var(--muted); font-size: 1.4rem; line-height: 1; cursor: pointer; }
 .share-modal-close:hover { color: var(--accent); }
 .share-modal-eyebrow { margin: 0 0 .75rem; color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
@@ -382,7 +382,7 @@ h1, h2, h3, p { margin-top: 0; }
 .photos-load-more-btn:disabled { color: var(--muted); cursor: default; }
 .gallery-card--hidden { display: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.photo-placeholder { min-height: min(56vw, 42rem); margin-bottom: clamp(4rem, 10vw, 9rem); display: grid; place-items: end start; padding: 1.5rem; background: linear-gradient(135deg, #294e49, #86afa4); color: white; }
+.photo-placeholder { min-height: min(56vw, 42rem); margin-bottom: clamp(4rem, 10vw, 9rem); display: grid; place-items: end start; padding: 1.5rem; background: radial-gradient(120% 140% at 12% 8%, #a8c9be 0%, #5c9186 38%, #294e49 72%, #1c332f 100%); color: white; }
 .photo-placeholder span { font: 500 clamp(1.5rem, 3vw, 3rem)/1 var(--serif); letter-spacing: -.04em; }
 .gallery-masonry { columns: 3 18rem; column-gap: 1rem; margin-bottom: clamp(4rem, 10vw, 9rem); }
 .gallery-card { position: relative; display: block; break-inside: avoid; margin-bottom: 1rem; background: var(--paper-strong); color: var(--ink); text-decoration: none; transition: transform 200ms ease, box-shadow 200ms ease; }
@@ -392,7 +392,7 @@ h1, h2, h3, p { margin-top: 0; }
 .gallery-card-copy strong { font-family: var(--serif); font-size: 1.5rem; font-weight: 500; letter-spacing: -.04em; line-height: 1.05; }
 .gallery-card-copy em { color: var(--muted); font-size: .86rem; font-style: normal; line-height: 1.45; }
 .gallery-card-copy small { margin-top: .25rem; color: var(--accent); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.gallery-card:hover { color: var(--ink); background: var(--paper-strong); box-shadow: 0 14px 30px -18px rgba(0, 0, 0, .35); }
+.gallery-card:hover { color: var(--ink); background: var(--paper-strong); box-shadow: 0 14px 30px -18px rgba(var(--shadow-rgb), .5); }
 .gallery-card:hover img { filter: saturate(1); transform: scale(1.025); }
 .gallery-detail { padding-block: clamp(5rem, 11vw, 9rem); }
 .gallery-header { max-width: 45rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }

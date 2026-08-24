@@ -20,6 +20,7 @@
   --icon-size-md: 1.2rem;
   --icon-size-lg: 1.5rem;
   --control-size: 2.75rem;
+  --shadow-rgb: 27, 38, 33;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,6 +33,7 @@
     --line: #414740;
     --accent: #9acbbb;
     --accent-soft: #28443d;
+    --shadow-rgb: 3, 6, 5;
   }
 }
 
@@ -44,4 +46,5 @@
   --line: #414740;
   --accent: #9acbbb;
   --accent-soft: #28443d;
+  --shadow-rgb: 3, 6, 5;
 }
