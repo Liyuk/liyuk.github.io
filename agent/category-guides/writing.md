@@ -18,6 +18,12 @@ Essays that make a claim about "the better way to do X" (a framework, a tool cho
 
 This does not apply to personal-narrative or reflective pieces (travel, personal habits, career reflection) — don't force comparative framing onto content that isn't making a comparative claim.
 
+## Reader value for analytical pieces
+
+For an analytical essay or case study, identify the reader situation before the publication pass: who is likely to recognize this problem, what they currently assume or do, what real contradiction, failure, or unexplained result puts that assumption under pressure, and what they can understand, judge, or do differently after reading. Use those questions to test whether the piece makes its value legible to a reader, not to force a problem-solution structure onto the draft.
+
+The tension must come from the material. Do not manufacture a misconception, conflict, or cost merely to make the opening sound important, and do not replace the author's experience with an abstract audience model. Personal notes and reflective pieces may create value through observation, memory, voice, or an unresolved question rather than by changing a reader's position.
+
 ## Drafting order
 
 1. Chinese first, all the way to a structurally complete draft, before any English work starts (see `CONTRIBUTING.md` for the publish-gate mechanics this feeds into).
@@ -29,6 +35,7 @@ This does not apply to personal-narrative or reflective pieces (travel, personal
 ## Pre-publish checklist
 
 - Title and opening reframe a real misconception, not a manufactured one.
+- In an analytical essay or case study, the intended reader can tell why the question matters and what understanding, judgment, or action the piece may change.
 - Every abstract claim is cashed out into criteria, a list, or a worked example.
 - No three consecutive sentences share near-identical length and clause structure.
 - `column` and `tags` are registered in `src/lib/taxonomy.ts` if used.

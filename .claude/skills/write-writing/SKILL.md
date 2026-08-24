@@ -18,10 +18,11 @@ This skill is for starting a new piece, not reviewing an existing one — use `.
 1. Start from a real observation, scene, question, disagreement, or failed attempt. Do not manufacture a misconception just to obtain a strong opening.
 2. Let the material reveal its frame. Use numbered or named sections only when the piece actually needs them; do not turn an in-progress thought into a finished taxonomy before it has earned one.
 3. Make abstract claims concrete through examples, criteria, or consequences, but do not mechanically convert every paragraph into a list.
-4. Use a negation-reframe opening, named method, reader exercise, FAQ, Mermaid diagram, or aphoristic ending only when it belongs to the material and the author would plausibly have reached for it.
-5. Populate `citationUrls` for any claim that isn't the author's own firsthand experience.
-6. Let the ending match the piece: a compressed conclusion is one option; a remaining question, image, or honest limitation may be better.
-7. Register any new `tags` or `column` slug in `src/lib/taxonomy.ts` before the draft is considered complete.
+4. For an analytical essay or case study, make a reader-value pass after the material has revealed its frame: identify the reader situation, the existing assumption placed under pressure by a real contradiction or failure, and what the reader may understand, judge, or do differently afterward. Use this to revise the title, description, opening, and argument priority, not as a mandatory problem-solution template. Do not manufacture tension or replace the author's experience with an abstract audience model.
+5. Use a negation-reframe opening, named method, reader exercise, FAQ, Mermaid diagram, or aphoristic ending only when it belongs to the material and the author would plausibly have reached for it.
+6. Populate `citationUrls` for any claim that isn't the author's own firsthand experience.
+7. Let the ending match the piece: a compressed conclusion is one option; a remaining question, image, or honest limitation may be better.
+8. Register any new `tags` or `column` slug in `src/lib/taxonomy.ts` before the draft is considered complete.
 
 ## Register discipline while drafting
 
