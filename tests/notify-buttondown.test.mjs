@@ -144,6 +144,18 @@ test('buildEmailHtml follows the site visual language', () => {
   assert.doesNotMatch(html, /#1456F0|border-radius:8px/);
 });
 
+test('buildEmailHtml makes relative article paths absolute for Buttondown', () => {
+  const html = buildEmailHtml({
+    blocks: [{
+      lang: 'en',
+      title: 'A new article',
+      summary: 'A summary.',
+      url: '/en/consulting/2026/08/example/',
+    }],
+  });
+  assert.match(html, /href="https:\/\/liyuk\.com\/en\/consulting\/2026\/08\/example\/"/);
+  assert.doesNotMatch(html, /href="\/en\/consulting\/2026\/08\/example\/"/);
+});
 test('email idempotency prefers canonical URL and remains compatible with legacy subject records', () => {
   const candidate = { subject: 'Same title', canonicalUrl: 'https://liyuk.com/writing/2026/08/a/' };
   assert.equal(
