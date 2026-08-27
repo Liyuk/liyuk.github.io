@@ -5,7 +5,7 @@ locale: zh-CN
 translationStatus: original
 createdAt: 2026-08-26
 publishedAt: 2026-08-26
-draft: true
+draft: false
 type: essay
 tags: [ai, developer-productivity, systems, systems-design, architecture, metrics, observability, technical-planning, strategy]
 column: { slug: engineering-ai-judgment, order: 10 }

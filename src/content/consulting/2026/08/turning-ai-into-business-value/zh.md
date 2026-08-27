@@ -5,7 +5,7 @@ locale: zh-CN
 translationStatus: original
 createdAt: 2026-08-26
 publishedAt: 2026-08-26
-draft: true
+draft: false
 episode: 2
 guest: 一位技术背景的 AI 从业者
 format: career-case

@@ -2,10 +2,10 @@
 title: "AI Does Not Automatically Create Productivity: From Local Acceleration to System Value"
 description: "Starting from a multi-system integration experience, this essay distinguishes creation, task efficiency, organizational productivity, and business value—and asks where value and cost actually come from when AI enters a complex system."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-26
 publishedAt: 2026-08-26
-draft: true
+draft: false
 type: essay
 tags: [ai, developer-productivity, systems, systems-design, architecture, metrics, observability, technical-planning, strategy]
 column: { slug: engineering-ai-judgment, order: 10 }

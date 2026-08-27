@@ -2,10 +2,10 @@
 title: "How to Sell an AI Proposal to Business Owners: From Technical Value to a B2B Business"
 description: "An edited consultation about an FDE conference, technical communication, and AI’s business value: when owners care about revenue and cost, how can technical people explain their work as a result worth testing?"
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 createdAt: 2026-08-26
 publishedAt: 2026-08-26
-draft: true
+draft: false
 episode: 2
 guest: "An AI practitioner with a technical background"
 format: career-case
