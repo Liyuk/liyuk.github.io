@@ -1,5 +1,5 @@
 ---
-title: "别急着讲 AI：先把技术方案讲成一门生意"
+title: "AI 方案怎么卖给老板：从技术价值到 B2B 生意"
 description: "一场关于 FDE 会议、技术沟通和 AI 商业价值的咨询对话：当老板关心收入和成本时，技术人员该怎样把能力讲成对方听得懂、愿意验证的结果。"
 locale: zh-CN
 translationStatus: original
