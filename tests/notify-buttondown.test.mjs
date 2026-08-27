@@ -6,6 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   buildMeta,
+  buildEmailHtml,
   emailMatchesCandidate,
   entryKey,
   entryLocale,
@@ -123,6 +124,37 @@ test('buildMeta combines reading time and date per language', () => {
 
 test('buildMeta omits the date when publishedAt is missing', () => {
   assert.equal(buildMeta({}, 'word', 'en'), '1 min read');
+});
+
+test('buildEmailHtml follows the site visual language', () => {
+  const html = buildEmailHtml({
+    blocks: [{
+      lang: 'zh',
+      title: '一篇新文章',
+      summary: '这是摘要。',
+      url: 'https://liyuk.com/writing/example/',
+      meta: '约 1 分钟阅读 · 2026年8月25日',
+    }],
+  });
+  assert.match(html, /background:#f7f4ee/);
+  assert.match(html, /charset="UTF-8"/);
+  assert.match(html, /color:#35685d/);
+  assert.match(html, /Iowan Old Style/);
+  assert.match(html, /border-top:1px solid #ddd8ce/);
+  assert.doesNotMatch(html, /#1456F0|border-radius:8px/);
+});
+
+test('buildEmailHtml makes relative article paths absolute for Buttondown', () => {
+  const html = buildEmailHtml({
+    blocks: [{
+      lang: 'en',
+      title: 'A new article',
+      summary: 'A summary.',
+      url: '/en/consulting/2026/08/example/',
+    }],
+  });
+  assert.match(html, /href="https:\/\/liyuk\.com\/en\/consulting\/2026\/08\/example\/"/);
+  assert.doesNotMatch(html, /href="\/en\/consulting\/2026\/08\/example\/"/);
 });
 
 test('email idempotency prefers canonical URL and remains compatible with legacy subject records', () => {

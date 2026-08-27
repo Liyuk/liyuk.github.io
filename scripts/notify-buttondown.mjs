@@ -83,23 +83,28 @@ function stripInlineMarkdown(text = '') {
 export function buildEmailHtml({ blocks }) {
   const sections = blocks.map(({ lang, title, summary, url, meta }) => {
     const safeTitle = esc(title);
+    const absoluteUrl = new URL(url, SITE_ORIGIN).href;
     const langLabel = lang === 'zh' ? '中文 · Chinese' : 'English';
     const metaLine = meta
-      ? `<p style="margin:0 0 14px;font-size:13px;color:#999;">${esc(meta)}</p>`
+      ? `<p style="margin:0 0 18px;font-size:13px;line-height:1.5;color:#696a65;">${esc(meta)}</p>`
       : '';
     return [
-      `<p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#999;">${langLabel}</p>`,
-      `<h1 style="margin:0 0 16px;font-size:23px;line-height:1.35;color:#222;">${safeTitle}</h1>`,
+      `<div style="border-top:1px solid #ddd8ce;padding-top:24px;">`,
+      `<p style="margin:0 0 10px;font-size:12px;line-height:1.3;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#35685d;">${langLabel}</p>`,
+      `<h1 style="margin:0 0 14px;font-family:'Iowan Old Style','Baskerville','Noto Serif SC','Songti SC',Georgia,serif;font-size:28px;font-weight:500;letter-spacing:-.035em;line-height:1.15;color:#232522;">${safeTitle}</h1>`,
       metaLine,
-      `<p style="margin:0 0 20px;font-size:16px;line-height:1.7;color:#444;">${esc(summary)}</p>`,
-      `<p style="margin:0 0 28px;"><a href="${esc(url)}" style="display:inline-block;padding:10px 20px;border-radius:8px;background:#1456F0;color:#ffffff;font-weight:600;font-size:15px;text-decoration:none;">阅读全文 · Read more →</a></p>`,
+      `<p style="max-width:520px;margin:0 0 22px;font-size:16px;line-height:1.7;color:#696a65;">${esc(summary)}</p>`,
+      `<p style="margin:0 0 24px;"><a href="${esc(absoluteUrl)}" style="color:#232522;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none;">阅读全文 · Read more <span style="color:#35685d;">↗</span></a></p>`,
+      `</div>`,
     ].join('');
   });
 
   return [
-    `<!doctype html><html><body style="margin:0;padding:0;background:#ffffff;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">`,
-    `<div style="max-width:600px;margin:0 auto;padding:32px 20px;">`,
-    sections.join(`<hr style="border:none;border-top:1px solid #eee;margin:24px 0;">`),
+    `<!doctype html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f7f4ee;font-family:Inter,'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif;color:#232522;">`,
+    `<div style="max-width:600px;margin:0 auto;padding:40px 24px 32px;">`,
+    `<div style="padding:0 0 24px;"><p style="margin:0;color:#232522;font-size:12px;font-weight:700;letter-spacing:.08em;">LIYUK <span style="color:#35685d;">/</span> FIELD NOTES</p></div>`,
+    sections.join(''),
+    `<div style="border-top:1px solid #ddd8ce;margin-top:8px;padding-top:18px;"><p style="margin:0;color:#696a65;font-size:12px;line-height:1.6;">沉默土豆的烹饪指南 · Silent Potato’s Cookbook</p></div>`,
     `</div></body></html>`,
   ].join('');
 }
