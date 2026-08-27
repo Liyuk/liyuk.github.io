@@ -1,233 +1,289 @@
 ---
-title: Neo Matrix
-description: "On top of a conventional relay (an OpenAI-compatible gateway), add a personal supply side: consumers use a single sk- token to access the platform's models by model, while suppliers host their idle API keys as channels to join routing and are paid by real usage, withdrawable. At its core are cost-optimal routing, a trust-climb closed loop, and auditable revenue-settlement."
-locale: en
-translationStatus: reviewed
+title: "Neo Matrix"
+description: "An OpenAI-compatible relay platform with a revenue-sharing mechanism for individual suppliers: consumers call models through one unified entry point, suppliers host idle upstream keys, and the platform handles routing, metering, settlement, and withdrawals. This article introduces the project, its mock demo, business model, financial estimates, and the risks and sunk costs that must be accepted before launch."
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 status: active
 repositoryUrl: https://github.com/Liyuk/neo-matrix
 hero:
   src: /images/projects/neo-matrix/hero-settlement.webp
-  alt: "Neo Matrix admin settlement and withdrawal page, showing 12 settlement orders and ¥123 in flow, including one reconciliation exception awaiting verification."
-  caption: "Settlement and withdrawal management page — the visible result of the routing and settlement mechanisms."
+  alt: "Neo Matrix admin settlement and withdrawal page, showing 12 settlement orders and about ¥123 in transaction flow, including a reconciliation exception awaiting verification."
+  caption: "Settlement and withdrawal management — the project ultimately has to turn every call into an explainable transaction."
 tags: [ai-relay, api-key, revenue-sharing, routing, settlement]
+locale: en
+translationStatus: reviewed
 translationKey: 2026/08/neo-matrix
 ---
 
 [View Neo Matrix on GitHub ↗](https://github.com/Liyuk/neo-matrix)
 
-> An **OpenAI-compatible relay** built on one-api (MIT): consumers use a single `sk-` token to access the models the platform offers as usual; on top of that, this project adds a **supply side** — individuals can host their idle API keys as channels to join routing, earn a share of real usage, and withdraw. **The key mechanisms are the routing algorithm and settlement reconciliation — they decide how the money is split, who it goes to, and whether it is split wrong.**
+## What kind of project is this?
 
-The image above is the platform admin's settlement page: 12 settlement orders, ¥123 in flow, 6 recorded, and 1 flagged "reconciliation exception" awaiting verification. This article is about how it works — not the UI, but the **routing and settlement mechanisms behind it**.
+At first glance, Neo Matrix looks like a familiar AI relay: users receive a platform token and call the models offered by the platform; administrators configure channels in the backend, and the system forwards requests upstream.
 
-## First, let's be clear: this is not "building another relay"
+But the project is not really trying to build one more model aggregation page. It also puts “who provides the capacity, who uses it, and how the money is split” inside the system:
 
-**The consumer-side main flow fully inherits the conventional relay (one-api) design**:
+- Consumers face one OpenAI-compatible entry point and do not need to manage keys from multiple upstream providers separately.
+- Suppliers can host temporarily idle upstream keys as channels and let the platform schedule requests through them.
+- The platform sets unified prices, records the retail price and channel cost for every call, and generates settlement orders by period.
+- Administrators handle channel review, reconciliation exceptions, and withdrawals instead of looking only at request success rates.
 
-- The platform is an **OpenAI-compatible gateway** that exposes a set of model names (`gpt-4o`, `gpt-4o-mini`, `claude-*`…), and consumers access it with a single `sk-` token.
-- Behind each **model** is a set of channels (upstream keys) serving traffic; requests are routed to a specific channel **by model** — `group2model2channels[group][model]`, not "one channel handles all models".
-- Consumer pricing is set uniformly by the platform (`ModelRatio`, anchored to official public pricing) and does not vary by channel.
-- A token can have a model whitelist (`token.Models`); requests for models not on the whitelist are rejected.
+The most accurate description is therefore: **an AI API relay platform with a revenue-sharing mechanism for suppliers**. It is not an open marketplace or a decentralized network. Consumers cannot choose a particular supplier, and suppliers cannot set prices with complete freedom; the platform controls admission, scheduling, accounting, and settlement.
 
-**This project only adds one layer on top of that main flow — a "supply side"**: individuals who hold idle keys (not just platform admins) act as **suppliers**, attach their keys as channels to join routing, and earn a share based on usage. This is what sets Neo Matrix apart from a typical relay.
+The 12 demo settlement orders, roughly ¥123 in transaction flow, and one reconciliation exception awaiting verification on the settlement page represent the project's central problem: forwarding a request is only the beginning. The platform must also explain where the money came from, who should receive it, and how to stop when something goes wrong.
 
-## Why personal supply sources exist
+## Start with the product: three identities, three paths
 
-The API keys people hold are usually scattered: OpenAI, DeepSeek, Gemini, various aggregation platforms… and many people's keys sit **idle** — monthly subscriptions go unused, or test keys gather dust.
+### Consumer: one token, multiple models
 
-Neo Matrix's idea is simple: **turn individuals' idle keys into supply the platform can route.**
+Consumers receive a platform-issued `sk-` token, not an upstream credential from a supplier. The platform can assign a model allowlist to the token, and consumers call models through the standard `/v1/chat/completions` endpoint.
 
-- **Consumers**: pay by usage with a `sk-` token as usual; models, pricing, and routing are transparent to them.
-- **Suppliers**: host their idle keys, earn a share of real usage, and can withdraw.
-- **Platform**: when one model has multiple channels, automatically route through the cost-optimal channel and grow its margin.
+![Consumer token and usage page](/images/projects/neo-matrix/tokens-consumer.webp)
 
-What sets it apart from a typical relay is that **the money split is transparent and auditable** — how much the supplier gets and how much the platform keeps is determined precisely by the routing and settlement mechanisms, not by gut feeling.
+![Consumer platform token management](/images/projects/neo-matrix/tokens.webp)
 
-## First, tell the two keys apart
+Consumers do not need to know which channel ultimately handles a request. The product value, from their perspective, is one stable and unified entry point; channel switching, retries, and cost selection are internal platform mechanisms.
 
-| | Consumer token (issued by platform) | Upstream key (hosted by supplier) |
-|---|---|---|
-| Who holds it | Consumer (`sk-`, generated by platform) | Supplier (OpenAI official key, etc.) |
-| Who issues it | Platform `/api/token` | Supplier "submits API Key" |
-| What it does | Calls `/v1/chat/completions` | Platform uses it to call upstream |
-| Who can see it | Only the holder | Platform admin |
+### Supplier: turn an upstream key into a schedulable channel
 
-**The key the consumer gets is a token issued by the platform, not any upstream key.** Once a request reaches the platform, **the routing algorithm decides by model which supplier's key handles it** — the consumer has no awareness of this and cannot choose which provider is used.
-
-## Architecture: two paths — routing + settlement
-
-![Neo Matrix routing and settlement architecture](/images/projects/neo-matrix/architecture.webp)
-
-Four modules collaborate on the platform: **cost-optimal routing** decides which channel a request goes to; **usage accounting** records both retail and cost prices; **revenue settlement** distributes profit to suppliers by period; **reconciliation + trust** keeps the books trustworthy and suppresses abnormal channels.
-
-## Routing algorithm: how it differs from a typical relay
-
-A typical relay (original one-api, etc.) routes by **random selection**: all available channels go into one pool and one is picked by priority-weighted random. It solves the load-balancing problem of "don't pile all requests onto one channel," but it **does not distinguish channels by cost or trustworthiness**.
-
-Neo Matrix's routing weaves "self-interest" into the weights. When one model has multiple channels, it **neither dispatches at random nor picks only the cheapest**; instead it uses a weighted random with $1 / (\text{Cost Ratio} \times \text{Trust Penalty})$:
-
-1. First group by **priority** and choose only within the highest-priority group.
-2. Within the group, do a **weighted random** with $WeightFactor = 1 / (CostRatio \times trustPenalty)$:
-   - Lower cost → higher score → higher selection probability (maximizing platform profit)
-   - Higher trust → smaller penalty (trust 5 has no penalty; trust 1 magnifies cost 5×) → higher selection probability
-   - **Low-trust channels keep a non-zero probability** — ensuring new channels can "climb the ramp"
-3. **Anti-arbitrage guard**: if the consumer happens to be the supplier of a channel, routing **excludes that self-hosted channel** (`excludeOwnerId`), structurally eliminating "produce-and-sell-to-yourself" revenue farming.
-
-```mermaid
-flowchart TD
-    A["Multi-channel request for one model"] --> B["1. Priority grouping: pick from top-priority group only"]
-    B --> C["2. Weighted random: WeightFactor = 1 / (CostRatio × trustPenalty)"]
-    C --> D["3. Anti-arbitrage: excludeOwnerId drops self-hosted channel"]
-```
-
-| Dimension | Typical relay | Neo Matrix |
-|---|---|---|
-| Priority grouping | ✅ | ✅ |
-| Random balancing | ✅ | ✅ (weighted random, low-trust keeps non-zero probability) |
-| Channel cost | ❌ | ✅ $1/CostRatio$ |
-| Channel trust | ❌ | ✅ $1/trustPenalty$ |
-| Anti-arbitrage | ❌ | ✅ `excludeOwnerId` |
-
-> **In one sentence**: a typical relay "scatters requests at random"; Neo Matrix "allocates by weighted 'who is cheaper + who is trusted,' while preventing produce-and-sell-to-yourself." The former solves "can it be used"; the latter solves "how to use it most economically without being farmed."
-
-## Trust levels: low start, automatic climb, downgrade on anomaly
-
-Each channel has a trust level of 1–5 that determines its weight in routing. **New channels default to trust 1** (cost is magnified 5×, so they only receive a small amount of "ramp-up" traffic). The up/down mechanisms:
-
-- **Automatic climb**: 7 consecutive cycles of **normal reconciliation** → trust auto +1 (capped at 5). New channels automatically earn higher routing weight through real operation, without waiting for an admin to promote them manually. (`model/settlement.go upgradeChannelTrust`)
-- **Admin manual cap/intervention**: during cost-declaration approval, a trust level (1–5) can be specified as well.
-- **Automatic downgrade on anomaly**: 2 consecutive cycles of reconciliation anomalies → trust auto −1 (minimum 1), down only, never up. (`degradeChannelTrust`)
-
-**Trust is a closed loop of "low start + automatic promotion through operation + automatic downgrade on anomaly"**: new channels prove themselves by climbing, abnormal channels are suppressed by negative feedback, and admins only intervene at key points.
-
-```mermaid
-stateDiagram-v2
-    state "Trust 1 (new channel default)" as t1
-    state "Trust 2" as t2
-    state "Trust 3" as t3
-    state "Trust 4" as t4
-    state "Trust 5" as t5
-
-    [*] --> t1
-    t1 --> t2 : 7 normal cycles → +1
-    t2 --> t3 : 7 normal cycles → +1
-    t3 --> t4 : 7 normal cycles → +1
-    t4 --> t5 : 7 normal cycles → +1
-    t2 --> t1 : 2 abnormal cycles → −1
-    t3 --> t2 : 2 abnormal cycles → −1
-    t4 --> t3 : 2 abnormal cycles → −1
-    t5 --> t4 : 2 abnormal cycles → −1
-    note right of t1 : Admin can manually set 1–5
-```
-
-Using the demo data as an example: for the same `gpt-4o-mini` request, the official direct connection (cost 1.0, trust 5) gets the largest share; the aggregation platform (cost 1.2, trust 4) comes second; and the subscription-to-API channel (cost 0.8 but trust 2, which carries a penalty) receives a small amount of ramp-up traffic.
-
-## Settlement: how the money is split
-
-Each charge records two numbers: the **retail amount** (what the consumer pays) and the **cost amount** (what is paid upstream). Settlement is per period:
-
-$$
-\text{Profit} = \text{Revenue} - \text{Cost}
-$$
-
-$$
-\text{Supplier Share} = \text{Cost} + \text{Profit} \times (1 - \text{Platform Take Rate})
-$$
-
-$$
-\text{Platform Retained} = \text{Revenue} - \text{Supplier Share}
-$$
-
-By default the platform takes 20% of profit, and $\text{Cost} = \text{Revenue} \times \text{Channel Cost Ratio}$. A cost ratio of 1.0 → profit 0, supplier recovers cost; > 1.0 → the platform takes a cut of profit; < 1.0 (requires approval) → the platform subsidizes to get low-cost supply.
-
-![Settlement and withdrawal management](/images/projects/neo-matrix/hero-settlement.webp)
-
-### Three engineering challenges (pitfalls I hit)
-
-This part is the most worth sharing from this development — every one of these was hit for real:
-
-**Pitfall 1: `used_quota` is cumulative during reconciliation — you can't compare it directly.**
-
-The first version directly compared "this period's `used_quota` increment" with "this period's total log volume." It sounds right, but `used_quota` is **a cumulative value since the channel was created**, not a per-period increment. Comparing directly never matches. The correct approach: each settlement order snapshots `used_quota_end`, and the increment is "current value − previous period's snapshot."
-
-**Pitfall 2: rerunning historical periods pollutes the reconciliation baseline.**
-
-If the background settlement loop falls behind, it backfills (re-runs periods that weren't settled before). When the first version reran, it updated `used_quota_end` to the **current** `used_quota` (including later periods' usage), which polluted the next period's increment baseline → consecutive false "reconciliation exception" flags → channels wrongly downgraded. Fix: **reruns do not update the snapshot**, only the aggregate value.
-
-**Pitfall 3: concurrent double-counting of settlement orders.**
-
-Reruns + admin manual confirmation + the background loop can all run at the same time. The first version's update branch didn't touch the balance, so after a rerun the balance drifted from the settlement orders; after switching to "sync the balance by the difference," it turned out two concurrent reruns would stack the difference on the same old value → **double-counting**. The final fix uses CAS: `UPDATE ... WHERE id=? AND status!=settled AND revenue_quota=old value`; if the condition doesn't match, give up. One WHERE clause solved the funds-consistency problem.
-
-### How reconciliation exceptions are handled
-
-A deviation exceeding the 20% threshold is judged a "reconciliation exception" → it gets flagged for admin verification (the orange "verify and record" button). **Better to flag it for manual verification than to let an anomalous flow quietly get recorded.** Consecutive exceptions trigger trust downgrades, forming negative feedback.
-
-## Cost bidding: inherent risks and countermeasures
-
-`cost_ratio` is the cost ratio **self-declared** by the supplier, constrained by the platform to `[1.0, MAX_COST_RATIO]` (default cap 3.0). This "self-declare + locked interval" mechanism has **three inherent risks** against malicious pricing:
-
-| Risk | Nature | Current countermeasure | Recommended hardening |
-|---|---|---|---|
-| **Inflated declaration** | Declares the 3.0 cap to eat platform profit | Manual approval + trust penalty | Dynamic anchoring / bill spot-audit |
-| **Low-price volume grab** | Declares 1.0 at the floor and lowers quality to cut real cost | Lock the 1.0 floor + reconciliation downgrade | Service quality enters routing weight |
-| **No price discovery** | Fixed interval doesn't follow the market | Anchored to official price | Quote deviation enters weight |
-
-> Conclusion: the current approach is the conservative "**self-declared cost + locked interval + trust negative feedback**" scheme, which blocks most malicious quotes but is not market bidding. True price discovery (real-time anchoring, dynamic intervals, service-quality weighting) is the direction for future evolution.
-
-## UI overview
-
-### I am a consumer
-
-Create a token, set the deployment URL, and call the standard OpenAI interface:
-
-```bash
-export NEO_MATRIX_BASE_URL=http://your-neomatrix-host:3000
-curl "${NEO_MATRIX_BASE_URL}/v1/chat/completions" \
-  -H "Authorization: Bearer sk-your-token" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"gpt-4o-mini","messages":[{"role":"user","content":"Hello"}]}'
-```
-
-Price = the platform's unified retail price (`ModelRatio`, anchored to official public pricing). **For the same model, the consumer price stays the same regardless of which channel is used**:
-
-![Consumer tokens](/images/projects/neo-matrix/tokens-consumer.webp)
-
-![Token management](/images/projects/neo-matrix/tokens.webp)
-
-### I am a supplier
-
-Submit an API key → the platform auto-validates it → it joins routing → earn a share by usage → withdraw:
+Suppliers submit an upstream key and channel information in the backend. The platform first validates the type, address, and connectivity, then decides whether the channel can enter the pool. Keys must not be exposed to consumers, and the platform must take responsibility for least-privilege access, rotation, revocation, and auditing.
 
 ![Supplier center](/images/projects/neo-matrix/supplier-center.webp)
 
-The supplier center shows the books at a glance: ¥54 withdrawable balance, ¥63 in settlement, 20% platform take.
+The supplier center shows withdrawable balance, balance under settlement, cumulative earnings, channels, and withdrawal records. These amounts come from demo data and do not represent real income; they show the accounting interface the platform would eventually need to provide.
 
-### Channel management for admins
+### Administrator: maintain the supply pool and settlement order
+
+Administrators manage users, channels, models, consumption logs, settlement orders, and withdrawals. They also handle two problems that cannot be fully automated: whether a supplier's declared cost is credible, and whether an abnormal transaction flow should enter the withdrawable balance.
 
 ![Channel management](/images/projects/neo-matrix/channels.webp)
 
-The 4 channels show different cost ratios and trust tiers. Note that "Subscription-to-API · Optimized routing" has cost 0.8 < 1.0 — anything below the official baseline must go through **cost-declaration approval**, to prevent "low-declare volume grabs."
+From onboarding to withdrawal, a supplier's journey is not “submit a key and finish.” It is a sequence of state changes:
 
-## Where the demo data comes from
+```mermaid
+flowchart TD
+    A["Supplier submits upstream credential"] --> B["Validate type, URL and connectivity"]
+    B --> C["Cost review and trust level"]
+    C --> D["Enter routing pool"]
+    D --> E["Usage and cost records"]
+    E --> F["Periodic reconciliation"]
+    F --> G{"Reconciliation passed?"}
+    G -->|"Yes"| H["Settling balance"]
+    G -->|"No"| I["Hold for manual review"]
+    H --> J["Withdrawal review"]
+    I --> J
+```
 
-The screenshots above come from a **real end-to-end demo**: register a supplier + consumer, host 4 channels pointing to a local mock upstream, the consumer makes 120 real calls through the standard API (across 3 days), the system settles 12 orders totaling ¥123 — of which 6 are recorded, 1 is a reconciliation exception (a used_quota offset was deliberately injected to demo "verify and record"), and the supplier withdraws ¥4.2 pending review + ¥1.4 already paid. **The whole flow runs real HTTP + a local mock, with no manual database edits.**
+## How one call travels through the chain
 
-## A few design points worth seeing in the code
+![Neo Matrix routing and settlement architecture](/images/projects/neo-matrix/architecture.webp)
 
-- **Cost-optimal routing** (`model/cache.go`): within the same priority, weighted random by `1/(cost × trust penalty)` — low cost + high trust → higher probability, while low trust keeps a non-zero probability to climb.
-- **Anti-arbitrage guard**: a supplier's self-operated channel is excluded from routing (`excludeOwnerId`).
-- **Trust-climb closed loop**: consecutive normal periods auto +1 (capped at 5), anomalies auto −1 (minimum 1), down only, admins can intervene manually.
-- **Idempotent settlement**: `UNIQUE(period_start, period_end, channel_id)` unique index + CAS balance sync — reruns don't double-record, concurrency doesn't double-count.
-- **Reconciliation snapshot**: `used_quota_end` is the increment baseline; reruns don't pollute it.
+Break one request down and the business path is fairly simple:
+
+```text
+Consumer token
+      │
+      ▼
+Authentication and model permission
+      │
+      ▼
+Priority group → cost/trust channel routing
+      │
+      ▼
+Upstream request with supplier key
+      │
+      ├─ record retail amount
+      ├─ record channel cost
+      └─ write usage log
+               │
+               ▼
+Settlement → reconciliation → supplier balance → withdrawal review
+```
+
+There are two keys here, and they must not be confused:
+
+| | Platform token | Upstream key |
+|---|---|---|
+| Holder | Consumer | Supplier or platform |
+| Purpose | Proves that the consumer can call the platform | Lets the platform call the upstream model |
+| Visible to the consumer? | Yes | No |
+| Determines the channel? | No | Enters the candidate channel pool |
+
+The platform's unified entry point solves the consumer's access problem; the channel pool and settlement system solve the platform's supply problem. Together, they are what distinguishes Neo Matrix from a relay used only by its owner.
+
+## Cost accounting: informed by Sub2API, not a copy of its subscription model
+
+The earlier approach wrote `cost_ratio` directly as “retail price multiplied by a factor.” That is too coarse to represent real costs, even if it can be used for channel pricing and routing order.
+
+Sub2API's billing implementation offers a more useful separation: first calculate the actual cost of a call from model prices and request usage, then record the user's balance, subscription quota, API-key quota, and upstream-account quota separately. It also quantizes amounts consistently and uses the request ID to prevent the same request from being charged twice. [Official billing implementation ↗](https://github.com/Wei-Shaw/sub2api/blob/main/backend/internal/service/usage_billing.go)
+
+If Neo Matrix is to make its financial model real, it should follow that idea while adding its own supplier revenue-sharing layer:
+
+1. **Usage cost**: calculate the actual upstream cost from input tokens, output tokens, cached tokens, image or audio usage, and the model price table.
+2. **Retail charge**: calculate what the consumer owes according to the platform's public price. It may differ from upstream cost, but it must be stable and explainable.
+3. **Supplier settlement**: after the upstream cost has been verified, share the profit with the supplier according to the agreed terms.
+4. **Platform contribution**: only after subtracting supplier settlement, payment fees, infrastructure, and the risk reserve from retail revenue is the amount left for the platform's actual contribution.
+
+```mermaid
+flowchart LR
+    A["Tokens and media usage"] --> B["Model pricing calculation"]
+    B --> C["Verified upstream cost"]
+    C --> D["Supplier settlement"]
+    C --> E["Retail price calculation"]
+    E --> F["Consumer charge"]
+    F --> G["Platform contribution after costs"]
+    D --> G
+```
+
+`RoutingCost` can still add a trust penalty to the actual cost for the purpose of choosing a channel, but the trust penalty should not be written into `UsageCost` or `SupplierSettlement`. Otherwise, the same call would produce different accounting costs depending on the routing strategy.
+
+`cost_ratio` is therefore better defined as “the supplier's quote relative to a baseline cost,” rather than the only source of cost truth. It can participate in routing and quote review, but final settlement should preferably rely on explainable token-level costs, upstream bills, or an audited cost baseline.
+
+## Scheduling is not random forwarding
+
+There may be multiple channels behind the same model. The system first selects the highest-priority group, then uses cost and trust to perform weighted random selection within that group:
+
+$$
+\text{RoutingWeight} = \frac{1}{\text{CostRatio} \times \text{TrustPenalty}}
+$$
+
+The lower the cost and the higher the trust, the greater the channel's probability of receiving a request. New channels are not left with zero traffic; they enter the pool with a lower weight first. If the consumer is also the supplier of a channel, routing excludes that self-owned channel through `excludeOwnerId` to avoid the most direct form of self-dealing.
+
+```mermaid
+flowchart LR
+    A["Consumer request"] --> B["Model and priority filter"]
+    B --> C["Cost and trust weighted routing"]
+    C --> D["Exclude self-owned channel"]
+    D --> E["Upstream provider"]
+    E --> F["Usage and cost log"]
+```
+
+![Routing channels and cost/trust configuration](/images/projects/neo-matrix/channels.webp)
+
+Trust level is a continuing feedback mechanism: a new channel starts at a low level, rises after normal reconciliation, and is down-weighted after an exception. It is not a complete service-quality system, because response speed, success rate, content quality, and upstream authorization have not all entered the weighting yet; but it is closer to real operations than granting a channel permanent traffic after one approval.
+
+## Business model: what does the platform actually sell?
+
+Neo Matrix does not sell consumers a specific upstream key. It sells a combination of three things:
+
+1. A unified entry point for accessing models;
+2. Scheduling, failover, and cost management for upstream channels;
+3. Records and settlement for consumer usage and supplier earnings.
+
+Suppliers provide upstream calling capacity that can be scheduled. The platform earns revenue from the spread or service fee generated by each call, while suppliers receive a share based on the cost and usage recorded by the platform.
+
+Compared with a relay that uses only its own channels, this approach brings in more potential supply but also adds complexity: key custody, supplier admission, cost declarations, trust ramp-up, accounting disputes, and withdrawal review all have to exist. Neo Matrix chooses this path not because it is simpler, but because individuals' idle supply may itself become a source of channels.
+
+## Financial estimate: first calculate what one call leaves behind
+
+The following is an estimate, not Neo Matrix's realized revenue and not real operating data from the demo page. To avoid treating an aspiration as a result, start with the formulas:
+
+$$
+\text{GrossProfit} = \text{RetailCharge} - \text{VerifiedUpstreamCost}
+$$
+
+$$
+\text{SupplierSettlement} = \text{VerifiedUpstreamCost} + \text{GrossProfit} \times (1 - \text{PlatformTakeRate})
+$$
+
+$$
+\text{PlatformContribution} = \text{RetailCharge} - \text{SupplierSettlement} - \text{OperatingCost}
+$$
+
+Assume that the platform has ¥100,000 in monthly consumer transaction flow, verified upstream cost is 70% of revenue, and the platform takes 20% of profit:
+
+| Item | Estimate |
+|---|---:|
+| Retail paid by consumers | ¥100,000 |
+| Upstream cost | ¥70,000 |
+| Gross profit | ¥30,000 |
+| Supplier share | ¥94,000 |
+| Platform gross retention | ¥6,000 |
+
+The ¥6,000 is not profit yet. It must cover servers, monitoring, payment fees, support, abnormal losses, key security, development, and supplier operations. If fixed operating cost is ¥3,000 per month and ¥2,000 is reserved for refunds and reconciliation risk, the platform has only about ¥1,000 left. Fixed costs become easier to absorb when transaction flow grows tenfold; but as the flow grows, account suspension, data leaks, payment disputes, and insufficient supply also become more expensive.
+
+### The current code's financial result is not ideal
+
+The implementation status needs to be stated plainly. The current code still defines `cost = retail price × cost_ratio`, while limiting supplier-submitted `cost_ratio` to 1.0–3.0. Under that definition:
+
+| `cost_ratio` | Accounting meaning | Current settlement result |
+|---:|---|---|
+| 1.0 | Cost equals retail price | The platform has no gross profit |
+| Greater than 1.0 | Cost exceeds retail price | Supplier earnings are capped at the retail price, leaving 0 for the platform |
+| Less than 1.0 | Cost is below retail price | There could theoretically be gross profit, but the current supplier interface rejects it |
+
+So the 70% cost scenario above is a “commercial target estimate,” not a result that the current default rules can already produce. The project needs a product decision about the definition of the cost factor, approval exceptions below 1.0, and the platform take rate. Otherwise, even if the platform has transaction flow, it may have no revenue.
+
+With a Sub2API-style separation, the direction becomes clearer: `UsageCost` records the actual usage cost, `RetailCharge` records the consumer price, and `SupplierSettlement` records the supplier share. `cost_ratio` handles quote validation and routing instead of pretending to be the entire financial truth.
+
+## Accounting design: why reconciliation and idempotency matter
+
+The project's most valuable engineering work is not the UI, but the three concrete problems that appear during settlement.
+
+First, `used_quota` is a channel's cumulative usage and cannot be subtracted directly from logs for one period. The system needs to store a `used_quota_end` snapshot on each settlement order and calculate the period increment from adjacent snapshots.
+
+Second, rerunning a historical period must not write the current cumulative usage back into an old settlement order, or it will corrupt the reconciliation baseline for the next period.
+
+Third, background jobs, administrator verification, and reruns can happen at the same time. A settlement order must not increase a supplier's balance more than once, so the system uses unique constraints, transactions, and CAS conditional updates.
+
+Settlement states must also remain separate: a new settlement order first enters the supplier's `settling_balance`; an abnormal settlement cannot become withdrawable immediately; only after administrator confirmation does the amount move into `withdraw_balance`.
+
+![Settlement and withdrawal management](/images/projects/neo-matrix/hero-settlement.webp)
+
+This design reduces duplicate credits and incorrect payouts, but it still depends on the platform's own logs and configuration. It is not an independent financial audit system, nor does it mean that official upstream billing has already been integrated.
+
+## Mock demo: what it shows and what it does not
+
+The images on the site come from a Neo Matrix interface demo covering the administrator, consumer, and supplier perspectives. The demo contains 4 channels, 12 settlement orders, balances, and withdrawal records, plus one deliberately introduced `used_quota` offset to demonstrate exception verification.
+
+These screenshots describe a product flow, not operating results:
+
+- The pages use local mock data and do not call real models, real accounts, or real payment services.
+- Actions in the browser reset after refresh and do not write to a production database.
+- The demo users, amounts, keys, withdrawal accounts, and channel addresses are fictional.
+- An online static page cannot prove that real upstream calls, real profit, or real withdrawals have been established.
+
+## Risks and sunk costs
+
+### Upstream authorization and account risk
+
+Whether a supplier's key may be shared, proxied, or resold depends first on the upstream service's terms and the authorization of the credential holder. Being technically able to forward a request does not mean that the business has the right to do so. The public Sub2API repository also discusses upstream terms and the boundaries of commercialization in its README. [Read the public Sub2API notes ↗](https://github.com/Wei-Shaw/sub2api)
+
+### Key and data risk
+
+The platform handles suppliers' upstream credentials and may also handle consumer request content. A production system needs key encryption and rotation, least privilege, redacted request logs, access auditing, revocation, and a data-retention policy. One leak could erase a long period of fee revenue.
+
+### Two-sided cold-start risk
+
+Without enough suppliers, the consumer experience is unstable; without consumers, suppliers have no earnings and no reason to keep hosting keys. A routing algorithm can optimize existing supply, but it cannot solve a shortage of both supply and demand. Cold-start costs may exceed server costs by a wide margin, including supplier recruitment, manual review, support, and compensation for failed experiments.
+
+### Financial and operational risk
+
+Low-cost channels may be unreliable, cost declarations may be inaccurate, image and audio requests may not be fully metered, and upstream bills may differ from platform logs. The platform needs funds for refunds, bad debt, and abnormal withdrawals rather than budgeting only from an ideal gross margin.
+
+### Sunk cost: building it does not mean it is worth launching
+
+The project has already absorbed the cost of channel adapters, the supplier role, cost-aware routing, settlement tables, reconciliation snapshots, a withdrawal state machine, frontend mocks, and an end-to-end demo. These investments form a technical asset, but they may not translate into commercial value.
+
+Before a real launch, further investment is still required:
+
+- key custody and security audits;
+- upstream authorization, supplier agreements, and compliance advice;
+- real-bill verification, refunds, and dispute handling;
+- monitoring, alerts, backups, job queues, and a highly available database;
+- supplier recruitment, consumer acquisition, and support operations.
+
+If the commercial rules ultimately cannot obtain upstream authorization, or the supplier base remains too small, most of this investment may leave only a runnable technical prototype. That is the sunk cost the project needs to acknowledge in advance.
 
 ## Project status
 
 | Phase | Content | Status |
 |---|---|---|
-| P0 | fork + module rename + branding | ✅ |
-| P1 | Cost-optimal routing + usage-log cost accounting | ✅ tested |
-| P2 | Supplier role + key hosting pre-validation | ✅ end-to-end verified |
-| P3 | Revenue settlement + supplier dashboard (idempotent, reconciliation-exception flagging) | ✅ end-to-end verified |
-| P4 | Withdrawal loop (apply / pay / reject and refund balance) | ✅ end-to-end verified |
-| P5 | Subscription-to-API extension reserved | ✅ verified |
+| P0 | Fork, module renaming, and branding | ✅ |
+| P1 | Cost-aware routing and cost accounting in usage logs | ✅ Tested |
+| P2 | Supplier role and pre-validation for hosted keys | ✅ End-to-end verified |
+| P3 | Revenue-sharing settlement and reconciliation exceptions | ✅ End-to-end verified |
+| P4 | Withdrawal applications, review, payment, and balance refunds after rejection | ✅ End-to-end verified |
+| P5 | Subscription-to-API extension | Reserved; not yet a complete production capability |
+
+Neo Matrix is currently better understood as a technical and business prototype for a platformized AI supply model: it connects the entry point, channels, routing, records, settlement, and demo. Whether it can become a business still depends on the financial rules, upstream authorization, real supply scale, and production security.

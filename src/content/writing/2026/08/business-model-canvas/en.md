@@ -1,6 +1,6 @@
 ---
 title: "Business Model Canvas: Nine Boxes"
-description: "The Business Model Canvas from an enterprise investment class, noted for myself: what each of the nine boxes is, the question each box must answer, and why the line 'all of them must be satisfied for a project to succeed' depends on the company's stage."
+description: "Business Model Canvas explained through nine questions: what each box answers, how the pieces fit together, and why a project's needs change across company stages."
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 type: note
