@@ -37,15 +37,15 @@ The more specifically a technical person explained the details, the less interes
 
 ## “Why do people lose interest when technical people explain things?”
 
-**Him:** I tried talking with business owners today, and it was a real challenge for someone from an R&D background. Owners seemed more receptive to the way people from sales and marketing talked. I could clearly see that several conversations might have turned into deals, but the owners’ interest faded as we kept talking. I need to strengthen my pre-sales and consulting skills.
+**Him:** I tried talking with business owners today, and it was a real challenge for someone from an R&D background. When I watched people from sales and marketing talk with them, the owners seemed to respond better.
 
 **Me:** It is mainly about making money. The result is easier to see when you talk about it.
 
-**Him:** Yes, I still need practice. I listened to several other FDEs speaking with business owners. Technical people have a recognizable style. You can tell very quickly who is technical and who is product or market-facing. We had not received the clients’ information in advance, so being able to handle that uncertainty on the spot mattered a lot.
+**Him:** I still need practice. You could clearly feel on site that several conversations might have turned into deals, but the owners’ interest faded as the conversations continued. I need to strengthen my pre-sales and consulting skills.
 
 **Me:** Do you think technical people lack communication skills, or are they starting the conversation from the wrong place?
 
-**Him:** Both, probably. I tend to fall into the technical solution when I prepare a proposal. But I should talk about the broader trade-offs instead. That might hold the owner’s attention better.
+**Him:** I listened to several other FDEs speaking with business owners. Technical people have a recognizable style. You can tell very quickly who is technical and who is product-facing. We had not received the clients’ information in advance, so being able to handle that uncertainty on the spot mattered a lot.
 
 There are two layers here. The first is expression: can you describe the same thing in language familiar to the other person? The second is more important: do you understand why the other person needs it, and what result they will use to decide whether to continue? This is why an owner may say, “We need something more convenient,” without knowing what is actually inconvenient. They have a pain point, but not yet a defined problem.
 
@@ -53,11 +53,13 @@ Simply replacing technical terms with more accessible technical terms does not c
 
 ## The problem is not “lack of convenience”; it has not been defined yet
 
-The last owner in the conversation ran an enterprise-training business with more than 6,000 corporate customers. The company was already using digital humans and knowledge bases in its training work, mainly through workflow tools such as Coze. What they wanted was more flexibility.
+He later mentioned a specific client: an enterprise-training company with several thousand corporate customers. It was already using digital humans and knowledge bases in its training work, mainly through workflow tools such as Coze. They wanted the system to be more flexible.
 
-That is a meaningful starting point, but not yet a problem definition. Flexibility could mean shorter content-production time, more reusable knowledge, less manual configuration, better delivery for different customers, or something else entirely. Each interpretation would lead to a different solution, cost, and test.
+That sounds like a pain point, but it is not yet a problem definition. “Not convenient enough” and “wanting more flexibility” are feelings about the current state. The next questions are: which role finds it inconvenient? Which step is most troublesome? How much labor does it currently require? If it becomes more flexible, will the company serve more customers, shorten delivery time, reduce training costs, or make content updates easier?
 
-The right next step was therefore not to explain another technical architecture. It was to ask what “more flexible” would change in the business, which users needed it, and how the company would recognize the improvement. The technical solution could come after that conversation.
+**Him:** I replayed the conversation on my way back. When I prepare a proposal for them, I still fall into the technical solution. But I should probably discuss the broader trade-offs instead. That might hold their attention better.
+
+That is the difference between a technical proposal and consulting. A proposal answers, “How can we build it?” Consulting first asks, “What do you actually want to change, and what result is worth investing in?”
 
 ## The pleasure of creation is not the same as productivity
 
@@ -71,8 +73,8 @@ The middle of that chain can be written like this:
 
 ```mermaid
 flowchart LR
-    A["AI capability"] --> B["Workflow change"] --> C["User adoption"] --> D["Business outcome"]
-    D --> E["Revenue, cost, or risk"]
+    A["AI capability"] --> B["Specific scenario"] --> C["Workflow change"] --> D["Observable metric"]
+    D --> E["Business outcome"] --> F["Continue investing or stop"]
 ```
 
 Many conversations stop at A: the model can write code, summarize, generate images, or call tools. Owners care about E. What needs to be explained and tested is the set of transitions from A to E, not how much more impressive A can become.
@@ -98,6 +100,16 @@ But we soon reached a more basic question: whose position are you taking, and wh
 When you negotiate with or sell to a business owner, you cannot stay in the position of “what technology do I have?” Start from the owner’s position instead. What result are they responsible for? What problem are they facing? How far do they need the problem solved? What benefit would make the change worth making? An owner may not want the most advanced AI. They may simply want to hire fewer people, shorten delivery time, serve more customers with the existing team, or make sure they are not missing an important shift.
 
 AI evangelism, training, and promotional content can easily appeal to a different motivation: anxiety about being left behind. Telling an owner that “everyone else is using AI” or that “you will be eliminated if you do not start now” can win attention quickly, but it does not mean a real problem has been found. It sells uncertainty itself.
+
+## Learn to tell the story from a founder's position
+
+There is another important capability here: the ability to tell a founder's story in a pitch. This does not mean wrapping a system in an inspiring vision. It means explaining, from the position of a founder raising money, why the system should exist, who it is for, and how it can become a business.
+
+The emphasis changes depending on who is listening. To an investor, explain whether the problem is large enough, why it is worth solving now, where the initial wedge is, why customers would pay, and whether the solution can be repeated as a larger business. To a procurement-side owner, answer which workflow the system enters, who will use it, what organizational cost it requires, how soon results can appear, and how the company can exit if it fails. An investor is buying the possibility of future growth; a buyer is buying a result the organization can take responsibility for today. These sales logics should not be mixed together.
+
+A founder's story is useful not because it is more emotional than a product explanation, but because it connects technology, market, and operations into one causal chain: what real and recurring problem affects which people; why the current way of working is insufficient; which step the system changes; what result the customer will pay for; and how revenue, cost, risk, and continued use connect afterward.
+
+When explaining a system's value to an owner, ask yourself three questions. If I were the founder, how would I prove this is a business worth investing in rather than an attractive demo? If I were the investor, what evidence would I still need before believing it can grow? If I were the procurement-side owner, why would I accept the switching, training, and experimentation costs today? Together, these questions form a more complete owner-level sales logic for B2B work.
 
 Problem-led selling requires the person making the proposal to admit that they do not yet know the answer, then enter the other person’s system and ask: how does the business run, who carries the cost, where do errors repeat, who can authorize a change, and what result would make further investment worthwhile?
 
@@ -158,6 +170,24 @@ Common advice for technical people is to reduce detail, lead with the conclusion
 5. If the result holds, who would be willing to invest what in the next step?
 
 Then explain it to someone who does not know the implementation. If they can only repeat, “This is a powerful AI tool,” your value mapping is incomplete. If they can say, “It helps this person reduce this part of the work, and we need to watch this result next,” the real conversation has begun.
+
+## How to practice the next conversation: reconstruct the scene before proposing a solution
+
+My advice was not to memorize another question list, but to practice being interested in the person.
+
+When someone mentions something they care about, follow it first. Do not rush to steer the conversation back to the AI capability you know best, or decide immediately what the problem is. Ask: How do you see it? Why does it matter to you? What happened before it, and what does it affect afterward?
+
+These questions may sound like ordinary conversation, but they are really a way to recover context. If someone says, “It is not convenient enough,” slowly find out who finds it inconvenient, where the friction occurs, how the work was done before, why it stayed that way, and what result made them want to change it. The useful information is often not in the first sentence, but in the person’s explanation of causes and judgments.
+
+This resembles structured thinking, but it is not an interrogation with a table. Listen while keeping several possible explanations in mind. Perhaps the process is genuinely slow; perhaps permissions are missing; perhaps the data is unreliable; perhaps the person simply wants to try a new way of working. The next step is not to choose an answer for them, but to check the possibilities: “Is this what you mean? If not, what is different?”
+
+AI can help here, but it is better at organizing than at performing discovery on site. You can give it your thinking together with what you heard and ask it to separate facts, judgments, hypotheses, contradictions, and open questions, or to turn a messy conversation into several possible causal chains. Which chain is closer to reality still has to be checked with the person involved.
+
+AI has not actually encountered the production environment. It can generate plausible judgments from language, but it does not know which details are habitual phrases, which constraints will appear only after launch, or which problems matter only to the person responsible for the result. Human judgment should not be compressed into an answer for AI to provide directly. It should first identify branches that can be tested, then let reality show which one holds.
+
+The exercise should therefore leave you with a gradual reconstruction of the scene: who encountered what problem in which situation, how the problem arose, what constraints already exist, who has the authority to change it, and what can be tried within the current experience, authority, and system conditions. Anything beyond your authority or capability needs another person, more system design, or a higher-level review.
+
+First define the problem clearly; only then can you know what to solve. Otherwise the conversation keeps expanding, and the more content AI generates, the harder it becomes to return to the real problem.
 
 ## Where the conversation stopped
 
