@@ -26,7 +26,7 @@ const copy = i18n(locale).page.home;
 const path = (p: string) => getRelativeLocaleUrl(locale, p);
 ---
 
-<BaseLayout title={copy.metaTitle} description={copy.description}>
+<BaseLayout title={copy.metaTitle} description={copy.description} seoPage="home">
   <section class="hero shell">
     <p class="eyebrow">{copy.eyebrow}</p>
     <h1>{copy.title[0]}<br />{copy.title[1]}</h1>

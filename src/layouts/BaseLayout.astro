@@ -6,6 +6,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site.mjs';
 import { i18n } from '../i18n/index.mjs';
+import { getPageSeo, type SeoPage } from '../lib/seo.ts';
 import { buildStructuredData, type PageKind, type StructuredDataImage } from '../lib/structured-data.ts';
 
 const {
@@ -13,6 +14,7 @@ const {
   description: descriptionProp,
   locale = Astro.currentLocale ?? 'zh-CN',
   noindex = false,
+  seoPage,
   // Social-share metadata. Detail pages pass these; list/home pages omit them
   // and fall back to the site defaults below.
   type = 'website',
@@ -35,6 +37,7 @@ const {
   description?: string;
   locale?: string;
   noindex?: boolean;
+  seoPage?: SeoPage;
   type?: string;
   image?: string;
   publishedAt?: string;
@@ -54,10 +57,12 @@ const {
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
 const isEnglish = locale === 'en';
+const pageSeo = seoPage ? getPageSeo(locale, seoPage) : undefined;
 // Locale-aware fallbacks so a page that omits its own title/description never
 // leaks the Chinese site defaults onto an English route.
 const title = titleProp ?? (isEnglish ? site.titleEn : site.title);
-const description = descriptionProp ?? (isEnglish ? site.descriptionEn : site.description);
+const description = pageSeo?.description ?? descriptionProp ?? (isEnglish ? site.descriptionEn : site.description);
+const resolvedKeywords = keywords.length > 0 ? keywords : pageSeo?.keywords ?? [];
 const rootPath = Astro.url.pathname.replace(/^\/en(?=\/|$)/, '');
 const zhUrl = new URL(getRelativeLocaleUrl('zh-CN', rootPath), Astro.site);
 const enUrl = new URL(getRelativeLocaleUrl('en', rootPath), Astro.site);
@@ -110,7 +115,7 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content={ogLocale} />
     <meta property="og:site_name" content={isEnglish ? site.brandEn : site.brand} />
-    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+    {resolvedKeywords.length > 0 && <meta name="keywords" content={resolvedKeywords.join(', ')} />}
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
@@ -129,7 +134,7 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
       galleryImages,
       publishedAt,
       updatedAt,
-      keywords,
+      keywords: resolvedKeywords,
       citations,
       repositoryUrl,
       paperUrl,

@@ -14,6 +14,7 @@ import { previewable } from '../../lib/content-model.ts';
 import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate, getChronologicalNeighbors } from '../../lib/timeline.ts';
+import { contentKeywords } from '../../lib/seo.ts';
 
 export async function getStaticPaths() {
   const galleries = await getCollection('gallery', previewable);
@@ -49,7 +50,7 @@ const nextColumnEntry = columnEntries[columnIndex + 1];
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
-<BaseLayout noindex={gallery.data.draft} title={`${gallery.data.title} — ${ui.navigation.photos} — ${ui.name}`} description={gallery.data.description} type="article" pageKind="gallery" section="photos" articleTitle={gallery.data.title} keywords={gallery.data.tags} image={cover.src} galleryImages={gallery.data.images} publishedAt={isoDate(publishedDate(gallery))} updatedAt={gallery.data.updatedAt && isoDate(gallery.data.updatedAt)}>
+<BaseLayout noindex={gallery.data.draft} title={`${gallery.data.title} — ${ui.navigation.photos} — ${ui.name}`} description={gallery.data.description} type="article" pageKind="gallery" section="photos" articleTitle={gallery.data.title} keywords={contentKeywords(gallery.data.tags, locale)} image={cover.src} galleryImages={gallery.data.images} publishedAt={isoDate(publishedDate(gallery))} updatedAt={gallery.data.updatedAt && isoDate(gallery.data.updatedAt)}>
   <article class="gallery-detail shell">
     <header class="gallery-header"><p class="eyebrow">{ui.navigation.photos} · {formatDate(publishedDate(gallery))}</p><h1>{gallery.data.title}</h1><p>{gallery.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><span>{ui.count.photos(gallery.data.images.length)}</span></div>{gallery.data.column && <p class="column-reference">{ui.entry.columnIn(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug, gallery.data.column.order)}</p>}<TagList tags={gallery.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header>
     <section class="gallery-carousel" aria-label={ui.gallery.carouselAria(gallery.data.title)} data-gallery-carousel tabindex="-1">

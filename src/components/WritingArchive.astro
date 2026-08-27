@@ -24,7 +24,7 @@ const { items, currentPage, totalPages, prevUrl, nextUrl } = paginateList(writin
 const titleSuffix = currentPage > 1 ? i18n(locale).pagination.pageTitleSuffix(currentPage) : '';
 ---
 
-<BaseLayout title={copy.metaTitle + titleSuffix} description={copy.metaDescription} pageKind="collection" section="writing">
+<BaseLayout title={copy.metaTitle + titleSuffix} description={copy.metaDescription} pageKind="collection" section="writing" seoPage="writing">
   <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   <section class="shell archive-list">
     <nav class="writing-years" aria-label={sortCopy.archiveLabel}>{years.map((year) => <a href={`${archivePrefix}${year}/`}>{year}</a>)}</nav>

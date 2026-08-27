@@ -17,6 +17,7 @@ import { getAllPublished, getColumnCollections, groupByLocaleVariant, pickLocale
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate, getChronologicalNeighbors } from '../../lib/timeline.ts';
+import { contentKeywords } from '../../lib/seo.ts';
 
 export async function getStaticPaths() {
   const research = await getCollection('research', previewable);
@@ -52,7 +53,7 @@ const repositoryUrl = entry.data.repositoryUrl && entry.data.repositoryUrl !== B
 const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
-<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description} type="article" pageKind="research" section="research" articleTitle={entry.data.title} keywords={entry.data.tags} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)} repositoryUrl={repositoryUrl} paperUrl={paperUrl} status={entry.data.status} version={entry.data.version}>
+<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description} type="article" pageKind="research" section="research" articleTitle={entry.data.title} keywords={contentKeywords(entry.data.tags, locale)} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)} repositoryUrl={repositoryUrl} paperUrl={paperUrl} status={entry.data.status} version={entry.data.version}>
   <ReadingProgress />
   <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time>{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header>
   {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={columnMembers} />}

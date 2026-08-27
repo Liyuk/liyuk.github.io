@@ -28,7 +28,7 @@ const anchorUrl = getRelativeLocaleUrl(locale, copy.anchor.url);
 const moreWays = copy.moreWays.items.map((item) => ({ ...item, url: getRelativeLocaleUrl(locale, item.url) }));
 ---
 
-<BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription} seoPage="start">
   <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
 
   <div class="shell start-groups">

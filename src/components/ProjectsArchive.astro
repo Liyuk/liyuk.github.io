@@ -19,7 +19,7 @@ const { items, currentPage, totalPages, prevUrl, nextUrl } = paginateList(projec
 const titleSuffix = currentPage > 1 ? i18n(locale).pagination.pageTitleSuffix(currentPage) : '';
 ---
 
-<BaseLayout title={copy.metaTitle + titleSuffix} description={copy.metaDescription} pageKind="collection" section="projects">
+<BaseLayout title={copy.metaTitle + titleSuffix} description={copy.metaDescription} pageKind="collection" section="projects" seoPage="projects">
   <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   <section class="shell entry-list archive-list">
     {items.map((project) =>
