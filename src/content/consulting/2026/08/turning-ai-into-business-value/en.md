@@ -11,6 +11,7 @@ guest: "An AI practitioner with a technical background"
 format: career-case
 featured: false
 tags: [ai, communication, product-thinking, strategy, metrics, operations, engineering, career-development]
+column: { slug: engineering-ai-judgment, order: 11 }
 translationKey: 2026/08/turning-ai-into-business-value
 ---
 

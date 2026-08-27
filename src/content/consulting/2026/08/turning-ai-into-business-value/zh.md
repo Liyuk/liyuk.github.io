@@ -11,6 +11,7 @@ guest: 一位技术背景的 AI 从业者
 format: career-case
 featured: false
 tags: [ai, communication, product-thinking, strategy, metrics, operations, engineering, career-development]
+column: { slug: engineering-ai-judgment, order: 11 }
 translationKey: 2026/08/turning-ai-into-business-value
 ---
 

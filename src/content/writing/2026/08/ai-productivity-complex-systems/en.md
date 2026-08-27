@@ -8,6 +8,7 @@ publishedAt: 2026-08-26
 draft: true
 type: essay
 tags: [ai, developer-productivity, systems, systems-design, architecture, metrics, observability, technical-planning, strategy]
+column: { slug: engineering-ai-judgment, order: 10 }
 citationUrls:
   - https://www.microsoft.com/en-us/research/publication/shifting-work-patterns-with-generative-ai/
   - https://www.nber.org/papers/w31161
