@@ -1,5 +1,5 @@
 ---
-title: "AI Does Not Create Productivity Directly: Local Acceleration, Workflow Redesign, and Cost Attribution in Complex Systems"
+title: "AI Does Not Automatically Create Productivity: From Local Acceleration to System Value"
 description: "Starting from a multi-system integration experience, this essay distinguishes creation, task efficiency, organizational productivity, and business value—and asks where value and cost actually come from when AI enters a complex system."
 locale: en
 translationStatus: draft

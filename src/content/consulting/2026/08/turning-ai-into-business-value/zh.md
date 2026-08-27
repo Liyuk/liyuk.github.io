@@ -1,5 +1,5 @@
 ---
-title: "别急着讲 AI：技术价值要先翻译成经营结果"
+title: "别急着讲 AI：先把技术方案讲成一门生意"
 description: "一场关于 FDE 会议、技术沟通和 AI 商业价值的咨询对话：当老板关心收入和成本时，技术人员该怎样把能力讲成对方听得懂、愿意验证的结果。"
 locale: zh-CN
 translationStatus: original
@@ -11,7 +11,7 @@ guest: 一位技术背景的 AI 从业者
 format: career-case
 featured: false
 tags: [ai, communication, product-thinking, strategy, metrics, operations, engineering, career-development]
-column: { slug: engineering-ai-judgment, order: 11 }
+column: { slug: consulting-and-b2b-business, order: 1 }
 translationKey: 2026/08/turning-ai-into-business-value
 ---
 

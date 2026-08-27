@@ -1,5 +1,5 @@
 ---
-title: AI 不直接产生生产力：复杂系统里的局部加速、流程重构与成本归因
+title: AI 不会自动带来生产力：从局部提速到系统价值
 description: 从一次多系统对接经历出发，区分创造、任务效率、组织生产力和经营价值，讨论 AI 进入复杂系统后，收益到底从哪里来、成本又该怎么算。
 locale: zh-CN
 translationStatus: original

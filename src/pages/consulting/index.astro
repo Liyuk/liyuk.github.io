@@ -20,7 +20,7 @@ const audience = consultingAudience(locale);
 // newly introduced consulting column still surfaces here even if no one
 // remembers to add it to this list. Order follows the editorial reading order
 // declared in taxonomy's startGroups.
-const CURATED_CONSULTING_COLUMNS = ['early-career-start', 'interview-job-search', 'career-management-growth', 'engineering-team-judgment'];
+const CURATED_CONSULTING_COLUMNS = ['early-career-start', 'interview-job-search', 'career-management-growth', 'consulting-and-b2b-business', 'engineering-team-judgment'];
 const columnsInUse = new Set(entries.map((e) => e.data.column?.slug).filter((slug) => slug !== undefined));
 const columnSlugSet = new Set([...CURATED_CONSULTING_COLUMNS, ...columnsInUse]);
 const columnSlugs = startGroups.flatMap((group) => group.columns).filter((slug) => columnSlugSet.has(slug));

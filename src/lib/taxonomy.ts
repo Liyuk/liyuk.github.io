@@ -224,6 +224,10 @@ export const columns: Record<string, { label: { 'zh-CN': string; en: string }; d
     label: { 'zh-CN': '职业路径与管理成长', en: 'Career Paths & Management Growth' },
     description: { 'zh-CN': '围绕职业选择、晋升、转管理和管理者成长的咨询记录。', en: 'Consultation records about career choices, promotion, management transitions, and manager growth.' },
   },
+  'consulting-and-b2b-business': {
+    label: { 'zh-CN': '咨询与 B2B 业务', en: 'Consulting & B2B Business' },
+    description: { 'zh-CN': '围绕咨询对话、创业讲故事、客户价值、采购决策与 B2B 销售逻辑的实践记录。', en: 'Practice notes on consultation, founder storytelling, customer value, procurement decisions, and B2B sales logic.' },
+  },
   'engineering-team-judgment': {
     label: { 'zh-CN': '工程团队与技术判断', en: 'Engineering Teams & Technical Judgment' },
     description: { 'zh-CN': '围绕团队职责、工程协作、技术规划和产品判断的咨询记录。', en: 'Consultation records about team responsibilities, engineering collaboration, technical planning, and product judgment.' },
@@ -254,6 +258,7 @@ export const startGroups: { key: 'method' | 'management' | 'engineering'; column
       'early-career-start',
       'interview-job-search',
       'career-management-growth',
+      'consulting-and-b2b-business',
       'engineering-team-judgment',
     ],
   },

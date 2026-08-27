@@ -1,5 +1,5 @@
 ---
-title: "Don’t Lead with AI: Translate Technical Value into Business Results"
+title: "Don’t Lead with AI: Turn a Technical Proposal into a Business"
 description: "An edited consultation about an FDE conference, technical communication, and AI’s business value: when owners care about revenue and cost, how can technical people explain their work as a result worth testing?"
 locale: en
 translationStatus: draft
@@ -11,7 +11,7 @@ guest: "An AI practitioner with a technical background"
 format: career-case
 featured: false
 tags: [ai, communication, product-thinking, strategy, metrics, operations, engineering, career-development]
-column: { slug: engineering-ai-judgment, order: 11 }
+column: { slug: consulting-and-b2b-business, order: 1 }
 translationKey: 2026/08/turning-ai-into-business-value
 ---
 
