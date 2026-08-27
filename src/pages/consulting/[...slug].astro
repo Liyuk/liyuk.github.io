@@ -18,6 +18,7 @@ import { i18n } from '../../i18n/index.mjs';
 import { publishedDate } from '../../lib/timeline.ts';
 import { readingMinutes } from '../../lib/reading-time.ts';
 import { getColumnCollections } from '../../lib/content-query.ts';
+import { contentKeywords } from '../../lib/seo.ts';
 
 export async function getStaticPaths() {
   const entries = await getCollection('consulting', previewable);
@@ -37,7 +38,7 @@ const related = allEntries.filter((candidate) => candidate.id !== entry.id).slic
 const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 const formatDate = (date: Date) => formatFullDate(date, locale);
 ---
-<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.name}`} description={entry.data.description} type="article" pageKind="consulting" section="consulting" articleTitle={entry.data.title} keywords={entry.data.tags} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)}>
+<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.name}`} description={entry.data.description} type="article" pageKind="consulting" section="consulting" articleTitle={entry.data.title} keywords={contentKeywords(entry.data.tags, locale)} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)}>
   <ReadingProgress />
   <article class="article shell">
     <header><p class="eyebrow">{ui.navigation.consulting}{entry.data.episode ? ` · ${entry.data.episode}` : ''}</p><h1>{entry.data.title}</h1><p class="article-dek" data-pagefind-meta="description">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{ui.entry.publishedAt} {formatDate(publishedDate(entry))}</time><span>{ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span></div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" pagefindFilter /></header>

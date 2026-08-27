@@ -1,6 +1,6 @@
 ---
 title: "Management Retrospective: Eight Judgments from Execution to System"
-description: "Condensing the judgments that have recurred over the past few years in management, collaboration, and decision-making into a single master summary told just once: judgment, boundaries, alignment, context, closed loop, resources, team, and retrospective — each pointing to one expanded article."
+description: "A practical management framework built from eight recurring judgments: problem definition, boundaries, alignment, context, closed loops, resources, teams, and retrospectives."
 locale: en
 translationStatus: reviewed
 createdAt: 2026-08-15
@@ -130,3 +130,5 @@ flowchart LR
 ```
 
 It was never a process to be memorized, nor proof of "managing a lot." The phrase I've always liked still holds: **Context, not control** — give enough context and put decision rights closest to where the problem is. All the articles above are just this phrase unfolded in different scenarios.
+
+If you are applying these judgments to a concrete project, continue with [Business Model Canvas: Nine Boxes](/en/writing/2026/08/business-model-canvas/); if the problem involves measurement definitions, start with the [Data Metrics Guide](/en/columns/data-metrics-guide/).

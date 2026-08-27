@@ -12,7 +12,7 @@ const { writing, consulting, research, projects, galleries } = await getAllPubli
 const tags = getIndexableTags([...writing, ...consulting, ...research, ...projects, ...galleries]);
 ---
 
-<BaseLayout title={`${copy.eyebrow} — ${ui.brand}`} description={copy.description} pageKind="collection" section="tags">
+<BaseLayout title={`${copy.eyebrow} — ${ui.brand}`} description={copy.description} pageKind="collection" section="tags" seoPage="tags">
   <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   <section class="shell taxonomy-section archive-list"><ul class="topic-directory">{tags.map(({ slug, count }) => <li><a href={tagUrl(slug, locale)}>#{getTag(slug, locale).label}</a><span>{copy.count(count)}</span></li>)}</ul></section>
 </BaseLayout>

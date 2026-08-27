@@ -383,3 +383,5 @@ If the last question has no answer, this metric may only be recording, without t
 ## Conclusion: numbers are observation, not verdict
 
 Good metrics make problems easier to see and make judgments reviewable; they do not replace understanding of users, systems, and contexts. Before each discussion begins, spend a minute confirming the measurement object, event definition, and denominator. Many metric arguments that seem intractable will, at this step, become a more concrete and more productive collaboration.
+
+For an example of these principles applied to a real data asset, continue with [China Housing Price Data: A Source- and Methodology-Aware Approach](/en/research/2026/08/china-housing-price-data-methods/).

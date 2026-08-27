@@ -31,7 +31,7 @@ const zhFmt = (n: number) => (n >= 10000 ? `${(n / 10000).toFixed(1).replace(/\.
 const enFmt = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : String(n));
 const [zhWord, enWord] = locale.startsWith('en') ? [enFmt(zhChars), enFmt(enWords)] : [zhFmt(zhChars), zhFmt(enWords)];
 ---
-<BaseLayout title={copy.metaTitle} description={copy.metaDescription}>
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription} seoPage="about">
   <section class="page-heading shell about"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p><p class="about-intro">{copy.intro}</p><p class="about-stats">{copy.stats(writing.length, research.length, projects.length, zhWord, enWord)}</p></section>
 
   <section class="shell section about-background" aria-labelledby="about-background-heading">
