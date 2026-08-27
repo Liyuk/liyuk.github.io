@@ -1,6 +1,6 @@
 ---
 title: SEO 实验与异常排查：用时间线保护判断
-description: 结合搜索处理延迟、CUPED、页面版本和流量事故排查，建立不急于宣布结果的 SEO 学习协议。
+description: 处理延迟、CUPED 和流量污染很容易被一起误读成"算法更新"；这里记录的是先冻结时间线、再谈显著性的排查协议。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -77,9 +77,8 @@ $$
 
 如果使用 CUPED，调整后的结果还要说明协变量来自实验前、如何估计以及哪些样本被排除。CUPED 能减少方差，不能修复分流错误或时间窗口污染。
 
-## 公开资料
+## 延伸阅读
 
 - [Google Website testing and search](https://developers.google.com/search/docs/crawling-indexing/website-testing)
 - [Google Search Status Dashboard](https://status.search.google.com/)
 - [Google Core updates](https://developers.google.com/search/updates/core-updates)
-- [Microsoft Research CUPED](https://www.microsoft.com/en-us/research/publication/improving-the-sensitivity-of-online-controlled-experiments-by-utilizing-pre-experiment-data/)

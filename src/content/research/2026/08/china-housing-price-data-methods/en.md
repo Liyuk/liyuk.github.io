@@ -1,6 +1,6 @@
 ---
-title: "The Measurable and the Unmeasurable: A Source- and Methodology-Aware Method for Constructing China's Housing Price Data (Beijing as a District-Level Case)"
-description: "Based on a completed Chinese housing price data asset (the official 70-city index panel, the national macro panel and LPR series, the Beijing district-level listing average price monthly series, and official district-level signed-contract and annual transaction data), we propose a source- and methodology-aware data construction framework and present cross-methodology empirical results."
+title: "China Housing Price Data: A Source- and Methodology-Aware Approach"
+description: "How to build reproducible China housing price data across official 70-city indexes, Beijing district-level listings, LPR, and transaction records without confusing incompatible measures."
 createdAt: 2026-08-08
 publishedAt: 2026-08-08
 version: '0.4'
@@ -293,3 +293,9 @@ Data science does not automatically become rigorous just because it uses a model
 **Conflict of interest:** The author declares no conflicts of interest. This project received no funding from any commercial institution and does not constitute investment advice; the model's output does not constitute a prediction of, or commitment regarding, future housing prices.
 
 **Data availability:** This project is based on real data: the residential price index for 70 large and medium-sized cities comes from the NBS's public monthly reports, and the collection, cleaning, training, auditing, and reporting code can all be reproduced in the GitHub repository ([cn-housing-price-training](https://github.com/Liyuk/cn-housing-price-training)). `yoy_secondhand` is the year-over-year index of second-hand residential sales prices, benchmarked at "the same month last year = 100", and is not equal to the transaction unit price. The project's modeling baseline, methodology-change markers (`methodology`), and leakage-prevention splits are all under version control.
+
+## Further reading
+
+- [Define the Measurement Before Arguing About Metrics](/en/writing/2021/03/define-the-measurement-before-arguing-about-metrics/)
+- [Data Definitions Are Collaboration Interfaces](/en/writing/2021/03/data-definitions-are-collaboration-interfaces/)
+- [Data Metrics Guide](/en/columns/data-metrics-guide/)

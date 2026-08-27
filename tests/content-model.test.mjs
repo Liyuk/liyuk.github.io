@@ -6,7 +6,7 @@ import { hasValidPublishedTranslationStatus, isPreviewable, notDraft, previewabl
 import { site } from '../src/data/site.mjs';
 import { i18n } from '../src/i18n/index.mjs';
 import { groupByYear, groupByYearMonth, getChronologicalNeighbors, sortByCreatedAt, sortByLastUpdatedAt } from '../src/lib/timeline.ts';
-import { columnEntryUrl, columnUrl, contentUrl, entryUrl, galleryUrl, projectUrl, researchUrl, tagUrl, writingUrl } from '../src/lib/content-paths.ts';
+import { columnEntryUrl, columnUrl, consultingUrl, contentUrl, entryUrl, galleryUrl, projectUrl, researchUrl, tagUrl, writingUrl } from '../src/lib/content-paths.ts';
 import { parseContentDate } from '../src/lib/content-date.ts';
 import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, getTag } from '../src/lib/taxonomy.ts';
 import { getGalleryCover } from '../src/lib/gallery.ts';
@@ -96,6 +96,11 @@ test('localized writing routes keep the year and month while hiding language fil
   assert.equal(writingUrl('2026/08/example/en', 'en'), '/en/writing/2026/08/example/');
 });
 
+test('consulting entries use their own localized content route', () => {
+  assert.equal(consultingUrl('2026/08/example/zh'), '/consulting/2026/08/example/');
+  assert.equal(consultingUrl('2026/08/example/en', 'en'), '/en/consulting/2026/08/example/');
+});
+
 test('all public content uses dated, language-file-free URLs', () => {
   assert.equal(contentUrl('projects', '2026/08/example/zh'), '/projects/2026/08/example/');
   assert.equal(contentUrl('research', '2026/08/example/zh'), '/research/2026/08/example/');
@@ -118,8 +123,10 @@ test('galleries have a stable top-level photo URL and an explicit cover image', 
 
 test('column members resolve to writing or gallery URLs in the current locale', () => {
   const essay = { id: '2026/08/example/zh', collection: 'writing', data: { locale: 'zh-CN' } };
+  const consultation = { id: '2026/08/example/zh', collection: 'consulting', data: { locale: 'zh-CN' } };
   const gallery = { id: 'maomao', collection: 'gallery', data: { slug: 'maomao', locale: 'zh-CN' } };
   assert.equal(entryUrl(essay), '/writing/2026/08/example/');
+  assert.equal(entryUrl(consultation), '/consulting/2026/08/example/');
   assert.equal(entryUrl(gallery), '/photos/maomao/');
   assert.equal(entryUrl(essay, 'en'), '/en/writing/2026/08/example/');
   assert.equal(entryUrl(gallery, 'en'), '/en/photos/maomao/');
@@ -176,6 +183,14 @@ test('columns have localized editorial copy, stable URLs, and preserve their dec
   const firstChapter = { id: 'first', data: { column: { slug: 'data-metrics-guide', order: 1 } } };
   const unrelated = { id: 'other', data: { column: { slug: 'thinking-training', order: 1 } } };
   assert.deepEqual(getColumnEntries([laterChapter, unrelated, firstChapter], 'data-metrics-guide'), [firstChapter, laterChapter]);
+});
+
+test('consulting columns have localized copy and support ordered entries', () => {
+  assert.equal(getColumn('career-management-growth', 'zh-CN').label, '职业路径与管理成长');
+  assert.equal(getColumn('career-management-growth', 'en').label, 'Career Paths & Management Growth');
+  const later = { id: 'later', collection: 'consulting', data: { column: { slug: 'career-management-growth', order: 2 } } };
+  const first = { id: 'first', collection: 'consulting', data: { column: { slug: 'career-management-growth', order: 1 } } };
+  assert.deepEqual(getColumnEntries([later, first], 'career-management-growth'), [first, later]);
 });
 
 test('column pages replace the legacy albums model', async () => {
@@ -247,6 +262,23 @@ test('writing detail pages show publication and optional update dates without cr
   assert.doesNotMatch(page, /ui\.entry\.createdAt/);
   assert.match(ui, /publishedAt: '发布于'/);
   assert.match(ui, /updatedAt: '更新于'/);
+});
+
+test('homepage puts latest writing before a capped, deduplicated recommendation list', async () => {
+  const page = await readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
+
+  assert.match(page, /const latest = writing\.slice\(0, HOME_POSTS\)/);
+  assert.match(page, /const HOME_FEATURED = 3/);
+  assert.match(page, /\.filter\(\(entry\) => !latestIds\.has\(entry\.id\)\)/);
+  assert.match(page, /\.slice\(0, HOME_FEATURED\)/);
+  assert.ok(page.indexOf('copy.writing.latest') < page.indexOf('copy.writing.featured'));
+});
+
+test('start page includes every column-bearing content collection', async () => {
+  const page = await readFile(new URL('../src/pages/start/index.astro', import.meta.url), 'utf8');
+
+  assert.match(page, /const \{ writing, consulting, research, galleries \} = await getColumnCollections\(locale\)/);
+  assert.match(page, /const entries = \[\.\.\.writing, \.\.\.consulting, \.\.\.research, \.\.\.galleries\]/);
 });
 
 test('project detail pages render an optional editorial visual with meaningful alternative text', async () => {

@@ -290,3 +290,9 @@ LPR 侧，5 年期以上 LPR（与房贷直接相关）从 2019-08 推出时的 
 **利益冲突：** 作者声明无利益冲突。本项目未受任何商业机构资助，不构成任何投资建议；模型输出不构成对未来房价的预测或承诺。
 
 **数据可用性：** 本项目基于真实数据：70 个大中城市住宅价格指数来自国家统计局公开月报，采集、清洗、训练、审计与报告代码均可在 GitHub 仓库复现（[cn-housing-price-training](https://github.com/Liyuk/cn-housing-price-training)）。`yoy_secondhand` 为二手住宅销售价格同比指数，以"上年同月 = 100"为基准，不等于成交单价。项目的建模基线、口径变更标记（`methodology`）与防泄漏切分均已纳入版本控制。
+
+## 延伸阅读
+
+- [先定义测量对象，再讨论指标](/writing/2021/03/define-the-measurement-before-arguing-about-metrics/)
+- [数据口径是协作接口](/writing/2021/03/data-definitions-are-collaboration-interfaces/)
+- [数据度量工作指南](/columns/data-metrics-guide/)

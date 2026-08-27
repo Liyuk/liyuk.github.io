@@ -8,6 +8,7 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [organization-design, ai, engineering, functional-teams, business-lines, work-leadership]
+column: { slug: engineering-ai-judgment, order: 5 }
 ---
 
 **版本：** 0.1（preprint）

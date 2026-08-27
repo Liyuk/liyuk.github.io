@@ -11,6 +11,7 @@ translationStatus: reviewed
 translationKey: 2026/08/model-harness-task-scheduling-context-routing
 draft: false
 tags: [ai, agent-systems, engineering, architecture, planning, observability, measurement, systems]
+column: { slug: engineering-ai-judgment, order: 6 }
 ---
 
 > **Version: 0.6 (preprint).** This is an engineering theory and design review, not a report of a controlled user experiment. It distinguishes a complete theoretical Agent scheduler from the engineering boundary of `dsh-quota-router`: the Planner decomposes work, quota-router selects a model for an already-defined subtask and performs bounded fallback, and the upper layer handles context regression, acceptance, and replanning. Context compression is treated as a related boundary and will be developed separately.

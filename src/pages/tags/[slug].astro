@@ -8,23 +8,23 @@ import { sortByCreatedAt } from '../../lib/timeline.ts';
 import { i18n } from '../../i18n/index.mjs';
 
 export async function getStaticPaths() {
-  const { writing, research, projects, galleries } = await getAllPublished('zh-CN');
-  return getIndexableTags([...writing, ...research, ...projects, ...galleries]).map(({ slug }) => ({ params: { slug }, props: {} }));
+  const { writing, consulting, research, projects, galleries } = await getAllPublished('zh-CN');
+  return getIndexableTags([...writing, ...consulting, ...research, ...projects, ...galleries]).map(({ slug }) => ({ params: { slug }, props: {} }));
 }
 
 const { slug } = Astro.params;
 const locale = Astro.currentLocale ?? 'zh-CN';
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
-const { writing, research, projects, galleries } = await getAllPublished(locale);
-const indexableTags = getIndexableTags([...writing, ...research, ...projects, ...galleries]).map(({ slug: tagSlug }) => tagSlug);
+const { writing, consulting, research, projects, galleries } = await getAllPublished(locale);
+const indexableTags = getIndexableTags([...writing, ...consulting, ...research, ...projects, ...galleries]).map(({ slug: tagSlug }) => tagSlug);
 const tag = getTag(slug, locale);
-const entries = sortByCreatedAt([...writing, ...research, ...projects, ...galleries]).filter((entry) => entry.data.tags?.includes(slug));
+const entries = sortByCreatedAt([...writing, ...consulting, ...research, ...projects, ...galleries]).filter((entry) => entry.data.tags?.includes(slug));
 const description = pageCopy.tags.detailDescription(tag.label);
 const cards = pageCopy.tagCards;
 ---
 
 <BaseLayout title={`#${tag.label} — ${ui.brand}`} description={description}>
   <section class="page-heading shell"><p class="eyebrow">{pageCopy.tags.eyebrow}</p><h1>#{tag.label}</h1><p>{description}</p></section>
-  <section class="shell entry-list archive-list">{entries.map((entry) => entry.collection === 'writing' ? <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} /> : entry.collection === 'research' ? <ContentEntryCard entry={entry} collection="research" label={cards.research.label} action={cards.research.action} locale={locale} /> : entry.collection === 'project' ? <ContentEntryCard entry={entry} collection="project" label={cards.project.label} action={cards.project.action} locale={locale} /> : <ContentEntryCard entry={entry} collection="gallery" label={cards.gallery.label} action={cards.gallery.action} locale={locale} />)}</section>
+  <section class="shell entry-list archive-list">{entries.map((entry) => entry.collection === 'writing' ? <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} /> : entry.collection === 'consulting' ? <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} urlPrefix="consulting" /> : entry.collection === 'research' ? <ContentEntryCard entry={entry} collection="research" label={cards.research.label} action={cards.research.action} locale={locale} /> : entry.collection === 'project' ? <ContentEntryCard entry={entry} collection="project" label={cards.project.label} action={cards.project.action} locale={locale} /> : <ContentEntryCard entry={entry} collection="gallery" label={cards.gallery.label} action={cards.gallery.action} locale={locale} />)}</section>
 </BaseLayout>

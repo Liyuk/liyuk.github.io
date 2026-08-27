@@ -10,20 +10,23 @@ import { site } from '../data/site.mjs';
 import { sortByCreatedAt } from '../lib/timeline.ts';
 
 const HOME_POSTS = 3;
+const HOME_FEATURED = 3;
 
 const locale = Astro.currentLocale ?? 'zh-CN';
 const published = publishedIn(locale);
 const writing = sortByCreatedAt(await getCollection('writing', published));
-const featured = sortByCreatedAt(await getCollection('writing', (entry) => published(entry) && entry.data.featured === true));
-const featuredIds = new Set(featured.map((entry) => entry.id));
-const latest = writing.filter((entry) => !featuredIds.has(entry.id)).slice(0, HOME_POSTS);
+const latest = writing.slice(0, HOME_POSTS);
+const latestIds = new Set(latest.map((entry) => entry.id));
+const featured = sortByCreatedAt(await getCollection('writing', (entry) => published(entry) && entry.data.featured === true))
+  .filter((entry) => !latestIds.has(entry.id))
+  .slice(0, HOME_FEATURED);
 const projectCount = (await getCollection('project', published)).length;
 const researchCount = (await getCollection('research', published)).length;
 const copy = i18n(locale).page.home;
 const path = (p: string) => getRelativeLocaleUrl(locale, p);
 ---
 
-<BaseLayout title={copy.metaTitle} description={copy.description}>
+<BaseLayout title={copy.metaTitle} description={copy.description} seoPage="home">
   <section class="hero shell">
     <p class="eyebrow">{copy.eyebrow}</p>
     <h1>{copy.title[0]}<br />{copy.title[1]}</h1>
@@ -44,20 +47,21 @@ const path = (p: string) => getRelativeLocaleUrl(locale, p);
       <RssSubscribe locale={locale} />
     </div>
     <div class="entry-list">
+      <h3 class="entry-list-heading">{copy.writing.latest}</h3>
+      {latest.length ? latest.map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
       {featured.length > 0 && (
         <>
           <h3 class="entry-list-heading">{copy.writing.featured}</h3>
           {featured.map((entry) => <EntryCard entry={entry} locale={locale} />)}
         </>
       )}
-      <h3 class="entry-list-heading">{copy.writing.latest}</h3>
-      {latest.length ? latest.map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
     </div>
   </section>
 
   <section class="section shell practice-grid" aria-label={copy.practiceGridAria}>
     <a href={path('/projects/')} class="practice-card"><span>{copy.practices.projects.label}</span><strong>{copy.practices.projects.title}</strong><em>{copy.practices.projects.description}</em><small>{copy.practices.projects.count(projectCount)}</small></a>
     <a href={path('/research/')} class="practice-card"><span>{copy.practices.research.label}</span><strong>{copy.practices.research.title}</strong><em>{copy.practices.research.description}</em><small>{copy.practices.research.count(researchCount)}</small></a>
+    <a href={path('/consulting/')} class="practice-card"><span>{copy.practices.consulting.label}</span><strong>{copy.practices.consulting.title}</strong><em>{copy.practices.consulting.description}</em><small>{copy.practices.consulting.cta}</small></a>
   </section>
 
   <section class="section shell start-callout">

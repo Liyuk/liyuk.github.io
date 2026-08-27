@@ -1,6 +1,6 @@
 ---
 title: 结构化数据与媒体 SEO：让页面事实可被理解
-description: 从页面事实模型到图片、视频、结构化数据和内链，建立可验证的多形态内容入口。
+description: alt 和 Schema 是事实核验之后的最后一步，不是第一步；标签补得再全，事实模型缺失，页面还是难懂。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -78,10 +78,9 @@ $$
 
 假设 500 次图片交互带来 80 次承载页面任务完成，Media-assisted Task Rate 是 16%。如果只看图片曝光，会漏掉“图片被看到了但没有帮助用户继续做事”的问题。
 
-## 公开资料
+## 参考
 
 - [Google Structured data introduction](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)
-- [Google Structured data policies](https://developers.google.com/search/docs/appearance/structured-data/sd-policies)
 - [Google Image SEO](https://developers.google.com/search/docs/appearance/google-images)
 - [Google Video SEO](https://developers.google.com/search/docs/appearance/video)
 - [Schema.org](https://schema.org/)

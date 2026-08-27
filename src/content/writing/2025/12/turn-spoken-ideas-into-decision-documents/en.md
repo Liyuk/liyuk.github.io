@@ -17,7 +17,7 @@ This post is a quick write-up: how to turn natural language into document langua
 
 A note up front: tools are good at helping you structure your thinking and acting as a writing coach; when business, data, or personal information is involved, confirm security and compliance first. They don't make judgments for you, and they certainly don't fabricate facts for you.
 
-# First, an Example 🌰
+## First, an Example 🌰
 
 ## Before — A Very Common Piece of Raw Wording
 
@@ -57,7 +57,7 @@ Intelligent capability: advance pragmatically, focusing on real-scenario value. 
 
 Execution principle: do what is right and efficient. For long-term value directions like architecture governance, automation, and intelligence, invest sufficient resources and conviction at the design stage, avoiding low-efficiency "easy" paths chosen under short-term resistance. Under a reasonable load, keep producing high-quality results.
 
-# A Concrete Distillation Approach
+## A Concrete Distillation Approach
 
 ## Step 1: Have the Tool Lay a Foundation First
 

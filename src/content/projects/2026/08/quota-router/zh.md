@@ -12,7 +12,7 @@ hero:
   src: /images/projects/quota-router/architecture.svg
   alt: Quota Router 在 DSH 中的位置：用户回合进入纯策略层，经过来源优先级、任务模型映射与保障机制后回到 DSH 原生层。
   caption: Quota Router 的架构边界：只负责可解释的模型选择与 fallback，不拥有 provider、凭据或模型目录。
-tags: [agent, routing, explainability, reliability, observability, typescript]
+tags: [agent, routing, algorithms, explainability, reliability, observability, typescript]
 ---
 
 [在 GitHub 查看 Quota Router ↗](https://github.com/Liyuk/dsh-quota-router)　·　[在 npm 查看已发布的包 ↗](https://www.npmjs.com/package/@liyuk/dsh-quota-router)
@@ -55,22 +55,7 @@ profiles:           # 每个任务在每个来源使用的模型
 
 ## 失败时如何前进
 
-失败分类是保守的，稳定失败和瞬态失败有不同待遇：
-
-| 失败类型 | 例子 | 行为 |
-| --- | --- | --- |
-| 稳定失败 | QUOTA、余额不足、401/403 | 立即前进到下一健康候选，并要求 DSH 同轮重试 |
-| 瞬态失败 | 429、5xx、超时、传输中断 | 先交给 DSH 正常重试；达到阈值后进入 cooldown 并前进 |
-| 其他 | 上下文超限等 | 不动；这不是换模型能解决的问题 |
-
-四条规则让行为保持可预测：
-
-- **forward-only**：候选只前进不回头，不在坏路由之间震荡。
-- **绝不越权**：`paid` 默认跳过，除非显式开启 `allowPaidFallback: true`；`manual`/`emergency` 永不自动选择。
-- **先校验后写入**：候选必须通过 DSH 原生 provider/model 目录校验，才会写进请求。
-- **可审计**：选择、fallback、cooldown 和用量记录在内存 ledger 中，可通过 `quota_router_status` 查看。
-
-候选耗尽时保留 DSH 原始错误，绝不静默使用未授权来源。
+失败分类是保守的：稳定失败（配额耗尽、余额不足、401/403）立即前进到下一个健康候选；瞬态失败（限流、5xx、超时）先交给 DSH 正常重试，超过阈值才进入 cooldown 并前进；上下文超限这类问题不动，因为换模型解决不了。候选只前进不回头，`paid` 来源默认跳过，选择和 cooldown 记录在内存 ledger 里可查。完整的失败分类表、四条不变规则和实现细节，写在[工程设计与路由算法](/projects/2026/08/quota-router-engineering/)里，这里不重复。
 
 ## Settings 页面
 
@@ -83,31 +68,9 @@ profiles:           # 每个任务在每个来源使用的模型
 
 配置通过 revision 乐观锁写回 DSH Settings，保存后实时重新校验候选，无需重启。
 
-## task-aware 子任务路由层
+## task-aware 子任务路由与省钱核算
 
-v0.2+ 还提供独立导出的 `SubtaskRouter`，面向 Agent/Planner 已经拆好的子任务。它返回一个模型租约，让同一个 subtask 在多轮执行中保持稳定：
-
-```ts
-const result = router.route({
-  taskId: 'T1', subtaskId: 'S3',
-  contractVersion: 'v1', contractHash: 'sha256-…',
-  taskClass: 'coding', complexity: 'high', precision: 'high',
-  allowedModels: ['opencode-go/mimo-v2.5', 'token-share/gpt-5.6-terra'],
-})
-```
-
-这一层不做 Planner，也不在每一轮重新猜任务类型。它坚持几个边界：结构化分类优先于关键词；同一 `taskId+subtaskId+contractHash` 幂等；权限只收紧不放大；critical 任务不降级；质量失败交给上层验收器；遥测默认不记录 prompt 全文。
-
-## 怎么衡量是否省钱
-
-“选择了便宜模型”不等于“产生了收益”。路由器可以直接审计 primary 使用比例、primary 直接完成比例、fallback 恢复比例，以及各 tier 的 token 用量；只有上层回传 `RouteOutcome`，才能进一步计算 accepted 率、返工率和有 baseline 支撑的净节省：
-
-```text
-saving = baseline_resource_for_accepted_subtasks
-       - router_resource_for_accepted_subtasks
-```
-
-因此，付费来源是否参与不是一次故障中的隐式副作用，而是一个明确的策略决定。
+v0.2+ 还提供独立导出的 `SubtaskRouter`，让 Agent/Planner 拆好的子任务在多轮执行中保持稳定的模型租约；路由器也能审计 primary 使用比例、fallback 恢复比例和各 tier 的 token 用量，区分"选了便宜模型"和"真的省了钱"。这两部分的接口示例、幂等规则和省钱公式，同样写在[工程设计与路由算法](/projects/2026/08/quota-router-engineering/)里。
 
 ## 安全模型与边界
 

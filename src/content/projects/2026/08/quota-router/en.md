@@ -15,7 +15,7 @@ hero:
   src: /images/projects/quota-router/architecture.en.svg
   alt: "Quota Router inside DSH: a user turn enters the policy layer, passes through source priority, task-model mapping, and guardrails, then returns to the native DSH layer."
   caption: "Quota Router's architectural boundary: explainable model selection and fallback, without owning providers, credentials, or the model catalog."
-tags: [agent, routing, explainability, reliability, observability, typescript]
+tags: [agent, routing, algorithms, explainability, reliability, observability, typescript]
 ---
 
 [View Quota Router on GitHub ↗](https://github.com/Liyuk/dsh-quota-router) · [View the published package on npm ↗](https://www.npmjs.com/package/@liyuk/dsh-quota-router)
@@ -58,22 +58,7 @@ At runtime, the message first matches a profile using first-match semantics. The
 
 ## What happens on failure
 
-Failure classification is conservative:
-
-| Failure type | Examples | Behavior |
-| --- | --- | --- |
-| Stable | QUOTA, insufficient balance, 401/403 | Move immediately to the next healthy candidate and request a same-turn retry |
-| Transient | 429, 5xx, timeout, transport interruption | Let DSH retry normally; enter cooldown and advance after the threshold |
-| Other | Context overflow and similar errors | Stay put; changing models does not solve it |
-
-Four rules keep behavior predictable:
-
-- **Forward-only:** candidates never move backward or oscillate between broken routes.
-- **No privilege escalation:** `paid` candidates are skipped unless `allowPaidFallback: true`; `manual` and `emergency` candidates are never selected automatically.
-- **Validate before writing:** a candidate must pass DSH's native provider/model catalog checks before it reaches a request.
-- **Auditable decisions:** selections, fallbacks, cooldowns, and usage are recorded in an in-memory ledger and exposed through `quota_router_status`.
-
-When candidates are exhausted, the original DSH error remains intact. The router never silently reaches an unauthorized source.
+Failure classification is deliberately conservative: stable failures such as exhausted quota, insufficient balance, and 401/403 responses advance immediately to the next healthy candidate; transient failures such as rate limits, 5xx responses, timeouts, and interrupted transport are first handed back to DSH for normal retry, then advance only after the threshold enters cooldown; context overflow and similar failures stay put because changing models cannot solve them. Candidates move forward only, `paid` sources are skipped by default, and selections and cooldowns remain inspectable in the in-memory ledger. The complete failure table, four invariants, and implementation details live in [Engineering Design and Routing Algorithms](/en/projects/2026/08/quota-router-engineering/), so this page does not repeat them.
 
 ## The Settings page
 
@@ -86,31 +71,9 @@ The plugin includes a DSH Web page at Settings → Quota Router:
 
 Configuration is written back through optimistic revision control and candidates are revalidated live, without a restart.
 
-## The task-aware subtask routing layer
+## Task-aware subtask routing and cost accounting
 
-v0.2+ also exports `SubtaskRouter` for subtasks already decomposed by an Agent or Planner. It returns a model lease so a subtask remains stable across turns:
-
-```ts
-const result = router.route({
-  taskId: 'T1', subtaskId: 'S3',
-  contractVersion: 'v1', contractHash: 'sha256-…',
-  taskClass: 'coding', complexity: 'high', precision: 'high',
-  allowedModels: ['opencode-go/mimo-v2.5', 'token-share/gpt-5.6-terra'],
-})
-```
-
-This layer is not a Planner and does not reclassify the task every turn. Structured classification takes priority over keyword guessing; the same `taskId+subtaskId+contractHash` is idempotent; permissions only narrow; critical tasks do not downgrade; quality failures go to the upper-level evaluator; and telemetry does not record prompt text by default.
-
-## Measuring whether it saves money
-
-Choosing a cheaper model does not automatically create savings. The router can directly audit primary-selection share, primary success share, fallback recovery, and token usage by tier. Accepted rate, rework rate, and net savings require an upper layer to return `RouteOutcome` and a paired baseline:
-
-```text
-saving = baseline_resource_for_accepted_subtasks
-       - router_resource_for_accepted_subtasks
-```
-
-This makes paid fallback an explicit policy decision rather than an accidental side effect of a failure.
+v0.2+ also exports `SubtaskRouter`, so a subtask already decomposed by an Agent or Planner keeps a stable model lease across turns. The router can also audit primary-selection share, fallback recovery, and token usage by tier, distinguishing “a cheaper model was selected” from “the system actually saved money.” The interface example, idempotency rules, and savings formula are documented in [Engineering Design and Routing Algorithms](/en/projects/2026/08/quota-router-engineering/).
 
 ## Safety model and boundaries
 

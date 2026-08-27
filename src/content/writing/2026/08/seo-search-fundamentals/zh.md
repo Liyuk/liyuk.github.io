@@ -1,6 +1,6 @@
 ---
 title: SEO 搜索基础地图：从被发现到产生价值
-description: 用一条真实项目链路理解发现、抓取、索引、点击和业务转化，并启动第一个可复盘的 SEO 项目。
+description: 很多人从标题和关键词开始学 SEO，这篇建议倒过来：先看一条从被发现到产生价值的完整链路，再动手写字。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -123,9 +123,8 @@ $$
 
 分母要固定。把所有 URL、已提交 URL 和真正应该进入索引的 URL 混在一起，比例会看起来很好看，但不能指导排查。
 
-## 公开资料
+## 延伸阅读
 
-- [Google Search Essentials](https://developers.google.com/search/docs/essentials)
 - [Google Crawling and Indexing](https://developers.google.com/search/docs/crawling-indexing)
 - [Bing Webmaster Guidelines](https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a)
 - [web.dev Performance](https://web.dev/learn/performance)

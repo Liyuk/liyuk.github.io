@@ -58,7 +58,7 @@ The output should be a one-page business landscape, not a compilation of materia
 
 ### 1.2 Evidence of the Current State: Constraint–Consequence–Evidence
 
-For business analysis to land on a decision-ready current state, a problem needs to be written in a three-part form:
+To turn business analysis into a decision-ready description of the current state, write each problem in a three-part form:
 
 - **Constraint**: the specific limitation of the current system, process, capability, or way of collaborating;
 - **Consequence**: how it affects business outcomes, user experience, risk, or R&D efficiency;
@@ -67,6 +67,8 @@ For business analysis to land on a decision-ready current state, a problem needs
 For example, don't just write "release efficiency is low"; keep asking: which types of changes are slow? At which stage are they slow? Is what's affected the frequency of experimentation, the risk of incidents, or cross-team waiting? Is there evidence sufficient to support a priority judgment?
 
 The value of "constraint–consequence–evidence" is turning the current state from "a string of complaints" into "input that can participate in comparison." A constraint without a consequence is just a statement of the status quo; a consequence without evidence is just an opinion. Only when all three are present can a "current state" truly enter the trade-off table that follows.
+
+For example (a constructed scenario, not a real event), a planning review may label "low release efficiency" the top constraint because "the engineers complain about it every day." Further questions reveal that only one business line is slow, because its changes require manual compliance approval; the CI/CD pipeline itself is not the bottleneck. Without separating which changes are slow and at which step, the plan might fund an unnecessary release-system rewrite, when the real work is digitizing the approval step. The more vague the constraint, the easier it is for the loudest complaint to steer the plan instead of the evidence.
 
 ## 2. Competitive Analysis: Understanding Whom We Compare Against, the Gap, and the Level
 
@@ -95,7 +97,7 @@ For competitive pressure to become goals, it must pass through the translation o
 | Industry judgment | Where we stand, what level counts as enough | The leader, the runner-up, the industry baseline | Copying peers without knowing why they are where they are |
 | Market judgment | Window, timing, supply and demand, competitor moves | Market window changes, competitor cadence, demand shifts | Treating trends as certainties, overestimating the window |
 
-The common base of the four judgments is **competitive comparison**:
+The common base of the four judgments is **competitive comparison**: whether we are asking whom users are choosing instead of us or what technical level we occupy in the industry, the judgment must return to a concrete reference point rather than intuition.
 
 ```mermaid
 flowchart TB
@@ -110,7 +112,7 @@ flowchart TB
     F --> G
 ```
 
-Watch out for one trap: **comparison is often narrowed down to "looking at competitors."** The true reference points come in four types — users' alternatives, mature technical paths, industry benchmarks, and market supply and demand. Competitors are just one thread; without the other three, comparison degrades into imitation benchmarked against competitors.
+Here is a constructed example. A plan sets a goal to "match the industry leader," but review reveals that the user's actual alternative is not that famous competitor; it is simply continuing with a manual spreadsheet. The goal changes from matching a feature at a named company to moving users out of the spreadsheet workflow. The reference point changed, and so did the capability to build. **Comparison is often narrowed down to looking at competitors**, but the true reference points are users' alternatives, mature technical paths, industry benchmarks, and market supply and demand. Competitors are only one thread; without the other three, comparison degrades into imitation.
 
 ### 2.3 Competitive Comparison Appears Twice: The Input Sets the Ceiling, the Output Sets When to Stop
 
@@ -124,17 +126,17 @@ flowchart LR
     C --> E["Calibrate stopping: which level is enough"]
 ```
 
-Most people use it only at the output end (benchmarking, setting thresholds), and rarely pull it back to the input end to "set goals." The same external benchmark calibrates ambition at one end and calibrates stopping at the other — a plan that lights up both ends dares to chase and also knows when to stop. Without the input-end comparison, goals will be set too high or too low; without the output-end comparison, optimization sinks into an arms race of "forever chasing number one" or the self-satisfaction of "good enough internally."
+Most people use it only at the output end (benchmarking, setting thresholds), and rarely pull it back to the input end to "set goals." The same external benchmark calibrates ambition at one end and calibrates stopping at the other — a plan that lights up both ends dares to chase and also knows when to stop. If comparison appears only at the output end, the goal may already have been set too high or too low; later benchmarking is then correcting a wrong starting direction.
 
 ## 3. From Analysis to Goals: Inductive and Deductive Reasoning
 
 Business analysis tells us "where we're stuck," and competitive analysis tells us "where the gap and the ceiling are." To turn these two into investment, there are two opposite but mutually required ways of derivation.
 
-**Inductive view**: extrapolate what can be done from existing resources. This is execution-level planning — how much money there is, how many people there are, what these people can do; what can be done is naturally limited. Its value is honesty, and its danger is conservatism: starting only from resources, it's easy to write the plan as "a schedule of existing capabilities," and miss larger possibilities.
+**Induction**: extrapolate what can be done from existing resources. This is execution-level planning — how much money there is, how many people there are, and what those people can do. Its value is honesty, and its danger is conservatism: starting only from resources, it's easy to turn the plan into "a schedule of existing capabilities" and miss larger possibilities.
 
-**Deductive view**: work backward from the result you want to achieve to the resources you need. First define the goal, then break it down, then go ask for resources. Its value is the courage to set goals, and its danger is wishful thinking: without constraints and evidence to support them, goals turn into rhetoric for "asking for resources."
+**Deduction**: work backward from the result you want to achieve to the resources you need. First define the goal, then break it down, then ask for the resources. Its value is the courage to set goals, and its danger is wishful thinking: without constraints and evidence, goals become rhetoric for "asking for resources."
 
-The two views are not either/or, but two halves of the same loop:
+The two views are not either/or, but two halves of the same loop: the inductive goal must return to competitive analysis to calibrate the ceiling; the deductive goal must return to induction to test whether it can actually be delivered.
 
 ```mermaid
 flowchart LR
@@ -144,7 +146,7 @@ flowchart LR
     D --> B
 ```
 
-Spinning only in induction, the team loses the ceiling; floating only in deduction, the team won't get resources. The ideal state is: **deduction translates competitive pressure into goals, induction pulls goals back to reality for testing, and the two repeatedly hedge against each other.** But each of these two views has a correction that must be fixed first, or both will be distorted.
+A team that only relies on induction gradually loses sight of the ceiling and turns planning into a schedule for existing capabilities; a team that only relies on deduction keeps asking for resources without securing the people and conditions to use them. The ideal state is: **deduction translates competitive pressure into goals, induction pulls goals back to reality for testing, and the two repeatedly correct each other.** But each approach has a problem that must be corrected first, or both will be distorted.
 
 ### 3.1 Correction One: Clock Mismatch
 
@@ -161,7 +163,7 @@ flowchart LR
 
 One of the essential contradictions of planning is that these clocks are never in sync: capital only lasts 12 months, but the capability gap you need to fill takes 18 months to grow; the window closes in 6 months, but the key person only arrives in 4 months. The real planning move, much of the time, is **using resources on a short clock to bridge a capability that can only grow on a long clock**. Ignore clock mismatch, and induction will miscalculate resources while deduction sets the wrong cadence.
 
-### 3.2 Correction Two: People Supply Is the Hardest Resource
+### 3.2 Correction Two: Capable People Are the Hardest Resource
 
 In induction and deduction, "resources" are often assumed to be money plus headcount. But the hardest resource is **people with specific capabilities, and the time it takes to grow them**:
 
@@ -170,7 +172,7 @@ In induction and deduction, "resources" are often assumed to be money plus headc
 - **Organizational bandwidth**: the same person can't be fully loaded by three plans at once.
 - **Willingness**: performance manages appraisal, but not willingness. Whether the key person treats this as their own thing decides whether the breakdown quietly deforms during execution.
 
-This directly overrules the inductive view: in "extrapolate what can be done from resources," the first thing to check is not money, but **whether there are people, and whether they are willing**. Without this, induction overestimates capability, and deduction ends up asking for a pile of "people we can't use."
+This changes how induction should begin: the first question is not how much money is available, but **whether the right people are available and willing to do the work**. Without that check, induction overestimates capability, while deduction asks for a pile of people the organization cannot actually use.
 
 ## 4. Capability Map: Translating Goals into Engineering Investment
 
@@ -224,7 +226,7 @@ Technical optimization is not "the more extreme, the better," but "**which level
 - **Industry comparison**: reach Top 1, exceed the runner-up by x%, or achieve 80% of the leader. It gives an external coordinate that turns "good enough" from a feeling into a discussable number.
 - **Investment ROI**: whether one more notch of optimization is still worth the marginal investment.
 
-Only together do these two form a complete stop condition. Industry comparison alone sinks into an arms race of "forever chasing number one"; ROI alone sinks into the self-satisfaction of "good enough internally." **Industry comparison sets the ceiling, and ROI sets the stopping point** — this is exactly how the "competitive comparison appears twice" from Section 2.3 lands at the goal level.
+Together these two form a complete stop condition: industry comparison alone becomes an arms race of forever chasing number one; ROI alone becomes self-satisfaction with being good enough internally while the outside level has moved on. **Industry comparison sets the ceiling, and ROI sets the stopping point** — this is exactly how the "competitive comparison appears twice" from Section 2.3 lands at the goal level.
 
 ### 5.3 There Are Only Two Kinds of Optimization: Performance and Strategy
 
@@ -252,16 +254,11 @@ Ranking alone leads to "do all the urgent ones." First put candidate items into 
 
 Three questions are especially useful when making trade-offs: if this item is delayed one cycle, what is the loss? What premises does it depend on, and can it be stopped or shrunk if the premise fails? Which future choices does it make easier, or harder?
 
+For example (a constructed scenario), three project owners may each mark their proposal "P0" because it is "important." Asking reviewers to place the proposals into the four categories above before ranking them may reveal that one proposal is not direct enablement at all, but exploration of an unproven scenario. It should use a small budget and a stop condition, rather than request the full delivery budget of an enablement project. Once the category is clear, much of the ranking argument disappears: many disputes about importance are really disputes about what kind of decision is being made.
+
 ### 6.2 Priority: First Distinguish Four Kinds of Decisions, Then Compare Along Six Dimensions
 
-The truly hard part is not ranking items from P0 to P2, but letting people of different backgrounds examine the judgment behind that ranking. A plan mixes decisions of different natures; throwing them into the same review often leads to "urgent" overwhelming "important."
-
-| Decision type | Typical question | Evidence needed | Appropriate cadence |
-| --- | --- | --- | --- |
-| Opportunity selection | Which scenario is most worth supporting first? | User value, window, expected impact | Reviewed with the business cycle |
-| Risk handling | Which vulnerability must be addressed before an incident? | Failure history, exposure scope, recovery difficulty | Continuously logged, escalated in time |
-| Capability investment | Which common capability is worth building ahead of time? | Repeated needs, reuse path, maintenance cost | Portfolio evaluated quarterly |
-| Approach selection | Which technical path should be taken to reach the goal? | Constraints, alternatives, experiment results | Decided before implementation |
+The truly hard part is not ranking items from P0 to P2, but letting people of different backgrounds examine the judgment behind that ranking. A plan mixes decisions of different natures; throwing them into the same review often leads to "urgent" overwhelming "important." At minimum, distinguish four types: **opportunity selection** (which scenario is worth supporting first, judged by user value, timing, and expected impact, then revisited with the business cycle); **risk handling** (which vulnerability must be addressed before an incident, judged by failure history and exposure, and continuously escalated); **capability investment** (which common capability is worth building ahead, judged by repeated needs and reuse paths, then reviewed as a quarterly portfolio); and **approach selection** (which technical path reaches the goal, judged by constraints and alternatives, and decided before implementation). Their evidence, cadence, and reversibility differ; comparing them in one meeting is almost guaranteed to produce noise.
 
 Their common language is "outcome, cost, and uncertainty." For candidate items not yet scheduled, write a lightweight card along six dimensions, with the point being to expose differences and unknowns:
 
@@ -284,7 +281,7 @@ A plan's credibility comes from choices, not from coverage. Every major problem 
 - **Decide after validation**: the direction may hold, but key evidence is missing; write down the minimal validation, success conditions, and budget cap.
 - **Explicitly abandoned**: the benefit isn't worth the cost, or a more suitable alternative path already exists; write down the reasoning at the time, to keep the issue from repeatedly returning to the table.
 
-The opposite of "not doing it for now" is not "never doing it," but "quietly deleting it." The difference between silently erasing a demand and writing it down as a formal conclusion is that the latter preserves the boundary of the judgment: next time someone wants to reopen it, the discussion shifts from "is it important" to "which known assumption has it changed, and which investment in the portfolio is it willing to replace."
+The opposite of "not doing it for now" is not "never doing it," but "quietly deleting it." The difference between silently erasing a demand and recording it as a formal conclusion is that the latter preserves the boundary of the judgment. When someone wants to reopen it, the discussion can then move from "is it important?" to "which assumption has changed, and which investment in the portfolio should it replace?"
 
 ### 6.4 Set Failure Conditions for Every Decision
 
@@ -304,7 +301,7 @@ The annual roadmap is not a list of commitments for the next twelve months. The 
 
 Every important item should have a minimal closed loop: what to change, who owns it, whom it depends on, how to verify it, and what signals trigger expanding, shrinking, or stopping. Writing these next to the roadmap prevents "completion rate" from replacing "whether the problem is solved."
 
-### 7.2 Write Clock Mismatch into the Roadmap
+### 7.2 Make Clock Mismatch Visible in the Roadmap
 
 Near/mid/long term is only spatial layering; it hasn't handled clock mismatch yet. The roadmap must additionally answer once: **among the funding clock, market clock, tech-debt clock, and talent clock, which is shortest, which is longest, and where does the mismatch occur?**
 
@@ -354,7 +351,7 @@ Don't merge the three meetings into a generic weekly meeting: planning review ne
 
 ### 9.2 Tie Performance to Outcomes, Not Completion Rate
 
-Progress tracking must land in meetings, and also in performance — performance is the hook that makes the breakdown truly land on individuals. But there is a trap to guard against: **once performance is tied to completion rate, people optimize "deliverables" rather than "outcomes."**
+Progress tracking must show up in meetings and in performance reviews. Performance is what connects the plan to individual responsibility, but there is a trap to avoid: **once performance is tied to completion rate, people optimize "deliverables" rather than "outcomes."**
 
 The correct binding order is: tie performance to outcomes and milestones, not to the number of tasks completed. This is why milestones should be written as "externally observable state changes" (for example, "the first scenario can complete changes autonomously within the agreed boundary," "key failure modes can be automatically detected and located"), rather than task counts. Task completion counts can hardly prove whether a plan is close to succeeding.
 
@@ -372,24 +369,16 @@ Tensions like short-term vs. long-term, delivery vs. quality, and business vs. p
 
 A plan's value is not only internal execution, but also that it is consumed by different people. The same trade-off must be told once in each of four languages — the judgment stays the same, while the wording and the hooks change.
 
-```mermaid
-flowchart LR
-    P["One judgment<br/>my trade-offs"] --> UP["Upward: report · simplify · align goal"]
-    P --> DOWN["Downward: vision · guidance · goal · performance"]
-    P --> PEER["Peer: sync · interface · coordinate resources"]
-    P --> ORG["Cross-org: vision · shared interest"]
-```
-
 | Audience | What they want | Your action | Emotional/rational mix |
 | --- | --- | --- | --- |
 | Upward (direct manager) | A decision-ready compressed version: judgment + trade-offs + which decisions need whom | Report, simplify, align goals | Rationality first, emotion anchors "why these" |
-| Downward (team) | A sense of direction + a hook of personal meaning + executable commitments | Vision, guidance, goal-setting, performance | Open with emotion, land with rationality |
+| Downward (team) | A sense of direction + a hook of personal meaning + executable commitments | Vision, guidance, goal-setting, performance | Open with emotion, end with rationale |
 | Peers (collaborators) | Checkable commitments + mutual boundaries | Sync, interface agreements, coordinate resources | Pure rationality, landing on input/output/timepoint/who decides on delay |
 | Cross-organization (higher level) | A larger shared interest, so multiple parties are willing to step in together | Painting the vision, reaching shared interest, a community of interest | Emotion paints the vision, rationality gives shared losses and shared opportunities |
 
-"Sweet-talking" and "reporting" are actually two polarities of the same mechanism — both translate "my trade-offs" into "the other party's gains and losses." The only difference is the translation target: downward, into growth and meaning; upward, into goals and risks; to peers, into interfaces and commitments; cross-organization, into shared losses and opportunities.
+Motivating people and reporting to leaders are two uses of the same mechanism: translating "my trade-offs" into "the other party's gains and losses." The target changes by audience: downward, the language is growth and meaning; upward, it is goals and risks; with peers, it is interfaces and commitments; across organizations, it is shared losses and opportunities.
 
-To make painting the vision land, there is a minimum threshold: **whether the vision you paint is something both sides "fear losing" or "both want to win."** A vision where only I want to win and the other side is indifferent is an empty picture; a vision that clearly explains both the shared loss (not doing it will hurt together) and the shared opportunity (what each side gains by doing it) truly constitutes a community of interest — this is also the minimum condition for a cross-team, cross-organization community of interest to hold. And this vision must withstand the test of Section 2: it corresponds to real market/capital/profit pressure, not just a vision.
+For a vision to motivate people, it must describe something both sides fear losing or both sides want to win. A vision where only one side benefits is an empty picture. A credible shared-interest story explains both the shared loss of doing nothing and the opportunity each side gains by acting. It must also pass the test from Section 2: it should respond to real market, capital, or profit pressure, not exist only as an inspiring story.
 
 ## A Usable Planning Skeleton
 
@@ -398,7 +387,7 @@ If you need to draft from scratch, you can use the following order. Each part sh
 1. **Summary**: the most important judgments, trade-offs, and the consensus to reach this cycle.
 2. **Business analysis**: whom we serve, where we're stuck, stage and changes, and "constraint–consequence–evidence."
 3. **Competitive analysis**: what market/capital/profit competition squeezed out; what conclusion each of the four judgments reached; where the gap and the level are.
-4. **Derivation and corrections**: the goals set by deduction, the checks from induction, and the two corrections of clock mismatch and people supply.
+4. **Derivation and corrections**: the goals set by deduction, the checks from induction, and the two corrections of clock mismatch and the supply of capable people.
 5. **Capability map**: whether the capability gap lies in the business domain, general engineering, or org and governance layer.
 6. **Goals and investment portfolio**: outcomes, boundaries, optimization limit, priority, not-now items, and reasons.
 7. **Roadmap and dependencies**: the three near/mid/long layers, clock bridge points, owners, verification methods, and failure conditions.

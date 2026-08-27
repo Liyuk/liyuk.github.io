@@ -11,6 +11,7 @@ translationStatus: original
 translationKey: 2026/08/agent-interface-feedback-architecture
 draft: false
 tags: [hci, agent, feedback, observability, recoverability, authorization, human-ai-collaboration, systems-design]
+column: { slug: engineering-ai-judgment, order: 7 }
 ---
 
 > **版本：v0.2（preprint）。** 这篇文章是一篇项目驱动的概念架构与设计研究，整理 ChatLab、Coding Agent Harness Study 与 CanonLoom 的设计经验，提出一套待验证的反馈架构，并报告后续实验协议；目前不报告用户实验数据或结果。

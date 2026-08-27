@@ -1,6 +1,6 @@
 ---
 title: SEO 价值不是流量：把搜索接到业务漏斗
-description: 从指标字典、页面消费到 Web2App，建立可解释的 SEO 价值模型，而不是用曝光乘出一个漂亮数字。
+description: 曝光涨了、下载没涨，问题不一定出在流量——这篇把 SEO 价值拆成搜索链和业务链，找瓶颈真正卡在哪一层。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -105,7 +105,7 @@ $$
 
 其中 $I$ 是曝光，$QCVR$ 是完成合格页面任务后的产品转化率。这个式子不是财务预测，只是帮助团队定位漏点。每个变量都要附上页面类型、时间窗和去重口径，否则乘出来的数字没有可比性。
 
-## 公开资料
+## 参考链接
 
 - [Google Search Console Performance report](https://support.google.com/webmasters/answer/7042828)
 - [Google Analytics cross-platform measurement](https://support.google.com/analytics/answer/11593727)

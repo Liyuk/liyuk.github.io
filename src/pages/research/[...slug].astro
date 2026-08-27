@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ColumnCard from '../../components/ColumnCard.astro';
 import TagList from '../../components/TagList.astro';
 import AuthorByline from '../../components/AuthorByline.astro';
 import ShareRow from '../../components/ShareRow.astro';
@@ -9,13 +10,14 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import Comments from '../../components/Comments.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import RelatedEntries from '../../components/RelatedEntries.astro';
-import { contentSlug, researchUrl } from '../../lib/content-paths.ts';
-import { getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
+import { contentSlug, researchUrl, columnUrl, columnEntryUrl } from '../../lib/content-paths.ts';
+import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, RELATED_LIMIT } from '../../lib/taxonomy.ts';
 import { previewable } from '../../lib/content-model.ts';
-import { getAllPublished, groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
+import { getAllPublished, getColumnCollections, groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate, getChronologicalNeighbors } from '../../lib/timeline.ts';
+import { contentKeywords } from '../../lib/seo.ts';
 
 export async function getStaticPaths() {
   const research = await getCollection('research', previewable);
@@ -35,6 +37,12 @@ const { writing, research, projects, galleries } = await getAllPublished(entry.d
 const all = [...writing, ...research, ...projects, ...galleries];
 const indexableTags = getIndexableTags(all).map(({ slug }) => slug);
 const relatedEntries = getRelatedEntries(all, entry, RELATED_LIMIT, entry.data.locale);
+const { writing: columnWriting, consulting: columnConsulting, research: columnResearch, galleries: columnGalleries } = await getColumnCollections(entry.data.locale);
+const columnMembers = [...columnWriting, ...columnConsulting, ...columnResearch, ...columnGalleries];
+const columnEntries = entry.data.column ? getColumnEntries(columnMembers, entry.data.column.slug) : [];
+const columnIndex = columnEntries.findIndex((columnEntry) => columnEntry.id === entry.id);
+const previousColumnEntry = columnEntries[columnIndex - 1];
+const nextColumnEntry = columnEntries[columnIndex + 1];
 const { previous: previousResearch, next: nextResearch } = getChronologicalNeighbors(research, entry);
 const formatDate = (date: Date) => formatFullDate(date, locale);
 // 论文/仓库链接：多数 research 的 paperUrl/repositoryUrl 是占位值，指向本博客
@@ -45,12 +53,15 @@ const repositoryUrl = entry.data.repositoryUrl && entry.data.repositoryUrl !== B
 const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
-<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description} type="article" pageKind="research" section="research" articleTitle={entry.data.title} keywords={entry.data.tags} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)} repositoryUrl={repositoryUrl} paperUrl={paperUrl} status={entry.data.status} version={entry.data.version}>
+<BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description} type="article" pageKind="research" section="research" articleTitle={entry.data.title} keywords={contentKeywords(entry.data.tags, locale)} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)} repositoryUrl={repositoryUrl} paperUrl={paperUrl} status={entry.data.status} version={entry.data.version}>
   <ReadingProgress />
-  <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time>{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header><div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose"><Content /></div></div>
+  <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time>{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header>
+  {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={columnMembers} />}
+  <div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose"><Content /></div></div>
   <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="research" />
   <RssSubscribe locale={locale} />
   {(previousResearch || nextResearch) && <nav class="post-pagination" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousResearch && <a class="prev" href={researchUrl(previousResearch.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousResearch.data.title}</span></a>}</div><div class="pagination-col">{nextResearch && <a class="next" href={researchUrl(nextResearch.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextResearch.data.title}</span></a>}</div></nav>}
+  {entry.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(entry.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(entry.data.column.slug, locale)?.label ?? '')}</a>{previousColumnEntry && <a class="prev" href={columnEntryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a class="next" href={columnEntryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
   <Comments lang={locale} />
   {relatedEntries.length > 0 && <RelatedEntries items={relatedEntries} locale={locale} />}
   </article>

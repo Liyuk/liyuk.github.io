@@ -4,21 +4,25 @@ This is a bilingual Astro static site for writing, research, projects, and photo
 
 ## Architecture map
 
-| Area                                                | Owns                                                           | Do not duplicate it in                                        |
-| --------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------- |
-| `src/content.config.ts`                             | Collection schemas and required frontmatter                    | Pages, scripts, or ad hoc validators                          |
-| `src/lib/content-model.ts`                          | Published/draft selection semantics                            | Individual `getCollection` predicates when a shared rule fits |
-| `src/lib/content-paths.ts`                          | Locale-aware content URLs and collection-to-route mapping      | Templates, notification scripts, or components                |
-| `src/lib/content-query.ts`                          | Locale grouping, fallback, and cross-collection queries        | Detail pages                                                  |
-| `src/lib/taxonomy.ts`                               | Tags, columns, start-page groups, related-content rules        | Content files or page-local lookup tables                     |
-| `src/lib/timeline.ts` and `src/lib/format-dates.ts` | Public ordering and date formatting                            | `Date` formatting in page components                          |
-| `src/i18n/index.mjs`                                | Shared Chinese/English UI copy                                 | Page-local duplicated labels                                  |
-| `src/pages/`                                        | Static route composition                                       | Components or content helpers                                 |
-| `src/components/`                                   | Reusable presentation                                          | Route-specific data selection                                 |
-| `scripts/`                                          | Creation, auditing, publish, notification, and browser runners | Shell one-offs that bypass their contracts                    |
-| `tests/`                                            | Executable behavior contracts                                  | Documentation-only claims                                     |
-| `.github/workflows/deploy.yml`                      | CI verification, deployment, and notification ordering         | Local notes or assumed GitHub behavior                        |
-| `docs/`                                             | Personal local notes and workflows                             | Git, CI, review requirements, or repository contracts         |
+| Area                                                | Owns                                                                                           | Do not duplicate it in                                                              |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `src/content.config.ts`                             | Collection schemas and required frontmatter                                                    | Pages, scripts, or ad hoc validators                                                |
+| `src/lib/content-model.ts`                          | Published/draft selection semantics                                                            | Individual `getCollection` predicates when a shared rule fits                       |
+| `src/lib/content-paths.ts`                          | Locale-aware content URLs and collection-to-route mapping                                      | Templates, notification scripts, or components                                      |
+| `src/lib/content-query.ts`                          | Locale grouping, fallback, and cross-collection queries                                        | Detail pages                                                                        |
+| `src/lib/taxonomy.ts`                               | Tags, columns, start-page groups, related-content rules                                        | Content files or page-local lookup tables                                           |
+| `src/lib/timeline.ts` and `src/lib/format-dates.ts` | Public ordering and date formatting                                                            | `Date` formatting in page components                                                |
+| `src/i18n/index.mjs`                                | Shared Chinese/English UI copy                                                                 | Page-local duplicated labels                                                        |
+| `src/pages/`                                        | Static route composition                                                                       | Components or content helpers                                                       |
+| `src/components/`                                   | Reusable presentation                                                                          | Route-specific data selection                                                       |
+| `scripts/`                                          | Creation, auditing, publish, notification, and browser runners                                 | Shell one-offs that bypass their contracts                                          |
+| `tests/`                                            | Executable behavior contracts                                                                  | Documentation-only claims                                                           |
+| `.github/workflows/deploy.yml`                      | CI verification, deployment, and notification ordering                                         | Local notes or assumed GitHub behavior                                              |
+| `agent/`                                            | Architecture rationale, editorial rules, translation spec, per-collection writing guides, ADRs | Anything that also needs to be true without this directory — cite it, don't fork it |
+| `.claude/skills/`                                   | Claude Code skills that operationalize the standards in `agent/`                               | A skill that invents a rule `agent/` doesn't already state                          |
+| `docs/`                                             | Personal local notes and workflows — never tracked, no exception                               | Git, CI, review requirements, or repository contracts                               |
+
+Editorial and writing-quality standards — voice, per-collection structure, the AI-detection threshold, and translation quality — live in `agent/` and are operationalized by the skills in `.claude/skills/`; this file covers engineering invariants only. Read `agent/README.md` before drafting or reviewing any `src/content/` entry.
 
 ## Content, paths, and locale rules
 

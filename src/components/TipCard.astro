@@ -1,49 +1,66 @@
 ---
-// Tip / donation card — collapsed by default, expands in place to reveal the
-// payment options. Mirrors the ColumnCard interaction (data-open + toggle).
+// Tip / donation card.
 //
-// Chinese routes reveal WeChat Pay + Alipay QR codes; English routes reveal a
-// single PayPal.me link (the standard way overseas readers tip).
+// English routes: no accordion — a single PayPal.me link, so there is nothing
+// worth hiding behind a click. Rendered as a compact inline CTA.
+//
+// Chinese routes: collapsed by default, expands to two small payment-method
+// buttons (WeChat / Alipay). Hovering a button (desktop) or tapping it
+// (touch) pops the matching QR code up as a bubble, one at a time, instead
+// of showing both codes inline all the time.
 import { i18n } from '../i18n/index.mjs';
 
 interface Props {
   locale?: string;
+  variant?: 'writing' | 'project';
 }
 
-const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props as Props;
-const t = i18n(locale).tip;
+const { locale = Astro.currentLocale ?? 'zh-CN', variant = 'writing' } = Astro.props as Props;
+const t = variant === 'project' ? i18n(locale).projectTip : i18n(locale).tip;
 const isEnglish = locale === 'en';
 const tipLink = 'https://paypal.me/liyuk7';
 ---
 
-<aside class="tip-card" data-open="false">
-  <button class="tip-card-toggle" type="button" aria-expanded="false">
+{isEnglish ? (
+  <aside class="tip-card tip-card-inline">
     <span class="tip-card-toggle-copy">
       <span class="eyebrow">{t.eyebrow}</span>
       <strong>{t.title}</strong>
     </span>
-    <span class="tip-card-chevron" aria-hidden="true">⌄</span>
-  </button>
-
-  <div class="tip-card-body">
     <p class="tip-card-desc">{t.description}</p>
-    {isEnglish ? (
-      <a class="tip-card-link" href={tipLink} rel="noopener">{t.action} →</a>
-    ) : (
-      <div class="tip-card-codes">
-        <figure>
-          <img src="/images/tip/wechat-pay.webp" alt={t.wechat} width="120" height="120" loading="lazy" />
-          <figcaption>{t.wechat}</figcaption>
-        </figure>
-        <figure>
-          <img src="/images/tip/alipay.webp" alt={t.alipay} width="120" height="120" loading="lazy" />
-          <figcaption>{t.alipay}</figcaption>
-        </figure>
-      </div>
-    )}
+    <a class="tip-card-link" href={tipLink} rel="noopener">{t.action} →</a>
     <p class="tip-card-note">{t.note}</p>
-  </div>
-</aside>
+  </aside>
+) : (
+  <aside class="tip-card" data-open="false">
+    <button class="tip-card-toggle" type="button" aria-expanded="false">
+      <span class="tip-card-toggle-copy">
+        <span class="eyebrow">{t.eyebrow}</span>
+        <strong>{t.title}</strong>
+      </span>
+      <span class="tip-card-chevron" aria-hidden="true">⌄</span>
+    </button>
+
+    <div class="tip-card-body">
+      <p class="tip-card-desc">{t.description}</p>
+      <div class="tip-card-methods">
+        <div class="tip-method">
+          <button type="button" class="tip-method-btn" aria-expanded="false">{t.wechat}</button>
+          <div class="tip-method-popup" role="tooltip">
+            <img src="/images/tip/wechat-pay.webp" alt={t.wechat} width="120" height="120" loading="lazy" />
+          </div>
+        </div>
+        <div class="tip-method">
+          <button type="button" class="tip-method-btn" aria-expanded="false">{t.alipay}</button>
+          <div class="tip-method-popup" role="tooltip">
+            <img src="/images/tip/alipay.webp" alt={t.alipay} width="120" height="120" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <p class="tip-card-note">{t.note}</p>
+    </div>
+  </aside>
+)}
 
 <style>
   .tip-card {
@@ -51,8 +68,11 @@ const tipLink = 'https://paypal.me/liyuk7';
     max-width: var(--prose-w);
     border: 1px solid var(--line);
     border-radius: 10px;
-    overflow: hidden;
+    overflow: visible;
     background: var(--paper-strong);
+  }
+  .tip-card-inline {
+    padding: 0.9rem 1.1rem 1rem;
   }
   .tip-card-toggle {
     display: flex;
@@ -60,7 +80,7 @@ const tipLink = 'https://paypal.me/liyuk7';
     justify-content: space-between;
     gap: 1rem;
     width: 100%;
-    padding: 0.9rem 1.1rem;
+    padding: 0.6rem 0.9rem;
     border: none;
     background: none;
     cursor: pointer;
@@ -74,31 +94,31 @@ const tipLink = 'https://paypal.me/liyuk7';
   .tip-card-toggle-copy {
     display: flex;
     align-items: baseline;
-    gap: 0.6rem;
+    gap: 0.55rem;
     flex-wrap: wrap;
   }
   .tip-card-toggle-copy .eyebrow {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--muted);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
   .tip-card-toggle-copy strong {
     font-family: var(--serif);
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 600;
   }
   .tip-card-chevron {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     transition: transform 0.2s ease;
   }
   .tip-card[data-open="false"] .tip-card-chevron {
     transform: rotate(-90deg);
   }
   .tip-card-body {
-    padding: 0 1.1rem 1rem;
+    padding: 0 1rem 0.9rem;
   }
   .tip-card[data-open="false"] .tip-card-body {
     display: none;
@@ -106,55 +126,103 @@ const tipLink = 'https://paypal.me/liyuk7';
   .tip-card-desc {
     margin: 0;
     color: var(--muted);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     line-height: 1.6;
   }
-  .tip-card-codes {
+  .tip-card-inline .tip-card-desc {
+    margin-top: 0.4rem;
+  }
+
+  /* Payment method buttons + hover/tap QR popup */
+  .tip-card-methods {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 1rem;
+    gap: 0.7rem;
+    margin-top: 0.9rem;
   }
-  .tip-card-codes figure {
-    margin: 0;
-    text-align: center;
+  .tip-method {
+    position: relative;
+    display: inline-flex;
   }
-  .tip-card-codes img {
+  .tip-method-btn {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: none;
+    color: var(--ink);
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .tip-method-btn:hover,
+  .tip-method-btn:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .tip-method-popup {
+    position: absolute;
+    bottom: calc(100% + 0.6rem);
+    left: 50%;
+    transform: translate(-50%, 4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    padding: 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    z-index: 5;
+  }
+  .tip-method-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #fff;
+  }
+  .tip-method-popup img {
     display: block;
     width: 7.5rem;
     height: 7.5rem;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: #fff; /* keep codes legible in dark mode */
   }
-  .tip-card-codes figcaption {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--muted);
+  @media (hover: hover) {
+    .tip-method:hover .tip-method-popup {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
   }
+  .tip-method[data-open="true"] .tip-method-popup {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+  }
+
   .tip-card-link {
     display: inline-block;
-    margin-top: 1rem;
-    padding: 0.6rem 1.1rem;
+    margin-top: 0.7rem;
+    padding: 0.45rem 0.95rem;
     border: 1px solid var(--accent);
     border-radius: 8px;
     color: var(--accent);
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
   }
   .tip-card-link:hover {
     background: var(--accent-soft);
   }
   .tip-card-note {
-    margin: 1rem 0 0;
+    margin: 0.8rem 0 0;
     color: var(--muted);
-    font-size: 0.82rem;
+    font-size: 0.78rem;
   }
 </style>
 
 <script>
   // One tip card per page; a single data-open state controls the expand.
-  const card = document.querySelector('.tip-card');
+  const card = document.querySelector('.tip-card[data-open]');
   if (card instanceof HTMLElement) {
     const toggle = card.querySelector('.tip-card-toggle');
     toggle?.addEventListener('click', () => {
@@ -162,5 +230,28 @@ const tipLink = 'https://paypal.me/liyuk7';
       card.dataset.open = String(!isOpen);
       toggle.setAttribute('aria-expanded', String(!isOpen));
     });
+
+    // Payment method buttons: click toggles the QR popup, mutually exclusive,
+    // and closes when tapping elsewhere. Hover-to-preview is handled in CSS
+    // for pointers that support it.
+    const methods = Array.from(card.querySelectorAll<HTMLElement>('.tip-method'));
+    const closeAll = (except?: HTMLElement) => {
+      for (const method of methods) {
+        if (method === except) continue;
+        method.dataset.open = 'false';
+        method.querySelector('.tip-method-btn')?.setAttribute('aria-expanded', 'false');
+      }
+    };
+    for (const method of methods) {
+      const btn = method.querySelector('.tip-method-btn');
+      btn?.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isOpen = method.dataset.open === 'true';
+        closeAll(method);
+        method.dataset.open = String(!isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+    }
+    document.addEventListener('click', () => closeAll());
   }
 </script>

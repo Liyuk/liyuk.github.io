@@ -8,6 +8,7 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [psychology, motivation, behavior, work-leadership, management]
+column: { slug: engineering-ai-judgment, order: 9 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/human-motivation-situational-model
@@ -76,7 +77,7 @@ Bring in developmental psychology, business management, and organizational and o
 
 - **Business management → situation concretization + two channels.** Managers cannot create motivation; they can only design the scene in which motivation arises. The "situation" employees face is almost entirely a management system, which should be concretized into six components: task design, goal system, incentive system, feedback system, development path, and leadership relationships[21]. At the same time, Herzberg's two-factor theory reminds us: hygiene factors (pay, systems, environment, fairness) can only remove dissatisfaction, while motivator factors (achievement, growth, recognition, responsibility) create drive — "removing negatives" and "adding positives" are two different channels[22]. Adams's equity theory further points out that the **perceived fairness** of the input-return ratio is a strong moderating variable running through the whole process[23]. Moreover, the life-cycle stage of the enterprise determines which of the six components can be mobilized and which exist in name only, making it a second, enterprise-level moderating variable[29].
 
-- **Organizational and occupational psychology → the outcome layer + measurement.** Motivation is not the endpoint; it must land on measurable outcomes such as work engagement, organizational commitment, performance, burnout, and turnover intention[24][25]. Organizational psychology has long measured these variables with engagement/pulse surveys and the JD-R model, which exactly supplies the measurement handle for the paper's weakest link — falsifiability.
+- **Organizational and occupational psychology → the outcome layer + measurement.** Motivation is not the endpoint; it must be tied to measurable outcomes such as work engagement, organizational commitment, performance, burnout, and turnover intention[24][25]. Organizational psychology has long measured these variables with engagement/pulse surveys and the JD-R model, which supplies the measurement handle for the paper's weakest link — falsifiability.
 
 ### 2.4 Boundary Statement
 
@@ -268,7 +269,7 @@ Compress SMM into nine laws. Each is given its **mechanism**, **testable predict
 
 ### 5.1 Diagnostic Checklist
 
-Operationally, SMM and the nine laws land on a three-layer diagnostic checklist unfolded along the growth axis. It does not output "whether this person should be motivated"; it only outputs "which layer motivation is stuck at." This is consistent with the article *What Can a Manager Do When Someone Loses Motivation* on this site: first distinguish whether the cause comes from environment, role, return, or personal state, then decide on intervention — rather than attributing everything to an attitude problem.
+Operationally, SMM and the nine laws yield a three-layer diagnostic checklist unfolded along the growth axis. It does not answer "whether this person should be motivated"; it identifies "which layer motivation is stuck at." This is consistent with the article *What Can a Manager Do When Someone Loses Motivation* on this site: first distinguish whether the cause comes from environment, role, return, or personal state, then decide on intervention — rather than attributing everything to an attitude problem.
 
 | Axis/Layer | Diagnostic question | Corresponding law | Intervention direction |
 | --- | --- | --- | --- |

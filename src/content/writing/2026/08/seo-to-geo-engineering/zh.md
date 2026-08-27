@@ -1,6 +1,6 @@
 ---
 title: SEO 到 GEO：从可发现页面到可复查的回答证据
-description: 把 SEO 页面工程、AI 搜索观察和主张—证据评测连接成一条可回放链路。
+description: 被 AI 提到、被引用、引用内容真正支持答案，是三件不同的事；这里用一套证据状态机取代一个神秘的可见性分数。
 createdAt: 2026-08-20
 publishedAt: 2026-08-20
 type: case-study
@@ -225,36 +225,13 @@ $$
 
 如果一项 GEO 工作最后没有让事实更清楚、证据更容易核验、页面版本更容易回放，那它很可能只是换了一套神秘分数。
 
-## 公开资料
+## 延伸阅读
 
-### 搜索、抓取与页面规范
-
-- [Google AI features and your website](https://developers.google.com/search/docs/appearance/ai-features)
-- [Google's guide to optimizing for generative AI features](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)
-- [Google Search technical requirements](https://developers.google.com/search/docs/essentials/technical)
-- [Google robots.txt 简介](https://developers.google.com/search/docs/crawling-indexing/robots/intro)
-- [Google 使用 noindex 阻止索引](https://developers.google.com/search/docs/crawling-indexing/block-indexing)
-- [Google URL Inspection](https://support.google.com/webmasters/answer/9012289)
-- [Google structured data markup](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)
-- [Google structured data policies](https://developers.google.com/search/docs/appearance/structured-data/sd-policies)
-- [Google spam policies](https://developers.google.com/search/docs/essentials/spam-policies)
-- [Google scaled content abuse](https://developers.google.com/search/docs/essentials/spam-policies#scaled-content)
-- [RFC 9309: Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309)
-
-### 平台 crawler 与指标
-
-- [OpenAI crawler documentation](https://developers.openai.com/api/docs/bots)
-- [Perplexity crawlers](https://docs.perplexity.ai/docs/resources/perplexity-crawlers)
-- [Anthropic crawler controls](https://privacy.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler)
-- [Bing AI Performance](https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c)
-- [Microsoft Bing Webmaster Blog: Introducing AI Performance](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview)
-- [Google Search Console Performance report](https://developers.google.com/search/docs/monitor-debug/search-console-start)
-- [Google Generative AI performance reports](https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports)
-
-### 提案与评测研究
+本文大部分引用已经在正文对应位置给出（Google AI features、OpenAI/Perplexity/Anthropic crawler 文档、scaled content abuse 政策、ALCE/FActScore/Verifiability 评测研究、Bing AI Performance 等）。以下是正文里未展开、但对深入了解本文方法论有用的几份材料：
 
 - [`llms.txt` proposal](https://llmstxt.org/)
-- [ALCE: Enabling Large Language Models to Generate Text with Citations](https://aclanthology.org/2023.emnlp-main.398/)
-- [FActScore: Fine-grained Atomic Evaluation of Factual Precision](https://aclanthology.org/2023.emnlp-main.741/)
-- [Evaluating Verifiability in Generative Search Engines](https://aclanthology.org/2023.findings-emnlp.467/)
+- [Google Search technical requirements](https://developers.google.com/search/docs/essentials/technical)
+- [RFC 9309: Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309)
+- [Google Search Console Performance report](https://developers.google.com/search/docs/monitor-debug/search-console-start)
+- [Google Generative AI performance reports](https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports)
 - [AttributionBench: How Hard is Automatic Attribution Evaluation?](https://aclanthology.org/2024.findings-acl.886/)

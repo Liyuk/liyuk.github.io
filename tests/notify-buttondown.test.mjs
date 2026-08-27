@@ -156,7 +156,6 @@ test('buildEmailHtml makes relative article paths absolute for Buttondown', () =
   assert.match(html, /href="https:\/\/liyuk\.com\/en\/consulting\/2026\/08\/example\/"/);
   assert.doesNotMatch(html, /href="\/en\/consulting\/2026\/08\/example\/"/);
 });
-
 test('email idempotency prefers canonical URL and remains compatible with legacy subject records', () => {
   const candidate = { subject: 'Same title', canonicalUrl: 'https://liyuk.com/writing/2026/08/a/' };
   assert.equal(

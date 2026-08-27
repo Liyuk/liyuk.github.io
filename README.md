@@ -4,14 +4,17 @@ Personal site for writing, research, projects & photography — bilingual, built
 
 ## Architecture at a glance
 
-The repository is a static Astro site with four content collections. The source of truth is the schema and shared helpers in `src/content.config.ts` and `src/lib/`; pages should consume those helpers instead of duplicating routing or filtering rules.
+The repository is a static Astro site with five content collections. The source of truth is the schema and shared helpers in `src/content.config.ts` and `src/lib/`; pages should consume those helpers instead of duplicating routing or filtering rules.
 
-| Collection | Source directory                       | Public route              | Content shape               |
-| ---------- | -------------------------------------- | ------------------------- | --------------------------- |
-| `writing`  | `src/content/writing/YYYY/MM/<slug>/`  | `/writing/<dated-slug>/`  | essays, notes, case studies |
-| `research` | `src/content/research/YYYY/MM/<slug>/` | `/research/<dated-slug>/` | papers and research notes   |
-| `project`  | `src/content/projects/YYYY/MM/<slug>/` | `/projects/<dated-slug>/` | projects and works          |
-| `gallery`  | `src/content/galleries/<slug>.md`      | `/photos/<slug>/`         | image galleries             |
+| Collection   | Source directory                          | Public route                 | Content shape                     |
+| ------------ | ------------------------------------------ | ----------------------------- | ---------------------------------- |
+| `writing`    | `src/content/writing/YYYY/MM/<slug>/`      | `/writing/<dated-slug>/`     | essays, notes, case studies        |
+| `research`   | `src/content/research/YYYY/MM/<slug>/`     | `/research/<dated-slug>/`    | papers and research notes          |
+| `project`    | `src/content/projects/YYYY/MM/<slug>/`     | `/projects/<dated-slug>/`    | projects and works                 |
+| `consulting` | `src/content/consulting/YYYY/MM/<slug>/`   | `/consulting/<dated-slug>/`  | edited career-consulting sessions  |
+| `gallery`    | `src/content/galleries/<slug>.md`          | `/photos/<slug>/`            | image galleries                    |
+
+Engineering invariants live in `AGENTS.md` and `CONTRIBUTING.md`; editorial voice, per-collection writing structure, translation standard, and design decisions live in [`agent/`](./agent/README.md), operationalized by the Claude Code skills in `.claude/skills/`. Read `agent/README.md` before drafting or reviewing any `src/content/` entry.
 
 `project` is the collection name but its public route is `/projects/`; use `src/lib/content-paths.ts` for every content URL. Locale-free source paths use `zh.md` and `en.md`; English routes add the `/en/` prefix, while the default Chinese routes do not. `src/lib/taxonomy.ts` owns registered tags and columns, and `src/i18n/index.mjs` owns shared UI copy.
 
