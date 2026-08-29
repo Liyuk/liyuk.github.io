@@ -81,7 +81,9 @@ This table is the canonical verification matrix (`agent/architecture.md` points 
 4. Run the narrowest applicable checks, then the required matrix above.
 5. Request review with changed paths, commands run, warnings, and intentional exceptions.
 
-Pull requests run verification only. A successful `master` verification deploys GitHub Pages; only after deployment succeeds does the `notify` job prepare/send Buttondown updates. `BUTTONDOWN_API_KEY` is a GitHub repository secret. Local `npm run notify:buttondown` is dry-run by default; `--apply` requires explicit owner authorization.
+Pull requests run verification only, and a superseded pull-request run is cancelled. Master runs queue instead: a cancelled master run would lose its subscriber notification permanently, not just delay it.
+
+A successful `master` verification deploys GitHub Pages. Two jobs then hang off a successful deployment, independently of each other: `purge` clears the Cloudflare cache so list pages pick up the deploy immediately, and `notify` prepares/sends Buttondown updates. Repository secrets: `BUTTONDOWN_API_KEY`, plus `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ZONE_ID`. Each job explains itself and skips rather than failing when its credentials are absent. Local `npm run notify:buttondown` is dry-run by default; `--apply` requires explicit owner authorization.
 
 ## Safety boundaries
 

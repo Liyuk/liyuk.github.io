@@ -14,7 +14,12 @@ jobs:
     name: verify
     concurrency:
       group: pages-verify-${{ github.ref }}
-      cancel-in-progress: true
+      # Superseding a pull-request run is free. Superseding a master run is not:
+      # a cancelled run never reaches `notify`, and the next push's
+      # `github.event.before` starts *after* the commits it skipped, so their
+      # content lands in no notification window at all. Master pushes therefore
+      # queue instead of cancelling, keeping the windows contiguous.
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     permissions:
       contents: read
       pages: write
@@ -70,6 +75,54 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  purge:
+    name: Purge Cloudflare cache
+    concurrency:
+      group: cloudflare-purge
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    needs: deploy
+    # Pages that already had a cached copy -- the home page, the section lists --
+    # keep serving it after a deploy, while brand-new URLs are fresh. That is
+    # what makes a new entry reachable by link and by RSS but missing from
+    # `/writing/`. Runs beside `notify` rather than before it: a stale list page
+    # must not hold back a subscriber email, and neither should block the other.
+    if: ${{ needs.deploy.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+    steps:
+      - name: Purge the zone after deployment
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ZONE_ID != '' }}
+        run: |
+          set -euo pipefail
+          response=$(curl -sS -X POST \
+            "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}')
+          echo "$response" | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)
+          if d.get("success"):
+              print("Cloudflare cache purged.")
+              sys.exit(0)
+          errors = d.get("errors", [])
+          print("Purge failed:", json.dumps(errors, ensure_ascii=False))
+          # Zone ID and Account ID are both 32-char hex and sit next to each
+          # other on the dashboard, so this is the likely mistake. Cache purge
+          # is a zone-level call; the account identifier will not work here.
+          if any(str(e.get("code")) in {"7003", "1049"} or "identifier" in str(e.get("message", "")).lower() for e in errors):
+              print("Hint: CLOUDFLARE_ZONE_ID must be the Zone ID for liyuk.com (Cloudflare dashboard -> the domain -> Overview -> API), not the Account ID shown beside it.")
+          sys.exit(1)
+          '
+      - name: Explain skipped purge
+        if: ${{ env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ZONE_ID == '' }}
+        run: echo "CLOUDFLARE_API_TOKEN / CLOUDFLARE_ZONE_ID are not configured; deployed without purging the CDN. List pages may serve a cached copy until their TTL expires."
 
   notify:
     name: Notify Buttondown subscribers
