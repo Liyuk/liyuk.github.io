@@ -14,6 +14,10 @@ const {
   description: descriptionProp,
   locale = Astro.currentLocale ?? 'zh-CN',
   noindex = false,
+  // GitHub Pages serves `404.html` at whatever URL the reader typed, so that
+  // page has no canonical URL of its own — declaring one points at a route
+  // that does not exist. Every real route keeps its canonical.
+  canonical = true,
   seoPage,
   // Social-share metadata. Detail pages pass these; list/home pages omit them
   // and fall back to the site defaults below.
@@ -32,11 +36,14 @@ const {
   version,
   isWork = false,
   galleryImages = [],
+  // Ordered members of a curated list page (currently a column's chapters).
+  itemList = [],
 } = Astro.props as {
   title?: string;
   description?: string;
   locale?: string;
   noindex?: boolean;
+  canonical?: boolean;
   seoPage?: SeoPage;
   type?: string;
   image?: string;
@@ -53,6 +60,7 @@ const {
   version?: string;
   isWork?: boolean;
   galleryImages?: StructuredDataImage[];
+  itemList?: { name: string; url: string }[];
 };
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
@@ -87,7 +95,7 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <meta name="theme-color" content="#f4f1ea" />
     <meta name="google-site-verification" content="FXPD4M6ETfaWY-qsVu1YiYLmKJFrFO28w6ya3odrNok" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="canonical" href={isEnglish ? enUrl : zhUrl} />
+    {canonical && <link rel="canonical" href={isEnglish ? enUrl : zhUrl} />}
     {!noindex && <>
       <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
       <link rel="alternate" hreflang="en" href={enUrl} />
@@ -108,7 +116,7 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <!-- Open Graph (Facebook / LinkedIn / iMessage / WhatsApp …) -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
+    {canonical && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -136,6 +144,7 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
       updatedAt,
       keywords: resolvedKeywords,
       citations,
+      itemList,
       repositoryUrl,
       paperUrl,
       status,

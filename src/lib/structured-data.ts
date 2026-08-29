@@ -24,6 +24,7 @@ export interface StructuredDataInput {
   updatedAt?: string;
   keywords?: string[];
   citations?: string[];
+  itemList?: { name: string; url: string }[];
   repositoryUrl?: string;
   paperUrl?: string;
   status?: string;
@@ -49,6 +50,7 @@ export function buildStructuredData(input: StructuredDataInput) {
     updatedAt,
     keywords = [],
     citations = [],
+    itemList = [],
     repositoryUrl,
     paperUrl,
     status,
@@ -119,10 +121,31 @@ export function buildStructuredData(input: StructuredDataInput) {
     datePublished: publishedAt,
     dateModified: updatedAt ?? publishedAt,
     primaryImageOfPage: images[0],
-    mainEntity: pageKind === 'website' || pageKind === 'collection' ? undefined : { '@id': contentId },
+    mainEntity:
+      itemList.length > 0
+        ? { '@id': `${canonicalUrl}#itemlist` }
+        : pageKind === 'website' || pageKind === 'collection'
+          ? undefined
+          : { '@id': contentId },
   };
 
   const graph: Record<string, unknown>[] = [...identity, webPage];
+
+  if (itemList.length > 0) {
+    graph.push({
+      '@type': 'ItemList',
+      '@id': `${canonicalUrl}#itemlist`,
+      name: title,
+      itemListOrder: 'https://schema.org/ItemListOrderAscending',
+      numberOfItems: itemList.length,
+      itemListElement: itemList.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        url: absolute(origin, item.url),
+      })),
+    });
+  }
   if (pageKind !== 'website') {
     graph.push({
       '@type': 'BreadcrumbList',
