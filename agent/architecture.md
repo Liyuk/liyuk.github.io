@@ -66,12 +66,19 @@ export { getStaticPaths } from '../../research/[...slug].astro';
 `npm run publish:check` is the single local gate (format check → content/image/column audits → unit tests → `astro check` → production build → SEO audit → link audit), and it stops at the first failure. GitHub Actions runs the same gate plus browser checks, as one `verify → deploy → notify` workflow (`.github/workflows/deploy.yml`, formalized in `agent/adr/0003`):
 
 ```text
-pull_request                 → verify
-master push                  → verify → deploy → notify
-manual dispatch               → verify (deploy/notify only fire off a master ref)
+pull_request                 → verify                    (superseded runs are cancelled)
+master push                  → verify → deploy → purge   (runs queue, never cancel)
+                                              ↘ notify
+manual dispatch               → verify (deploy/purge/notify only fire off a master ref)
 ```
 
-A browser-check failure uploads `artifacts/browser-checks/` (screenshots, Playwright traces) so a failure is debuggable without reproducing it locally. If `BUTTONDOWN_API_KEY` isn't configured, deploy still completes and the `notify` job records why it skipped, rather than failing the pipeline. See `CONTRIBUTING.md`'s verification matrix for which npm scripts a given change needs — that table is the canonical list; this section only adds the CI-graph and failure-artifact behavior that table doesn't cover.
+`purge` and `notify` both hang off a successful deploy and are independent of each other: a stale list page must not hold back a subscriber email, and a mail failure must not leave the CDN stale.
+
+**Master runs queue rather than cancel, and that is load-bearing.** Cancelling a superseded master run does not merely delay its notification — it destroys it. The cancelled run never reaches `notify`, and the next push's `github.event.before` points at a commit *after* the ones it skipped, so their content falls into no diff window at all. This was diagnosed on 2026-08-29, when three master pushes inside one minute left six newly published entries deployed but silently un-notified (`变更基准 ref: …，检测到 0 个 content md/mdx 变更`). Pull-request runs still cancel, where superseding is free.
+
+A browser-check failure uploads `artifacts/browser-checks/` (screenshots, Playwright traces) so a failure is debuggable without reproducing it locally. Missing credentials never fail the pipeline: if `BUTTONDOWN_API_KEY` isn't configured the `notify` job records why it skipped, and if `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ZONE_ID` aren't configured the `purge` job does the same.
+
+**Why the purge job exists.** GitHub Pages serves `cache-control: max-age=14400` and the CDN in front of the site keeps serving a cached copy well past that — measured at 19 hours on the home page. A brand-new URL has no cached copy and is therefore fresh immediately, which produces the confusing state where a new entry is reachable by direct link, by RSS, and from its column, but missing from `/` and `/writing/`. Purging the zone after a successful deploy removes the whole class rather than the two pages that happened to be noticed. See `CONTRIBUTING.md`'s verification matrix for which npm scripts a given change needs — that table is the canonical list; this section only adds the CI-graph and failure-artifact behavior that table doesn't cover.
 
 ## Image asset conventions
 
