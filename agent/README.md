@@ -8,7 +8,7 @@ This directory holds curated, Git-tracked reference material for AI collaborator
 | --- | --- |
 | `architecture.md` | Content-model rationale, the current feature surface across all five collections, image-asset conventions, UTM outbound-link tracking, the CI/automation contract, and known exceptions/edge cases worth not re-discovering. |
 | `writing-style.md` | The author's distilled voice — structure, rhetorical patterns, register — derived from actual published writing. Use it to calibrate drafts and reviews, not as a template to force onto every piece. |
-| `editorial-rules.md` | Cross-cutting rules: language choice for diagrams/formulas, the AI-detection threshold and how to work under it, the 信达雅 translation standard. |
+| `editorial-rules.md` | Cross-cutting rules: language choice for diagrams/formulas, when a diagram earns its place and which kind answers which question, the canonical analytical evidence sequence, the AI-detection threshold and how to work under it, the 信达雅 translation standard. |
 | `translation-spec.md` | The mechanical rules for producing an `en.md`: frontmatter transforms, YAML quoting, what to translate verbatim vs. copy unchanged, per-collection strict-schema keys. |
 | `category-guides/writing.md`, `research.md`, `projects.md`, `consulting.md`, `gallery.md` | Structure, evidentiary bar, and comparative/prior-art expectations specific to each content collection. Read the relevant one before drafting a new entry in that collection. |
 | `adr/` | Decision records for the trade-offs behind the content pipeline, bilingual policy, deploy/notify ordering, the Node version contract, and the public/private material boundary. |

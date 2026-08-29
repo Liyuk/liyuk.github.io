@@ -16,6 +16,8 @@ Before a research piece is considered draft-complete, it needs an explicit pass 
 
 This does not mean padding the piece with a literature-review section for its own sake; a few sentences naming the closest existing view and the actual point of departure is usually enough.
 
+For market, product, approach, or industry questions, follow the seven-step sequence in `agent/editorial-rules.md` (§ Analytical evidence sequence). Research is the collection where its later steps are least optional: the dialectical challenge in step 6 and the bounded judgment in step 7 are what separate a research note from an opinion piece, and unlike in `writing`, the scope and limitations that come out of them usually do belong in the visible prose.
+
 ## Structure
 
 Research pieces don't follow the essay skeleton in `agent/writing-style.md` as tightly — formal register, method before conclusion, and explicit scope/limitations are more load-bearing here than the negation-reframe move. Still: cash claims out into concrete criteria where possible, and keep prose as the default (tables only for content that's genuinely tabular data).

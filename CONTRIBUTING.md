@@ -44,14 +44,16 @@ Before an editor changes `draft: true` to `false`, confirm:
 - title, description, dates, tags, column metadata, images, and links are accurate;
 - tag and column slugs are registered in `src/lib/taxonomy.ts`;
 - a column's source-locale order is positive and unique;
+- column entries have a registered slug and unique positive order; article type and reading time help readers choose what to read next;
 - image paths resolve and every meaningful image has appropriate alt text;
 - locale filenames, frontmatter, `translationKey`, and translation status pass `npm run audit:content`; Chinese source files are `original`, published English files are `reviewed`, and `translationStatus: draft` is reserved for unpublished English work;
 - published writing, projects, and galleries have their required English sibling; research fallback is only for English detail pages, not English archives or RSS;
 - public wording contains no secret, private contact detail, unreviewed local URL, or unpublished material;
 - `.claude/skills/content-review` (or an equivalent manual pass) has been run and its public-risk and category-fit findings addressed;
+- the matching writing skill has been run, followed by content-review's separate AI-signal pass, author's-voice pass, dimensional-wall pass (no unnecessary exposure of the writing/AI/review process), reader-value pass (what a reader can learn, judge, or do), and distinctiveness pass (what non-generic, specifically owned contribution the piece makes); the final report is an explicit `GO`;
 - the site owner explicitly approved publication.
 
-`npm run publish <slug>` publishes the sibling pair and normalizes Chinese `original` / English `reviewed` translation status after editorial approval. Do not use `git push --no-verify` as a routine publishing workflow.
+`npm run publish <slug> -- --confirm-editorial-review` publishes the sibling pair and normalizes Chinese `original` / English `reviewed` translation status only after the matching writing skill, content-review (including the dimensional-wall check), and owner approval are complete. The confirmation flag is an intentional hard stop for the human editorial gate; without it, the command refuses to flip a draft public. Do not use `git push --no-verify` as a routine publishing workflow.
 
 ## Verification
 
@@ -64,6 +66,8 @@ Before an editor changes `draft: true` to `false`, confirm:
 | Before a publish-oriented handoff                   | `npm run publish:check`; CI adds browser E2E and axe checks                                                                                                             |
 
 `npm run publish:check` runs scoped formatting, content/image/column audits, Node tests, Astro check, production build, SEO audit, and internal-link audit. It stops at the first failure. It does not launch a browser.
+
+This table is the canonical verification matrix (`agent/architecture.md` points here). `AGENTS.md` mirrors it for agents reading only that file — change both together or they drift.
 
 `npm run test:e2e:ci` and `npm run test:a11y` use the existing `dist/` build; use `npm run test:e2e:fresh` and `npm run test:a11y:fresh` when a command must build first. `npm run test:draft:dev` starts and cleans up its own isolated Astro development server. The interactive `npm run test:e2e` expects an already running server at `E2E_BASE` (default `http://localhost:4321`). External link availability is intentionally outside the release gate.
 
