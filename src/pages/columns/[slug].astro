@@ -3,10 +3,11 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.ts';
 import { getColumnCollections } from '../../lib/content-query.ts';
-import { columnEntryUrl } from '../../lib/content-paths.ts';
+import { columnEntryUrl, entryUrl } from '../../lib/content-paths.ts';
 import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate } from '../../lib/timeline.ts';
+import { readingMinutes } from '../../lib/reading-time.ts';
 
 const locale = Astro.currentLocale ?? 'zh-CN';
 const copy = i18n(locale).page.columnsDetail;
@@ -27,9 +28,20 @@ const chapterDates = (entry: CollectionEntry<'writing'> | CollectionEntry<'consu
   const updated = entry.data.updatedAt ? `${ui.entry.updatedAt} ${formatDate(entry.data.updatedAt)}` : undefined;
   return copy.chapterDate(published, updated);
 };
+const entryType = (entry: CollectionEntry<'writing'> | CollectionEntry<'consulting'> | CollectionEntry<'research'> | CollectionEntry<'gallery'>) => {
+  const typeKey = entry.collection === 'writing' ? entry.data.type : entry.collection;
+  return ui.entry.types[typeKey as keyof typeof ui.entry.types] ?? typeKey;
+};
 ---
 
-<BaseLayout title={copy.title(column?.label ?? '')} description={column?.description}>
+<BaseLayout
+  title={copy.title(column?.label ?? '')}
+  description={column?.description}
+  pageKind="collection"
+  section="columns"
+  articleTitle={column?.label}
+  itemList={chapters.map((entry) => ({ name: entry.data.title, url: entryUrl(entry, locale) }))}
+>
   <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{column?.label}</h1><p>{column?.description}</p></section>
-  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}>{chapters.length > 0 ? <ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column!.order)}</span><h2><a href={columnEntryUrl(entry, locale)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol> : <p class="about-cooperate-desc">{copy.empty}</p>}</section>
+  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}>{chapters.length > 0 ? <ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column!.order)} · {entryType(entry)} · {ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span><h2><a href={columnEntryUrl(entry, locale)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol> : <p class="about-cooperate-desc">{copy.empty}</p>}</section>
 </BaseLayout>

@@ -7,6 +7,7 @@ import { site } from '../src/data/site.mjs';
 import { i18n } from '../src/i18n/index.mjs';
 import { groupByYear, groupByYearMonth, getChronologicalNeighbors, sortByCreatedAt, sortByLastUpdatedAt } from '../src/lib/timeline.ts';
 import { columnEntryUrl, columnUrl, consultingUrl, contentUrl, entryUrl, galleryUrl, projectUrl, researchUrl, tagUrl, writingUrl } from '../src/lib/content-paths.ts';
+import { parseColumnField } from '../scripts/audit-columns.mjs';
 import { parseContentDate } from '../src/lib/content-date.ts';
 import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, getTag } from '../src/lib/taxonomy.ts';
 import { getGalleryCover } from '../src/lib/gallery.ts';
@@ -193,6 +194,26 @@ test('consulting columns have localized copy and support ordered entries', () =>
   assert.deepEqual(getColumnEntries([later, first], 'career-management-growth'), [first, later]);
 });
 
+test('templates are excluded from production selection, not just from preview', () => {
+  const template = { id: 'writing/_template', data: { draft: false, locale: 'zh-CN' } };
+  const real = { id: 'writing/2026/08/a-post/zh', data: { draft: false, locale: 'zh-CN' } };
+
+  // A template that lost its `draft: true` must still stay out of lists,
+  // archives, tags, columns, RSS, the sitemap, and getStaticPaths.
+  assert.equal(notDraft(template), false);
+  assert.equal(publishedIn('zh-CN')(template), false);
+  assert.equal(notDraft(real), true);
+  assert.equal(publishedIn('zh-CN')(real), true);
+});
+
+test('the shipped writing template carries no live column assignment', async () => {
+  // `audit:columns` skips `_template.md` by filename, so a template that shipped
+  // a real `column:` would carry an unregistered slug past the whole gate.
+  const raw = await readFile(new URL('../src/content/writing/_template.md', import.meta.url), 'utf8');
+  const frontmatter = raw.match(/^---\n([\s\S]*?)\n---/)[1];
+  assert.equal(parseColumnField(frontmatter), null);
+});
+
 test('column pages replace the legacy albums model', async () => {
   const columnIndex = await readFile(new URL('../src/pages/columns/index.astro', import.meta.url), 'utf8');
   const writingPage = await readFile(new URL('../src/pages/writing/[...slug].astro', import.meta.url), 'utf8');
@@ -203,6 +224,50 @@ test('column pages replace the legacy albums model', async () => {
   assert.match(writingPage, /entry\.data\.column/);
   assert.doesNotMatch(writingPage, /entry\.data\.album/);
   assert.match(uiCopy, /seriesLabel/);
+});
+
+test('column reading metadata is visible in directory and article navigation', async () => {
+  const columnPage = await readFile(new URL('../src/pages/columns/[slug].astro', import.meta.url), 'utf8');
+  const columnCard = await readFile(new URL('../src/components/ColumnCard.astro', import.meta.url), 'utf8');
+  const entryCard = await readFile(new URL('../src/components/EntryCard.astro', import.meta.url), 'utf8');
+
+  assert.match(columnPage, /readingMinutes/);
+  assert.match(columnCard, /readingMinutes/);
+  assert.match(entryCard, /readingMinutes/);
+  assert.match(entryCard, /entry\.data\.type/);
+  assert.match(columnCard, /colEntry\.data\.type|colEntry\.collection/);
+  assert.match(columnPage, /entryType/);
+  assert.doesNotMatch(columnPage, /readingRole|reading\.role/);
+  assert.doesNotMatch(columnCard, /readingRole|reading\.role/);
+});
+
+test('everything that can scroll horizontally is keyboard-focusable', async () => {
+  // Run the plugin rather than grepping its source: the failure this guards
+  // against (a scroll container a keyboard user cannot reach — WCAG 2.1.1,
+  // axe `scrollable-region-focusable`) only shows up in the output tree.
+  const { rehypeScrollWrap } = await import('../src/lib/rehype-scroll-wrap.mjs');
+  const element = (tagName, properties = {}) => ({ type: 'element', tagName, properties, children: [] });
+  const tree = {
+    type: 'root',
+    children: [
+      element('table'),
+      element('svg', { id: 'mermaid-1' }),
+      element('span', { className: ['katex-display'] }),
+      element('p'),
+    ],
+  };
+
+  rehypeScrollWrap()(tree);
+
+  const [table, mermaid, math, paragraph] = tree.children;
+  for (const [name, wrapper] of [['table', table], ['mermaid', mermaid]]) {
+    assert.equal(wrapper.tagName, 'div', `${name} should be wrapped`);
+    assert.deepEqual(wrapper.properties.className, ['scroll-wrap']);
+    assert.equal(wrapper.properties.tabIndex, 0, `${name} wrapper must be focusable`);
+  }
+  assert.equal(math.properties.tabIndex, 0);
+  assert.equal(paragraph.tagName, 'p', 'ordinary blocks stay unwrapped');
+  assert.equal(paragraph.properties.tabIndex, undefined);
 });
 
 test('related content prefers a non-adjacent same-column entry over one that only shares tags', () => {

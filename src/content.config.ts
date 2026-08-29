@@ -14,10 +14,8 @@ const writing = defineCollection({
     createdAt: contentDate,
     publishedAt: contentDate.optional(),
     updatedAt: contentDate.optional(),
-    // Reserved metadata, not yet consumed by any renderer: `type` classifies
-    // the writing stream (essay/note/case-study); `featured` marks entries for
-    // a future curated home section. Kept in the schema so authored frontmatter
-    // stays valid.
+    // `type` classifies the writing form (essay/note/case-study); `featured`
+    // marks entries for a future curated home section.
     type: z.enum(['essay', 'note', 'case-study']).default('essay'),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
