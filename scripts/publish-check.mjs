@@ -49,7 +49,9 @@ async function main() {
     }
   }
 
-  console.log(failed ? '\n✘ 有检查未通过，请修复后重跑。' : '\n✔ 全部通过，可以发布。');
+  console.log(failed
+    ? '\n✘ 有检查未通过，请修复后重跑。'
+    : '\n✔ 工程发布检查全部通过；仍需 content-review 明确 GO、站点所有者批准，并使用带 --confirm-editorial-review 的 publish 命令。');
   process.exitCode = failed ? 1 : 0;
 }
 
