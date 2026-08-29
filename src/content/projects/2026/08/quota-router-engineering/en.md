@@ -292,11 +292,6 @@ sequenceDiagram
     alt success
         DSH->>Ledger: completed + usage
         DSH-->>User: Return result
-    else stable failure
-        DSH->>Router: QUOTA / 401 / 403
-        Router->>Router: candidateIndex += 1
-        Router->>Ledger: fallback(reason=stable)
-        Router->>DSH: Rebuild request in same turn
     else transient failure
         DSH->>DSH: Adapter retry
         alt retry recovers
@@ -309,6 +304,32 @@ sequenceDiagram
             Router->>DSH: Rebuild request in same turn
         end
     end
+```
+
+Stable failures enter the candidate-switching path:
+
+```mermaid
+sequenceDiagram
+    participant User as User
+    participant Router as Quota Router
+    participant DSH as DSH Agent/Adapter
+    participant Provider as Provider
+    participant Ledger as Ledger
+
+    User->>Router: Input message
+    Router->>Router: first-match + buildCandidates()
+    Router->>DSH: Write route header after native validation
+    Router->>Ledger: selected(profile, candidate=0)
+    DSH->>Provider: Send request
+    Provider-->>DSH: QUOTA / 401 / 403
+    DSH->>Router: Stable failure
+    Router->>Router: candidateIndex += 1
+    Router->>Ledger: fallback(reason=stable)
+    Router->>DSH: Rebuild request in same turn
+    DSH->>Provider: Execute with the next candidate
+    Provider-->>DSH: Success or final failure
+    DSH->>Ledger: completed or failed
+    DSH-->>User: Return result
 ```
 
 “Rebuild in the same turn” means the user does not copy and resend the message. DSH continues the current turn with a new route.
@@ -328,20 +349,20 @@ That oscillation is prevented by forward-only recovery. Across turns, repeated f
 Cooldown is router health memory, not a provider balance query. It means “this process observed repeated recent failures,” not “the provider has definitively run out of quota.”
 
 ```mermaid
-stateDiagram-v2
-    [*] --> Ready
-    Ready --> Active: native validation passes
-    Ready --> Skipped: disabled / paid protection / invalid
-    Active --> Active: transient error + retry budget
-    Active --> Completed: request succeeds
-    Active --> Fallback: stable failure
-    Active --> Cooldown: transient threshold reached
-    Cooldown --> Fallback: move forward
-    Fallback --> Active: next candidate exists
-    Fallback --> Failed: no candidate remains
-    Completed --> [*]
-    Failed --> [*]
-    Skipped --> [*]
+flowchart LR
+    Start((Start)) --> Ready[Ready]
+    Ready -->|native validation passes| Active[Active]
+    Ready -->|disabled / paid protection / invalid| Skipped[Skipped]
+    Active -->|transient error + retry budget| Active
+    Active -->|request succeeds| Completed[Completed]
+    Active -->|stable failure| Fallback[Fallback]
+    Active -->|transient threshold reached| Cooldown[Cooldown]
+    Cooldown -->|move forward| Fallback
+    Fallback -->|next candidate exists| Active
+    Fallback -->|no candidate remains| Failed[Failed]
+    Completed --> End((End))
+    Failed --> End
+    Skipped --> End
 ```
 
 The state machine preserves two invariants:

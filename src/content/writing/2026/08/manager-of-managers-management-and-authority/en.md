@@ -55,7 +55,7 @@ Ask what is blocking the goal before asking for more power. The gap may be prior
 Some boundaries cannot be purchased with business results. Legal, regulatory, personal safety, privacy, and major stability risks need the appropriate safety, legal, privacy, compliance, or technical governance role. The manager of managers ensures that the issue is named, owned, escalated, and recorded; the role must not disguise specialist judgment as a business trade-off.
 
 ```mermaid
-flowchart TB
+flowchart LR
   A[Cross-team conflict] --> B[Facts, constraints, options, and cost]
   B --> C{Single-team boundary?}
   C -->|Yes| D[Frontline leader decides]

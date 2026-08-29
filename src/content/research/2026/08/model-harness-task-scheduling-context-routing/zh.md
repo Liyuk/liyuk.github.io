@@ -257,7 +257,7 @@ type SubtaskResult = {
 完整的 Agent 系统可以包含多个层次，但 quota-router 不需要实现全部层次。图 1 用实线表示正常执行路径，用虚线表示反馈或离线治理路径：
 
 ```mermaid
-flowchart TD
+flowchart LR
   A["User goal<br/>用户目标"] --> B["Planner / Supervisor<br/>规划器 / 监督器"]
   B --> C["Subtask contract<br/>子任务契约"]
   C --> D["quota-router<br/>配额路由器"]
@@ -1266,7 +1266,7 @@ type RouteTelemetry = {
 这些假设的关系不是单向“模型越强越好”，而是一个带有成本、质量和边界条件的研究模型：
 
 ```mermaid
-flowchart TD
+flowchart LR
   A["Planning quality"] --> B["Subtask contract clarity"]
   B --> C["Classification confidence"]
   C --> D["Stable model lease"]

@@ -19,7 +19,7 @@ column: { slug: technical-systems, order: 1 }
 其余所有东西——目标、能力、取舍、路线图、机制、对外沟通——都是这两个引擎的输出。业务分析缺席时，规划最容易变成一份自嗨的技术愿望清单；而一旦竞品分析也跟着缺席，规划就连外部坐标都没有了，天花板在哪、什么时候该收手，全靠感觉。两者合起来，才构成一条可追溯的因果链：
 
 ```mermaid
-flowchart TB
+flowchart LR
     subgraph engines["Two engines: analysis"]
         A["Business analysis<br/>who we serve · where stuck · constraint evidence"]
         B["Competitive analysis<br/>vs whom · gap · level"]
@@ -97,7 +97,7 @@ flowchart TB
 四种判断的共同底座是**竞争对比**：无论是判断"用户在替我们和谁选"，还是"我们的技术水位在行业里算什么位置"，最终都要回到一个具体的参照物上，否则判断就只是自我感觉。
 
 ```mermaid
-flowchart TB
+flowchart LR
     A["Market · capital · profit competition"] --> B["Squeeze out: gap · window · resource boundary"]
     B --> C["Business judgment"]
     B --> D["Technical judgment"]
@@ -180,7 +180,7 @@ flowchart LR
 一个实用的能力地图通常可分为四层，越往下越容易被忽略：
 
 ```mermaid
-flowchart TB
+flowchart LR
     A["Journey & business domain<br/>key user tasks"] --> B["Domain capability<br/>rules · workflow · transactions"]
     B --> C["General engineering capability<br/>quality · performance · observability · release · security"]
     C --> D["Org & governance capability<br/>decision · standards · ownership · talent pipeline"]

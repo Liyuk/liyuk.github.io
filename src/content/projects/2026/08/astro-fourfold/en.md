@@ -200,7 +200,7 @@ Content collections first pass schema validation, then the query layer sorts the
 ## Content publishing flow
 
 ```mermaid
-flowchart TD
+flowchart LR
   A[Create Markdown content] --> B[Fill in frontmatter]
   B --> C{npm run validate:content}
   C -- fail --> D[Fix fields, slug, tags, or asset references]
@@ -222,6 +222,7 @@ The state boundaries around publishing matter more than the page itself. A draft
 
 ```mermaid
 stateDiagram-v2
+  direction LR
   [*] --> Draft
   Draft --> Validating : submit
   Validating --> Draft : validation failed

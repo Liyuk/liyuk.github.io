@@ -15,7 +15,7 @@ translationKey: 2026/08/canvas-pitch-diligence
 
 ## First, the big picture: three lenses, not an assembly line
 
-| Business model canvas | Startup pitch | Investor due diligence |
+| Dimension | Business model canvas | Startup pitch | Investor due diligence |
 |---|---|---|
 | Made for yourself | Told to others | Others scrutinize you |
 | Self-consistency | Persuasion | Verification |
@@ -130,7 +130,7 @@ Don't write the comparison as "the only difference is whether the financials are
 
 ## 5. Differences among the three lenses
 
-| | Business model canvas | Startup pitch | Investor due diligence |
+| Dimension | Business model canvas | Startup pitch | Investor due diligence |
 |---|---|---|---|
 | **Purpose** | explain how the business works | persuade "why it's worth investing" | verify "whether it's worth investing, and how much" |
 | **Who is looking** | the founder themselves | founder → investors | investors → the project |

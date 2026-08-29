@@ -205,7 +205,7 @@ The engineering form is:
 ### 4.1 Complete system and quota-router boundary
 
 ```mermaid
-flowchart TD
+flowchart LR
   A["User goal<br/>用户目标"] --> B["Planner / Supervisor<br/>规划器 / 监督器"]
   B --> C["Subtask contract<br/>子任务契约"]
   C --> D["quota-router<br/>配额路由器"]
@@ -597,7 +597,7 @@ The paper proposes, rather than proves, the following hypotheses:
 The key experimental comparison is fixed default model versus per-turn dynamic routing versus subtask-stable plan-pinned routing. Task families should include closed tasks, coding, research, and writing; evaluation should use task-specific acceptance rubrics. Report accepted subtask rate, resource per accepted subtask, rework rate, context migration cost, infrastructure errors, and semantic failures. Keep task input, rubric, tool contract, and pairing/randomization conditions fixed, and distinguish task, subtask, turn, and request denominators.
 
 ```mermaid
-flowchart TD
+flowchart LR
   A["Planning quality"] --> B["Subtask contract clarity"]
   B --> C["Classification confidence"]
   C --> D["Stable model lease"]

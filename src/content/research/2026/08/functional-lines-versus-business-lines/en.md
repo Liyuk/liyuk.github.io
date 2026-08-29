@@ -171,7 +171,7 @@ Section 1 implies a baseline: functional lines are the status quo, and organizat
 
 This is not two ways of stating one proposition, but **two different starting points**:
 
-| | American starting point | Chinese starting point |
+| Dimension | American starting point | Chinese starting point |
 | --- | --- | --- |
 | State of functional lines | Still the default; organizations are considering whether to move | Already substantially loosened / abolished; organizations are deconstructing them |
 | Core question | Should I move from functional lines to business lines? | Functional lines are already gone; how do I avoid losing control and preserve specialization? |

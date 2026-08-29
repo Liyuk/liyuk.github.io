@@ -60,7 +60,7 @@ column: { slug: multi-team-management, order: 3 }
 跨团队专项可以按下面的最小授权流程处理：
 
 ```mermaid
-flowchart TB
+flowchart LR
   A[共同目标是否清楚？] --> B[事实、约束与代价是否可见？]
   B --> C{单个团队能否决定？}
   C -->|是| D[一线负责人决定并记录]

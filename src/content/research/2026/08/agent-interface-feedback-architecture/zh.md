@@ -154,7 +154,7 @@ failed     已停止，失败原因和下一步已明确
 状态名称不是越多越好。状态必须有稳定的进入和退出条件，并能映射到用户可以采取的动作。若 `waiting` 既表示网络等待，也表示等待用户批准，界面就无法告诉用户该做什么。
 
 ```mermaid
-flowchart TD
+flowchart LR
   A["idle<br/>没有正在运行的任务"] --> B["planning<br/>形成或调整计划"]
   B --> C["running<br/>已获准步骤；按权限执行"]
   C --> D["waiting<br/>等待资源、工具或用户"]
@@ -225,7 +225,7 @@ flowchart TD
 ### 4.1 总体数据流
 
 ```mermaid
-flowchart TD
+flowchart LR
   A[用户任务与边界] --> B[上下文构建器]
   B --> C[执行循环：计划/行动/观察/停止]
   C --> D[工具 broker]

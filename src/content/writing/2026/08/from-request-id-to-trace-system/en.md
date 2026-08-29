@@ -325,7 +325,7 @@ To me, “repeatable” does not mean mechanically sending the same HTTP request
 For a failed business operation, I keep three paths: safe retry for steps that may still succeed; compensation for completed steps that need a reverse or alternative action; and replay, using sanitized input with a fixed version, to verify the result after code or configuration changes. Together they decide whether recovery means deleting data and starting over, or following evidence back to a correct state.
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Message received] --> B[Consumer processing]
     B -->|success| C[Acknowledge]
     B -->|transient failure| D[Retry with backoff]
@@ -359,7 +359,7 @@ The third was log search. It needed filters for `trace_id`, `span_id`, service, 
 Slow-request analysis also needs a baseline, or “slow” remains subjective. I use absolute thresholds for success rate and compare latency and dependency response time with a recent online baseline. When there is not enough baseline data, the result is “not enough evidence” rather than a false alert during cold start. Request count is usually context, not proof of health.
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Request becomes slow] --> B[Enter trace_id]
     B --> C[Open latency flame graph]
     C --> D{Find slow node}

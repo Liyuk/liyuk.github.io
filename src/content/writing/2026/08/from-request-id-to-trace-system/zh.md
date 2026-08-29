@@ -322,7 +322,7 @@ sequenceDiagram
 对一条已经失败的业务，我保留三种能力：安全重试，重新执行仍然可能成功的步骤；补偿，对已经完成但无法继续的步骤做反向或替代处理；重放，在修复代码或配置后，用脱敏且版本固定的输入重新验证结果。它们共同决定了系统出了问题以后，是只能删数据重来，还是可以沿着证据把业务恢复回来。
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Message received] --> B[Consumer processing]
     B -->|success| C[Acknowledge]
     B -->|transient failure| D[Retry with backoff]
@@ -356,7 +356,7 @@ VPS、数据库、R2 和观测数据需要分别考虑恢复路径。容灾设�
 慢请求分析还需要一个基线，否则“慢”只是主观感受。我对成功率使用绝对阈值，对延迟和依赖响应时间则和近期在线基线比较；没有足够基线数据时显示“暂无判断”，不把冷启动阶段误报成故障。请求量本身通常更适合作为背景信息，不能因为请求少就把系统判断成健康。
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[发现请求变慢] --> B[输入 trace_id]
     B --> C[查看耗时火焰图]
     C --> D{定位慢节点}
