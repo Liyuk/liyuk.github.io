@@ -177,12 +177,19 @@ test('a gallery can join a column, and omits the key when it does not', () => {
   assert.equal('column' in buildGalleryFrontmatter(base), false);
 });
 
-test('the gallery column prompt only returns registered slugs and positive orders', async () => {
+test('the gallery column prompt only returns registered slugs and positive orders', async (t) => {
   const registry = { 'technical-systems': { label: { 'zh-CN': '技术系统' } } };
   const scripted = (answers) => {
     const queue = [...answers];
     return { ask: async () => queue.shift() ?? '' };
   };
+  // The prompt prints the column menu; keep it off the test runner's stdout
+  // channel, which carries the serialized results of every test in this file.
+  const log = console.log;
+  console.log = () => {};
+  t.after(() => {
+    console.log = log;
+  });
 
   assert.deepEqual(await askGalleryColumn(scripted(['1', '3']), registry), { slug: 'technical-systems', order: 3 });
   assert.deepEqual(await askGalleryColumn(scripted(['技术系统', '1']), registry), { slug: 'technical-systems', order: 1 });
