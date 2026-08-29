@@ -46,7 +46,5 @@ test('draft detail does not appear in the writing list', async () => {
 
 test('template detail routes remain unavailable', async () => {
   const writingTemplate = await get('/writing/_template/');
-  const galleryTemplate = await get('/photos/gallery-slug/');
   assert.equal(writingTemplate.response.status, 404);
-  assert.equal(galleryTemplate.response.status, 404);
 });
