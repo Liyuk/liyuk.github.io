@@ -105,7 +105,21 @@ jobs:
             -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
-          echo "$response" | python3 -c 'import json,sys; d=json.load(sys.stdin); print("success:", d.get("success")); print("errors:", json.dumps(d.get("errors", []), ensure_ascii=False)); sys.exit(0 if d.get("success") else 1)'
+          echo "$response" | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)
+          if d.get("success"):
+              print("Cloudflare cache purged.")
+              sys.exit(0)
+          errors = d.get("errors", [])
+          print("Purge failed:", json.dumps(errors, ensure_ascii=False))
+          # Zone ID and Account ID are both 32-char hex and sit next to each
+          # other on the dashboard, so this is the likely mistake. Cache purge
+          # is a zone-level call; the account identifier will not work here.
+          if any(str(e.get("code")) in {"7003", "1049"} or "identifier" in str(e.get("message", "")).lower() for e in errors):
+              print("Hint: CLOUDFLARE_ZONE_ID must be the Zone ID for liyuk.com (Cloudflare dashboard -> the domain -> Overview -> API), not the Account ID shown beside it.")
+          sys.exit(1)
+          '
       - name: Explain skipped purge
         if: ${{ env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ZONE_ID == '' }}
         run: echo "CLOUDFLARE_API_TOKEN / CLOUDFLARE_ZONE_ID are not configured; deployed without purging the CDN. List pages may serve a cached copy until their TTL expires."
