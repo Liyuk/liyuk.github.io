@@ -20,6 +20,7 @@ jobs:
       pages: write
       id-token: write
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v7
@@ -41,8 +42,13 @@ jobs:
           path: artifacts/browser-checks/
           if-no-files-found: ignore
           retention-days: 14
+      # Only a master ref can reach `deploy`, so pull requests skip the Pages
+      # API call and the full dist/ upload. Verification itself is unchanged —
+      # the production build already ran inside publish:check.
       - uses: actions/configure-pages@v6
+        if: ${{ github.ref == 'refs/heads/master' }}
       - uses: actions/upload-pages-artifact@v5
+        if: ${{ github.ref == 'refs/heads/master' }}
         with:
           path: ./dist
 
@@ -57,6 +63,7 @@ jobs:
     needs: verify
     if: ${{ needs.verify.result == 'success' && github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -76,6 +83,7 @@ jobs:
     # cannot roll back the completed Pages deployment.
     if: ${{ needs.deploy.result == 'success' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     env:
       BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
     steps:
