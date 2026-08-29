@@ -23,12 +23,12 @@ At build time, content flows through schema validation, collection filters, Astr
 Content is created interactively, gated by a pre-push check, then deployed automatically.
 
 ```sh
-npm run new:post        # create a writing / research / project entry (draft by default)
+npm run new:post        # create a writing / research / consulting / project entry (draft by default)
 npm run new:gallery     # create a photography gallery (drops images into the terminal)
-npm run publish <slug>  # publish the sibling pair and normalize original/reviewed status
+npm run publish <slug> -- --confirm-editorial-review   # publish the sibling pair; the flag is the editorial hard stop
 ```
 
-All new content is `draft: true` — flip it to `false` (or run `npm run publish <slug>`) to publish. Pushing to `master`
+All new content is `draft: true`. Publishing goes through `npm run publish <slug> -- --confirm-editorial-review`, which refuses to flip a draft public without that flag; the flag asserts that the matching writing skill, `content-review`, and owner approval are all done. Pushing to `master`
 runs the full publish gate (format + content/image/column audits + tests + build + SEO/GEO/link audits) via a pre-push hook. Pull requests run the same verification; a successful push to `master` deploys through `.github/workflows/deploy.yml`.
 
 ```sh
@@ -67,7 +67,7 @@ Use Node `24.18.0` from `.node-version` and `npm ci` so local dependencies and t
 npm test                 # pure Node contracts and audit tests
 npm run check            # Astro schema and type diagnostics
 npm run build            # production HTML, sitemap, and Pagefind output
-npm run publish:check    # format, content/image/column audits, tests, build, SEO, links
+npm run publish:check    # engineering gate; content-review GO + owner approval remain required
 npm run test:e2e:ci      # browser smoke against the existing dist/ build
 npm run test:e2e:fresh   # build, then browser smoke
 npm run test:a11y        # axe scan against the existing dist/ build

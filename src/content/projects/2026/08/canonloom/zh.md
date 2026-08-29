@@ -60,6 +60,7 @@ tasks/current.md                   # 当前任务（Agent 的入口）
 
 ```mermaid
 stateDiagram-v2
+    direction LR
     state "S0 Contract — freeze contract" as S0
     state "S1 Draft — generate candidate draft" as S1
     state "S2 Quick Check — quick check" as S2

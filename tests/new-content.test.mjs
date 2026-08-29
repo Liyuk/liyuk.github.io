@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 
 import { buildSlug, buildFrontmatter, isValidDate, validateSlug, validateTags } from '../scripts/lib/cli.mjs';
 import { buildPostFrontmatter, parseTags, postPath, pickSlug } from '../scripts/new-post.mjs';
-import { buildGalleryFrontmatter, galleryFilePath, imageIdFromName, scanImageFiles } from '../scripts/new-gallery.mjs';
-import { publishFrontmatter, findEntriesBySlug } from '../scripts/publish.mjs';
+import { askGalleryColumn, buildGalleryFrontmatter, galleryFilePath, imageIdFromName, scanImageFiles } from '../scripts/new-gallery.mjs';
+import { publishFrontmatter, findEntriesBySlug, requiresEditorialConfirmation } from '../scripts/publish.mjs';
 
 test('buildSlug turns English titles into kebab-case', () => {
   assert.equal(buildSlug('Hello World'), 'hello-world');
@@ -53,6 +53,41 @@ test('pickSlug uses the asked slug, else auto-derives', () => {
   assert.equal(pickSlug('中文标题', null), null);
 });
 
+test('buildPostFrontmatter produces legal consulting (strict) frontmatter', () => {
+  const fm = buildPostFrontmatter('consulting', {
+    title: '一次转岗对话',
+    description: '一次关于转岗时机的咨询记录。',
+    createdAt: '2026-08-29',
+    publishedAt: '2026-08-29',
+    draft: true,
+    tags: ['career'],
+    format: 'interview',
+    episode: 3,
+    guest: 'K',
+    column: { slug: 'technical-systems', order: 4 },
+  });
+  assert.equal(fm.format, 'interview');
+  assert.equal(fm.episode, 3);
+  assert.deepEqual(fm.column, { slug: 'technical-systems', order: 4 });
+  // strict schema: no keys beyond what consulting allows
+  const allowed = new Set(['title', 'description', 'createdAt', 'draft', 'tags', 'publishedAt', 'format', 'episode', 'guest', 'column']);
+  for (const key of Object.keys(fm)) assert.ok(allowed.has(key), `unexpected key: ${key}`);
+});
+
+test('consulting entries land in the consulting collection directory', () => {
+  assert.ok(postPath('consulting', '2026-08-29', 'a-transfer-conversation').endsWith('src/content/consulting/2026/08/a-transfer-conversation/zh.md'));
+});
+
+test('optional consulting fields are omitted rather than emitted empty', () => {
+  const fm = buildPostFrontmatter('consulting', {
+    title: 'T', description: 'D', createdAt: '2026-08-29', publishedAt: '2026-08-29', draft: true, tags: [],
+  });
+  assert.equal(fm.format, 'career-case');
+  assert.equal('episode' in fm, false);
+  assert.equal('guest' in fm, false);
+  assert.equal('column' in fm, false);
+});
+
 test('buildPostFrontmatter produces legal writing (strict) frontmatter', () => {
   const fm = buildPostFrontmatter('article', {
     title: '测试', description: '描述', createdAt: '2026-08-15', draft: true, tags: ['technology'],
@@ -63,6 +98,7 @@ test('buildPostFrontmatter produces legal writing (strict) frontmatter', () => {
   assert.equal(fm.type, 'note');
   assert.deepEqual(fm.column, { slug: 'technical-systems', order: 2 });
   // strict schema: no keys beyond what writing allows
+  assert.equal(fm.reading, undefined);
   const allowed = new Set(['title', 'description', 'createdAt', 'draft', 'tags', 'publishedAt', 'type', 'column']);
   for (const key of Object.keys(fm)) assert.ok(allowed.has(key), `unexpected key: ${key}`);
 });
@@ -134,6 +170,33 @@ test('scanImageFiles filters non-images and dotfiles', async () => {
   assert.ok(files.every((f) => f.endsWith('.webp')), files.join(','));
 });
 
+test('a gallery can join a column, and omits the key when it does not', () => {
+  const base = { title: 'T', description: 'D', slug: 's', createdAt: '2026-08-29', cover: 'c', images: [] };
+  const withColumn = buildGalleryFrontmatter({ ...base, column: { slug: 'technical-systems', order: 2 } });
+  assert.deepEqual(withColumn.column, { slug: 'technical-systems', order: 2 });
+  assert.equal('column' in buildGalleryFrontmatter(base), false);
+});
+
+test('the gallery column prompt only returns registered slugs and positive orders', async (t) => {
+  const registry = { 'technical-systems': { label: { 'zh-CN': '技术系统' } } };
+  const scripted = (answers) => {
+    const queue = [...answers];
+    return { ask: async () => queue.shift() ?? '' };
+  };
+  // The prompt prints the column menu; keep it off the test runner's stdout
+  // channel, which carries the serialized results of every test in this file.
+  const log = console.log;
+  console.log = () => {};
+  t.after(() => {
+    console.log = log;
+  });
+
+  assert.deepEqual(await askGalleryColumn(scripted(['1', '3']), registry), { slug: 'technical-systems', order: 3 });
+  assert.deepEqual(await askGalleryColumn(scripted(['技术系统', '1']), registry), { slug: 'technical-systems', order: 1 });
+  assert.equal(await askGalleryColumn(scripted(['']), registry), null);
+  assert.equal(await askGalleryColumn(scripted(['1', '2']), {}), null);
+});
+
 test('publishing normalizes draft and translation status by locale', () => {
   const english = publishFrontmatter('---\ntitle: T\ndraft: true\ntranslationStatus: draft\n---\nbody', 'en');
   assert.match(english, /draft: false/);
@@ -142,6 +205,16 @@ test('publishing normalizes draft and translation status by locale', () => {
   assert.match(chinese, /draft: false/);
   assert.match(chinese, /translationStatus: original/);
   assert.equal(publishFrontmatter('---\ntitle: T\ndraft: false\ntranslationStatus: reviewed\n---\nbody', 'en'), null);
+});
+
+test('publishing requires explicit editorial confirmation while any sibling is a draft', () => {
+  assert.equal(requiresEditorialConfirmation([
+    { content: '---\ndraft: true\n---\nbody' },
+    { content: '---\ndraft: false\n---\nbody' },
+  ]), true);
+  assert.equal(requiresEditorialConfirmation([
+    { content: '---\ndraft: false\n---\nbody' },
+  ]), false);
 });
 
 

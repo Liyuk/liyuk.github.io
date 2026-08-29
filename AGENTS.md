@@ -24,6 +24,26 @@ This is a bilingual Astro static site for writing, research, projects, and photo
 
 Editorial and writing-quality standards — voice, per-collection structure, the AI-detection threshold, and translation quality — live in `agent/` and are operationalized by the skills in `.claude/skills/`; this file covers engineering invariants only. Read `agent/README.md` before drafting or reviewing any `src/content/` entry.
 
+## Skill index
+
+`.claude/skills/` holds the operational procedures for those standards. Claude Code loads them by name; every other coding agent reads the same files directly from disk — nothing in a skill depends on a Claude-specific runtime. Match the task to a row and read that `SKILL.md` in full before acting:
+
+| Task                                                           | Skill                                          |
+| -------------------------------------------------------------- | ---------------------------------------------- |
+| Draft a new `writing` entry                                    | `.claude/skills/write-writing/SKILL.md`        |
+| Draft a new `research` entry                                   | `.claude/skills/write-research/SKILL.md`       |
+| Draft a new `project` entry                                    | `.claude/skills/write-projects/SKILL.md`       |
+| Draft a new `consulting` entry                                 | `.claude/skills/write-consulting/SKILL.md`     |
+| Draft a new `gallery` entry                                    | `.claude/skills/write-gallery/SKILL.md`        |
+| Diagram how a system, platform, or method is organized         | `.claude/skills/house-diagram/SKILL.md`        |
+| Calibrate an existing Chinese draft against the author's voice | `.claude/skills/humanize-writing/SKILL.md`     |
+| Write or review an `en.md`                                     | `.claude/skills/xinda-ya-translation/SKILL.md` |
+| Final judgment gate before `draft: false`                      | `.claude/skills/content-review/SKILL.md`       |
+
+The frontend design skills (`impeccable`, `design-taste-frontend`, `redesign-existing-projects`) are vendored third-party material for UI work and carry no content-publishing authority.
+
+A skill operationalizes a rule `agent/` already states. Where a skill and `agent/` disagree, `agent/` wins and the skill is the file to fix.
+
 ## Content, paths, and locale rules
 
 ### Collections and routes
@@ -51,7 +71,7 @@ Editorial and writing-quality standards — voice, per-collection structure, the
 ### Taxonomy, chronology, and assets
 
 - Register every published tag and column in `src/lib/taxonomy.ts` before use. Creator-script warnings are not a substitute for `audit:content`.
-- Columns only contain writing and gallery entries. Their source-locale `order` is positive and unique; taxonomy columns must be represented exactly once in `startGroups`.
+- Columns are available to `writing`, `consulting`, `research`, and `gallery`; `project` entries do not use them. A column's source-locale `order` is positive and unique; taxonomy columns must be represented exactly once in `startGroups`.
 - Public chronology and archives use `publishedAt` (falling back to `createdAt`); `updatedAt` is for last-updated ordering and display. Do not change date fields merely to reorder cards.
 - Markdown and frontmatter image references must resolve. Gallery images need stable lowercase ids, absolute `/images/...` paths, meaningful alt text, positive dimensions, and a `cover` that names an existing image id.
 - `npm run new:gallery` depends on macOS `sips` and `cwebp`; it writes optimized WebP assets into `public/images/galleries/` and leaves source files untouched.
@@ -91,10 +111,11 @@ Editorial and writing-quality standards — voice, per-collection structure, the
 
 An agent may prepare drafts, code, tests, dry-run reports, and local verification. It must not independently:
 
-1. publish content or flip a user-authored draft to public;
+1. publish content or flip a user-authored draft to public — `npm run publish <slug> -- --confirm-editorial-review` asserts that the matching writing skill, `content-review`, and owner approval are complete, so an agent must never pass that flag on its own judgment, and must not hand-edit `draft: false` to route around it;
 2. push, merge, deploy, change GitHub settings/secrets, or force a branch operation;
-3. invoke `notify:buttondown -- --apply`, send subscriber communication, or expose a Buttondown API key;
-4. add, stage, or otherwise turn local `docs/` material into a repository deliverable;
-5. discard unfamiliar worktree changes, generated diagnostics needed for debugging, or user-owned local files.
+3. flip an `en.md` from `translationStatus: draft` to `reviewed` — that field asserts a completed 信达雅 review, so an agent proposes the change and the owner accepts it (`.claude/skills/xinda-ya-translation`);
+4. invoke `notify:buttondown -- --apply`, send subscriber communication, or expose a Buttondown API key;
+5. add, stage, or otherwise turn local `docs/` material into a repository deliverable;
+6. discard unfamiliar worktree changes, generated diagnostics needed for debugging, or user-owned local files.
 
 CI behavior is intentional: pull requests verify; only successful `master` verification deploys; Buttondown notification runs only after successful deployment and is visibly retryable if it fails. Before requesting review, report the files changed, checks run, remaining warnings, and any intentional policy exception.

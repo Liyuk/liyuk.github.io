@@ -5,6 +5,7 @@ import type { CollectionEntry } from 'astro:content';
 import { getColumn, getColumnEntries } from '../lib/taxonomy.ts';
 import { columnEntryUrl } from '../lib/content-paths.ts';
 import { i18n } from '../i18n/index.mjs';
+import { readingMinutes } from '../lib/reading-time.ts';
 
 type ColumnMember = CollectionEntry<'writing'> | CollectionEntry<'consulting'> | CollectionEntry<'research'> | CollectionEntry<'gallery'>;
 
@@ -42,18 +43,21 @@ const currentId = entry.id;
   <ol class="column-card-list">
     {columnEntries.map((colEntry) => {
       const isCurrent = colEntry.id === currentId;
+      const typeKey = colEntry.collection === 'writing' ? colEntry.data.type : colEntry.collection;
+      const type = ui.entry.types[typeKey as keyof typeof ui.entry.types] ?? typeKey;
+      const meta = `${type} · ${ui.entry.readingMinutes(readingMinutes(colEntry.body, locale))}`;
       return (
         <li class:list={{ current: isCurrent }}>
           {isCurrent ? (
             <span class="column-card-item-current">
               <span class="column-card-order">{colEntry.data.column!.order}</span>
-              <strong>{colEntry.data.title}</strong>
+              <span><strong>{colEntry.data.title}</strong><em class="column-card-meta">{meta}</em></span>
               <em class="column-card-you">{ui.column.current}</em>
             </span>
           ) : (
             <a href={columnEntryUrl(colEntry, locale)}>
               <span class="column-card-order">{colEntry.data.column!.order}</span>
-              <span>{colEntry.data.title}</span>
+              <span><span>{colEntry.data.title}</span><em class="column-card-meta">{meta}</em></span>
             </a>
           )}
         </li>
@@ -170,6 +174,15 @@ const currentId = entry.id;
     font-style: normal;
     font-weight: 700;
     letter-spacing: 0.05em;
+  }
+  .column-card-meta {
+    display: block;
+    margin-top: .1rem;
+    color: var(--muted);
+    font-size: .68rem;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: .01em;
   }
 </style>
 

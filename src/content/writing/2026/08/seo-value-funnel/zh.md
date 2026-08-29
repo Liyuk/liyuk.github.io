@@ -45,7 +45,7 @@ estimated value = impressions × CTR × qualified-CVR × cohort-LTV
 如果曝光翻倍但激活仍接近 10 次，瓶颈不在收录量，而在页面任务、CTA、深链或首次体验。这个演算也提醒我们：每一层的分母不同，不能用“激活 ÷ 曝光”倒推出页面本身的问题。
 
 ```mermaid
-flowchart TD
+flowchart LR
   A[Crawlable pages] --> B[Indexed]
   B --> C[Impressions]
   C --> D[Clicks]

@@ -6,6 +6,7 @@
 import { readFile, readdir, stat, glob } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { site } from '../src/data/site.mjs';
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -23,13 +24,46 @@ function pageRoute(distDir, htmlFile) {
   return rel === 'index.html' ? '/' : `/${rel.replace(/index\.html$/, '')}`;
 }
 
+// Returns { pathname, hash } for anything that points back at this site —
+// including a bare `#fragment` (same page) and an absolute `https://liyuk.com/…`
+// URL, both of which an earlier version skipped entirely.
 function localHref(rawHref, route) {
-  if (!rawHref || /^(?:#|mailto:|tel:|data:|javascript:|https?:|\/\/)/i.test(rawHref)) return null;
+  if (!rawHref || /^(?:mailto:|tel:|data:|javascript:)/i.test(rawHref)) return null;
   try {
-    return new URL(rawHref, `https://site.invalid${route}`).pathname;
+    const url = new URL(rawHref, `https://site.invalid${route}`);
+    const isSameSite =
+      url.origin === 'https://site.invalid' || `${url.protocol}//${url.host}` === site.url;
+    if (!isSameSite) return null;
+    return { pathname: url.pathname, hash: decodeURIComponent(url.hash.slice(1)) };
   } catch {
     return null;
   }
+}
+
+const ID_RE = /\bid=(?:"([^"]*)"|'([^']*)')/gi;
+function idsIn(html) {
+  return new Set([...html.matchAll(ID_RE)].map((match) => match[1] ?? match[2]));
+}
+
+// Resolve a URL path to the built file that serves it, so a fragment can be
+// looked up in the page it actually lands on.
+async function builtFileFor(distDir, urlPath) {
+  let decoded;
+  try {
+    decoded = decodeURIComponent(urlPath);
+  } catch {
+    return null;
+  }
+  const base = path.resolve(distDir);
+  const target = path.resolve(base, `.${decoded}`);
+  if (target !== base && !target.startsWith(`${base}${path.sep}`)) return null;
+  const candidates = decoded.endsWith('/')
+    ? [path.join(target, 'index.html')]
+    : [target, `${target}.html`, path.join(target, 'index.html')];
+  for (const candidate of candidates) {
+    if (await isFile(candidate)) return candidate;
+  }
+  return null;
 }
 
 async function isFile(candidate) {
@@ -38,26 +72,6 @@ async function isFile(candidate) {
   } catch {
     return false;
   }
-}
-
-async function resolvesToBuiltFile(distDir, urlPath) {
-  let decoded;
-  try {
-    decoded = decodeURIComponent(urlPath);
-  } catch {
-    return false;
-  }
-  const base = path.resolve(distDir);
-  const target = path.resolve(base, `.${decoded}`);
-  if (target !== base && !target.startsWith(`${base}${path.sep}`)) return false;
-
-  const candidates = decoded.endsWith('/')
-    ? [path.join(target, 'index.html')]
-    : [target, `${target}.html`, path.join(target, 'index.html')];
-  for (const candidate of candidates) {
-    if (await isFile(candidate)) return true;
-  }
-  return false;
 }
 
 export async function auditLinks({
@@ -78,22 +92,33 @@ export async function auditLinks({
   }
 
   const seen = new Set();
+  const idCache = new Map();
   let checked = 0;
   for (const file of files) {
     const html = await readFile(file, 'utf8');
     const route = pageRoute(distDir, file);
+    idCache.set(file, idsIn(html));
     const hrefs = [...html.matchAll(/\bhref=(?:"([^"]*)"|'([^']*)')/gi)].map(
       (match) => match[1] ?? match[2],
     );
     for (const href of hrefs) {
       const local = localHref(href, route);
-      if (!local || local === '/en/404/') continue;
+      if (!local || local.pathname === '/en/404/') continue;
       checked++;
-      const key = `${route} -> ${local}`;
+      const key = `${route} -> ${local.pathname}#${local.hash}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      if (!(await resolvesToBuiltFile(distDir, local))) {
+
+      const targetFile = await builtFileFor(distDir, local.pathname);
+      if (!targetFile) {
         errors.push(`${route}: 站内链接 ${href} 未解析到 dist 中的文件。`);
+        continue;
+      }
+      if (!local.hash || local.hash === 'top') continue;
+      if (!idCache.has(targetFile))
+        idCache.set(targetFile, idsIn(await readFile(targetFile, 'utf8')));
+      if (!idCache.get(targetFile).has(local.hash)) {
+        errors.push(`${route}: 锚点 ${href} 在目标页面中没有对应的 id。`);
       }
     }
   }

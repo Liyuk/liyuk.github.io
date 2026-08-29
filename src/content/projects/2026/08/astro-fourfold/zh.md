@@ -202,7 +202,7 @@ flowchart LR
 ## 内容发布流程图
 
 ```mermaid
-flowchart TD
+flowchart LR
   A[创建 Markdown 内容] --> B[填写 frontmatter]
   B --> C{npm run validate:content}
   C -- 失败 --> D[修复字段、slug、标签、资源引用]
@@ -224,6 +224,7 @@ flowchart TD
 
 ```mermaid
 stateDiagram-v2
+  direction LR
   [*] --> Draft
   Draft --> Validating : submit
   Validating --> Draft : validation failed

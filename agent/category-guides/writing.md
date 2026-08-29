@@ -18,6 +18,12 @@ Essays that make a claim about "the better way to do X" (a framework, a tool cho
 
 This does not apply to personal-narrative or reflective pieces (travel, personal habits, career reflection) — don't force comparative framing onto content that isn't making a comparative claim.
 
+## Analytical evidence sequence
+
+When an essay or case study makes a claim about a market, product, approach, or industry, work through the seven-step sequence in `agent/editorial-rules.md` (§ Analytical evidence sequence) before fixing the final argument: facts and scope → change over time → competitors and prior art → like-for-like comparison → pros and cons → provisional conclusion and dialectical challenge → bounded judgment.
+
+For this collection specifically: an essay's frame usually emerges from the material rather than from the sequence, so run the sequence in working notes and let the finished piece keep whichever parts of it the argument actually needs. Personal-narrative and reflective pieces are exempt unless they make a genuinely comparative claim.
+
 ## Reader value for analytical pieces
 
 For an analytical essay or case study, identify the reader situation before the publication pass: who is likely to recognize this problem, what they currently assume or do, what real contradiction, failure, or unexplained result puts that assumption under pressure, and what they can understand, judge, or do differently after reading. Use those questions to test whether the piece makes its value legible to a reader, not to force a problem-solution structure onto the draft.
@@ -30,7 +36,7 @@ The tension must come from the material. Do not manufacture a misconception, con
 2. Self-check structure, facts, tone, and voice fit against `agent/writing-style.md`.
 3. Run `.claude/skills/humanize-writing` before considering the Chinese draft final.
 4. Only after the Chinese side is confirmed final does the English translation start, via `agent/translation-spec.md` and `.claude/skills/xinda-ya-translation`.
-5. Run `.claude/skills/content-review` before flipping `draft` to `false`.
+5. Run `.claude/skills/content-review` before flipping `draft` to `false`. Its AI-signal, author's-voice, dimensional-wall, reader-value, and distinctiveness passes are separate hard gates: the review must state what AI-like patterns were found, what of the author's voice survived, whether the article exposes its writing/review process unnecessarily, what a reader can learn/do, and what non-generic contribution the article owns.
 
 ## Pre-publish checklist
 

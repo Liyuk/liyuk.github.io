@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 import { buildFrontmatter, createPrompter, todayStr, validateSlug, validateDate } from './lib/cli.mjs';
+import { columns } from '../src/lib/taxonomy.ts';
 
 const GALLERY_CONTENT_DIR = path.join(process.cwd(), 'src/content/galleries');
 const GALLERY_PUBLIC_DIR = path.join(process.cwd(), 'public/images/galleries');
@@ -42,16 +43,42 @@ export function galleryPublicDir(slug) {
 
 // Build the gallery frontmatter object (mirrors src/content.config.ts schema).
 // New galleries default to draft so they don't publish until edited.
-export function buildGalleryFrontmatter({ title, description, slug, createdAt, cover, images, draft = true }) {
+export function buildGalleryFrontmatter({ title, description, slug, createdAt, cover, images, column, draft = true }) {
   return {
     title,
     description,
     slug,
     createdAt,
     draft,
+    ...(column ? { column } : {}),
     cover,
     images,
   };
+}
+
+// Galleries can join a column just like writing entries; `audit:columns` scans
+// this collection, so an unregistered slug or a duplicate order fails the gate.
+export async function askGalleryColumn(rl, registry = columns) {
+  const names = Object.keys(registry);
+  if (names.length === 0) return null;
+  console.log('可选专栏（回车 = 无）：');
+  names.forEach((c, i) => console.log(`  ${i + 1}) ${registry[c].label['zh-CN']}`));
+  const answer = (await rl.ask('所属专栏（回车 = 无）: ', {
+    validate: (v) => {
+      if (!v) return null;
+      const byIndex = names[Number(v) - 1];
+      const byName = names.find((c) => c === v || registry[c].label['zh-CN'] === v);
+      return byIndex || byName ? null : '请输入列表中的序号或专栏名，或直接回车跳过';
+    },
+  })).trim();
+  if (!answer) return null;
+  const slug = names[Number(answer) - 1] ?? names.find((c) => c === answer || registry[c].label['zh-CN'] === answer);
+  if (!slug) return null;
+  const order = await rl.ask('在专栏中的顺序（正整数）', {
+    default: '1',
+    validate: (v) => (/^[1-9][0-9]*$/.test(v) ? null : '顺序必须是正整数'),
+  });
+  return { slug, order: Number(order) };
 }
 
 // --- image handling ---
@@ -181,7 +208,8 @@ async function main() {
       if (Number.isInteger(idx) && idx >= 0 && idx < images.length) cover = images[idx].id;
     }
 
-    const frontmatter = buildFrontmatter(buildGalleryFrontmatter({ title, description, slug, createdAt, cover, images }));
+    const column = await askGalleryColumn(rl);
+    const frontmatter = buildFrontmatter(buildGalleryFrontmatter({ title, description, slug, createdAt, cover, images, column }));
     const filePath = galleryFilePath(slug);
     const body = `${frontmatter}\n`;
 

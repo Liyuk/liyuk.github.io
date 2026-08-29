@@ -11,7 +11,7 @@ Research is where a reader is evaluating a claim, not just reading a perspective
 
 1. Read `agent/category-guides/research.md`.
 2. Confirm the schema requirements this entry must satisfy: `version`, `status` (`preprint` / `published` / `in-progress`), and at least one of `repositoryUrl` / `paperUrl` (`src/content.config.ts`).
-3. Do the prior-art / competing-view pass **before** writing the main argument, not after: identify what already exists on this question — prior work, a competing framework, or the "obvious" alternative explanation a knowledgeable reader would raise. This shapes what the piece actually needs to claim; doing it last only lets it retrofit a caveat onto an already-fixed argument.
+3. Run the evidence pass **before** writing the main argument. For a market, product, approach, or industry question, follow the seven-step sequence in `agent/editorial-rules.md` (§ Analytical evidence sequence) — read it there rather than from a summary. For a narrower research question, omit the stages that don't apply but preserve the principle: evidence and competing views must shape the claim before prose is fixed, and the dialectical challenge must happen before the conclusion is treated as final.
 
 ## Drafting
 

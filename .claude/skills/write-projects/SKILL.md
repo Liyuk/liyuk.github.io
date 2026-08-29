@@ -15,7 +15,7 @@ Read `agent/category-guides/projects.md` first — it explains the two subtypes 
 ## Drafting an engineering project
 
 1. Open with the actual problem and who has it — not a capability list. If the honest opening is "this exists because X was annoying," say that; don't manufacture a grander problem statement than the one that actually motivated the work.
-2. Show the architecture where there's real structure to show. A Mermaid diagram uses English labels in both `zh.md` and `en.md` (`agent/editorial-rules.md`) regardless of the diagram's surrounding language.
+2. Show the architecture where there's real structure to show. `agent/editorial-rules.md` owns which diagram answers which question and the English-label rule that applies in both `zh.md` and `en.md`; for a capability or layering overview, build it with `.claude/skills/house-diagram`.
 3. Name at least one decision that could reasonably have gone another way, and the concrete constraint that made the alternative worse for this problem — not a generic "too complex" without a stated reason.
 4. Report what actually happened: current status, real limitations, anything that didn't work as planned. `status: archived`/`maintained` should be an honest signal, not a label nobody revisits.
 5. State the scope boundary once, plainly — what this project deliberately doesn't do.

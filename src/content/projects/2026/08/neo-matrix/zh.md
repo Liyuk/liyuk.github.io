@@ -58,7 +58,7 @@ tags: [ai-relay, api-key, revenue-sharing, routing, settlement]
 供给方从接入到提现，不是“提交一个 Key 就结束”，而是一条带状态变化的流程：
 
 ```mermaid
-flowchart TD
+flowchart LR
     A["Supplier submits upstream credential"] --> B["Validate type, URL and connectivity"]
     B --> C["Cost review and trust level"]
     C --> D["Enter routing pool"]
@@ -99,7 +99,7 @@ Settlement → reconciliation → supplier balance → withdrawal review
 
 这里有两把 Key，不能混为一谈：
 
-| | 平台令牌 | 上游 Key |
+| 凭证 | 平台令牌 | 上游 Key |
 |---|---|---|
 | 持有者 | 消费者 | 供给方或平台 |
 | 作用 | 证明消费者可以调用平台 | 让平台调用上游模型 |

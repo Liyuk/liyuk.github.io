@@ -55,3 +55,38 @@ test('gallery structured data includes every image object', () => {
   assert.equal(gallery.image.length, 2);
   assert.equal(gallery.image[0].contentUrl, 'https://liyuk.com/images/a.webp');
 });
+
+test('a column exposes its chapters as an ordered ItemList the page points at', () => {
+  const data = buildStructuredData({
+    ...base,
+    canonicalUrl: 'https://liyuk.com/columns/engineering-ai-judgment/',
+    title: 'Engineering and AI judgment',
+    pageKind: 'collection',
+    section: 'columns',
+    itemList: [
+      { name: 'First chapter', url: '/research/2026/08/first/' },
+      { name: 'Second chapter', url: '/research/2026/08/second/' },
+    ],
+  });
+
+  const page = data['@graph'].find((node) => node['@type'] === 'CollectionPage');
+  const list = data['@graph'].find((node) => node['@type'] === 'ItemList');
+  assert.ok(list, 'a column page should carry an ItemList');
+  assert.equal(list.numberOfItems, 2);
+  assert.equal(page.mainEntity['@id'], list['@id']);
+  assert.deepEqual(
+    list.itemListElement.map((item) => [item.position, item.url]),
+    [
+      [1, 'https://liyuk.com/research/2026/08/first/'],
+      [2, 'https://liyuk.com/research/2026/08/second/'],
+    ],
+  );
+});
+
+test('pages without an item list keep their previous mainEntity wiring', () => {
+  const collection = buildStructuredData({ ...base, pageKind: 'collection', section: 'research' });
+  const research = buildStructuredData({ ...base, pageKind: 'research', section: 'research' });
+  assert.equal(collection['@graph'].some((node) => node['@type'] === 'ItemList'), false);
+  assert.equal(collection['@graph'].find((node) => node['@type'] === 'CollectionPage').mainEntity, undefined);
+  assert.ok(research['@graph'].find((node) => node['@type'] === 'WebPage').mainEntity['@id']);
+});

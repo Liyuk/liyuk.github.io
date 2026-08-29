@@ -22,7 +22,7 @@ Over time I came to see clearly: the essence of technical planning is really jus
 Everything else — goals, capabilities, trade-offs, roadmap, mechanisms, external communication — is the output of these two engines. Without business analysis, the plan becomes a self-indulgent technical wish list; without competitive analysis, the plan loses its external coordinates, knowing neither the ceiling nor when to stop. The two together form a traceable causal chain:
 
 ```mermaid
-flowchart TB
+flowchart LR
     subgraph engines["Two engines: analysis"]
         A["Business analysis<br/>who we serve · where stuck · constraint evidence"]
         B["Competitive analysis<br/>vs whom · gap · level"]
@@ -100,7 +100,7 @@ For competitive pressure to become goals, it must pass through the translation o
 The common base of the four judgments is **competitive comparison**: whether we are asking whom users are choosing instead of us or what technical level we occupy in the industry, the judgment must return to a concrete reference point rather than intuition.
 
 ```mermaid
-flowchart TB
+flowchart LR
     A["Market · capital · profit competition"] --> B["Squeeze out: gap · window · resource boundary"]
     B --> C["Business judgment"]
     B --> D["Technical judgment"]
@@ -181,7 +181,7 @@ The core translation work of planning is converting business language into capab
 A practical capability map can usually be divided into four layers; the lower you go, the more easily they are overlooked:
 
 ```mermaid
-flowchart TB
+flowchart LR
     A["Journey & business domain<br/>key user tasks"] --> B["Domain capability<br/>rules · workflow · transactions"]
     B --> C["General engineering capability<br/>quality · performance · observability · release · security"]
     C --> D["Org & governance capability<br/>decision · standards · ownership · talent pipeline"]

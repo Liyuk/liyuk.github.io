@@ -42,6 +42,7 @@ export const tags: Record<string, [string, string]> = {
   relationships: ['关系', 'Relationships'],
   promotion: ['晋升', 'Promotion'],
   'problem-framing': ['问题定义', 'Problem Framing'],
+  performance: ['性能', 'Performance'],
   observability: ['可观测性', 'Observability'],
   motivation: ['动力', 'Motivation'],
   learning: ['学习', 'Learning'],

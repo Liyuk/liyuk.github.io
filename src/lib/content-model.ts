@@ -22,12 +22,17 @@ export const translationStatusForLocale = (locale: string): TranslationStatus =>
 export const hasValidPublishedTranslationStatus = ({ data }: PublishedEntry): boolean =>
   !isPublished({ data }) || data.translationStatus === translationStatusForLocale(data.locale);
 
+const isTemplateEntry = (entry: PublishedEntry): boolean => entry.id?.split('/').at(-1) === '_template';
+
 // Published (non-draft) entries regardless of locale. Used by getStaticPaths to
 // enumerate every public slug so both the default (zh-CN) and /en/ routes
 // generate the same path set.
-export const notDraft = (entry: PublishedEntry): boolean => isPublished(entry);
-
-const isTemplateEntry = (entry: PublishedEntry): boolean => entry.id?.split('/').at(-1) === '_template';
+//
+// Templates are excluded here, not only in `isPreviewable`: a `_template.md`
+// stays out of production because it is a template, not because someone
+// remembered to leave `draft: true` in it.
+export const notDraft = (entry: PublishedEntry): boolean =>
+  !isTemplateEntry(entry) && isPublished(entry);
 
 export const isPreviewable = (entry: PublishedEntry, isDev: boolean): boolean =>
   !isTemplateEntry(entry) && (isDev || !entry.data.draft);
@@ -37,5 +42,5 @@ export const previewable = (entry: PublishedEntry): boolean =>
 
 // Published entries for one specific locale. Used by list, archive, tag,
 // column, and RSS pages to render only the current locale's content.
-export const publishedIn = (locale: string) => ({ data }: PublishedEntry): boolean =>
-  !data.draft && data.locale === locale;
+export const publishedIn = (locale: string) => (entry: PublishedEntry): boolean =>
+  !isTemplateEntry(entry) && !entry.data.draft && entry.data.locale === locale;

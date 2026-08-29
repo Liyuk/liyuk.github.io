@@ -45,7 +45,7 @@ graph TD
 ![图片的替代文字](./images/example.webp)
 ```
 
-文章头图用 frontmatter 的 `hero` 字段（见 `docs/engineering/content-publishing-workflow.md`）。
+`writing` 的 schema 是 `.strict()`，没有 `hero` 字段——头图只有 `project` 支持。文章配图一律走上面的 Markdown 相对路径写法；字段以 `src/content.config.ts` 为准。
 
 ## 数学公式（LaTeX / KaTeX）
 

@@ -8,7 +8,7 @@ import { i18n } from '../i18n/index.mjs';
 const zh = i18n('zh-CN').page.notFound;
 const en = i18n('en').page.notFound;
 ---
-<BaseLayout title={zh.metaTitle} description={zh.metaDescription} noindex>
+<BaseLayout title={zh.metaTitle} description={zh.metaDescription} noindex canonical={false}>
   <section class="page-heading shell" id="not-found">
     <p class="eyebrow">404</p>
     <h1 id="not-found-title">{zh.title}</h1>

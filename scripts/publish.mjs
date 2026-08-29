@@ -1,6 +1,6 @@
 // Publish a drafted entry: flip `draft: true` → `false`.
-// Run: npm run publish <slug>
-// Locates the entry across writing/research/projects/galleries by slug
+// Run: npm run publish <slug> -- --confirm-editorial-review
+// Locates the entry across writing/consulting/research/projects/galleries by slug
 // (the directory name for dated collections, the explicit slug for galleries).
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -83,19 +83,36 @@ export async function publishBySlug(slug) {
   return { published: true, reason: 'ok', entries: published };
 }
 
+export function requiresEditorialConfirmation(entries) {
+  return entries.some(({ content }) => /^draft:[ \t]*true$/m.test(content));
+}
+
 async function main() {
   const slug = process.argv[2];
+  const editorialConfirmed = process.argv.includes('--confirm-editorial-review');
   if (!slug) {
-    console.error('用法：npm run publish <slug>');
-    console.error('例如：npm run publish why-code-decays');
+    console.error('用法：npm run publish <slug> -- --confirm-editorial-review');
+    console.error('例如：npm run publish why-code-decays -- --confirm-editorial-review');
+    process.exit(2);
+  }
+
+  const matches = await findEntriesBySlug(slug);
+  if (matches.length === 0) {
+    console.error(`未找到 slug「${slug}」对应的内容（检查 writing/consulting/research/projects/galleries）。`);
+    process.exit(1);
+  }
+
+  const entriesWithContent = await Promise.all(matches.map(async (entry) => ({
+    ...entry,
+    content: await readFile(entry.file, 'utf8'),
+  })));
+  if (requiresEditorialConfirmation(entriesWithContent) && !editorialConfirmed) {
+    console.error('拒绝发布：请先完成匹配的写作 skill 与 content-review 的 AI 味、作者 voice、次元墙、读者价值、独特性、风险审核，并取得 GO。');
+    console.error('确认完成后运行：npm run publish <slug> -- --confirm-editorial-review');
     process.exit(2);
   }
 
   const result = await publishBySlug(slug);
-  if (!result.published) {
-    console.error(`未找到 slug「${slug}」对应的内容（检查 writing/research/projects/galleries）。`);
-    process.exit(1);
-  }
 
   for (const entry of result.entries) {
     if (entry.changed) {

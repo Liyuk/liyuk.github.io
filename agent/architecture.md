@@ -19,12 +19,13 @@ Content files are `zh.md` (source) or `en.md` (translation) in the same director
 Two predicates in `src/lib/content-model.ts` gate what's visible where:
 
 ```js
-export const notDraft = ({ data }) => !data.draft;
-export const publishedIn = (locale) => ({ data }) => !data.draft && data.locale === locale;
+export const notDraft = (entry) => !isTemplateEntry(entry) && !entry.data.draft;
+export const publishedIn = (locale) => (entry) =>
+  !isTemplateEntry(entry) && !entry.data.draft && entry.data.locale === locale;
 export const previewable = (entry) => !isTemplateEntry(entry) && (import.meta.env.DEV || !entry.data.draft);
 ```
 
-`previewable` is what lets `npm run dev` open a real draft's direct detail URL while keeping it out of every list, archive, RSS, sitemap, and the production build. Templates (`_template.md`) are excluded even in development.
+`previewable` is what lets `npm run dev` open a real draft's direct detail URL while keeping it out of every list, archive, RSS, sitemap, and the production build. All three predicates exclude templates, so `src/content/writing/_template.md` stays out of production because it is a template — not because someone remembered to leave `draft: true` in it. Only the writing template ships; galleries are scaffolded entirely by `npm run new:gallery`.
 
 ### Dates
 
@@ -34,7 +35,7 @@ Frontmatter dates are date-only strings (`YYYY-MM-DD`), parsed by `parseContentD
 
 ### Columns and tags
 
-A column is a hand-curated reading path. Entries opt in with `column: { slug, order }`; the registry (label, description per locale) lives in `src/lib/taxonomy.ts`. Only `writing`, `consulting`, and `gallery` entries use columns — `project` and `research` don't. `getColumnEntries()` returns a column's entries in declared order; a column only renders once it has at least one entry, and its `order` values must be positive and unique.
+A column is a hand-curated reading path. Entries opt in with `column: { slug, order }`; the registry (label, description per locale) lives in `src/lib/taxonomy.ts`. The `order` is the only path metadata: order 1 is the natural starting point, and later entries are read in sequence. Article `type` describes form, while the shared reading-time estimate helps readers judge the time needed. `project` entries do not use columns. `getColumnEntries()` returns a column's entries in declared order; a column only renders once it has at least one entry, and its `order` values must be positive and unique.
 
 Tags are a flat global registry in `src/lib/taxonomy.ts` (slug → `['中文', 'English']`). Every collection references tags by slug; `audit:content` fails on an unregistered tag. Index pages only surface tags used by 3 or more entries.
 
@@ -102,4 +103,6 @@ These are documented so they don't get "fixed" by someone who doesn't know they'
 - **The `neo-matrix` project's `localhost` command example is an intentional, reader-facing exception.** `audit:content`'s localhost/127.0.0.1 pattern check will flag it; that's correct behavior (the check should always surface a localhost string for confirmation), and the confirmation each time is that this one is a legitimate local-dev-command example, not a leaked private address.
 - **Buttondown idempotency matches on `subject + canonical_url`, with a fallback to subject-only for pre-existing legacy records.** A brand-new notification-matching change must keep both paths working — do not assume every historical record has a canonical URL.
 - **`translationStatus: draft` is never a valid state for published content.** Only unpublished (`draft: true`) English files may sit at `translationStatus: draft`; `audit:content` should fail, not warn, if a published entry is caught at that status. If you find this invariant is only a warning somewhere, that's a gap, not the intended design.
+- **A markdown-pipeline change needs `npx astro build --force` locally, not `npm run build`.** Astro caches rendered collection entries, so editing a remark/rehype plugin or `astro.config.mjs`'s markdown options re-renders only the content files that themselves changed. Everything else keeps its previously rendered HTML, and a local `dist/` ends up mixing old and new output — which reads exactly like "my plugin change didn't work." CI is unaffected (a fresh checkout has no cache and rebuilds everything), so the danger is the reverse: a local `publish:check` can pass against a `dist/` that differs from what deploys. After touching the pipeline, rebuild with `--force` before trusting any `dist/`-based audit or browser check. Found 2026-08-29, when a `rehype-scroll-wrap` fix appeared to have no effect and half the site's `katex-display` elements were missing an attribute the plugin had been adding for weeks.
+
 - **`docs/` is not a fallback place to look for a missing standard.** If an agent needs a project rule and can't find it in `AGENTS.md`, `CONTRIBUTING.md`, `agent/`, or `.claude/skills/`, the rule doesn't exist as a tracked standard yet — it is not hiding in `docs/`, which is explicitly excluded from being a contract (`agent/adr/0005`). Propose the rule and add it to `agent/` rather than inferring it from local notes that won't exist on another machine.

@@ -78,7 +78,7 @@ Conversion differs by page. A tutorial may count completed reading, a comparison
 ## How to read the funnel
 
 ```mermaid
-flowchart TD
+flowchart LR
   A[Crawlable pages] --> B[Indexed]
   B --> C[Impressions]
   C --> D[Clicks]

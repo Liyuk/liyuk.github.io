@@ -1,4 +1,4 @@
-// Interactive content creator for writing / research / project entries.
+// Interactive content creator for writing / research / consulting / project entries.
 // Run: npm run new:post
 // Uses Node built-ins only. Pure functions are exported for tests.
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -13,9 +13,11 @@ const CONTENT_ROOT = path.join(process.cwd(), 'src/content');
 const TYPE_CHOICES = [
   { key: 'article', label: '文章 (writing)' },
   { key: 'research', label: '研究 (research)' },
+  { key: 'consulting', label: '咨询 (consulting)' },
   { key: 'project', label: '项目 (projects)' },
 ];
 const STATUS_CHOICES = ['preprint', 'published', 'in-progress'];
+const CONSULTING_FORMAT_CHOICES = ['career-case', 'interview', 'mock-interview', 'management-case'];
 const ARTICLE_TYPE_CHOICES = ['essay', 'note', 'case-study'];
 
 // --- pure helpers (exported for tests) ---
@@ -55,6 +57,17 @@ export function buildPostFrontmatter(type, answers) {
       status: answers.status ?? 'preprint',
       repositoryUrl: answers.repositoryUrl,
       paperUrl: answers.paperUrl,
+      ...(answers.column ? { column: answers.column } : {}),
+    };
+  }
+  if (type === 'consulting') {
+    return {
+      ...common,
+      publishedAt: answers.publishedAt,
+      format: answers.format ?? 'career-case',
+      ...(answers.episode ? { episode: answers.episode } : {}),
+      ...(answers.guest ? { guest: answers.guest } : {}),
+      ...(answers.column ? { column: answers.column } : {}),
     };
   }
   if (type === 'project') {
@@ -94,17 +107,17 @@ async function main() {
     // 1. type
     console.log('要创建哪种内容？');
     TYPE_CHOICES.forEach((c, i) => console.log(`  ${i + 1}) ${c.label}`));
-    const typeAnswer = await rl.ask('输入序号（1-3）或类型名: ', {
+    const typeAnswer = await rl.ask(`输入序号（1-${TYPE_CHOICES.length}）或类型名: `, {
       validate: (v) => {
         const byIndex = TYPE_CHOICES[Number(v) - 1];
         const byName = TYPE_CHOICES.find((c) => c.key === v);
-        return byIndex || byName ? null : '请选择 1-3，或输入 article / research / project';
+        return byIndex || byName ? null : `请选择 1-${TYPE_CHOICES.length}，或输入 ${TYPE_CHOICES.map((c) => c.key).join(' / ')}`;
       },
     });
     const type = (TYPE_CHOICES[Number(typeAnswer) - 1] ?? TYPE_CHOICES.find((c) => c.key === typeAnswer) ?? TYPE_CHOICES[0]).key;
 
     // 2. title
-    const typeLabel = { article: '文章', research: '研究', project: '项目' }[type];
+    const typeLabel = { article: '文章', research: '研究', consulting: '咨询', project: '项目' }[type];
     const title = await rl.ask(`${typeLabel}标题（必填）: `, {
       validate: (v) => (v ? null : '标题不能为空'),
     });
@@ -171,6 +184,22 @@ async function main() {
       }
       answers.repositoryUrl = repositoryUrl;
       answers.paperUrl = paperUrl;
+      answers.column = await askColumn(rl);
+    } else if (type === 'consulting') {
+      answers.publishedAt = await rl.ask('发布日期（YYYY-MM-DD）', { default: createdAt, validate: validateDate });
+      console.log(`形式：${CONSULTING_FORMAT_CHOICES.map((f, i) => `${i + 1}=${f}`).join(' ')}`);
+      const formatAnswer = await rl.ask(`选择（1-${CONSULTING_FORMAT_CHOICES.length}）`, {
+        default: '1',
+        validate: (v) => (CONSULTING_FORMAT_CHOICES[Number(v) - 1] ? null : `请输入 1-${CONSULTING_FORMAT_CHOICES.length}`),
+      });
+      answers.format = CONSULTING_FORMAT_CHOICES[Number(formatAnswer) - 1] ?? 'career-case';
+      const episodeAnswer = await rl.ask('期数（正整数，可留空）: ', {
+        validate: (v) => (!v || /^[1-9][0-9]*$/.test(v) ? null : '期数必须是正整数'),
+      });
+      if (episodeAnswer) answers.episode = Number(episodeAnswer);
+      // `guest` must already be de-identified — see agent/category-guides/consulting.md.
+      answers.guest = await rl.ask('访谈对象化名（已脱敏，可留空）: ');
+      answers.column = await askColumn(rl);
     } else {
       const projectFields = await askProject(rl, slug);
       Object.assign(answers, projectFields);
@@ -198,7 +227,8 @@ async function main() {
     await mkdir(path.dirname(filePath), { recursive: true });
     await writeFile(filePath, body, 'utf8');
     console.log(`\n✔ 已创建：${filePath}`);
-    console.log('  下一步：编辑正文，然后运行 npm run publish <slug> 发布（或把 draft 改为 false）。');
+    console.log('  下一步：编辑正文，走完写作 skill 与 content-review，取得所有者批准后再运行');
+    console.log('        npm run publish <slug> -- --confirm-editorial-review');
   } finally {
     rl.close();
   }

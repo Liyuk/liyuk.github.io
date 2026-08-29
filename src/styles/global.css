@@ -175,6 +175,8 @@ h1, h2, h3, p { margin-top: 0; }
 .column-chapters h2 a { text-decoration: none; }
 .column-chapters time { display: block; margin-bottom: .65rem; font-size: .82rem; color: var(--muted); }
 .column-chapters p { max-width: 54ch; margin-bottom: 0; color: var(--muted); }
+.entry-type,
+.entry-reading { margin-bottom: 0; color: var(--muted); font-size: .78rem; }
 .column-pagination { max-width: var(--prose-w); margin: 4rem auto 0; padding-top: 1.3rem; border-top: 1px solid var(--line); display: grid; gap: .75rem; }
 .column-pagination a { color: var(--ink); font-size: .9rem; font-weight: 700; text-decoration: none; }
 .column-pagination a:hover { color: var(--accent); }
@@ -815,12 +817,25 @@ h1, h2, h3, p { margin-top: 0; }
   background-color: var(--shiki-dark-bg) !important;
 }
 
+:root[data-theme="light"] .astro-code span[style*="#E36209"] {
+  color: #9c3d00 !important;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .astro-code span[style*="#E36209"] {
+    color: #9c3d00 !important;
+  }
+}
+
 /* Mermaid diagrams (rendered to inline SVG at build time). */
 .prose svg[id^="mermaid-"] {
   display: block;
+  width: 100%;
   max-width: 100%;
   height: auto;
+  max-height: 70vh;
   margin: 1.6em auto;
+  object-fit: contain;
 }
 
 /* Recolor Mermaid's inline SVG with the site palette so it tracks light/dark
@@ -969,7 +984,12 @@ h1, h2, h3, p { margin-top: 0; }
   .prose .scroll-wrap > table { width: auto; min-width: 100%; }
   .prose .scroll-wrap > table th,
   .prose .scroll-wrap > table td { white-space: nowrap; }
-  .prose .scroll-wrap > svg[id^="mermaid-"] { max-width: none; min-width: 520px; }
+  .prose .scroll-wrap > svg[id^="mermaid-"] {
+    width: auto;
+    max-width: none;
+    min-width: 520px;
+    max-height: 70vh;
+  }
   .gallery-masonry { columns: 2 11rem; column-gap: .75rem; }
   .gallery-card { margin-bottom: .75rem; }
   .gallery-card-copy { padding: .85rem; }

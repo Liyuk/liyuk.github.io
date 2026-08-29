@@ -192,7 +192,7 @@ High-frequency feedback is not automatically high-quality feedback. Low-risk, re
 ### 4.1 Overall data flow
 
 ```mermaid
-flowchart TD
+flowchart LR
   A[User task and boundaries] --> B[Context builder]
   B --> C[Execution loop: plan/action/observe/stop]
   C --> D[Tool broker]

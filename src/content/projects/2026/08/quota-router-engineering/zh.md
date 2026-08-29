@@ -298,11 +298,6 @@ sequenceDiagram
     alt 成功
         DSH->>Ledger: completed + usage
         DSH-->>User: 返回结果
-    else 稳定失败
-        DSH->>Router: QUOTA / 401 / 403
-        Router->>Router: candidateIndex += 1
-        Router->>Ledger: fallback(reason=stable)
-        Router->>DSH: 同一轮重建请求
     else 暂态失败
         DSH->>DSH: adapter retry
         alt 重试后恢复
@@ -315,6 +310,32 @@ sequenceDiagram
             Router->>DSH: 同一轮重建请求
         end
     end
+```
+
+稳定失败则进入候选切换路径：
+
+```mermaid
+sequenceDiagram
+    participant User as 用户
+    participant Router as Quota Router
+    participant DSH as DSH Agent/Adapter
+    participant Provider as Provider
+    participant Ledger as Ledger
+
+    User->>Router: 输入消息
+    Router->>Router: first-match + buildCandidates()
+    Router->>DSH: native validation 后写入 route header
+    Router->>Ledger: selected(profile, candidate=0)
+    DSH->>Provider: 发起请求
+    Provider-->>DSH: QUOTA / 401 / 403
+    DSH->>Router: 稳定失败
+    Router->>Router: candidateIndex += 1
+    Router->>Ledger: fallback(reason=stable)
+    Router->>DSH: 同一轮重建请求
+    DSH->>Provider: 使用下一个候选执行
+    Provider-->>DSH: 成功或最终失败
+    DSH->>Ledger: completed 或 failed
+    DSH-->>User: 返回结果
 ```
 
 这里的“同一轮重建请求”很关键：fallback 不是让用户重新发送一条消息，而是让 DSH 在当前 turn 内使用新的 route 继续执行。
@@ -338,20 +359,20 @@ A 失败 → B
 ### 候选状态机
 
 ```mermaid
-stateDiagram-v2
-    [*] --> Ready
-    Ready --> Active: native validation 通过
-    Ready --> Skipped: disabled / paid protection / invalid
-    Active --> Active: transient error + retry budget
-    Active --> Completed: request succeeds
-    Active --> Fallback: stable failure
-    Active --> Cooldown: transient threshold reached
-    Cooldown --> Fallback: move forward
-    Fallback --> Active: next candidate exists
-    Fallback --> Failed: no candidate remains
-    Completed --> [*]
-    Failed --> [*]
-    Skipped --> [*]
+flowchart LR
+    Start((开始)) --> Ready[Ready]
+    Ready -->|native validation 通过| Active[Active]
+    Ready -->|disabled / paid protection / invalid| Skipped[Skipped]
+    Active -->|transient error + retry budget| Active
+    Active -->|request succeeds| Completed[Completed]
+    Active -->|stable failure| Fallback[Fallback]
+    Active -->|transient threshold reached| Cooldown[Cooldown]
+    Cooldown -->|move forward| Fallback
+    Fallback -->|next candidate exists| Active
+    Fallback -->|no candidate remains| Failed[Failed]
+    Completed --> End((结束))
+    Failed --> End
+    Skipped --> End
 ```
 
 状态机体现了两个不变量：

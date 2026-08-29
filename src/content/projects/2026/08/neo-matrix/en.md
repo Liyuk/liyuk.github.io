@@ -61,7 +61,7 @@ Administrators manage users, channels, models, consumption logs, settlement orde
 From onboarding to withdrawal, a supplier's journey is not “submit a key and finish.” It is a sequence of state changes:
 
 ```mermaid
-flowchart TD
+flowchart LR
     A["Supplier submits upstream credential"] --> B["Validate type, URL and connectivity"]
     B --> C["Cost review and trust level"]
     C --> D["Enter routing pool"]
@@ -102,7 +102,7 @@ Settlement → reconciliation → supplier balance → withdrawal review
 
 There are two keys here, and they must not be confused:
 
-| | Platform token | Upstream key |
+| Credential | Platform token | Upstream key |
 |---|---|---|
 | Holder | Consumer | Supplier or platform |
 | Purpose | Proves that the consumer can call the platform | Lets the platform call the upstream model |

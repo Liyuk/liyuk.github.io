@@ -6,15 +6,43 @@
 // earlier and additionally catches duplicate orders and unknown column slugs,
 // which the per-entry Zod schema cannot see (those need cross-entry context).
 import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { columns as columnRegistry } from '../src/lib/taxonomy.ts';
 
-const CONTENT_DIRS = ['src/content/writing', 'src/content/consulting', 'src/content/research', 'src/content/galleries'];
-const COLUMN_RE = /^column:\s*\{\s*slug:\s*([A-Za-z0-9-]+)\s*,\s*order:\s*(\d+)\s*\}/m;
+const CONTENT_DIRS = ['writing', 'consulting', 'research', 'galleries'];
+
+// `column` is legal in both YAML shapes, so both must be audited — a block-form
+// entry that this script skipped would carry an unregistered slug or a duplicate
+// order past every check in the repository (the per-entry schema only validates
+// types, and audit:content only compares zh/en consistency).
+const INLINE_COLUMN_RE = /^column:[ \t]*\{([^}\n]*)\}/m;
+const BLOCK_COLUMN_RE = /^column:[ \t]*(?:#[^\n]*)?\n((?:[ \t]+[^\n]*\n?)+)/m;
+
+// Returns { slug, order } as raw strings (either may be null when that key is
+// absent), or null when the frontmatter declares no column at all.
+export function parseColumnField(frontmatter) {
+  const inline = frontmatter.match(INLINE_COLUMN_RE);
+  const body = inline ? inline[1] : frontmatter.match(BLOCK_COLUMN_RE)?.[1];
+  if (body === undefined) return null;
+  return {
+    slug: body.match(/\bslug:[ \t]*['"]?([^'"\s,}]+)/)?.[1] ?? null,
+    order: body.match(/\border:[ \t]*['"]?([^'"\s,}]+)/)?.[1] ?? null,
+  };
+}
 
 async function walk(dir) {
-  const entries = await readdir(dir, { withFileTypes: true });
+  let entries;
+  try {
+    entries = await readdir(dir, { withFileTypes: true });
+  } catch (error) {
+    // A collection directory that doesn't exist yet is fine; anything else
+    // (permissions, a file where a directory was expected) must not be
+    // swallowed into a silently passing audit.
+    if (error.code !== 'ENOENT') throw error;
+    return [];
+  }
   const nested = await Promise.all(
     entries.map(async (entry) => {
       const target = path.join(dir, entry.name);
@@ -24,11 +52,14 @@ async function walk(dir) {
   return nested.flat();
 }
 
-export async function auditColumns() {
+export async function auditColumns({ contentRoot = path.join(process.cwd(), 'src/content') } = {}) {
   const errors = [];
   const seen = new Map(); // slug -> Map(order, file)
+  let scannedDirs = 0;
 
-  for (const dir of CONTENT_DIRS) {
+  for (const dirName of CONTENT_DIRS) {
+    const dir = path.join(contentRoot, dirName);
+    if (existsSync(dir)) scannedDirs += 1;
     // Audit the source locale only: an `en.md` / `*.en.md` translation mirrors its
     // `zh.md` column assignment verbatim, so auditing both would flag every column
     // as a duplicate order.
@@ -36,11 +67,16 @@ export async function auditColumns() {
     for (const file of files) {
       const source = await readFile(file, 'utf8');
       const frontmatter = source.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
-      const match = frontmatter.match(COLUMN_RE);
-      if (!match) continue;
+      const column = parseColumnField(frontmatter);
+      if (!column) continue;
 
       const rel = path.relative(process.cwd(), file);
-      const [, slug, orderStr] = match;
+      const { slug, order: orderStr } = column;
+
+      if (!slug || !orderStr) {
+        errors.push(`${rel}: column 必须同时声明 slug 和 order`);
+        continue;
+      }
       const order = Number(orderStr);
 
       if (!(slug in columnRegistry)) {
@@ -59,6 +95,10 @@ export async function auditColumns() {
       byOrder.set(order, rel);
       seen.set(slug, byOrder);
     }
+  }
+
+  if (scannedDirs === 0) {
+    errors.push(`未找到任何内容目录（${CONTENT_DIRS.join('、')}）于 ${contentRoot}：审计范围为空，不能当作通过。`);
   }
 
   return errors;

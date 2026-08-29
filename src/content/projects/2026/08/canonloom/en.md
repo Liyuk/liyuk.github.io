@@ -63,6 +63,7 @@ A chapter's production is split into 7 stages, each with fixed artifacts and wri
 
 ```mermaid
 stateDiagram-v2
+    direction LR
     state "S0 Contract — freeze contract" as S0
     state "S1 Draft — generate candidate draft" as S1
     state "S2 Quick Check — quick check" as S2
