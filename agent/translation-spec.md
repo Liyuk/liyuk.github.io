@@ -29,7 +29,13 @@ Never rename or move the `zh.md`. Never touch `_template.md` / `.gitkeep`.
 
 ## Frontmatter rules
 
-Start from the `zh.md` frontmatter, then apply these transforms:
+Choose the source state before creating or changing an English file:
+
+- **Unpublished Chinese source:** create the formal sibling with matching `draft: true` and `translationStatus: draft`. It is a valid candidate for review, not publication.
+- **Published Chinese source with no English sibling:** do not create a formal `en.md` at `translationStatus: draft`, and do not change the Chinese source to make one fit. Prepare the candidate translation in a user-designated ignored local path. After the owner accepts the 信达雅 review, write the formal sibling with `translationStatus: reviewed` under explicit authorization.
+- **Existing published English sibling:** review it in place and report proposed differences. Do not downgrade its status to show that review is happening; if the Chinese source's claims, structure, or frontmatter changed, rerun the affected translation review before accepting an update.
+
+For an unpublished source, start from the `zh.md` frontmatter, then apply these transforms:
 
 ### Quoting (critical)
 
@@ -52,8 +58,8 @@ around the whole value). Do **not** quote slugs, tags, dates, URLs, enums,
 1. **Translate** `title` and `description` into natural, idiomatic English.
 2. **Set** `locale: en`.
 3. **Set** `translationStatus: draft` (machine/AI translation, not yet
-   human-reviewed). Only a human reviewer flips it to `reviewed` after checking
-   it against the 信达雅 standard in `agent/editorial-rules.md`.
+   human-reviewed). Only a human reviewer accepts `reviewed` after checking it
+   against the 信达雅 standard in `agent/editorial-rules.md`.
 4. **Set** `translationKey` to the locale-free path shared by both languages:
    - dated collections: the directory path relative to the collection root,
      e.g. `2026/08/example`

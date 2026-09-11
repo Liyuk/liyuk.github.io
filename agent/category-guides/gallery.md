@@ -4,7 +4,7 @@ The `gallery` collection is photo albums, not prose essays — `src/content/gall
 
 ## What this collection is
 
-A curated set of photos under one `slug`, with a `cover` and one or more `images`. `column` membership is allowed (`writing`, `consulting`, and `gallery` are the only collections that use columns — see `agent/architecture.md`), so a gallery can also be a chapter in a reading path, not only a standalone album.
+A curated set of photos under one `slug`, with a `cover` and one or more `images`. `column` membership is allowed; `writing`, `consulting`, `research`, and `gallery` support columns, as defined by `src/content.config.ts`. A gallery can therefore be a chapter in a reading path, not only a standalone album.
 
 ## Curation, not archiving
 

@@ -13,7 +13,7 @@ Run these in order; a failure at an earlier step usually invalidates work done o
 
 ### 1. AI-signal and author's-voice pass
 
-Run the matching writing skill for the collection if the piece was drafted with one (`.claude/skills/write-writing`, `write-research`, `write-projects`, `write-consulting`, or `write-gallery`), then run `.claude/skills/humanize-writing` for an existing Chinese draft. Read the whole piece, not only the passages that changed. Do not proceed on a draft that either skill flagged and left unfixed. If no matching writing skill was used, say so explicitly in the final report and perform the same material, reader-value, and distinctiveness checks manually.
+Confirm the matching writing skill's earlier outcome if the piece was drafted with one (`.claude/skills/write-writing`, `write-research`, `write-projects`, `write-consulting`, or `write-gallery`), then run `.claude/skills/humanize-writing` in review-only mode for an existing Chinese draft. Read the whole piece, not only the passages that changed. Do not proceed on a draft that either pass flagged and left unresolved. If no matching writing skill was used, say so explicitly in the final report and perform the same material, reader-value, and distinctiveness checks manually. Content review does not restart interview, outline, or section-drafting modes.
 
 Keep these two judgments separate and report both: (a) does the prose still have recognizable AI-like signals such as smooth generic connective tissue, forced symmetry, abstract claims, uniform rhythm, or over-packaged structure; and (b) does it still sound like the author's voice described in `agent/writing-style.md` — concrete experience, visible thinking, personal anchors, chosen phrasing, productive irregularity, and honest boundaries? Passing an AI-signal check is not evidence that the author's voice survived. Do not claim an AI-detector percentage that was not measured.
 
@@ -29,7 +29,7 @@ Read the article as its intended reader, temporarily setting aside the author's 
 - What can a reader judge, decide, or do differently afterward — what is the practical takeaway, if any?
 - Which example, criterion, procedure, or boundary makes that takeaway usable rather than merely agreeable?
 
-If the answers are vague, interchangeable with a generic article on the same topic, or amount only to “认同一个观点,” the gate is **no-go**. Revise the material, scope, examples, or ending before publication. A literary or exploratory piece may have an open question instead of an instruction, but it still needs a specific reader consequence.
+If the answers are vague, interchangeable with a generic article on the same topic, or amount only to “认同一个观点,” the gate is **no-go**. Report the material, scope, examples, or ending that requires revision before publication. A literary or exploratory piece may have an open question instead of an instruction, but it still needs a specific reader consequence.
 
 ### 4. Distinctiveness pass
 
@@ -63,7 +63,7 @@ Run `.claude/skills/xinda-ya-translation` in review mode. A translation stuck at
 
 ### 8. Final report
 
-State explicitly, as a go/no-go:
+State explicitly, as a go/no-go, for the reviewed target and its current file version. A later change to the Chinese claim, structure, or frontmatter invalidates the relevant translation review and the final recommendation until both are repeated:
 
 1. Whether `npm run publish:check` has been run and passed (this skill doesn't replace running it).
 2. AI-signal status and author's-voice status from step 1, including which skill was run, what AI-like patterns were found, what voice evidence was preserved or lost, and what specifically changed if anything was flagged. Do not claim an AI-detector percentage that was not measured.

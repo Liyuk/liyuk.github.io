@@ -57,6 +57,12 @@ No detector is wired into this repository: nothing in `npm run publish:check` me
 
 Getting under the threshold is not about scrubbing an AI vocabulary blocklist onto otherwise-generic prose. The detectable signal is structural: uniform sentence length and rhythm, predictable connective tissue ("此外"、"值得注意的是"、"综上所述" and their English equivalents "moreover", "furthermore", "it's worth noting"), claims left abstract instead of cashed out into concrete criteria, and hedges bolted onto a sentence instead of built into it. `agent/writing-style.md` describes what this site's actual voice does instead — calibrate against it, not against a generic "sound human" checklist. The `.claude/skills/humanize-writing` skill operationalizes this check.
 
+The project-local `.claude/skills/shuorenhua` package is the Chinese implementation layer for this pass. Use its scene, protected-span, severity, scope, and two-way fidelity rules after calibrating against the author's voice. The project-local `.claude/skills/humanizer` package is the English implementation layer; use it after 信达雅 translation review to audit English-specific AI patterns. Neither package authorizes invented personal detail, factual drift, detector evasion, or a change to publication state.
+
+## Review and revision are separate stages
+
+A review identifies the passages, evidence, and conditions that block readiness; it does not silently revise the content. Use a review-only pass when the request is to assess a draft or decide publication readiness. A requested revision is a separate pass, followed by a new review. Record a final GO against the target files as reviewed; a later Chinese change to a claim, structure, or frontmatter invalidates the related translation review and final GO. A GO remains a recommendation and never replaces owner approval or changes a publication state.
+
 ## English translation standard: 信达雅, not literal translation
 
 Chinese is the source locale; every published English page is a translation of a Chinese original (see `agent/translation-spec.md` for mechanics — quoting, what to translate vs. copy verbatim, `translationKey` wiring). The *quality* bar for that translation is Yan Fu's three-part standard, in this order of priority when they trade off:

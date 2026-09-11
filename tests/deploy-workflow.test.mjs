@@ -15,11 +15,10 @@ function jobBlock(name) {
   return next === -1 ? rest : rest.slice(0, next + 1);
 }
 
-test('master verification runs queue instead of cancelling each other', () => {
+test('master verification is not interrupted by a later run', () => {
   const verify = jobBlock('verify');
-  // A cancelled master run never reaches `notify`, and the next push's
-  // `github.event.before` starts after the commits it skipped -- so their
-  // content lands in no notification window at all.
+  // This protects an active master verification. GitHub's pending-run policy
+  // is documented separately because it is not equivalent to an unlimited queue.
   assert.match(verify, /cancel-in-progress:\s*\$\{\{\s*github\.event_name == 'pull_request'\s*\}\}/);
   assert.doesNotMatch(verify, /cancel-in-progress:\s*true/);
 });

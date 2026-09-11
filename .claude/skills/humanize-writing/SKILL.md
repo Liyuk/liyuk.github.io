@@ -7,6 +7,8 @@ description: Use when drafting or reviewing Chinese content in src/content/ for 
 
 This is a source-voice calibration pass, not a word-swap pass and not a final copy-edit. Read `agent/writing-style.md` first. The default target is the author's 2024–2026 human-source voice: the way a person with real experience thinks aloud, notices a contradiction, changes direction, remembers a detail, and only gradually arrives at a usable frame.
 
+For Chinese AI-pattern cleanup, this project also installs `.claude/skills/shuorenhua/SKILL.md`. Use it as the second pass after voice calibration: it supplies scene detection, protected-span handling, fact/relationship preservation, and Chinese AI-pattern coverage. It supplements this skill; it does not replace the author's voice target below.
+
 Keep three layers separate:
 
 1. **Human source** — notes, memories, conversations, examples, jokes, detours, and half-formed distinctions.
@@ -36,16 +38,18 @@ AI-like drift in this context is often the opposite of messiness: a draft that i
 3. Identify the source layer and intended mode:
    - **Native-human mode (default):** preserve the thinking process and personal anchors; make only clarity, factual, safety, and local rhythm edits.
    - **Publication mode (explicit request only):** add structure where the material needs it, while preserving native-human passages as the texture beneath the structure.
-4. Pass over the draft and flag, per paragraph:
+   - **Review-only mode:** report paragraph-level findings and proposed repairs without changing the draft. Use this when the request is to review, calibrate, or decide readiness rather than revise.
+4. Apply `.claude/skills/shuorenhua/SKILL.md` as a Chinese cleanup pass. Identify the scene, protected spans, severity tier, rewrite level, and scope before changing prose. For long Chinese public writing, keep its `bounded` default unless the user explicitly asks for structural rewriting.
+5. Pass over the draft and flag, per paragraph:
    - Polished abstractions that have lost the concrete event or person that generated them
    - Suspiciously symmetric sentences, section openings, or conclusions
    - Generic connective phrases doing the work an argument should be doing
    - Invented first-person intimacy, jokes, uncertainty, or anecdotes not present in the source
    - Premature checklists, named frameworks, negation-reframes, FAQs, or Mermaid diagrams added only to resemble the site
    - Personal detours that were flattened even though they explain the author's judgment
-5. Rewrite flagged passages. Recover the author's own material where possible; do not manufacture "human touches." Preserve facts, argument, uncertainty, and conclusions. When source material is missing, mark the gap or ask for it rather than inventing autobiographical detail. If an invented illustrative example is used instead (with the user's sign-off), see `agent/writing-style.md`'s "Constructed examples must read as prose" rule — the fact that it's constructed stays out of the reader-facing sentence.
-6. Check length against `agent/writing-style.md`'s "Minimum length by form" table. A title/description that promises a full judgment sitting on top of a body that doesn't clear its form's floor is a "题大文小" failure — flag it and either narrow the title or add material, don't leave the mismatch.
-7. Report the trade-off: what was preserved as native voice, what was clarified, and what publication structure was deliberately not added. Do not claim an AI-detector percentage you did not measure. If the repository's publish gate requires a detector check, report that separately from voice calibration.
+6. In review-only mode, stop after recording the findings and the smallest repair that would resolve each one. Otherwise rewrite flagged passages. Recover the author's own material where possible; do not manufacture "human touches." Preserve facts, argument, uncertainty, and conclusions. When source material is missing, mark the gap or ask for it rather than inventing autobiographical detail. If an invented illustrative example is used instead (with the user's sign-off), see `agent/writing-style.md`'s "Constructed examples must read as prose" rule — the fact that it's constructed stays out of the reader-facing sentence.
+7. Do the two readbacks required by `shuorenhua`: first verify every fact, condition, scope, subject, number, and certainty level; then check for remaining AI-pattern density without flattening intentional voice. Check length against `agent/writing-style.md`'s "Minimum length by form" table.
+8. Report the trade-off: what was preserved as native voice, what was clarified, and what publication structure was deliberately not added. Do not claim an AI-detector percentage you did not measure. If the repository's publish gate requires a detector check, report that separately from voice calibration.
 
 ## What this skill does not do
 

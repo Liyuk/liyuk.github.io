@@ -38,6 +38,8 @@ Editorial and writing-quality standards — voice, per-collection structure, the
 | Diagram how a system, platform, or method is organized         | `.claude/skills/house-diagram/SKILL.md`        |
 | Calibrate an existing Chinese draft against the author's voice | `.claude/skills/humanize-writing/SKILL.md`     |
 | Write or review an `en.md`                                     | `.claude/skills/xinda-ya-translation/SKILL.md` |
+| Clean Chinese AI patterns after voice calibration              | `.claude/skills/shuorenhua/SKILL.md`           |
+| Clean English AI patterns after 信达雅 translation             | `.claude/skills/humanizer/SKILL.md`            |
 | Final judgment gate before `draft: false`                      | `.claude/skills/content-review/SKILL.md`       |
 
 The frontend design skills (`impeccable`, `design-taste-frontend`, `redesign-existing-projects`) are vendored third-party material for UI work and carry no content-publishing authority.
@@ -48,7 +50,7 @@ A skill operationalizes a rule `agent/` already states. Where a skill and `agent
 
 ### Collections and routes
 
-- `writing`, `research`, and `project` entries use dated directories: `YYYY/MM/<slug>/zh.md` and `en.md`.
+- `writing`, `research`, `project`, and `consulting` entries use dated directories: `YYYY/MM/<slug>/zh.md` and `en.md`.
 - `gallery` entries use `src/content/galleries/<slug>.md` and `<slug>.en.md`; their public route is `/photos/<slug>/`.
 - The `project` collection is singular, while its source directory and public route are plural: `src/content/projects/` and `/projects/`.
 - Use `contentUrl`, `writingUrl`, `galleryUrl`, `entryUrl`, `tagUrl`, and `columnUrl` from `src/lib/content-paths.ts`. Never concatenate a content URL in a page, script, test, email, or notification.
@@ -94,17 +96,19 @@ A skill operationalizes a rule `agent/` already states. Where a skill and `agent
 
 ## Verification matrix
 
-| Change                                         | Minimum verification                                                                                                                                                    |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Content, translation, tag, or column           | `npm run audit:content`, `npm run audit:images`, `npm run audit:columns`, `npm test`                                                                                    |
-| Content URLs, routes, locale, layout, metadata | `npm test`, `npm run check`, `npm run build`, `npm run audit:seo`, `npm run audit:links`, `npm run test:e2e:fresh`, `npm run test:a11y:fresh`, `npm run test:draft:dev` |
-| Scripts, audits, notification, or CI           | Focused tests, `npm test`, `npm run format:check`, `npm run publish:check`                                                                                              |
-| Styles or interactive components               | `npm run check`, `npm run test:e2e:fresh`, `npm run test:a11y:fresh`; use the changed UI in a browser before reporting success                                          |
-| Before a publish-oriented change is handed off | `npm run publish:check`; CI additionally runs E2E and axe checks                                                                                                        |
+| Change                                         | Minimum verification                                                                                                  |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Content, translation, tag, or column           | `npm run audit:content`, `npm run audit:images`, `npm run audit:columns`, `npm test`                                  |
+| Content URLs, routes, locale, layout, metadata | `npm run publish:check`, `npm run test:draft:dev`, `npm run test:browser:ci`                                          |
+| Scripts, audits, notification, or CI           | Focused tests, `npm run publish:check`                                                                                |
+| Styles or interactive components               | `npm run check`, `npm run build`, `npm run test:browser:ci`; use the changed UI in a browser before reporting success |
+| Rules or project skill only                    | Validate the changed paths, references, and task routing; run `npm run format:check` when its scoped files changed    |
+| Local `docs/` notes only                       | Verify the note locally; do not add it to repository checks                                                           |
+| Before a publish-oriented change is handed off | `npm run publish:check`; CI additionally runs E2E and axe checks                                                      |
 
 - Use Node `24.18.0` from `.node-version` and `npm ci` for a clean install. `npm ci` also installs the repository's pre-push hook via `prepare`.
 - `publish:check` stops at the first failed step. It runs formatting, content/image/column audits, tests, Astro check, build, SEO audit, and link audit; it does not run browser tests.
-- `test:e2e:ci` and `test:a11y` run against the existing `dist/`; use their `:fresh` wrappers outside a gate that already built. `test:draft:dev` owns an isolated Astro dev server. Plain `test:e2e` expects an already running server at `E2E_BASE`.
+- `publish:check` produces the `dist/` used by `test:browser:ci`; use `publish:check` → `test:draft:dev` → `test:browser:ci` for the full route or metadata gate. Use the `:fresh` wrappers only when no prior command produced a current build. `test:draft:dev` owns an isolated Astro dev server. Plain `test:e2e` expects an already running server at `E2E_BASE`.
 - `npm run format:check` intentionally covers project automation, workflows, AGENTS, CONTRIBUTING, and selected tests. It does not currently format authored content or README.
 
 ## Human confirmation points

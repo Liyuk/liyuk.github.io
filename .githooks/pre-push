@@ -3,9 +3,10 @@
 # Installed by `git config core.hooksPath .githooks` (see package.json
 # "prepare" script / README). Failures block the push with exit 1.
 #
-# Note: on a plain `git push` without refs (e.g. pushing a tag or when
-# git can't resolve a source branch), this script still runs the checks —
-# that's intended, since a tag push deploys the site too.
+# Note: on a plain `git push` without refs (for example, pushing a tag or when
+# Git cannot resolve a source branch), this script still runs the checks. This
+# is a local repository gate; deployment is triggered only by the workflow's
+# configured events.
 
 echo "▶ pre-push: 运行发布前检查（publish:check）..."
 

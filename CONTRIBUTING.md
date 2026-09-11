@@ -30,7 +30,7 @@ Draft preview is deliberately limited to real detail entries in development. Dra
 
 ## Content workflow
 
-Use `npm run new:post` for writing, research, consulting, or projects and `npm run new:gallery` for galleries. New entries start as `draft: true`. Before drafting, read the relevant `agent/category-guides/*.md` and, if using Claude Code, the matching `write-*` skill in `.claude/skills/`; both encode structure and evidentiary/comparative expectations specific to that collection that this file doesn't repeat.
+Use `npm run new:post` for writing, research, consulting, or projects and `npm run new:gallery` for galleries. New entries start as `draft: true`. Before drafting, read the relevant `agent/category-guides/*.md` and the matching `write-*` skill in `.claude/skills/`; every coding agent uses the same project-local skill procedure.
 
 | Kind                                      | Source convention                                            | Public route                                            |
 | ----------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------- |
@@ -57,19 +57,20 @@ Before an editor changes `draft: true` to `false`, confirm:
 
 ## Verification
 
-| Change type                                         | Required commands                                                                                                                                                       |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Content, translation, taxonomy, or image references | `npm run audit:content`, `npm run audit:images`, `npm run audit:columns`, `npm test`                                                                                    |
-| Routes, locale, layout, metadata, or URLs           | `npm test`, `npm run check`, `npm run build`, `npm run audit:seo`, `npm run audit:links`, `npm run test:e2e:fresh`, `npm run test:a11y:fresh`, `npm run test:draft:dev` |
-| Scripts, audits, notification, or workflow          | Focused tests, `npm test`, `npm run format:check`, `npm run publish:check`                                                                                              |
-| Styles or interactive components                    | `npm run check`, `npm run test:e2e:fresh`, `npm run test:a11y:fresh`, plus browser use of the changed path                                                              |
-| Before a publish-oriented handoff                   | `npm run publish:check`; CI adds browser E2E and axe checks                                                                                                             |
+| Change type                                         | Required commands                                                                                              |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Content, translation, taxonomy, or image references | `npm run audit:content`, `npm run audit:images`, `npm run audit:columns`, `npm test`                           |
+| Routes, locale, layout, metadata, or URLs           | `npm run publish:check`, `npm run test:draft:dev`, `npm run test:browser:ci`                                   |
+| Scripts, audits, notification, or workflow          | Focused tests, `npm run publish:check`                                                                         |
+| Styles or interactive components                    | `npm run check`, `npm run build`, `npm run test:browser:ci`, plus browser use of the changed path              |
+| Rules or project skill only                         | Validate changed paths, references, and task routing; run `npm run format:check` when its scoped files changed |
+| Before a publish-oriented handoff                   | `npm run publish:check`; CI adds browser E2E and axe checks                                                    |
 
 `npm run publish:check` runs scoped formatting, content/image/column audits, Node tests, Astro check, production build, SEO audit, and internal-link audit. It stops at the first failure. It does not launch a browser.
 
 This table is the canonical verification matrix (`agent/architecture.md` points here). `AGENTS.md` mirrors it for agents reading only that file — change both together or they drift.
 
-`npm run test:e2e:ci` and `npm run test:a11y` use the existing `dist/` build; use `npm run test:e2e:fresh` and `npm run test:a11y:fresh` when a command must build first. `npm run test:draft:dev` starts and cleans up its own isolated Astro development server. The interactive `npm run test:e2e` expects an already running server at `E2E_BASE` (default `http://localhost:4321`). External link availability is intentionally outside the release gate.
+`npm run publish:check` produces the `dist/` build consumed by `npm run test:browser:ci`; run those commands in that order for the full route or metadata gate, with `npm run test:draft:dev` between them. Use `npm run test:e2e:fresh` and `npm run test:a11y:fresh` only when no earlier command built the current `dist/`. `npm run test:draft:dev` starts and cleans up its own isolated Astro development server. The interactive `npm run test:e2e` expects an already running server at `E2E_BASE` (default `http://localhost:4321`). External link availability is intentionally outside the release gate.
 
 `npm run format` and `npm run format:check` cover project automation, workflows, `AGENTS.md`, `CONTRIBUTING.md`, and selected tests. They deliberately do not reformat authored content or README; do not broaden that scope incidentally.
 
@@ -81,7 +82,7 @@ This table is the canonical verification matrix (`agent/architecture.md` points 
 4. Run the narrowest applicable checks, then the required matrix above.
 5. Request review with changed paths, commands run, warnings, and intentional exceptions.
 
-Pull requests run verification only, and a superseded pull-request run is cancelled. Master runs queue instead: a cancelled master run would lose its subscriber notification permanently, not just delay it.
+Pull requests run verification only, and a superseded pull-request run is cancelled. Master verification is not cancelled while it is running; the workflow's pending-run policy has a separate concurrency limit, documented with the workflow and tested before changing notification behavior.
 
 A successful `master` verification deploys GitHub Pages. Two jobs then hang off a successful deployment, independently of each other: `purge` clears the Cloudflare cache so list pages pick up the deploy immediately, and `notify` prepares/sends Buttondown updates. Repository secrets: `BUTTONDOWN_API_KEY`, plus `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ZONE_ID`. Each job explains itself and skips rather than failing when its credentials are absent. Local `npm run notify:buttondown` is dry-run by default; `--apply` requires explicit owner authorization.
 
