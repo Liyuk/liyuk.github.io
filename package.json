@@ -39,7 +39,7 @@
     "astro": "^7.2.9",
     "katex": "^0.18.7",
     "pagefind": "^1.5.2",
-    "playwright": "^1.62.1",
+    "playwright": "^1.63.0",
     "prettier": "^3.9.6",
     "qrcode": "^1.5.4",
     "rehype-katex": "^7.0.1",
