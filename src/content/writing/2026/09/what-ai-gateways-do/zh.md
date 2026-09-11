@@ -4,7 +4,7 @@ description: 通过多后端模型访问场景，理解 AI Gateway 如何处理�
 locale: zh-CN
 createdAt: 2026-09-03
 publishedAt: 2026-09-03
-draft: true
+draft: false
 type: essay
 tags: [ai, architecture, systems-design, routing, reliability, capacity-planning, observability, interview, learning, technology]
 column: { slug: technical-systems, order: 9 }
@@ -52,7 +52,7 @@ flowchart LR
     R --> B --> X --> O
 ```
 
-这篇文章不打算回答“哪个 AI 网关最好”。我想沿着一次请求把问题拆开：网关究竟替调用方做了哪些决定，LiteLLM、Portkey、Helicone 和 Azure 的公开方案分别把哪些问题放在了前面，以及一个基础设计距离企业级平台还差什么。
+问题不在于先回答“哪个 AI 网关最好”，而在于沿着一次请求把问题拆开：网关究竟替调用方做了哪些决定，LiteLLM、Portkey、Helicone 和 Azure 的公开方案分别把哪些问题放在了前面，以及一个基础设计距离企业级平台还差什么。
 
 ## 一、AI Gateway 面对的不是一个模型，而是一组后端资源
 
@@ -498,7 +498,7 @@ fallback 还可能改变模型质量。更高的成功率不一定意味着更�
 
 ## 参考资料
 
-本文使用以下公开资料作为概念和架构参照。它们并非同一类型产品的严格横向测评，文中的归纳和判断仍然是基于这些资料及系统设计分析得出的理解。
+以下公开资料作为概念和架构参照。它们并非同一类型产品的严格横向测评，后面的归纳和判断仍然是基于这些资料及系统设计分析得出的理解。
 
 1. [LiteLLM Routing](https://docs.litellm.ai/docs/routing)：model group、deployment、权重、延迟路由、并发和 cooldown。
 2. [LiteLLM GitHub](https://github.com/BerriAI/litellm)：开源统一模型调用与路由实现。
