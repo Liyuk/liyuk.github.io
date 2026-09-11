@@ -4,11 +4,11 @@ description: "Using multi-backend model access as the setting, this article expl
 locale: en
 createdAt: 2026-09-03
 publishedAt: 2026-09-03
-draft: true
+draft: false
 type: essay
 tags: [ai, architecture, systems-design, routing, reliability, capacity-planning, observability, interview, learning, technology]
 column: { slug: technical-systems, order: 9 }
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/09/what-ai-gateways-do
 citationUrls:
   - https://docs.litellm.ai/docs/routing
@@ -52,7 +52,7 @@ flowchart LR
     R --> B --> X --> O
 ```
 
-This article is not trying to answer “which AI Gateway is best.” It follows one request and breaks the problem apart: what decisions does the Gateway make for its callers, which questions do the public designs of LiteLLM, Portkey, Helicone, and Azure put first, and what separates a basic design from an enterprise platform?
+The useful question is not which AI Gateway is best. It is what happens along one request: what decisions does the Gateway make for its callers, which questions do the public designs of LiteLLM, Portkey, Helicone, and Azure put first, and what separates a basic design from an enterprise platform?
 
 ## 1. AI Gateway faces a set of backend resources, not one model
 
@@ -498,7 +498,7 @@ Being able to explain those questions along one request path is the beginning of
 
 ## References
 
-The following public sources serve as conceptual and architectural references. They are not a strict like-for-like product comparison; the article's synthesis and judgments are derived from these sources together with systems-design analysis.
+The following public sources serve as conceptual and architectural references. They are not a strict like-for-like product comparison; the synthesis and judgments below are derived from these sources together with systems-design analysis.
 
 1. [LiteLLM Routing](https://docs.litellm.ai/docs/routing): model groups, deployments, weights, latency routing, concurrency, and cooldown.
 2. [LiteLLM GitHub](https://github.com/BerriAI/litellm): an open-source unified model-calling and routing implementation.
