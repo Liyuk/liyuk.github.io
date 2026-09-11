@@ -153,4 +153,4 @@ Keep the author's native rhythm, including occasional spoken phrasing, self-corr
 
 ## Handoff
 
-A finished Chinese draft from this skill still needs, in order: `.claude/skills/humanize-writing` (source-voice calibration) → English translation via `agent/translation-spec.md` and `.claude/skills/xinda-ya-translation` → `.claude/skills/content-review` before `draft: false`. This skill does not itself certify publish-readiness.
+A finished Chinese draft from this skill still needs, in order: `.claude/skills/humanize-writing` (source-voice calibration) → English translation via `agent/translation-spec.md` and `.claude/skills/xinda-ya-translation` → `.claude/skills/content-review` before `draft: false`. Content review verifies this handoff; it does not re-enter this skill's interview or section-drafting modes. This skill does not itself certify publish-readiness.

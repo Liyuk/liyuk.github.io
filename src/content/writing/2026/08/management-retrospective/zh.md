@@ -106,6 +106,7 @@ tags: [management, leadership, decision-making, work-leadership]
 - [一线技术管理的三种产出](/writing/2023/03/frontline-engineering-management/) · [从零搭团队时，先设计什么](/writing/2023/06/from-zero-design-the-team/) · [管理者离代码多远才合适](/writing/2023/03/how-close-managers-should-stay-to-code/) · [当一个人失去动力](/writing/2023/03/when-a-team-member-loses-motivation/)
 - [如何判断工作是否让你成长](/writing/2022/01/how-to-tell-if-work-helps-you-grow/) · [能力模型与自我评估](/writing/2022/09/honest-self-assessment/) · [评估潜力时该看什么](/writing/2023/02/evaluating-potential-with-care/) · [自我迭代不是鸡血](/writing/2023/06/self-iteration-feedback-system/) · [成就感不是奖励](/writing/2021/01/achievement-is-not-a-reward/) · [晋升与面试前的自查清单](/writing/2023/08/career-growth-ten-questions/) · [成长里程碑](/writing/2021/08/specific-growth-milestones/)
 - [招聘与职业关系（系列）](/columns/recruiting-and-professional-relationships/)：从[技术招聘](/writing/2022/01/technical-hiring-long-term-judgment/)、[推荐](/writing/2025/03/referral-is-mutual-recognition/)、[人脉](/writing/2021/11/relationships-as-long-term-reciprocity/)到[招聘 Branding](/writing/2024/05/recruiting-brand-is-a-trust-system/)和[校招](/writing/2022/07/campus-recruitment-training/)
+- [管理管理者与多团队结果（系列）](/columns/multi-team-management/)：从多团队组织何时需要二线管理开始，展开人、事、钱、授权、资源、接班与治理边界
 
 ## 八、复盘：让经验回到下一次选择
 

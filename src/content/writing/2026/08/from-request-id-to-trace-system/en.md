@@ -1,8 +1,9 @@
 ---
-title: "From One Request ID to a Lightweight Observability and Reliability System"
-description: "I started with a real API service that had almost no observability, then rebuilt a lightweight system for request correlation, distributed tracing, service discovery, health checks, logging, reliability, and infrastructure governance."
+title: "Starting with One Request ID: A Lightweight Observability and Reliability System for a Small Project"
+description: "Starting from the observability problems of a small API service, this article distills the minimum implementation of request IDs, distributed Traces, service discovery, health monitoring, log queries, reliability, and infrastructure governance."
 createdAt: 2026-08-25
 publishedAt: 2026-08-25
+updatedAt: 2026-09-04
 draft: false
 locale: en
 translationStatus: reviewed
@@ -13,8 +14,6 @@ citationUrls:
   - https://www.w3.org/TR/trace-context/
   - https://opentelemetry.io/docs/specs/otel/logs/
   - https://opentelemetry.io/docs/specs/semconv/http/http-spans/
-  - https://developers.cloudflare.com/workers/observability/exporting-opentelemetry-data/
-  - https://developers.cloudflare.com/tunnel/monitoring/
   - https://docs.datadoghq.com/tracing/trace_explorer/trace_view/
   - https://www.jaegertracing.io/docs/2.dev/features/
   - https://grafana.com/docs/tempo/latest/
@@ -27,58 +26,58 @@ citationUrls:
   - https://www.sentry.help/en/articles/13965104-how-does-transaction-sampling-work
 ---
 
-Recently I had been making a few small tools when a former colleague asked me to help investigate a project. That was also how I properly entered the world of software development. The project was close to launch: most of the core features were already in place, but the system around them was still rough. It exposed a unified API entry point for forwarding requests and coordinating external capabilities. The entry ran on Cloudflare Workers, connected through Cloudflare Tunnel to several VPSs, and the VPSs hosted several services that called one another. Those services also accessed a database, R2, and other external dependencies.
+Recently I was organizing engineering experience from a few small tools and came across a class of small API services whose basic features were already in place, while observability and failure governance remained rough. They expose a unified API entry point for forwarding requests and coordinating external capabilities: requests first pass through an edge access layer, then enter several backend services that access a database, object storage, and other external dependencies.
 
 The work I took on was, more precisely, governance for a distributed architecture: service boundaries, request correlation, runtime state, failure handling, and data reconciliation. My first task was not to redraw the architecture diagram. It was to answer a much simpler question: why had one request become so slow?
 
-My first suspicion was the Tunnel. A request went from the Worker to a VPS through several services, so the network relay seemed like an obvious bottleneck. But after I added timings at each stage and drew a latency flame graph, the answer was different. The Tunnel added very little overhead. Most of the delay came from an internal computation task in one of the services. I optimized that task, and for the first time used data to correct my own guess about the system.
+My first suspicion was the network path. A request crossed the edge layer, a connection layer, compute nodes, and several services, so the network seemed like an obvious bottleneck. But after I added timings at each stage and drew a latency flame graph, the answer was different. The network layer added very little overhead. Most of the delay came from an internal computation task in one of the services. I optimized that task, and for the first time used data to correct my own guess about the system.
 
-That incident became the starting point for this system. At work, I had used mature troubleshooting platforms for years: search logs, open a Trace, expand a latency flame graph, inspect a service topology, analyze a slow request, and jump from a span to its logs. As a user, I never had to think about how IDs were propagated, spans were closed, events were stored, or topology data was aggregated.
+That experience became the starting point for organizing this system. At work, I had used mature troubleshooting platforms for years: search logs, open a Trace, expand a latency flame graph, inspect a service topology, analyze a slow request, and jump from a span to its logs. As a user, I never had to think about how IDs were propagated, spans were closed, events were stored, or topology data was aggregated.
 
-This time I treated the work as a learning exercise. I also brought part of the business-reliability work I had done over the previous year into this smaller system. I was not trying to build another Datadog. I wanted to understand what a small project actually needed before “I think the Tunnel is slow” could become “the evidence points to an internal computation,” and before retries, reconciliation, and recovery could stop depending on guesswork.
+This time I treated the work as a learning exercise. I also brought part of the reliability work I had done over the previous year into this smaller system. I was not trying to build another Datadog. I wanted to understand what a small project actually needed before “I think the network path is slow” could become “the evidence points to an internal computation,” and before retries, reconciliation, and recovery could stop depending on guesswork.
 
-## Define the problem precisely
+## State the problem precisely
 
 The problem was not simply how to generate a Trace for one request. When I took over and maintained the system, it had already been running for some time without systematic observability.
 
-The symptoms were scattered. A failed request was visible only at the entry point. A service could say that it had processed a request, but there was no way to prove it was the same request the entry point had seen. A VPS process could still be alive while the business logic was unusable. A database could accept connections while slow queries or failed backups went unnoticed. R2 could respond to API calls without anyone checking whether objects could be written, read back, and expired as expected.
+The symptoms were scattered. A failed request was visible only at the entry point. A service could say that it had processed a request, but there was no way to prove it was the same request the entry point had seen. A compute process could still be alive while the business logic was unusable. A database could accept connections while slow queries or failed backups went unnoticed. Object storage could respond to API calls without anyone checking whether objects could be written, read back, and expired as expected.
 
 When something broke, we did not usually have a clean error. We had a few incomplete log lines, a few timestamps, and a network diagram, and then we assembled a story that sounded plausible.
 
 The first version of the path looked like this:
 
 ```text
-User → Cloudflare Worker → Cloudflare Tunnel → Service A → Service B → External Dependency
+User → Edge Entry → Service A → Service B → External Dependency
 ```
 
-That diagram explained the system's shape, but it could not prove that a particular request had actually passed through every node. Service A might not have logged the request. Service B might have left only one error line. An external dependency might have had its own request ID. The Tunnel knew something about the connection layer, but no shared ID tied the pieces together.
+That diagram explained the system's shape, but it could not prove that a particular request had actually passed through every node. Service A might not have logged the request. Service B might have left only one error line. An external dependency might have had its own request ID. The connection layer knew something about the network path, but no shared ID tied the pieces together.
 
 So the first step was to make the system answer a few basic questions:
 
 1. Did the request reach the entry point?
 2. Which services and instances did it actually call?
 3. Did each service record its start, end, and failure reason?
-4. Were the VPS, database, R2, and Tunnel healthy?
+4. Were the compute nodes, database, object storage, and connection layer healthy?
 5. Which stages had direct evidence, and which were only estimates from timestamp differences?
 6. Could one ID retrieve the request the next time something went wrong?
 
 That was the point at which logs, Traces, and health checks became distinct to me. They all describe what happened, but at different time scales.
 
 ```text
-Trace       which services one request passed through
-Logs        what a service was doing at the time
-Metrics     how the system behaved over a period
-Health      whether it can work now
-Events      when the system changed state
+Trace       一次请求经过了哪些服务
+Logs        某个服务当时具体发生了什么
+Metrics     一段时间内系统表现如何
+Health      现在还能不能工作
+Events      系统状态什么时候发生了变化
 ```
 
-## I had used mature systems; this time I wanted to build a small one
+## I had used mature systems; this time I wanted to build a lightweight version
 
 The commercial troubleshooting platforms I had used—Datadog APM, New Relic Distributed Tracing, and Sentry Performance—package logs, Traces, errors, slow requests, and service relationships into a finished product. Datadog's Trace View, for example, offers Flame Graph, Span List, Waterfall, and Map views. The operator does not have to design span storage or build a query service first.
 
 Open-source systems are more like a box of parts. Jaeger is a direct Trace backend. Grafana Tempo stores and queries Traces and works with Grafana and Loki. OpenTelemetry standardizes the collection and transport of Traces, Logs, and Metrics. Grafana can also link a Tempo span to Loki logs and back again.
 
-The API relay business I was working in had another layer of difficulty. It was not enough to forward a request. The system also had to register external resources, schedule requests, enforce concurrency limits, switch away from failed resources, and record usage events. A business request could complete successfully while the system still had to answer which instance handled it, which resource it consumed, whether the statistics event was lost, and whether it could be safely retried.
+The service had another layer of difficulty. It was not enough to forward a request. The system also had to register external resources, schedule requests, enforce concurrency limits, switch away from failed resources, and record usage events. A business request could complete successfully while the system still had to answer which instance handled it, which resource it consumed, whether the statistics event was lost, and whether it could be safely retried.
 
 These systems are useful not just because they store data, but because they turn troubleshooting into a repeatable path: find a request, see its services, inspect each duration, open the abnormal node, and jump to the relevant logs. A topology answers a different question: which services have been calling which others recently, and which dependency has become slower or less reliable?
 
@@ -86,18 +85,18 @@ For a personal project, commercial pricing is a real constraint. Logs, Traces, m
 
 So I built a low-cost version. It was not meant to replace Datadog or support every runtime. It only needed the parts this project actually required: one shared identity, a cross-service timeline, log search, a service topology, and device health.
 
-## Start by giving the request one identity
+## Start by connecting the request
 
-The system already had several local IDs: request information from the Worker, a request ID created by a service, Cloudflare's Ray ID, and database connection information. They could all be useful, but they should not be forced into one string.
+The system already had several local IDs: request information from the edge entry, a request ID created by a service, a platform correlation ID, and database connection information. They could all be useful, but they should not be forced into one string.
 
 I ended up giving them different jobs:
 
 ```text
-trace_id       primary correlation key for one end-to-end request
-request_id     compatibility ID for existing logs and tools
-span_id        local ID for one service or stage
-service_id     stable identity of a service instance
-platform_id    external correlation information from a platform
+trace_id       一次端到端请求的主关联键
+request_id     兼容旧日志和排障工具的请求 ID
+span_id        某个服务或阶段自己的局部 ID
+service_id     服务实例的稳定身份
+platform_id    外部平台提供的关联信息
 ```
 
 The entry service generates a W3C Trace Context-compatible `trace_id`. Each service creates its own span and passes the context downstream through `traceparent`. The `trace_id` stays the same across the request; the `span_id` changes with each service and operation.
@@ -105,17 +104,15 @@ The entry service generates a W3C Trace Context-compatible `trace_id`. Each serv
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant W as Worker
-    participant T as Tunnel
-    participant G as VPS Gateway
+    participant E as Edge Entry
+    participant G as Service Gateway
     participant A as Service A
     participant B as Service B
     participant U as External Dependency
 
-    C->>W: HTTP request
-    W->>W: Create root span
-    W->>T: traceparent
-    T->>G: Forward request
+    C->>E: HTTP request
+    E->>E: Create root span
+    E->>G: traceparent
     G->>A: traceparent
     A->>A: Create Service A span
     A->>B: traceparent
@@ -124,16 +121,15 @@ sequenceDiagram
     U-->>B: response
     B-->>A: response
     A-->>G: response
-    G-->>T: response
-    T-->>W: response
-    W-->>C: response
+    G-->>E: response
+    E-->>C: response
 ```
 
 A W3C `trace_id` is 32 hexadecimal characters and a `parent-id` is 16 hexadecimal characters. A normal hyphenated UUID cannot simply be placed into `traceparent`. Client-provided `traceparent` and `x-request-id` also cannot be treated as trusted internal identity: the entry point needs to validate them and generate new internal IDs when necessary.
 
 The custom `x-request-trace-id` remains useful as a compatibility field for older logs, but cross-service propagation should prefer the standard `traceparent`. Otherwise two fields can both be called “request ID” while different services interpret them differently.
 
-## A service name is not enough; I need the instance
+## A service name is not enough; I need the machine
 
 Once there were several services, another problem appeared. A Trace saying `user-service` did not tell me which instance had actually handled the request.
 
@@ -168,47 +164,47 @@ sequenceDiagram
 
 This is what made service registration and discovery click for me. They are not there to make an architecture diagram look more complicated. A service name alone simply cannot explain a real failure.
 
-## Put a timestamp on every meaningful stage
+## Add timestamps to every meaningful stage
 
 Once the IDs were in place, I did not immediately add more fields. I first made the time points precise:
 
 ```text
-received_at       request reached the entry service
-validated_at      request validation finished
-service_start     a service began processing
-dependency_start  a downstream call began
-dependency_end    the dependency returned a result
-service_end       service processing finished
-request_end       the entire request finished
+received_at       入口服务收到请求
+validated_at      请求校验完成
+service_start     某个服务开始处理
+dependency_start  发起下游调用
+dependency_end    下游依赖返回结果
+service_end       服务处理结束
+request_end       整个请求结束
 ```
 
 From these points I can calculate:
 
 ```text
 request_total_ms      = request_end - received_at
-dependency_wait_ms    = dependency_end - dependency_start
+dependency_wait_ms     = dependency_end - dependency_start
 service_process_ms    = service_end - service_start
 ```
 
 I name fields after facts I actually observed. If I only know the time from starting a dependency call to receiving its result, I call it `dependency_response_time`; I do not label it “connection time” or “queue time.” Those could also include connection setup, service queueing, dependency processing, and network round trips.
 
-There is an important limitation that architecture diagrams tend to hide: having one `trace_id` does not mean every segment has been measured accurately. I can reliably obtain the Worker wall time, downstream service processing time, and request result. The per-request duration between the Worker and Tunnel depends on additional instrumentation. DNS, connection setup, dependency response, and the final byte observed by the client may not be recoverable from the server side.
+There is an important limitation that architecture diagrams tend to hide: having one `trace_id` does not mean every segment has been measured accurately. I can reliably obtain the edge entry wall time, downstream service processing time, and request result. The per-request duration between the edge entry and network layer depends on additional instrumentation. DNS, connection setup, dependency response, and the final byte observed by the client may not be recoverable from the server side.
 
-My latency flame graph therefore distinguishes collected timings from values inferred from parent and child spans. Worker wall time and backend latency can be compared directly, but their difference cannot simply be declared to be Tunnel time. It may also contain platform scheduling, network transfer, and uninstrumented work. An observability system should show where it has evidence, and where it is estimating.
+My latency flame graph therefore distinguishes collected timings from values inferred from parent and child spans. Edge-entry wall time and backend latency can be compared directly, but their difference cannot simply be declared to be connection-layer time. It may also contain platform scheduling, network transfer, and uninstrumented work. An observability system should show where it has evidence, and where it is estimating.
 
-### One slow request: I blamed the Tunnel, then optimized computation
+### One slow request: I blamed the network path, then optimized computation
 
 The investigation itself was simple, but it changed how I thought about the system.
 
-When a user reported a slow request, I followed the network path first: Worker to Tunnel, then VPS, then several services. The Tunnel seemed like the obvious suspect. Without timings, that hypothesis was reasonable, but it was still only a hypothesis. The entry point had one total duration, and the service logs contained only scattered start and end lines. Nobody could say where the time had gone.
+In this composite case, when a request became slow, I followed the network path first: edge entry, connection layer, compute node, and then several backend services. The network layer seemed like the obvious suspect. Without timings, that hypothesis was reasonable, but it was still only a hypothesis. The entry point had one total duration, and the service logs contained only scattered start and end lines. Nobody could say where the time had gone.
 
-I did not change the Tunnel first. I added timestamps around the entry point, service calls, internal computation, and request completion. Once those events were organized by `trace_id` into a latency flame graph, the result was clear: the Worker total and backend processing time were close, and the Tunnel added little overhead. Most of the delay came from an internal computation task in a service, and that task sat on the critical path.
+I did not change the network layer first. I added timestamps around the entry point, service calls, internal computation, and request completion. Once those events were organized by `trace_id` into a latency flame graph, the result was clear: the edge entry total and backend processing time were close, and the network layer added little overhead. Most of the delay came from an internal computation task in a service, and that task sat on the critical path.
 
 The question changed from “is the network slow?” to “why is this computation slow?” I broke the task into smaller steps, found the expensive part, and optimized it. Afterward I watched similar requests again. I compared not just one total duration, but the internal task, service processing, and end-to-end duration together.
 
-This does not prove that a Tunnel can never be a bottleneck. It shows how easily the “relay” in an architecture diagram attracts attention before there is evidence. The value of the flame graph is not that it finds the answer automatically. It turns a guess into a testable hypothesis. Even concluding that the Tunnel added little cost is useful evidence.
+This does not prove that the network layer can never be a bottleneck. It shows how easily one boundary in an architecture diagram attracts attention before there is evidence. The value of the flame graph is not that it finds the answer automatically. It turns a guess into a testable hypothesis. Even concluding that the network layer added little cost is useful evidence.
 
-I also separated data by reliability. At request completion, the system writes a queryable Trace summary; a fuller diagnostic summary goes to R2; runtime logs are collected separately. They share `trace_id`, but a successful business request does not guarantee that every diagnostic record has reached storage. Strict business events, best-effort statistics, and diagnostic data need different failure policies.
+I also separated data by reliability. At request completion, the system writes a queryable Trace summary; a fuller diagnostic summary goes to object storage; runtime logs are collected separately. They share `trace_id`, but a successful business request does not guarantee that every diagnostic record has reached storage. Strict business events, best-effort statistics, and diagnostic data need different failure policies.
 
 Asynchronous work should not be forced into one continuous synchronous Trace. If Service A puts a message on a queue and a Consumer handles it later, the producer and consumer have separate spans linked by message context or a span link. Message waiting, retries, backlog, and consumer failures are separate events.
 
@@ -223,31 +219,31 @@ flowchart LR
 
 A queue is not a substitute for reliable logging. It changes the time boundary of a request and introduces acknowledgement, retry, idempotency, dead-letter, and backlog monitoring problems.
 
-## A request can work while the device is unhealthy
+## A request can run while the device is unhealthy
 
-Looking at request Traces still was not enough. Some failures happened before a request arrived: a VPS disk was nearly full, Docker or systemd services kept restarting, database backups failed repeatedly, an R2 write check failed, or the Tunnel was connected while a service's core logic was unusable.
+Looking at request Traces still was not enough. Some failures happened before a request arrived: a compute node disk was nearly full, containers or processes kept restarting, database backups failed repeatedly, an object storage write check failed, or the network layer was connected while a service's core logic was unusable.
 
 I divided health monitoring into several layers:
 
 ```text
-Host health       CPU, memory, disk, network, inode
-Process health    Docker, systemd, agent status
-Service health    port, HTTP readiness, core business check
-Dependency health database, R2, Tunnel, domain, certificate
-Data health       slow queries, backups, object lifecycle, last report time
+主机健康       CPU、内存、磁盘、网络、inode
+进程健康       容器、进程和采集器是否运行
+服务健康       端口、HTTP readiness、核心业务检查
+依赖健康       数据库、对象存储、接入层、域名和证书
+数据健康       慢查询、备份、对象生命周期、最近上报时间
 ```
 
 “The process is alive” is not the same as “the service is healthy.” An HTTP service may still listen while its database pool is exhausted. A database may accept connections while its backups have been failing for days. Object storage may return success while the application cannot correctly read or expire what it wrote.
 
-I did not make health a single Boolean. Each check records its type, time, duration, result, error, version, and device identity. R2 checks include writing, reading, and expiring a test object. Database checks include connectivity, slow queries, and backups. Business services also run a real core-logic check.
+I did not make health a single Boolean. Each check records its type, time, duration, result, error, version, and device identity. Object storage checks include writing, reading, and expiring a test object. Database checks include connectivity, slow queries, and backups. Business services also run a real core-logic check.
 
 ```mermaid
 sequenceDiagram
     participant M as Health Monitor
-    participant V as VPS
+    participant V as Compute Node
     participant S as Service
     participant DB as Database
-    participant R as R2
+    participant R as Object Storage
     participant A as Alerting
 
     M->>V: Collect CPU, memory, disk
@@ -269,13 +265,13 @@ Observability, health checks, reliability, and disaster recovery were in the pla
 Any asynchronous task needs a stateful lifecycle:
 
 ```text
-Message received
-  → Consumer fetches it
-  → Processing starts
-  → Acknowledgement succeeds
-  → Retry on failure
-  → Dead-letter after the limit
-  → Automatic or manual repair
+消息进入队列
+  → Consumer 拉取
+  → 开始处理
+  → 成功确认
+  → 失败重试
+  → 超过次数进入死信
+  → 自动或人工修复
 ```
 
 For each consumer task I record `message_id`, `trace_id`, consumer, attempt, first receive time, last attempt time, acknowledgement time, and failure reason. That tells me whether a message has not been consumed, is being retried, has completed, or is stuck in the dead-letter queue.
@@ -303,20 +299,20 @@ These cases made me separate failure causes into request behavior, service imple
 A task can pass through a sequence like this:
 
 ```text
-External call succeeds
-  → Message is delivered
-  → Consumer processing fails
-  → Database is not written
-  → R2 may already contain an object
+上游调用成功
+  → 消息投递成功
+  → Consumer 执行失败
+  → 数据库没有写入
+  → 对象存储可能已经写入
 ```
 
-Blindly retrying can duplicate the write. The system therefore needs idempotency keys, a state machine, retry records, compensation jobs, and a repair audit. Reconciliation compares database records, R2 objects, message state, Trace summaries, and final business state to find missing, duplicate, expired, or contradictory data.
+Blindly retrying can duplicate the write. The system therefore needs idempotency keys, a state machine, retry records, compensation jobs, and a repair audit. Reconciliation compares database records, object storage objects, message state, Trace summaries, and final business state to find missing, duplicate, expired, or contradictory data.
 
-I have seen a typical version of this in the real system: the main request completed and the user received a success response, while statistics and diagnostic events were still being processed asynchronously. An event entered an in-process queue and was later batch-written to the database; a fuller diagnostic summary went to R2. If the service restarted before the batch was flushed, or if the database or R2 briefly failed, the main flow did not roll back. The result was “the request succeeded, but one statistic is missing” or “the database has the summary, but R2 does not.”
+I have seen a typical version of this in the small service: the main request completed and the user received a success response, while statistics and diagnostic events were still being processed asynchronously. An event entered an in-process queue and was later batch-written to the database; a fuller diagnostic summary went to object storage. If the service restarted before the batch was flushed, or if the database or object storage briefly failed, the main flow did not roll back. The result was “the request succeeded, but one statistic is missing” or “the database has the summary, but object storage does not.”
 
-That led me to separate the main request from its side-channel data by reliability level. A strict business result cannot depend only on an in-memory queue. Best-effort statistics may arrive late, but loss must be detectable. A diagnostic archive can be written later, as long as the original request can be found through `trace_id`. Reconciliation first finds the events that should exist, compares the database, message acknowledgement state, and R2, and creates a compensation task instead of directly changing a row to “complete.”
+That led me to separate the main request from its side-channel data by reliability level. A strict business result cannot depend only on an in-memory queue. Best-effort statistics may arrive late, but loss must be detectable. A diagnostic archive can be written later, as long as the original request can be found through `trace_id`. Reconciliation first finds the events that should exist, compares the database, message acknowledgement state, and object storage, and creates a compensation task instead of directly changing a row to “complete.”
 
-Compensation also cannot simply rerun the entire request. The repair task carries the original business idempotency key, event version, and completed steps. If the database record already exists, it skips that write. If the R2 object is missing, it writes only the archive. If the statistics event was not acknowledged, it publishes it again with a new attempt. The failure then leaves a complete trail and can be reconciled again after repair.
+Compensation also cannot simply rerun the entire request. The repair task carries the original business idempotency key, event version, and completed steps. If the database record already exists, it skips that write. If the object storage object is missing, it writes only the archive. If the statistics event was not acknowledged, it publishes it again with a new attempt. The failure then leaves a complete trail and can be reconciled again after repair.
 
 To me, “repeatable” does not mean mechanically sending the same HTTP request again. It means that the same business intent can produce an explainable result under the same inputs and rules. That requires the business idempotency key, rule or configuration version, input digest, important intermediate states, and final state. A retry can continue from the state machine or rebuild from confirmed events instead of guessing what happened.
 
@@ -342,11 +338,11 @@ flowchart LR
 
 ### Disaster recovery is more than having a backup
 
-VPSs, databases, R2, and observability data each need a recovery path. The design has to answer where a service restarts, what point in time the database can recover to, whether diagnostic objects can be retrieved, whether service registration must be rebuilt, and whether the business can continue while observability is unavailable.
+Compute nodes, databases, object storage, and observability data each need a recovery path. The design has to answer where a service restarts, what point in time the database can recover to, whether diagnostic objects can be retrieved, whether service registration must be rebuilt, and whether the business can continue while observability is unavailable.
 
 At minimum, disaster recovery needs measurable answers: the RTO, the RPO, the most recent backup, the most recent successful restore drill, and whether discovery and health checks work after a switch. The backup job itself belongs in health monitoring. The existence of a backup file is not proof that the system can be restored.
 
-## These views eventually need to meet
+## These views eventually need to converge
 
 When I used mature troubleshooting platforms, I relied on three views.
 
@@ -360,20 +356,20 @@ Slow-request analysis also needs a baseline, or “slow” remains subjective. I
 
 ```mermaid
 flowchart LR
-    A[Request becomes slow] --> B[Enter trace_id]
-    B --> C[Open latency flame graph]
-    C --> D{Find slow node}
-    D -->|Service processing| E[Inspect service logs]
-    D -->|Instance issue| F[Inspect discovery and version]
-    D -->|Async wait| G[Inspect queue backlog and retries]
-    D -->|Dependency issue| H[Inspect database, R2, or VPS health]
-    E --> I[Confirm root cause]
+    A[发现请求变慢] --> B[输入 trace_id]
+    B --> C[查看耗时火焰图]
+    C --> D{定位慢节点}
+    D -->|服务处理慢| E[查看服务日志]
+    D -->|实例异常| F[查看服务发现与版本]
+    D -->|异步等待| G[查看队列积压与重试]
+    D -->|依赖异常| H[查看数据库、对象存储或节点健康]
+    E --> I[确认根因]
     F --> I
     G --> I
     H --> I
 ```
 
-I did not plan to bring over every capability of a commercial platform. For this project, entering a `trace_id` and seeing the service nodes, latency flame graph, failure stage, instance, and related logs—then seeing VPS, database, and R2 health from the service page—was already a useful troubleshooting loop.
+I did not plan to bring over every capability of an industrial platform. For this small service, entering a `trace_id` and seeing the service nodes, latency flame graph, failure stage, instance, and related logs—then seeing compute-node, database, and object-storage health from the service page—was already a useful troubleshooting loop.
 
 ## Storage and governance: writing the data is not the end
 
@@ -381,25 +377,25 @@ I did not put everything into one `traces` table. The data had different purpose
 
 The relational database stores queryable business and operational summaries: request state, service, instance, error stage, health-check result, backup state, and last report time. It needs a stable schema, indexes, and access controls, but it is not a good place for complete request or response bodies or large volumes of high-frequency events.
 
-R2 is better for controlled diagnostic summaries and archives. Objects need a schema version, size limit, stable key, field allowlist, and lifecycle rule. Sensitive fields, authorization headers, request bodies, and response bodies are not stored by default. A successful write is not enough; I also verify that the object can be read back and that expiration actually works.
+Object storage is better for controlled diagnostic summaries and archives. Objects need a schema version, size limit, stable key, field allowlist, and lifecycle rule. Sensitive fields, authorization headers, request bodies, and response bodies are not stored by default. A successful write is not enough; I also verify that the object can be read back and that expiration actually works.
 
-The log system stores runtime events: service logs, Docker/systemd logs, health-check logs, network events, and deployment events. The Trace system stores cross-service spans. They share `trace_id`, service, instance, and time range so logs and Traces can link to each other.
+The log system stores runtime events: service logs, container or process logs, health-check logs, network events, and deployment events. The Trace system stores cross-service spans. They share `trace_id`, service, instance, and time range so logs and Traces can link to each other.
 
 That creates governance questions: who can see logs, which fields are indexed, how long data stays, what happens when a device is retired, and who notices when the collector itself is down. A small project can keep the rules simple, but it cannot have no rules.
 
 ## Cost governance: writes are often more expensive than storage
 
-Once I put data in R2, I started calculating the system's cost seriously. People often worry first about storing years of data, but long-term storage is relatively easy to control: use lifecycle rules, limit retention, compress diagnostic summaries, and move rarely queried data to object storage.
+Once I put data in object storage, I started calculating the system's cost seriously. People often worry first about storing years of data, but long-term storage is relatively easy to control: use lifecycle rules, limit retention, compress diagnostic summaries, and move rarely queried data to object storage.
 
 Writes are easier to overlook. Every span, log event, health-check result, and statistics event may require serialization, a network request, a database write, or an object write. If every small event is sent separately, request count and network overhead can exceed the payload itself. Batching reduces request count, but adds memory use and delay, and creates a window where a restart can lose unflushed data.
 
 I estimate the cost in separate pieces:
 
 ```text
-Daily ingest volume = requests × events per request × bytes per event
-Write cost          = network requests + database writes + object writes
-Storage cost        = daily volume × retention days × replica or compression factor
-Query cost          = index size + scanned data + egress traffic
+每日写入量 = 请求数 × 每请求事件数 × 单事件大小
+写入成本   = 网络请求数 + 数据库写入 + 对象存储写入
+存储成本   = 每日写入量 × 保留天数 × 副本或压缩系数
+查询成本   = 索引规模 + 查询扫描量 + 出口流量
 ```
 
 The answer is not just “store less.” A better approach is to remove low-value events: retain aggregates and exception details for health checks; retain a necessary Trace summary for successful requests; retain the full chain and error context for failed requests. Request bodies, response bodies, authorization information, and other high-risk, high-volume fields stay out of observability data by default.
@@ -422,17 +418,17 @@ If I continue expanding this implementation, I will define the retention policy 
 
 The gap between this system and an industrial platform is mostly scale and governance, not whether there is a Trace page. Mature platforms need an independent collection pipeline for batching, rate limiting, backpressure, retries, dropped-data accounting, and horizontal scaling. With tail sampling, all spans of a Trace also need to reach the same collector so a complete decision can be made at the end.
 
-The logging side is more than putting text in a database. A production log platform also needs full-text search, inverted indexes, high-cardinality field controls, hot and cold storage, compression, sharding, query timeouts, tenant quotas, and lifecycle management. This project has limited query volume and retention, so a simple implementation is acceptable. At larger scale, storage design becomes a primary engineering problem.
+The logging side is more than putting text in a database. A industrial log platform also needs full-text search, inverted indexes, high-cardinality field controls, hot and cold storage, compression, sharding, query timeouts, tenant quotas, and lifecycle management. This project has limited query volume and retention, so a simple implementation is acceptable. At larger scale, storage design becomes a primary engineering problem.
 
 Several other capabilities currently exist only as boundaries or future work:
 
 ```text
-Metrics and SLOs   RED/USE, P95/P99, error budgets, burn-rate alerts
-Alert governance   deduplication, aggregation, suppression, recovery, on-call
-Security           tenants, RBAC, redaction, access audit
-Platform self-checks collector, index, query, and write-path health
-Runtime diagnosis  CPU/memory profiles, GC, threads, goroutines, locks
-Scale              collector clusters, sharding, load balancing, multi-region recovery
+指标与 SLO       RED/USE、P95/P99、错误预算和燃烧率告警
+告警治理         去重、聚合、抑制、恢复通知和值班流程
+安全治理         多租户、RBAC、敏感字段脱敏、访问审计
+平台自监控       采集器、索引、查询、写入链路自身的健康状态
+运行时诊断       CPU/内存 profile、GC、线程、协程和锁分析
+规模化能力       Collector 集群、分片、负载均衡、跨区域容灾
 ```
 
 These are not reasons to keep turning a small project into a large platform. They are capabilities to add when real pressure justifies them. First I would make the collection path reliable and observable, then deepen metrics and alerting. If query volume grows, I would introduce indexes, sharding, and hot/cold storage. If the service count and permission boundaries grow, I would add tenancy and stricter access audit.
@@ -451,19 +447,19 @@ The first stage closed the request and log loop:
 
 The second stage governed devices and dependencies:
 
-6. Monitor VPSs, Docker/systemd, ports, readiness, and business-logic stability;
+6. Monitor compute nodes, containers or processes, ports, readiness, and business-logic stability;
 7. Monitor database connections, slow queries, and backups;
-8. Check R2 writes, reads, and lifecycle;
-9. Monitor domains, certificates, Tunnel, and the observability system itself.
+8. Check object storage writes, reads, and lifecycle;
+9. Monitor domains, certificates, network layer, and the observability system itself.
 
 The third stage handled reliability and data governance:
 
 10. Record acknowledgement, retries, idempotency, dead letters, and backlog for consumers;
 11. Record timeout, degradation, circuit-break, and recovery events;
-12. Use reconciliation jobs to compare database, R2, message, and business state;
-13. Define backup, recovery, and disaster-recovery paths for VPSs, databases, R2, service registration, and observability data.
+12. Use reconciliation jobs to compare database, object storage, message, and business state;
+13. Define backup, recovery, and disaster-recovery paths for compute nodes, databases, object storage, service registration, and observability data.
 
-## The parts that transfer to industrial systems
+## What can transfer between a small project and an industrial system
 
 I would not describe this as building my own Datadog. More accurately, I rebuilt a small part of what mature troubleshooting platforms do inside one small project.
 
@@ -475,4 +471,4 @@ That is the most valuable part of this exercise. I used to know where to click t
 
 The useful result is not a pretty Trace. When someone says “that request was slow,” I can use one ID to find whether it arrived, which services it crossed, which instance handled it, where it waited, whether its dependencies were healthy, and which log provides evidence.
 
-I started with a small project and built a lightweight version. It does not have the scale, recovery guarantees, or automation of an industrial platform. But putting these pieces together in stages gave me a more concrete understanding of why large logging systems, distributed tracing, microservices, message systems, and infrastructure governance are separate systems—and why they eventually need to meet in one troubleshooting entry point.
+I started with a small project and built a lightweight version. It does not have the scale, recovery guarantees, or automation of an industrial platform. But putting these pieces together in stages gave me a more concrete understanding of why large logging systems, distributed tracing, service components, message systems, and infrastructure governance are separate systems—and why they eventually need to meet in one troubleshooting entry point.

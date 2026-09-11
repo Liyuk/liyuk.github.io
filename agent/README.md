@@ -14,3 +14,5 @@ This directory holds curated, Git-tracked reference material for AI collaborator
 | `adr/` | Decision records for the trade-offs behind the content pipeline, bilingual policy, deploy/notify ordering, the Node version contract, and the public/private material boundary. |
 
 Project-level Claude Code skills that operationalize these standards live in `.claude/skills/`. Keep this directory and those skills in sync: if a rule changes here, update the skill that enforces it, and vice versa.
+
+Use one primary path for each content task: draft a new entry with its `write-*` skill; review an existing Chinese draft with `humanize-writing`; perform requested Chinese rewrites with `humanize-writing` then `shuorenhua`; translate or review English with `xinda-ya-translation` then `humanizer`; and use `content-review` only for the final go/no-go judgment. UI skills follow the existing Astro implementation and do not imply a framework migration.

@@ -23,12 +23,28 @@ function run(command, args) {
     stdio: ['ignore', 'pipe', 'pipe'],
     encoding: 'utf8',
   });
-  return { code: result.status, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
+  return {
+    code: result.status,
+    signal: result.signal,
+    error: result.error,
+    stdout: result.stdout ?? '',
+    stderr: result.stderr ?? '',
+  };
 }
 
 function summarize(output, maxLines = 12) {
   const lines = output.trim().split('\n').filter(Boolean);
   return lines.slice(-maxLines).join('\n');
+}
+
+export function summarizeFailure({ code, signal, error, stdout, stderr }) {
+  const sections = [];
+  if (error) sections.push(`无法启动：${error.message}`);
+  if (signal) sections.push(`被信号终止：${signal}`);
+  if (code !== null && code !== undefined) sections.push(`退出码：${code}`);
+  if (stdout.trim()) sections.push(`stdout（末尾）：\n${summarize(stdout)}`);
+  if (stderr.trim()) sections.push(`stderr（末尾）：\n${summarize(stderr)}`);
+  return sections.join('\n\n') || '命令未返回诊断输出。';
 }
 
 async function main() {
@@ -37,21 +53,23 @@ async function main() {
 
   for (const step of STEPS) {
     process.stdout.write(`▶ ${step.name} ... `);
-    const { code, stdout, stderr } = run(step.command, step.args);
+    const result = run(step.command, step.args);
+    const { code } = result;
     if (code === 0) {
       console.log('✔ 通过');
     } else {
       console.log('✘ 失败');
       failed = true;
-      const detail = (stderr || stdout || '').trim();
-      console.log(`\n--- ${step.name} 输出（末尾） ---\n${summarize(detail)}\n`);
+      console.log(`\n--- ${step.name} 输出（末尾） ---\n${summarizeFailure(result)}\n`);
       break;
     }
   }
 
-  console.log(failed
-    ? '\n✘ 有检查未通过，请修复后重跑。'
-    : '\n✔ 工程发布检查全部通过；仍需 content-review 明确 GO、站点所有者批准，并使用带 --confirm-editorial-review 的 publish 命令。');
+  console.log(
+    failed
+      ? '\n✘ 有检查未通过，请修复后重跑。'
+      : '\n✔ 工程发布检查全部通过；仍需 content-review 明确 GO、站点所有者批准，并使用带 --confirm-editorial-review 的 publish 命令。',
+  );
   process.exitCode = failed ? 1 : 0;
 }
 

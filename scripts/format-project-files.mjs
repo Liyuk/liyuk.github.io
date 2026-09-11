@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT_FILES = [
   'AGENTS.md',
+  'CLAUDE.md',
   'CONTRIBUTING.md',
   'prettier.config.mjs',
   '.github/dependabot.yml',
@@ -17,6 +18,7 @@ const SCRIPT_PREFIXES = [
   'audit-links.mjs',
   'audit-seo.mjs',
   'format-project-files.mjs',
+  'publish-check.mjs',
   'run-browser-checks.mjs',
   'run-dev-browser-checks.mjs',
 ];
@@ -25,6 +27,7 @@ const TEST_PREFIXES = [
   'content-audit.test.mjs',
   'draft-smoke.mjs',
   'link-audit.test.mjs',
+  'publish-check.test.mjs',
   'seo-audit.test.mjs',
 ];
 

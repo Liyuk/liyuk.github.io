@@ -1,9 +1,10 @@
 ---
-title: "From One Request to Distributed Architecture: The Evolution of a Multi-Node System"
-description: "Starting from production facts in a multi-node relay system, this article reviews how requests, state, storage, performance, and failures gradually crossed boundaries, and discusses how the next architecture should be reorganized."
+title: "From One Request to a Multi-Node Execution System: How the Architecture Evolves"
+description: "Starting from the fault structure of a multi-node execution system, this article reviews how requests, state, storage, performance, and failures gradually cross boundaries, and discusses how the next architecture should be reorganized."
 locale: en
 createdAt: 2026-08-28
 publishedAt: 2026-08-28
+updatedAt: 2026-09-04
 draft: false
 type: essay
 tags: [systems-design, architecture, distributed-work, reliability, observability, capacity-planning, technology]
@@ -21,7 +22,7 @@ citationUrls:
   - https://stackoverflow.blog/2024/09/23/where-developers-feel-ai-coding-tools-are-working-and-where-they-re-missing-the-mark/
   - https://martinfowler.com/fragments/2026-04-02.html
 ---
-This article discusses a cross-region multi-node execution system. The caller only needs to face a stable service entrance. The system hands the request to the appropriate execution node based on capabilities, capacity, area and current status; the execution node then calls external dependencies, completes the task and returns the result to the caller.
+This article discusses a cross-region multi-node execution system. The caller only needs to face a stable service entrance. The system hands the request to the appropriate execution node based on capabilities, capacity, region and current status; the execution node then calls external dependencies, completes the task and returns the result to the caller.
 
 The system initially only solves the problem of "finding an available execution resource for the caller". As the number of callers, execution nodes, and external services increases, it gradually assumes responsibilities such as protocol adaptation, routing, capacity management, failover, request observation, and node operation and maintenance. It doesn't just move the request from one end to the other, but maintains a stable contract between the caller and the execution resource.
 
@@ -51,33 +52,35 @@ The "distribution" here does not mean copying a service to multiple machines, bu
 
 ```mermaid
 flowchart LR
-    S[单入口<br/>单节点] --> N[多节点<br/>本地选择]
-    N --> R[多区域<br/>区域路由]
-    R --> C[控制面 + 数据面<br/>状态与流量分离]
-    C --> G[可治理系统<br/>观测、恢复与演进]
+    S[Single entry<br/>Single node] --> N[Multiple nodes<br/>Local selection]
+    N --> R[Multiple regions<br/>Regional routing]
+    R --> C[Control plane + data plane<br/>Separate state and traffic]
+    C --> G[Governable system<br/>Observation, recovery, and evolution]
 ```
 
 This evolution path does not require every small project to reach the final step, but explains where complexity arises: the increase of nodes brings selection problems, the increase of regions brings status synchronization problems, and traffic transfer brings capacity and failure problems. In the end, the control plane, data plane and governance mechanism need to jointly answer these questions.
 
-## 1. How does the transit station grow from a forwarding link?
+## 1. How does an execution system grow from a call chain?
 
 ### Start from a single node
 
-Many problems with single-node relays can be temporarily hidden by processes and databases. The transfer station knows where the upstream is, the upstream knows its own status, and the logs are usually written on the same machine. Even without formal service discovery, capacity models, and failover, it is still possible to meet current scale needs.
+Many problems with a single-node execution system can be temporarily hidden by processes and databases. The coordination layer knows where the backend resource is, the backend resource knows its own status, and the logs are usually written in the same place. Even without formal service discovery, capacity models, and failover, it may still meet current scale needs.
 
-But that doesn't mean the problem doesn't exist. They are simply obscured by the condition that there is only one place.
+But that doesn't mean the problem doesn't exist. It is simply obscured while there is only one place to handle the request.
 
-### After adding nodesWhen the transfer station has multiple execution nodes, the system immediately needs to answer: which node the request should be sent to, whether the node is really available, what capabilities the node supports, how much capacity is currently left, and whether the switch will be repeated after a failure.
+### After adding nodes
 
-After adding multiple regions, the global entrance, regional services and local upstream resources will have local information respectively. They may observe different states at different times, or they may be temporarily unable to acknowledge each other due to network partitions. At this point the transit station already has distributed semantics, even if it only has a few machines.
+When the execution system has multiple execution nodes, it immediately needs to answer: which node should receive the request, whether that node is truly available, what capabilities it supports, how much capacity remains, and whether a failure-triggered switch will repeat the execution.
+
+After adding multiple regions, the global entrance, regional services and local execution resources will have local information respectively. They may observe different states at different times, or they may be temporarily unable to acknowledge each other due to network partitions. At this point the execution system already has distributed semantics, even if it has only a few machines.
 
 ### Boundary of review
 
-This article conceals the business name, node name, domain name, account number, capacity and time window, and only retains the fault structure that can be migrated to other systems. What is discussed here is not the technology stack of a certain project, but the architectural problems exposed in the real operation of a multi-node system, and how the next version of the design should respond to these problems.
+This article omits business names, node names, domains, accounts, capacity figures, and time windows, retaining only fault structures that can transfer to other systems. It does not discuss the technology stack of a particular project, but the architectural problems exposed while a multi-node system was running and how the next version of the design should respond.
 
 The point of review is not to prove that the original implementation was useless, but to find out which capabilities have become critical infrastructure and where they are still just maintained by convention, scripts and luck.
 
-## 2. How to deduce architectural gaps from online problems
+## 2. How online problems reveal architectural gaps
 
 The following questions come from an online troubleshooting of an evolving multi-node system. Specific names and operational data have been hidden, leaving only the structure of the problem, evidence, and causal relationships between failures.
 
@@ -98,7 +101,7 @@ Therefore, when troubleshooting "why the request timed out", you cannot just loo
 
 This means that the deadline must be a fact of the request that is passed across the boundary, rather than an isolated number configured by each layer. Streaming requests also need to separate "response header has been submitted" and "complete output has ended", otherwise the keepalive mechanism may just change the expression of the error.
 
-### Passing the health check does not mean that the business path is available.
+### Passing a health check does not mean the business path is available
 
 If `/healthz` of a certain node returns successfully, it can only mean that the detection path is reachable at that moment. It does not necessarily mean:
 
@@ -123,9 +126,11 @@ Such problems are difficult to fix with business code. The system should have on
 = 健康检查地址
 = 监控目标
 = 部署变量
-```Configurations are also production facts and cannot be treated as mere document attachments.
+```
 
-### The log exists, but it cannot prove what happened.
+Configurations are also production facts and cannot be treated as mere document attachments.
+
+### Logs exist, but they cannot prove what happened
 
 A system may already have request logs, trace IDs, upstream and downstream execution attempts, and error logs, but it still cannot answer questions during troubleshooting: which node a certain request passed through, how many attempts occurred, which stage took the longest, and whether the failure occurred before the request or after the response.
 
@@ -135,7 +140,7 @@ Observation data should also have its own schema version, collection success rat
 
 ### A local current limit is magnified into a regional fault
 
-The same status code returned by the upstream may mean both "the long-term resource window has been exhausted" and "the request is too fast in a short period of time". If the downstream converts both to permanently unavailable, the short cooling of a single resource will turn the entire node out of the route; if each node has only one resource of this type, the local problem will further become a regional problem.
+The same status code returned by the upstream may mean both "the long-term resource window has been exhausted" and "the request is too fast in a short period of time". If the downstream converts both to permanently unavailable, a brief cooldown of a single resource will remove the entire node from the route; if each node has only one resource of this type, the local problem will further become a regional problem.
 
 What is really missing here is not a more complex load balancing algorithm, but the granularity and life cycle of states: the system needs to distinguish between temporary cooling, permanent disabling, capacity exhaustion and unknown states, and let the router use these different actions of "downgrade, wait, quarantine or remove".
 
@@ -143,7 +148,7 @@ What is really missing here is not a more complex load balancing algorithm, but 
 
 Capacity refresh, trace archiving, statistical projection and alarm sending are often placed in scheduled tasks or background tasks after the request ends. In order not to affect user requests, these tasks may catch errors and continue running.
 
-The problem is: if this task is the only writer of a routing table or observation table, then "capture and record" does not equal system security. What the downstream reads may be permanently old data, but nowhere is it explicitly told that the refresh task has stopped.
+The problem is: if this task is the only writer of a routing table or observation table, then "capture and record" does not equal operational safety. What the downstream reads may be permanently old data, but nowhere is it explicitly told that the refresh task has stopped.
 
 Background tasks need their own running status, last success time, failure reason, retry and compensation mechanism. Error isolation should prevent one node from bringing down the entire batch, but it cannot turn the failure of a critical task into a silent normal state.
 
@@ -153,11 +158,11 @@ Request logs, streaming shards, and debug archives can eventually fill up the di
 
 This type of failure shows that capacity management is not only targeted at business requests, but also at the system's own observation data: log retention time, disk budget, cleanup failure alarms and pre-deployment space inspection should all be part of the closed loop of operation.
 
-## 3. Deducing architectural gaps from phenomena
+## 3. Inferring architectural gaps from phenomena
 
 ### Let’s first look at what the system must fulfill
 
-When reviewing, you can't just ask "which module has the bug", but also ask what the system must fulfill. Otherwise, a local fix may break another boundary: increasing retries to reduce timeouts may amplify upstream pressure; to improve cache hit rates, expired status may continue to be propagated.A set of cross-region transfer stations may require such guarantees:
+When reviewing, you can't just ask "which module has the bug", but also ask what the system must fulfill. Otherwise, a local fix may break another boundary: increasing retries to reduce timeouts may amplify upstream pressure; to improve cache hit rates, expired status may continue to be propagated. A cross-region execution system may require such guarantees:
 
 ```text
 只读请求：允许在有限时间内切换区域
@@ -173,7 +178,7 @@ These sentences are more useful than "high performance, high availability, and h
 
 Here we also need to distinguish a few words that are often confused together:
 
-- **Impotence**: If the same operation is executed multiple times, the business effect will be the same as if it was executed once;
+- **Idempotence**: If the same operation is executed multiple times, the business effect will be the same as if it was executed once;
 - **Consistency**: The states seen by different nodes satisfy the specified order or constraints;
 - **Persistence**: Confirmed facts will not disappear due to node failure;
 - **Traceability**: The process of requests and status changes can be reconstructed after the fact.
@@ -184,7 +189,7 @@ A single request cannot achieve strong consistency, unlimited availability, mini
 
 Engineering design cannot just write "the system must be highly available". Before entering into implementation, you should at least write down clearly what requests the system serves, what it is not responsible for, what goals it must meet, and which issues are explicitly left for later.
 
-For example, a set of cross-regional transfer stations can be written as:
+For example, a set of cross-regional execution systems can be written as:
 
 | Project | Constraints |
 | --- | --- |
@@ -192,7 +197,7 @@ For example, a set of cross-regional transfer stations can be written as:
 | Not responsible | Solve business consistency for the upstream and do not merge all regional status into a real-time database |
 | Request target | Normal requests are completed within the deadline; failed requests can distinguish between retryable and unknown results |
 | Status Goals | Ownership and critical records have authoritative writers; capacity views allow bounded staleness |
-| Failure target | Single node or single area failure does not propagate into global overload |
+| Failure target | Single node or single region failure does not propagate into global overload |
 | Post-problems | Multi-active control plane, cross-region strongly consistent transactions, automatic expansion and contraction |
 
 The non-goal is not to admit that the system is incomplete, but to prevent one architectural discussion from sucking in all the issues and ending up with neither a deliverable first version nor clear boundaries.
@@ -229,31 +234,33 @@ Engineering writing should not only give the final solution, but also explain wh
 
 This way of writing changes "eventual consistency is better" into a bounded judgment: under what conditions it is established, at what cost, and when it needs to be re-evaluated. The value of architectural decision records is also to preserve context, decisions, and consequences. [MADR](https://adr.github.io/madr/)
 
-## 4. Look at distributed issues along a request chainLet’s first look at the hierarchical structure of this multi-node execution system. The caller requests to enter the global entrance, and the system selects a region based on capabilities, capacity, distance and affinity; the regional control plane selects the local node; the data plane selects the local execution unit, calls external dependencies and returns the results.
+## 4. Examine distributed problems along a request chain
+
+Let’s first look at the hierarchical structure of this multi-node execution system. The caller requests to enter the global entrance, and the system selects a region based on capabilities, capacity, distance and affinity; the regional control plane selects the local node; the data plane selects the local execution unit, calls external dependencies and returns the results.
 
 ~~~mermaid
 flowchart LR
-    U[用户请求] --> G[全局入口 / 数据面]
-    G --> A[区域 A 数据面]
-    G --> B[区域 B 数据面]
-    G --> C[区域 C 数据面]
-    A --> AR[区域 A 本地执行资源]
-    B --> BR[区域 B 本地执行资源]
-    C --> CR[区域 C 本地执行资源]
-    AR --> AU[外部依赖]
-    BR --> BU[外部依赖]
-    CR --> CU[外部依赖]
-    CP[全局控制面] -.期望状态、策略、版本.-> G
-    CP -.-> AC[区域 A 控制面]
-    CP -.-> BC[区域 B 控制面]
-    CP -.-> CC[区域 C 控制面]
-    AC -.注册、租约、容量.-> A
-    BC -.注册、租约、容量.-> B
-    CC -.注册、租约、容量.-> C
-    G -.过程事实、容量信号.-> O[(观测与审计)]
-    A -.过程事实、容量信号.-> O
-    B -.过程事实、容量信号.-> O
-    C -.过程事实、容量信号.-> O
+    U[Caller request] --> G[Global entry / data plane]
+    G --> A[Region A data plane]
+    G --> B[Region B data plane]
+    G --> C[Region C data plane]
+    A --> AR[Region A local execution resources]
+    B --> BR[Region B local execution resources]
+    C --> CR[Region C local execution resources]
+    AR --> AU[External dependency]
+    BR --> BU[External dependency]
+    CR --> CU[External dependency]
+    CP[Global control plane] -.desired state, policy, version.-> G
+    CP -.-> AC[Region A control plane]
+    CP -.-> BC[Region B control plane]
+    CP -.-> CC[Region C control plane]
+    AC -.registration, lease, capacity.-> A
+    BC -.registration, lease, capacity.-> B
+    CC -.registration, lease, capacity.-> C
+    G -.process facts, capacity signals.-> O[(Observability and audit)]
+    A -.process facts, capacity signals.-> O
+    B -.process facts, capacity signals.-> O
+    C -.process facts, capacity signals.-> O
 ~~~
 
 The normal flow of a request can be written as:
@@ -282,7 +289,7 @@ sequenceDiagram
 
 Every arrow in the diagram requires a question: is it a synchronous call or an asynchronous event? Who handles failure? Can you try again? Is the caller relying on live state or a versioned snapshot? If there are no answers to these questions, the architecture diagram simply draws the uncertainty as lines.
 
-### Control plane, data plane and regional control plane
+### Control plane, data plane, and regional control plane
 
 Complex systems usually require at least three levels.
 
@@ -291,13 +298,13 @@ Complex systems usually require at least three levels.
 The global control plane maintains the desired state and global rules of the system:
 
 - which areas and services exist;
-- Which areas are allowed to receive traffic;
-- In which areas a certain capability should be provided;
+- Which regions are allowed to receive traffic;
+- In which regions a certain capability should be provided;
 - Which version and configuration the node uses;
-- Which area is draining;
+- Which region is draining;
 - What are the global policies, resource limits and audit facts.
 
-### Regional control surface
+### Regional control plane
 
 The regional control plane is responsible for bringing global goals to this region:
 
@@ -306,9 +313,9 @@ The regional control plane is responsible for bringing global goals to this regi
 - Local capacity summary;
 - Configuration execution;
 - Node start, stop and rolling update;
-- Local recovery in case of zone failure.
+- Local recovery in case of region failure.
 
-### Regional data surface
+### Regional data plane
 
 The data plane only focuses on hot paths:
 
@@ -316,30 +323,30 @@ The data plane only focuses on hot paths:
 - Select resources based on available views;
 - Execute business;
 - Make limited retries within the deadline;
--Return results and record facts.
+- return results and record facts.
 
 The control plane is responsible for "what the system should look like", and the data plane is responsible for "how to complete this request now". When the control plane fails, the data plane that has obtained valid configuration and lease does not have to stop immediately; when the data plane fails, the control plane should still be able to observe and repair it.
 
 The controller mode of Kubernetes is a similar control loop: the controller observes the current state and gradually pushes it to the desired state, rather than assuming that the two will always be the same in real time. [Kubernetes Controllers](https://kubernetes.io/docs/concepts/architecture/controller/)
 
-## 5. Four closed loops of status, responsibility and fact
+## 5. Four closed loops for state, responsibility, and facts
 
 "Is this service healthy?" is usually too crude. Service discovery and routing have to deal with at least four facts respectively.
 
-### Identity Facts: Who it is
+### Identity facts: who it is
 
 Regions, nodes, services and versions all have stable identities:
 
 ```text
-region_id = us-west-1
-node_id = worker-17
+region_id = region-a
+node_id = node-17
 service = task-executor
 version = release-42
 ```
 
 The fact of status only means that it exists on the roster, but does not mean that it can currently provide services.
 
-### Reachable Facts: Can I contact it?
+### Reachable facts: can I contact it?
 
 DNS resolution, networking, TLS, authentication, and interface responses are all reachability. The node may exist but the network is unreachable; the management interface may be reachable but the data plane is overloaded.
 
@@ -347,9 +354,11 @@ DNS resolution, networking, TLS, authentication, and interface responses are all
 存在 ≠ 可达
 ```
 
-### Ability Facts: What It Can DoWhether a node supports certain business capabilities, protocol versions, long connection methods or authentication methods is a capability fact. Capabilities generally change slowly and are suitable for registration and version management.
+### Ability facts: what it can do
 
-### Capacity Facts: How Much More Can It Do Now
+Whether a node supports certain business capabilities, protocol versions, long connection methods or authentication methods is a capability fact. Capabilities generally change slowly and are suitable for registration and version management.
+
+### Capacity facts: how much more can it do now
 
 Available concurrency, resource limits, temporary hold-down states, latency, and error rates are all capacity facts. It must have an observation time and may begin to expire after being written.
 
@@ -368,11 +377,11 @@ The core of the multi-region design is not to copy all data to the center, but t
 
 | Status | Authoritative | What is saved elsewhere |
 | --- | --- | --- |
-| In-zone resource and lease status | Zone services | Summary, versions, and events |
-| Whether the zone is enabled | Global control plane | The actual execution status of the zone |
-| Local Scheduling and Cooling | Regional Data Plane | Capacity Observation |
+| In-region resource and lease status | Regional services | Summary, versions, and events |
+| Whether the region is enabled | Global control plane | The actual execution status of the region |
+| Local scheduling and cooling | Regional data plane | Capacity observation |
 | Request forwarding facts | Node that actually handles the request | Central correlation, key logging and auditing |
-| Global Capacity View | Central Projection | Timestamped Read-Only Snapshot |
+| Global capacity view | Central projection | Timestamped read-only snapshot |
 
 Both the center and the region can directly modify the same state, which is one of the most dangerous designs. The clearer relationship is:
 
@@ -380,15 +389,15 @@ Both the center and the region can directly modify the same state, which is one 
 Command → 权威节点执行 → Event → 其他节点建立投影
 ```
 
-For example, if the central government wants to disable a regional resource, it sends a command with `command_id`; after the regional execution, it writes the local state and then publishes the `ResourceDisabled` event; after the central consumes the event, it updates the global view.
+For example, if the global control plane wants to disable a regional resource, it sends a command with `command_id`; after the regional execution, it writes the local state and then publishes the `ResourceDisabled` event; after the global control plane consumes the event, it updates the global view.
 
 MQ is only responsible for delivering messages and is not responsible for automatically resolving conflicts. To ensure that local status and events are not separated, it is usually necessary to outbox: status updates and events are written in the same transaction, and then published asynchronously. When the central projection is damaged, it can be reconstructed from events rather than trusting that a certain timing synchronization is complete.
 
 Strongly consistent storage or consensus may be required for unique ownership, business-critical records, and security policies. The core of Raft is to use replicated logs to construct a replicated state machine, rather than having several databases regularly overwrite each other. [Raft paper](https://raft.github.io/raft.pdf)
 
-### Multi-zone is not a fully connected network
+### Multi-region is not a fully connected network
 
-There can be dedicated secure paths between zones, but each zone should not default to discovering and calling all other zones. The more common structure is:
+There can be dedicated secure paths between regions, but each region should not default to discovering and calling all other regions. The more common structure is:
 
 ```text
 Global Control Plane
@@ -397,7 +406,9 @@ Global Control Plane
   └─ Region C Control Plane ── Region C Data Plane
 ```
 
-The global control plane provides regional directories and policies, and the regional control plane is responsible for local service discovery. Only declare cross-region calls when business dependencies do exist:```text
+The global control plane provides regional directories and policies, and the regional control plane is responsible for local service discovery. Only declare cross-region calls when business dependencies do exist:
+
+```text
 Region A → Global State Store
 Region A → Region B Replication
 Region B → Global Configuration
@@ -405,9 +416,9 @@ Region B → Global Configuration
 
 This is not done to make the topology look good, but to control fault propagation, permission boundaries, and the number of connections. Kubernetes uses a centralized API path for node and control plane communication, which also reflects the value of hub-and-spoke for governance. [Kubernetes control-plane communication](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/)
 
-## 6. The most expensive thing is not the machine, but the border
+## 6. The costliest part is not machines, but boundaries
 
-### Communication contract definition failure semantics
+### Communication contracts define failure semantics
 
 HTTP, RPC, gRPC, and Message Queuing are just transports. What really needs to be designed is the contract:
 
@@ -468,7 +479,7 @@ Each layer only selects resources that it has sufficient information and control
 5. 在请求 deadline 内做有限 failover
 ```
 
-The goal of load balancing is not necessarily an average number of requests. The number of requests, concurrency, computation time, long connections, upstream resource limits, and queue length may represent different pressures.
+The goal of load balancing is not necessarily an average number of requests. The number of requests, concurrency, computation time, long connections, execution resource limits, and queue length may represent different pressures.
 
 Affinity protects cache locality, but must give way to overload. Weighted rendezvous hashing, least-loaded, or random by capacity can be used, provided that the selection goal is clear and the algorithm does not lump unexplained multiple indicators into an uncheckable score.
 
@@ -488,7 +499,9 @@ Recovery should proceed layer by layer along resource ownership:
 
 全局容量不足
   → 限流、降级或拒绝
-```Don't let the ingress, regional services, and upstream clients each have their own set of infinite retries. With three retries for each of the three layers, one user request may turn into twenty-seven downstream calls. gRPC's official retry configuration also includes retryable status, maximum number of attempts, exponential backoff, random jitter, and retry throttling as explicit mechanisms. [gRPC Retry](https://grpc.io/docs/guides/retry/)
+```
+
+Don't let the ingress, regional services, and upstream clients each have their own set of infinite retries. With three retries for each of the three layers, one user request may turn into twenty-seven downstream calls. gRPC's official retry configuration also includes retryable status, maximum number of attempts, exponential backoff, random jitter, and retry throttling as explicit mechanisms. [gRPC Retry](https://grpc.io/docs/guides/retry/)
 
 Each request should have only one total deadline and one total retry budget, and each layer consumes the same budget. Otherwise, the so-called high availability will turn into a retry storm.
 
@@ -509,25 +522,25 @@ admission control
 
 The queue cannot grow indefinitely. A request that has been waiting until the client gives up continues to occupy connections, memory and threads, which will only reduce the effective throughput of the entire system.
 
-Different flows should also be isolated: normal requests, long streaming, management operations, and background synchronization should not share an unbounded queue. Traffic transfer after a zone failure must also check the remaining capacity, otherwise a local failure will become a cascading failure. Google SRE considers this process of "failures causing traffic shifts, which cause more failures" as a typical cascading failure, and recommends the use of load drops, degradation, dynamic timeouts, backoffs, and retry budgets. [Google SRE: Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/)
+Different flows should also be isolated: normal requests, long streaming, management operations, and background synchronization should not share an unbounded queue. Traffic transfer after a region failure must also check the remaining capacity, otherwise a local failure will become a cascading failure. Google SRE considers this process of "failures causing traffic shifts, which cause more failures" as a typical cascading failure, and recommends the use of load drops, degradation, dynamic timeouts, backoffs, and retry budgets. [Google SRE: Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/)
 
 Failover can first be drawn as a bounded decision-making process:
 
 ```mermaid
 flowchart TD
-    Q[请求进入] --> A{本地可以接收？}
-    A -->|可以| E[本地选择节点并执行]
-    A -->|过载| D[拒绝、降级或有界排队]
-    A -->|不可达| B{允许转移且候选有容量？}
-    B -->|没有| F[返回明确失败]
-    B -->|有| X[转移一次并记录 attempt]
+    Q[Request arrives] --> A{Can local capacity accept it?}
+    A -->|yes| E[Select a local node and execute]
+    A -->|overloaded| D[Reject, degrade, or queue with a bound]
+    A -->|unreachable| B{Failover allowed and candidate has capacity?}
+    B -->|no| F[Return an explicit failure]
+    B -->|yes| X[Fail over once and record the attempt]
     X --> E
-    E --> O[返回结果并记录过程事实]
+    E --> O[Return result and record process facts]
 ```
 
 The key here is not that "you must change regions after failure", but that the transfer itself must also consume budget, check capacity, and leave evidence. Otherwise failover simply moves the fault from one boundary to another.
 
-## 7. How nodes change and how the system recovers
+## 7. How nodes change and systems recover
 
 ### Life cycle and deployment are also system design
 
@@ -535,24 +548,26 @@ Nodes should have state machines instead of just online and offline:
 
 ```mermaid
 flowchart LR
-    Start((开始)) --> Registered[registered]
+    Start((Start)) --> Registered[registered]
     Registered --> Verified[verified]
     Verified --> Enabled[enabled]
     Enabled --> Serving[serving]
     Serving --> Draining[draining]
     Draining --> Disabled[disabled]
     Disabled --> Decommissioned[decommissioned]
-    Draining -->|恢复接流| Serving
-    Verified -->|校验失败| Disabled
-    Serving -->|故障摘流| Disabled
-    Decommissioned --> End((结束))
+    Draining -->|resume traffic| Serving
+    Verified -->|verification failed| Disabled
+    Serving -->|remove from traffic after failure| Disabled
+    Decommissioned --> End((End))
 ```
 
 The meaning of `draining` is to stop new requests, but allow existing requests to be completed; `disabled` is the routing status, which does not necessarily mean deleting nodes and local resources; `decommissioned` means that the resources can be cleaned up.
 
 When deploying, drain first, then update the program, then verify the capability and capacity, and finally resume serving. If any step fails, the original version and original routing status should be restored. The global control plane also prevents emptying the only areas where a certain capability is available, otherwise the maintenance action itself creates an incident.
 
-### Safety Boundary and Fault DomainIf the regional service owns resource leases, business keys, or other sensitive state, the global control plane should not read the original secret, only the digest and submit the command with permissions. Management interfaces and data interfaces should be separated, service identities should be rotated, and area entry should pass through dedicated security boundaries.
+### Safety boundary and fault domain
+
+If the regional service owns resource leases, business keys, or other sensitive state, the global control plane should not read the original secret, only the digest and submit the command with permissions. Management interfaces and data interfaces should be separated, service identities should be rotated, and regional access should pass through dedicated security boundaries.
 
 Also define the fault domain:
 
@@ -565,7 +580,7 @@ Also define the fault domain:
 上游故障
 ```
 
-Each fault domain requires an independent degradation strategy. If one area hangs up, other areas should not be allowed to wait for its management interface to time out; the global control plane is temporarily unavailable, and the data plane with valid local configuration should not be allowed to stop service immediately.
+Each fault domain requires an independent degradation strategy. If one region hangs up, other regions should not be allowed to wait for its management interface to time out; the global control plane is temporarily unavailable, and the data plane with valid local configuration should not be allowed to stop service immediately.
 
 ## 8. Database, cache and performance
 
@@ -587,16 +602,16 @@ The read and write path of a request can be drawn as:
 
 ```mermaid
 flowchart LR
-    Q[请求] --> I[认证与资源限制读取]
-    I --> V[路由视图读取]
-    V --> E[本地资源执行]
-    E --> W[权威状态写入]
-    W --> X[事件或异步任务]
-    X --> P[统计与审计投影]
-    V -.-> C[区域缓存]
-    C -.失效或过期.-> V
-    W --> D[(权威存储)]
-    P --> H[(历史与分析存储)]
+    Q[Request] --> I[Authentication and limit lookup]
+    I --> V[Read routing view]
+    V --> E[Execute on local resources]
+    E --> W[Write authoritative state]
+    W --> X[Event or async task]
+    X --> P[Analytics and audit projection]
+    V -.-> C[Regional cache]
+    C -.expired or invalidated.-> V
+    W --> D[(Authoritative store)]
+    P --> H[(Historical and analytical store)]
 ```
 
 Every database access asks: does it have to be on the request's main path? Is it reading authoritative state or a derived view? Is it possible to try again after failure? Are repeated writes idempotent? Where are the transaction boundaries?
@@ -638,7 +653,9 @@ At the same time, throughput, concurrency, queue length, database connection usa
 
 Performance optimization should first locate who consumes the budget, and then decide to add indexes, change queries, batch, asynchronous, cache or expand capacity. Optimization without baselines and profiling often just moves complexity from one location to another.
 
-### Database complexity must have boundariesAs business grows, the database will gradually carry transactions, configurations, logs, statistics, queues, and cache invalidation records. Their life cycles, access pressures, and consistency requirements are different, and continuing to be placed in the same model will make migration, lock contention, and troubleshooting increasingly difficult.
+### Database complexity must have boundaries
+
+As business grows, the database will gradually carry transactions, configurations, logs, statistics, queues, and cache invalidation records. Their life cycles, access pressures, and consistency requirements are different, and continuing to be placed in the same model will make migration, lock contention, and troubleshooting increasingly difficult.
 
 There are several questions you can use to decide whether to split:
 
@@ -652,7 +669,7 @@ There are several questions you can use to decide whether to split:
 
 Only when the access patterns, fault domains, or life cycles are truly different, is it worthwhile to split tables, databases, or introduce new storage. Otherwise premature splitting will turn a transaction problem into a distributed consistency problem.
 
-## 9. Turn optimization into hierarchical decision-making
+## 9. Turn optimization into layered decisions
 
 If the previous principles cannot be translated into optimization sequences, they are still just architectural discussions. Real systems cannot solve all problems at once, nor should all components be optimized from the beginning. A more practical approach is to first separate requests, status, calls and storage, and see clearly where each type of cost comes from.
 
@@ -672,7 +689,7 @@ This layer should be completed first:
 
 After doing this, no matter how many nodes a request passes through, it should at least be able to determine whether it has been executed, which step it has been executed to, and whether it can be safely retried. Without this foundation, caching and parallel calls will just produce errors faster.
 
-### First make the area shorter
+### First shorten the in-region path
 
 Within the region, priority is given to solving "one less step" and "one less wait": reuse connections and clients, reduce repeated authentication and configuration reading, use local routing views, limit single-node concurrency and queues, and allow local failures to be digested locally.
 
@@ -732,7 +749,7 @@ P95/P99 延迟能够按阶段解释；
 
 If average latency goes down without explaining an increase in errors, cache expiration, or amplified retries, then the problem is most likely just in a different location.
 
-## 10. How far should we go in the next version?
+## 10. What should the next version achieve first?
 
 Reviewing this point, the next version does not require all enterprise infrastructure to be deployed immediately. Even if there are only a few machines, it is not necessary to use a complete service mesh, consensus cluster, or automatic orchestration platform; but the following semantics cannot continue to rely on conventions:
 
@@ -776,7 +793,9 @@ The minimum system should also have clear acceptance conditions, rather than jus
 能在过载时有界排队或明确拒绝
 能安全 drain、发布、失败回滚和恢复流量
 能通过 request_id 重建一次请求的尝试过程
-```These conditions can be verified by integration testing, fault injection, and small-scale stress testing. They also provide evidence of when to introduce more complex components, rather than being dictated by team size or technology trends.
+```
+
+These conditions can be verified by integration testing, fault injection, and small-scale stress testing. They also provide evidence of when to introduce more complex components, rather than being dictated by team size or technology trends.
 
 ### Observation should retain process facts
 
@@ -798,7 +817,7 @@ Full link traceability does not mean copying all original requests, resource ide
 
 Observations must also be bound to targets. At least you need to know: whether the request success rate reaches the target, whether the P95/P99 delay exceeds the budget, whether failover is increasing, how long the capacity view is stale, what proportion of retry traffic is, and whether the expected low-priority requests are rejected when overloaded. Without these indicators, the system only "has logs" and is far from verifiable reliability.
 
-## 11. How the architecture is formed during iterations
+## 11. How architecture takes shape through iteration
 
 ### Architecture is not a one-time design
 
@@ -820,13 +839,13 @@ This is closer to the basic architectural skills of engineers: when requirements
 
 What really needs to be taken away is not a list of components, but a judgment sequence: first look at user guarantees, then status and responsibilities; find out read, write, call and failure boundaries along the request chain; and finally decide whether to add complex components based on indicators and failure evidence. If you switch to file processing, search, task scheduling or internal platforms, the business will change, but this set of judgments still holds.
 
-## Conclusion
+## Closing thoughts
 
 A distributed system is not about deploying services to multiple machines. That's just the physical form of distribution.
 
 A more complete statement is: it hands status, responsibilities, facts, traffic and failures to different boundaries, and then uses versions, events, protocols, control loops and failure budgets to allow these boundaries to continue to cooperate even when the network is unreliable, nodes will lose contact, and information will expire.
 
-There is no mysterious gap between small and large systems. Small systems may not have complex infrastructure for the time being, but they should retain the correct semantics; large systems should turn these semantics into stronger redundancy, automation, consensus, observation, and governance after the scale, faults, and team boundaries expand.Looking back, the more reasonable evolution sequence is not to continue to add more distributed components to a running system, but to first complete the four closed loops of request, status, storage and failure, and then decide whether stronger replication, consensus or automation is needed based on new evidence. The value of architectural design does not lie in predicting the end of the system from the beginning, but in that after every change, the system still knows the price it has paid.
+There is no mysterious gap between small and large systems. Small systems may not have complex infrastructure for the time being, but they should retain the correct semantics; large systems should turn these semantics into stronger redundancy, automation, consensus, observation, and governance after the scale, faults, and team boundaries expand. Looking back, the more reasonable evolution sequence is not to continue to add more distributed components to a running system, but to first complete the four closed loops of request, status, storage and failure, and then decide whether stronger replication, consensus or automation is needed based on new evidence. The value of architectural design does not lie in predicting the end of the system from the beginning, but in ensuring that after every change, the system still knows the price it has paid.
 
 There is another reality that is difficult to get around: the first version of the design of many systems is already completed by AI. Of course, AI's design capabilities are "ok" - it can quickly expand vague ideas into components, interfaces, processes and codes, and it can also provide several sets of seemingly complete solutions in a few minutes; but it "can't do enough". It usually doesn't know that a certain solution will add one more network call to the hot path, will make fault recovery unverifiable, and will make database writing a new bottleneck. It also doesn't know whether the team has the ability to maintain this complexity for a long time.
 
