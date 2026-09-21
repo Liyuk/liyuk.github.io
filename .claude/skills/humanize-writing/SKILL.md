@@ -17,6 +17,20 @@ Keep three layers separate:
 
 The target of this skill is layer 2, not layer 3. If the user explicitly requests a publish-ready or site-style pass, layer 3 is an additional mode; never apply it silently.
 
+## Material gate before prose
+
+Before drafting a long piece, classify the source as **fragment**, **outline**, or **substantial draft**.
+
+- **Fragment**: a topic, a few claims, a conversation, or a short list of ideas. Produce a brief, ask one focused question, or offer a few possible openings. Do not silently turn it into a complete essay.
+- **Outline**: the argument and examples exist, but the prose is missing. Draft section by section and mark which sentences come from the author's material versus external evidence.
+- **Substantial draft**: revise the existing prose in place. Preserve its unevenness unless a sentence is unclear or factually unsafe.
+
+If the user explicitly asks for a full draft from fragmentary material, keep the scope narrow, label unresolved gaps in working notes, and do not invent scenes, personal history, emotions, or examples. A longer article is not automatically a better answer. Stop expanding when the next paragraph would only restate the thesis, add a generic transition, or complete a symmetry the material did not create.
+
+## Voice lock
+
+When the author has supplied writing samples or the repository has a voice guide, extract a small voice profile before rewriting: how paragraphs open, common sentence lengths, first-person distance, preferred level of uncertainty, repeated words the author actually uses, and how endings stop. Use that profile as a constraint. Do not replace it with a neutral "good Chinese" style, a named author's voice, or a uniformly polished cadence. If the draft becomes smoother but less recognizably owned by the author, revert the smoothing.
+
 ## What humanizes this author's prose
 
 The strongest evidence of human authorship here is not casual vocabulary. It is the relationship between experience and judgment:

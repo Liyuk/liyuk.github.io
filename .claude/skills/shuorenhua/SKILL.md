@@ -32,18 +32,29 @@ description: 检查和清理中英文文本里的 AI 套路，适用于“去 AI
 - 不用机械同义词替换表，也不要为了躲重复而轮换同义词。关键词该重复就重复，换词躲重复本身就是模型腔。默认可以删句、并句、降调、换主语、去总结式收尾；如果进入 `in-place` scope，就只做句内改写。
 - 短语表默认只列代表项，不追求穷举所有变体。遇到新口癖，先按现有模式归类，再决定要不要补词。
 
+## 长文素材门
+
+长文先判断手里的材料够不够，再决定改写力度。只有抽象主题、几条观点或一段访谈时，优先保留为短稿、写作 brief 或问题清单；不要为了达到 essay 长度补出完整的案例、动机、情绪和结论。已有文章才进入长文改写。
+
+每个主要段落至少要有作者提供的事实、具体观察、外部可核验材料、明确判断或下一步动作中的一项。一个段落如果只是在换词、重复上一段、把判断拔高，删掉它或停在上一段。复盘类文章还要检查：复盘是否改变了下一次动作；没有改变时，不要把“持续记录和分析”写成进步。
+
+## 先审后改
+
+当用户说“太像 AI”“去 AI 味”时，先做一次短审计：指出最影响读感的 3—5 个结构问题，判断是素材不足、组织过满、句式过匀，还是措辞模板化。若主要问题是组织过满或素材不足，先缩小范围或保留开放边缘，再改句子。不要用一轮同义词替换来掩盖文章本身没有新增信息。
+
 ## Execution order
 
 按固定顺序做，不要跳步：
 
 1. 判场景：`chat / status / docs / public-writing`
-2. 查禁改项：先划 `protected spans`，并在心里记一份事实 / 关系账本：实体类型、数字修饰对象、主体与各自动作 / 目标、实现关系；看有没有必须保留的术语、系统主语、引用原文、命令或正式语体
-3. 判 Tier：`Tier 1 / Tier 2 / Tier 3`，按问题命中强度判断，不要把 Tier 当作改写力度
-4. 再判档位：`minimal / standard / aggressive`
-5. 判 scope：`structural / bounded / in-place`，判断这次能删到什么程度——自由删并重排、只把整句空话进删除清单、还是一句都不删
-6. 先执行本文件里的最小规则；只要环境里能读 `references/`，默认继续按问题类型补看 [Protected Spans](./references/protected-spans.md)、[Positive Style Contract](./references/positive-style.md)、[微操作手册](./references/operation-manual.md)、[结构反模式](./references/structures.md) 和相关短语表；如果目标是“改完能直接发”，或文本明显属于 README、release note、论坛帖、issue 回复、API reference、FAQ，再补看 [Scene Packs](./references/scene-packs.md)、[场景样本评测](./evals/real-samples.md) 和 [改写示例](./references/examples.md)
-7. 回读拆成两步：先做保真回读，再按需做残留味回读
-8. 输出：默认只给单一推荐版本；用户明确要求“先标问题，不改写”时切到 `annotation mode`
+2. 判材料：片段先做短稿/brief/问题清单；已有长文才做长文改写
+3. 查禁改项：先划 `protected spans`，并在心里记一份事实 / 关系账本：实体类型、数字修饰对象、主体与各自动作 / 目标、实现关系；看有没有必须保留的术语、系统主语、引用原文、命令或正式语体
+4. 判 Tier：`Tier 1 / Tier 2 / Tier 3`，按问题命中强度判断，不要把 Tier 当作改写力度
+5. 再判档位：`minimal / standard / aggressive`
+6. 判 scope：`structural / bounded / in-place`，判断这次能删到什么程度——自由删并重排、只把整句空话进删除清单、还是一句都不删
+7. 先执行本文件里的最小规则；只要环境里能读 `references/`，默认继续按问题类型补看 [Protected Spans](./references/protected-spans.md)、[Positive Style Contract](./references/positive-style.md)、[微操作手册](./references/operation-manual.md)、[结构反模式](./references/structures.md) 和相关短语表；如果目标是“改完能直接发”，或文本明显属于 README、release note、论坛帖、issue 回复、API reference、FAQ，再补看 [Scene Packs](./references/scene-packs.md)、[场景样本评测](./evals/real-samples.md) 和 [改写示例](./references/examples.md)
+8. 回读拆成两步：先做保真回读，再按需做残留味回读
+9. 输出：默认只给单一推荐版本；用户明确要求“先标问题，不改写”时切到 `annotation mode`
 
 执行第 6 步时，先按“模式”处理，再按“词条”兜底：
 
