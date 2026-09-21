@@ -7,7 +7,6 @@ publishedAt: 2026-09-17
 draft: false
 type: essay
 tags: [decision-making, product, strategy, reflection, risk-management, agency]
-column: { slug: thinking-training, order: 12 }
 translationStatus: original
 translationKey: 2026/09/every-choice-is-a-trade
 citationUrls:
