@@ -82,6 +82,17 @@ After an approved section, reread the piece from the beginning. Check continuity
    - a provisional definition of done for this article type.
 5. If the author has not supplied enough personal material for a personal or reflective piece, ask for it or keep the piece explicitly analytical. Never invent autobiographical detail, a conversation, a failure, or a change of mind.
 
+### Material sufficiency gate for an essay
+
+Before outline or section drafting, check four inputs:
+
+- a real trigger or an explicit statement that the piece is external analysis;
+- a bounded central judgment, not just a topic;
+- at least two concrete observations or examples, each marked as firsthand, external evidence, or hypothesis;
+- at least one limitation, counterexample, failure, or unresolved question.
+
+If any input is missing, stay in raw-material/interview mode, narrow the piece to a note, or ask for the missing material. The user's request for an essay does not make fragmentary material sufficient. Run a compression test: if removing abstract summaries, structural signposts, and generic examples leaves too little fact, action, and judgment for the claimed form, do not refill the length with invented cases, generic psychology, or a complete taxonomy.
+
 ## Drafting
 
 1. Start from a real observation, scene, question, disagreement, or failed attempt. Do not manufacture a misconception just to obtain a strong opening.
