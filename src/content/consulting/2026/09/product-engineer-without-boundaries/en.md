@@ -1,5 +1,5 @@
 ---
-title: "The Project Didn't Go Well. Am I Cut Out for Product Engineering?"
+title: "When a Project Gets No Product Support, How Should Engineering Move Forward?"
 description: "A consultation about a high-pressure blended role: looking past the schedule to the business goal, shared expectations, resources, and authority the work requires."
 locale: en
 translationStatus: reviewed
