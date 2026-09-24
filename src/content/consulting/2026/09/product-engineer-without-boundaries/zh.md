@@ -1,5 +1,5 @@
 ---
-title: "项目没做好，我是不是不适合做产品工程师？"
+title: "产品资源排不上，研发接下项目后怎么推进？"
 description: "一次关于高压工作与复合岗位的咨询：先看清自己经历了什么、已经做了什么，再把产品工程师的能力挑战和下一步拆开。"
 locale: zh-CN
 translationStatus: original
