@@ -3,19 +3,21 @@ title: 愿望之后
 description: 一部长篇小说。席班抱着三个月大的沈乐走进沙海，只想带这个孩子活着穿过商路。愿望从不保证幸福，它只会把责任留给愿望实现之后的人。
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
-updatedAt: 2026-08-14
-status: active
+updatedAt: 2026-09-28
+status: archived
 repositoryUrl: https://www.qidian.com/book/1050031941/
 workUrl: https://www.qidian.com/book/1050031941/
 work:
   penName: 盗火的魔法师
   platform: 起点中文网
-  status: 连载中
+  status: 暂停更新（连载实验已完成）
   cover: /images/projects/novel-yuanwang-zhihou/cover.webp
 tags: [fiction, novel, work-leadership]
 ---
 
 [在起点中文网阅读《愿望之后》 ↗](https://www.qidian.com/book/1050031941/)
+
+这次连载实验已完成，目前暂停更新。页面保留作品简介与平台入口。
 
 愿望实现的那一刻，一切就会变好吗？
 
