@@ -6,19 +6,21 @@ translationStatus: reviewed
 translationKey: 2026/08/novel-pandonggui
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
-updatedAt: 2026-08-14
-status: active
+updatedAt: 2026-09-28
+status: archived
 repositoryUrl: https://www.xxsypro.com/book/36408026604477109
 workUrl: https://www.xxsypro.com/book/36408026604477109
 work:
   penName: "The Fire-Stealing Magician"
   platform: "Xiaoxiang Academy"
-  status: "Serializing"
+  status: "Updates paused (serialization experiment complete)"
   cover: /images/projects/novel-pandonggui/cover.webp
 tags: [fiction, novel, work-leadership]
 ---
 
 [Read *Longing to Return East* on Xiaoxiang Academy ↗](https://www.xxsypro.com/book/36408026604477109)
+
+The serialization experiment is complete, and updates are currently paused. This page keeps the novel's introduction and platform link.
 
 The story follows Lu Zhao — she grew up in the Ming Cult of the Western Regions, wearing a longevity lock inscribed with "Long Life." At nineteen she was ordered to enter Tong Pass, delivering messages, guiding the way, and saving people amid the chaos of war.
 
