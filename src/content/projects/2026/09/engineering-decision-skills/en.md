@@ -1,6 +1,6 @@
 ---
-title: "Engineering Decision Skills: Going Further with Reviews, Planning, and Retrospectives"
-description: "A proposal is due for review, three projects do not fit the next planning cycle, and another delivery is late. Five independent Skills, each with an input and a concrete output you can take into a discussion."
+title: "Engineering Decision Skills: What I Want AI to Do in Reviews, Planning, and Retrospectives"
+description: "A proposal is due for review, three projects do not fit the next planning cycle, and another delivery is late. Five independent skills, each with an input and a concrete output you can take into a discussion."
 locale: en
 translationStatus: reviewed
 createdAt: 2026-09-28
@@ -18,13 +18,13 @@ You have to review a proposal tomorrow. It covers queues, retries, alerts, and r
 
 Or the next eight-week cycle is already full. Product wants permissions, support wants self-service exports, and the engineers want to split a service. Every request has a case. Someone still has to write down what gets done, what waits, and when the deferred work comes back for discussion.
 
-I put some of my working methods for technical planning, reviews, retrospectives, metric analysis, and engineering reporting into Engineering Decision Skills. Each of the five Skills handles one of these tasks. Give the relevant Skill the material for the work at hand.
+I collected some of my working methods for technical planning, reviews, retrospectives, metric analysis, and engineering reporting in Engineering Decision Skills. Each of the five skills handles one of these jobs. Give it the material for the task at hand.
 
-So what would you get by installing one? Each section below shows the material you could hand to a Skill and one possible result. Staffing, scheduling, and business figures are example conditions. Each Skill handles a separate request and produces a different kind of deliverable.
+Each of the five sections shows a different skill in use, with the request it receives and a sample response. The staffing, schedule, and business figures are part of the request.
 
 ## `tech-review`: find the rollback that does not actually take you back
 
-Start with a proposal for issuing a coupon after an order is paid. A review can easily become a check for missing document sections. This Skill also follows specific failure sequences: what a retry does after a timeout, and what happens to work already dispatched when a switch is flipped back.
+Start with a proposal for issuing a coupon after an order is paid. A review can easily become a check for missing document sections. This skill also follows specific failure sequences: what a retry does after a timeout, and what happens to work already dispatched when a switch is flipped back.
 
 **The material supplied:**
 
@@ -36,10 +36,10 @@ Start with a proposal for issuing a coupon after an order is paid. A review can 
 >
 > We monitor queue backlog and task failures. To roll back, we turn off workers and return to synchronous issuance. We plan to start with 5% of traffic. Give a conclusion, blockers, and scenarios to exercise before launch.
 
-The key finding is that **switching back to the synchronous path does not cancel asynchronous tasks already in progress.** An order could receive a coupon through both paths. The output turns that risk into review findings the author can act on.
+**Switching back to the synchronous path does not cancel asynchronous tasks already in progress.** An order could receive a coupon through both paths. The review turns that risk into blockers and scenarios the team can reproduce.
 
 <details open>
-<summary>Read the review: two blockers and how to demonstrate they are fixed</summary>
+<summary>Read the review: two blockers and how to show they are fixed</summary>
 
 **Conclusion: hold production rollout; proceed with integration testing in isolation.** A 5% rollout limits the number of orders exposed, but the one-coupon-per-order rule must still hold. The material does not explain how that rule survives timeouts, retries, and rollback.
 
@@ -70,7 +70,7 @@ Once these behaviors are specified and exercise records are available, review wh
 
 </details>
 
-You can send this to the proposal's author: it explains which two things need attention first, why they block launch, and what to bring back for another review. Another proposal may pass. The `tech-review` instructions explicitly allow approval when the evidence does not support a blocker.
+The review names the evidence missing for each blocker and gives the team failure cases to reproduce. When the proposal already addresses those risks, `tech-review` can recommend approval too.
 
 ## `tech-planning`: three worthwhile projects, room for only two
 
@@ -108,27 +108,27 @@ Bound permissions by the customer's confirmed requirements. Suggested acceptance
 
 For the service split, investigate the two deployment conflicts. Compare a split with changes to deployment windows, compatibility practices, or the release process. Reopen the investment decision if evidence shows coupling repeatedly blocking deployment and smaller changes cannot resolve it. Investigation consumes capacity too: estimate it, then authorize it from the available allowance, rather than attaching it to the plan for free.
 
-**Revisit the combination if** the customer cancels or delays permissions acceptance, permission scope exceeds the estimate substantially, the key engineer is unavailable when needed, or new deployment evidence changes the priority. Those changes should reopen the plan rather than leave the original schedule in place.
+**Revisit the combination if** the customer cancels or pushes back acceptance of the permissions work, its scope exceeds the estimate substantially, the key engineer is unavailable when needed, or new deployment evidence changes the priority. Those changes should reopen the plan rather than leave the original schedule in place.
 
 </details>
 
-The meeting can now address which permissions the customer needs, how far exports can be narrowed, and what evidence would justify the service split. Deferred work has a route back into discussion instead of being left at “later.”
+The first meeting can settle what the customer needs to accept and when the key engineer is available. Those answers determine whether exports can stay in the cycle. The service split also has clear conditions for reconsideration.
 
 ## `management-retro`: another late project. Was it really changing requirements?
 
-This Skill also works for ordinary delivery retrospectives, especially when everyone can explain what went wrong but nobody can say what to change on the next project.
+This skill also works for ordinary delivery retrospectives, especially when everyone can explain what went wrong but nobody can say what to change on the next project.
 
 **The input contains delivery records and conflicting accounts:**
 
 > $management-retro
 >
-> Help me review a partner integration planned for six weeks that passed acceptance in week eight. Another similar project starts next week, and I want this retrospective to change how it runs.
+> Help me review a partner integration that was planned to take six weeks but was not accepted until week eight. Another similar project starts next week, and I want this retrospective to change how it runs.
 >
-> In week two, both teams reported “API development complete.” Weekly reports stayed green. We only began applying for the partner's production test access in week four. The first complete integration run was in week five, when we discovered that we sent amounts in yuan while the partner expected fen, and that we disagreed on empty-order behavior. After fixes, acceptance passed in week eight.
+> In week two, both teams reported “API development complete.” Weekly reports stayed green. We only began applying for the partner's production test access in week four. The first complete integration run was in week five, when we discovered that we sent amounts in yuan while the partner expected fen, and that we disagreed on empty-order behavior. After the fixes, the integration was accepted in week eight.
 >
 > Product added a filter field in week four. Developers blame changing requirements; product says the field was not on the main flow and that API quality was the main issue. The records do not contain effort per change or a complete critical path. Preserve the disagreements and recommend the changes most worth trying next time.
 
-One distinction can already affect the next delivery: “API written” and “both sides have run representative data through it” were treated as the same status. The output checks that distinction against the records rather than choosing a side to blame.
+The timeline highlights a distinction that matters to the next delivery: API development was marked complete in week two, but the first full integration run did not happen until week five. The retrospective uses that sequence to assess both explanations without picking a side.
 
 <details>
 <summary>Read the retrospective: supported judgments, unresolved causes, and two experiments for next time</summary>
@@ -151,9 +151,9 @@ Keep resolving differences found during integration and carrying the work throug
 
 </details>
 
-The result gives you two changes to try on the next project and observations that can tell you whether they helped. That takes the retrospective further than tidying up both sides' complaints.
+For the next project, try two changes: run the smallest integration path by week two, and report development completion separately from end-to-end validation. At acceptance, check whether interface differences still surface near the end.
 
-## `metric-decision`: the bot resolves 91% of requests. Can weekend human support go?
+## `metric-decision`: the bot's “resolution rate” hit 91%. Can we drop weekend human support?
 
 This number directly affects service staffing. A mistaken interpretation could simply make a person harder to reach.
 
@@ -163,7 +163,7 @@ This number directly affects service staffing. A mistaken interpretation could s
 >
 > After a support-bot upgrade, “resolution rate” rose from 72% to 91%. We are discussing removing weekend human coverage. The report counts conversations that do not transfer to a person as resolved.
 >
-> In the same week, the human-support button moved into a submenu, and the conversation denominator changed to exclude sessions that ended after only a welcome message. We have neither a comparison recalculated under one definition nor records of whether users completed their tasks. There are a few reports of “cannot find a person” after the upgrade, with unknown sample size. Today we must decide whether to change staffing. Give an action and a way to validate it.
+> In the same week, the button for contacting a human agent moved into a submenu, and the conversation denominator changed to exclude sessions that ended after only a welcome message. We have neither a comparison recalculated under one definition nor records of whether users completed their tasks. A few users reported that they could not find a human agent, though we do not know how many were affected. Today we must decide whether to change staffing. Give an action and a way to validate it.
 
 The question for `metric-decision` is whether “did not transfer” can legitimately mean “resolved.” Even a correctly calculated 91% may not answer what the staffing decision needs to know.
 
@@ -188,9 +188,9 @@ If a conversation shows a task remaining incomplete and human help being blocked
 
 </details>
 
-The output gives you both today's staffing recommendation and conditions to validate next. You can bring more than “there is a problem with the data” back to the discussion.
+A single bot metric is not enough to justify removing all weekend human coverage. This example starts by testing a specific task, checking order status, then considers coverage by task and time period.
 
-## `eng-reporting`: plenty of work done, but your manager needs to decide on a loaned engineer
+## `eng-reporting`: after the release-platform pilot, can an engineer join for two weeks?
 
 The final example is a release-platform status report. The technical details and the team's conclusion already exist. The recipient needs to understand what they are being asked to approve.
 
@@ -198,22 +198,22 @@ The final example is a release-platform status report. The technical details and
 
 > $eng-reporting
 >
-> Turn these notes into a progress report for the engineering director, who must decide whether to loan us an engineer familiar with the old release scripts for two weeks starting next week.
+> Turn these notes into a progress report for the engineering director, who must decide whether to make an engineer familiar with the old release scripts available to our team for two weeks starting next week.
 >
 > Four-week pilot, eight services planned, six connected. The other two use old release scripts and do not have automated rollback integrated. The connected services have made 17 releases; one rollback still required manual handling.
 >
 > Records show median manual operation time for the same six services falling from 18 minutes before the pilot to 6 minutes afterward. These are manual records; we did not measure waiting time or failure rate. Business teams are frustrated by slow onboarding. I handle integration standards and cross-team coordination; another group built the execution engine.
 >
-> Existing review conclusion: complete rollback before expanding. The team proposes borrowing one person for two weeks. That duration is an estimate and the loan is unapproved. If nobody is available, maintain the six-service pilot without promising a date for the other two. Preserve contribution boundaries and data limitations.
+> Existing review conclusion: complete rollback before expanding. The team proposes temporary support from one engineer for two weeks. That duration is an estimate and the assignment is not approved. If nobody is available, maintain the six-service pilot without promising a date for the other two. Preserve contribution boundaries and data limitations.
 
-The output below can serve as the report body. It leads with the staffing decision and uses technical progress to explain the request.
+The report starts with the request and uses the technical progress to explain it.
 
 <details>
 <summary>Read the report: requested support, observed results, and the plan if support is unavailable</summary>
 
 **Release-platform pilot progress and a request for two weeks of engineering support**
 
-We recommend borrowing an engineer familiar with the old release scripts next week, with an estimated two weeks to complete rollback adaptation and validation before reconsidering expansion. The loan awaits approval. If support is unavailable this cycle, the team will maintain the current six-service pilot and will not commit to an onboarding date for the remaining two services.
+We recommend assigning an engineer familiar with the old release scripts to the team next week for an estimated two weeks, to adapt and validate rollback before reconsidering expansion. The assignment awaits approval. If support is unavailable this cycle, the team will maintain the current six-service pilot and will not commit to an onboarding date for the remaining two services.
 
 Over four weeks, six of eight planned services have joined the pilot and completed 17 releases. Manual records for the same six services show median manual operation time decreasing from 18 minutes before the pilot to 6 minutes afterward, providing initial evidence of less time spent on operating steps. This excludes release waiting time, and no failure-rate data has been collected. It does not yet establish improved overall release efficiency or reliability. One of the 17 releases still required manual rollback.
 
@@ -225,30 +225,30 @@ The director's decision is whether this staffing support can be provided. If app
 
 </details>
 
-A substantial report does not need to attribute the whole team's results to one person or turn manual records into a claim of comprehensive benefit. Connecting observed results, the current obstacle, and the requested support makes the recipient's decision easier. `eng-reporting` also supports project summaries, self-reviews, and promotion narratives, grounded in work actually done and the evidence for it.
+The report makes the support request and fallback plan explicit, while separating what the manual records show from outcomes that have not been measured. `eng-reporting` can also help with project summaries, self-reviews, and promotion cases, based on work you actually did and evidence you can point to.
 
-## A model can do this directly. Why install a Skill?
+## A model can do this directly. Why install a skill?
 
-You can ask directly. A capable model with a complete task description may produce an equally useful result. I do not have enough comparative evidence to claim that installing these Skills will always outperform a direct request.
+You can ask directly. A capable model with a complete task description may produce an equally useful result. I do not have enough comparative evidence to claim that installing these skills will always outperform a direct request.
 
 What I want to save is repeated instruction about how the work should be done. Reviews need references to the proposal, a distinction between blockers and personal preferences, and conditions for reconsideration. Plans need opportunity costs and checks for double-booking key people. Retrospectives need to preserve disagreements and end with changes worth trying next time. Each task has its own requirements that are easy to omit.
 
-Those requirements live in each Skill's `SKILL.md` and reference files. Invoke a Skill, provide this task's material, constraints, and decision, and reuse the working method. The instructions are readable and editable; adjust a rule that does not suit your team.
+Those requirements live in each skill's `SKILL.md` and reference files. Invoke the one you need, provide the task's material, constraints, and decision, and reuse its working method. The instructions are readable and editable; adjust a rule that does not suit your team.
 
-That is also why five independent Skills fit this work better than one assistant covering all of engineering management. A proposal review produces findings and a conclusion. Reporting expresses an existing judgment for a particular reader. A retrospective reexamines why events unfolded as they did. Since they do different work on the material, separate Skills let installation and use follow the current task.
+I split the collection into five because these jobs call for different judgments. A review looks for risks that affect a release; a report presents an existing conclusion to a decision-maker; a retrospective uses the event record to find a change worth trying. Each skill keeps the instructions for its job, so you can call the one you need without restating its working rules every time.
 
-For occasional paragraph polishing, a direct request is convenient enough. If you do these jobs every week and often need another round of “do not rewrite it; tell me whether it can ship,” “you counted that person twice,” or “which parts are your inference,” try one Skill on an old document.
+For occasional paragraph polishing, a direct request is convenient enough. If you do these jobs every week and often need another round of “do not rewrite it; tell me whether it can ship,” “you counted that person twice,” or “which parts are your inference,” try one skill on an old document.
 
 ## Try it on a proposal you have already reviewed
 
-I suggest starting with `tech-review`. Choose a proposal you have already assessed and whose issues you understand. Check whether the Skill identifies problems that affect the decision, mistakes implementation preferences for defects, and gives recommendations you could send to the author.
+I suggest starting with `tech-review`. Choose a proposal you have already assessed and whose issues you understand. Check whether it identifies problems that affect the decision, mistakes implementation preferences for defects, and gives recommendations you could send to the author.
 
-Install this Skill for Codex:
+Install this skill for Codex:
 
 ```sh
 npx skills add Liyuk/engineering-decision-skills --skill tech-review --agent codex --global
 ```
 
-Then enter `$tech-review`, paste the proposal, and specify whether the decision concerns a direction, a pilot, or production rollout. You can also try the first example in this article. To use another Skill, replace the name in the installation command with the one for your task.
+Then enter `$tech-review`, paste the proposal, and specify whether the decision concerns a direction, a pilot, or a production rollout. You can also try the first example in this article. To use another skill, replace the name in the installation command with the one for your task.
 
-The project currently contains five Skills, 39 evaluation cases, and three reports based on public engineering material, with behavioral smoke checks primarily in Codex. These are limited case checks; they have not established that the Skills generally outperform direct requests across models, teams, and tasks. Code implementation and execution are outside their scope. The current version, full instructions, and cases are in the [project repository](https://github.com/Liyuk/engineering-decision-skills).
+The project currently contains five skills, 39 evaluation cases, and three reports based on public engineering material. Behavioral smoke checks have focused mainly on Codex. These limited case checks do not establish that the skills generally outperform direct requests across models, teams, and tasks. Code implementation and execution are outside their scope. The current version, full instructions, and cases are in the [project repository](https://github.com/Liyuk/engineering-decision-skills).
