@@ -91,7 +91,7 @@ try {
 
   await page.goto(`${BASE}/photos/maomao/`, { waitUntil: 'networkidle' });
   check('gallery detail keeps image carousel controls', await page.locator('[data-gallery-previous], [data-gallery-next]').count() === 2);
-  check('singleton gallery has no empty entry navigation', await page.locator('.post-pagination a').count() === 0);
+  check('gallery navigation links to the new published gallery', await page.locator('.post-pagination a[href="/photos/monument-valley-2/"]').count() === 1);
   check('singleton gallery has no empty related section', await page.locator('.related-entries').count() === 0);
 
   await page.goto(`${BASE}/projects/`, { waitUntil: 'networkidle' });
