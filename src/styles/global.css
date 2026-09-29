@@ -441,6 +441,7 @@ h1, h2, h3, p { margin-top: 0; }
 .about-background,
 .consulting-columns,
 .about-contact,
+.about-maomao,
 .about-boundary,
 .about-guestbook {
   max-width: 950px;
@@ -452,6 +453,7 @@ h1, h2, h3, p { margin-top: 0; }
 .about-background h2,
 .consulting-columns h2,
 .about-contact h2,
+.about-maomao h2,
 .about-guestbook h2 {
   margin: 0 0 1.5rem;
   font-family: var(--serif);
@@ -964,7 +966,7 @@ h1, h2, h3, p { margin-top: 0; }
   .hero h1, .page-heading h1 { font-size: clamp(3rem, 13vw, 4.6rem); }
   .hero-copy { max-width: 31rem; margin-top: 2.25rem; }
   .split-section { display: block; padding-block: 4rem; }
-  .about-map, .about-fiction, .about-cooperate, .about-contact, .about-boundary, .about-guestbook { padding-block: 3rem; }
+  .about-map, .about-fiction, .about-cooperate, .about-contact, .about-maomao, .about-boundary, .about-guestbook { padding-block: 3rem; }
   .links-friends, .links-apply { padding-block: 3rem; }
   .section-intro { margin-bottom: 3.5rem; }
   .practice-grid { grid-template-columns: 1fr; margin-inline: auto; }

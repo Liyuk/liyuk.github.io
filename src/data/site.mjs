@@ -21,6 +21,11 @@ export const site = {
     x: 'https://x.com/liyukli',
     linkedin: 'https://www.linkedin.com/in/liyuk/',
   },
+  // 毛毛的账号单独维护，避免混入站主的社交链接。
+  maomaoSocial: {
+    instagram: 'https://www.instagram.com/where_isfunding/',
+    tiktok: 'https://www.tiktok.com/@where_isfunding',
+  },
   // 友链（/links 页）：常读、也愿意推荐的独立站点，按「开放互换」维护。
   // name/url 跨语言一致；description/descriptionEn 分别给中英文一句话介绍。
   // 友链多了以后，可给每条加 group 字段（值用 i18n key）做分组展示。
