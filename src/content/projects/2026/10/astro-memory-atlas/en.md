@@ -3,14 +3,14 @@ title: "A Memory Atlas for Two: A Self-Hosted Keepsake Site Template"
 description: "A bilingual keepsake site template built with Astro, with a photo album, relationship timeline, yearly reviews, and place map, plus a workflow for using AI to help maintain the content."
 createdAt: 2026-10-07
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 status: active
 repositoryUrl: https://github.com/Liyuk/astro-memory-atlas
 hero:
   src: /images/projects/astro-memory-atlas/home.webp
   alt: "The demo homepage, with the site title, anniversary countdowns, and album links over a riverside illustration"
   caption: "The demo homepage. The people, dates, and illustrations are template examples you can replace with your own content."
-draft: true
+draft: false
 tags: [astro, static-site, privacy, relationships, personal-publication]
 translationKey: 2026/10/astro-memory-atlas
 ---
@@ -21,7 +21,7 @@ I'd also been to a friend's wedding where they put together something that felt 
 
 Then I started working out the requirements. The photos were a given, but I also wanted to keep the dates, places, and what happened. Ordering everything by time might not be enough. Sometimes you want to look back at a particular year; sometimes it's a place that comes to mind. And some things haven't happened yet, but you've talked about doing them together someday. Those needs gradually became the album, relationship timeline, yearly reviews, place map, and a wish list called "Someday, Together."
 
-I've now turned it into an Astro template you can copy, modify, and deploy, released under the MIT license. You can start with the [live demo](https://liyuk.com/astro-memory-atlas/); the screenshots below come from that site too. It uses fictional people and original abstract illustrations. Replace those with your own photos and stories when you use it.
+I've now turned it into an Astro template you can copy, modify, and deploy, released under the MIT license. You can start with the [live demo](https://liyuk.github.io/astro-memory-atlas/); the screenshots below come from that site too. It uses fictional people and original abstract illustrations. Replace those with your own photos and stories when you use it.
 
 ## How the memories fit into a site
 

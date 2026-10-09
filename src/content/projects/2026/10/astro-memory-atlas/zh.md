@@ -10,7 +10,7 @@ hero:
   src: /images/projects/astro-memory-atlas/home.webp
   alt: 演示站首页，河岸插画前显示站点标题、纪念日倒计时和相册入口
   caption: 首页演示。人物、日期和插画都是模板示例，可以替换成自己的内容。
-draft: true
+draft: false
 tags: [astro, static-site, privacy, relationships, personal-publication]
 translationKey: 2026/10/astro-memory-atlas
 ---
@@ -21,7 +21,7 @@ translationKey: 2026/10/astro-memory-atlas
 
 接下来才是拆需求。照片肯定要有，日期、地点和当时的事情也得一起留下。只按时间排，可能还是不够；有时候想看的是某一年的生活，有时候想起的是某个地方，也有些事情还没发生，只是两个人说过以后想一起做。顺着这些需要，才慢慢做出了相册、关系时间线、年度回顾、地点地图，还有“以后一起”的愿望清单。
 
-现在我把它整理成了可以复制、修改和部署的 Astro 模板，用 MIT 许可开源。可以先打开[在线演示](https://liyuk.com/astro-memory-atlas/)看看，下面的截图也来自这个演示站。示例用的是虚构人物和原创抽象插画，使用时再换成自己的照片和故事。
+现在我把它整理成了可以复制、修改和部署的 Astro 模板，用 MIT 许可开源。可以先打开[在线演示](https://liyuk.github.io/astro-memory-atlas/)看看，下面的截图也来自这个演示站。示例用的是虚构人物和原创抽象插画，使用时再换成自己的照片和故事。
 
 ## 记忆怎么变成一个站点
 
