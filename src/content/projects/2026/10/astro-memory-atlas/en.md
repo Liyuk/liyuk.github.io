@@ -15,9 +15,9 @@ tags: [astro, static-site, privacy, relationships, personal-publication]
 translationKey: 2026/10/astro-memory-atlas
 ---
 
-I'd been working on a few things for an anniversary and wanted to put our photos into an album, so I looked for an existing project I could use. I found quite a few wedding sites. I also wanted somewhere to record everyday life, keep adding to it, and look back a few years later. Nothing I found quite fit, so I started building it around what I needed, a little at a time.
+I'd been working on a few things for an anniversary and wanted to put our photos into an album. I first looked for an existing project I could use. I found quite a few wedding sites, but nothing that quite fit. I wanted to record everyday life too, keep adding to it, and look back a few years later. After looking around, I started building it around what I needed, a little at a time.
 
-Another idea came from a friend's wedding I'd attended. They had put together something that felt a bit like a museum, and it stayed with me. When I started this site, I wanted some of that experience too: somewhere you could wander through and read about what was happening behind the photos.
+I'd also been to a friend's wedding where they put together something that felt a bit like a museum. It stayed with me. When I started this site, I wanted some of that experience too: somewhere you could wander through, look at the photos, and read the stories behind them.
 
 Then I started working out the requirements. The photos were a given, but I also wanted to keep the dates, places, and what happened. Ordering everything by time might not be enough. Sometimes you want to look back at a particular year; sometimes it's a place that comes to mind. And some things haven't happened yet, but you've talked about doing them together someday. Those needs gradually became the album, relationship timeline, yearly reviews, place map, and a wish list called "Someday, Together."
 
@@ -31,13 +31,13 @@ One thing to work out first is how to record a memory and connect it to the othe
 
 The homepage starts with a few selected memories. In the demo, they're a riverside walk, a spring picnic, and a small celebration. You can choose your own when you replace the content. Scroll down to continue into the album.
 
-Anniversaries and birthdays are on the homepage too. Anniversary cards show a countdown. "Revisit this memory" opens the anniversary details and the titles of up to three memories with matching dates; the birthday buttons open a greeting. You might not happen to visit on the right day to see these effects, so I left in a debug panel. Change the simulated date to preview them, or jump directly to the album and map. Once your own content is ready, you can turn the panel off in the configuration.
+Anniversaries and birthdays are on the homepage too. Anniversary cards show a countdown. "Revisit this memory" opens the anniversary details and the titles of up to three memories with matching dates. The birthday buttons open a greeting.
 
 The album lets you search by title or place and filter by year. If you just want to browse, switch to the page-turning view. Open a photo and its date, description, and place stay beside it, so you can read what was happening at the time.
 
 ![The album's page-turning view, with a riverside illustration on the left and the date, title, story, and place on the right](/images/projects/astro-memory-atlas/album.webp)
 
-In this view, the photo and its record share a page.
+*In this view, the photo and its record share a page.*
 
 ### The timeline and yearly reviews
 
@@ -45,7 +45,7 @@ The relationship timeline has two lines for the stages each person has been thro
 
 ![The demo relationship timeline, with two people's paths alongside years, places lived, and related memories](/images/projects/astro-memory-atlas/journey.webp)
 
-The timeline connects each person's experiences with their shared memories.
+*The timeline connects each person's experiences with their shared memories.*
 
 For a yearly review, you can give the year a theme and choose a few memories you especially want to keep, followed by the rest of that year's records. The selections can have their own titles and descriptions, while using the original photos. Click a card to return to the album. You choose which memories belong in the yearly selections or on the timeline; dates alone don't make those decisions.
 
@@ -55,7 +55,7 @@ The map lets you find memories by place. Choose a location to see the related ph
 
 ![The demo place map, with location markers on an illustrated map and a memory card for the selected place beside it](/images/projects/astro-memory-atlas/places.webp)
 
-You can also find the same memories by where they happened.
+*You can also find the same memories by where they happened.*
 
 "Someday, Together" is for things that haven't happened yet: places to go, things to do, and the kind of days you'd like to have. There are no deadlines or progress bars. For now, it's enough to write the wishes down. They're currently separate from the memories of things that have happened, but the two could be connected later. Once a wish comes true, adding a date, photos, and a place could turn it into a memory that also appears in the album, map, and yearly review.
 
@@ -67,15 +67,17 @@ There's no visual editor at the moment; you edit the content in the repository f
 
 The template supports Chinese and English, so memories, places, reviews, and wishes need copy in both languages. You can switch languages at the top of the page. The choice is saved in the current browser, and new visitors see Chinese by default.
 
+You might not happen to visit on the right day to see the anniversary and birthday effects, so I left in a debug panel. Change the simulated date to preview them, or jump directly to the album and map. Once your own content is ready, you can turn the panel off in the configuration.
+
 The example images are in `src/assets/images/demo/`. When replacing a photo, update its path and alternative text in the memory record too. The illustrated map and Leaflet files are also in the repository; the page doesn't request online map tiles or external fonts.
 
 ### Using AI to help organize things
 
-With only a little content, editing a few files yourself is fine. As it builds up, a new memory may also need a place link, an entry in a yearly review, or a spot on the timeline. The bilingual copy and photo descriptions need attention too. Maintaining all of that by hand gets a bit tedious.
+With only a little content, editing a few files yourself is fine. Adding a memory sounds like adding a photo and a few sentences, but it may also need a place link, an entry in a yearly review or on the timeline, and bilingual copy and photo descriptions. Once there's more content, all these small edits get a bit tedious.
 
-I think this kind of project is a good fit for help from AI. I can write down the material and what I have in mind, then ask a coding assistant to organize it using the existing data structure, draft the Chinese and English copy, and check dates, places, and references. It can edit the files directly; I then read the diff to see what it changed. When deleting a memory, it should also check whether other pages still reference that id.
+I think AI can help maintain this kind of project. You can give a coding assistant the material and what you have in mind, then ask it to follow the project's existing format, draft the Chinese and English copy, and edit the files directly. Afterward, read the diff to see what it changed and check the dates, places, and references. If you delete a memory, check whether other pages still reference that id too.
 
-But I still need to think it through myself. What is worth recording? Which memories belong in the yearly selections? How should the timeline read so it feels like our own experience? It helps to make those decisions before asking AI to do the work. The project doesn't currently have built-in AI features; this is a way of maintaining the repository with a coding assistant.
+But I still need to decide what's worth recording, which memories I want in the yearly review, and how to write the timeline so it feels like our own experience. Making those decisions first makes it much easier to ask AI to edit the files. The site doesn't have built-in AI; I'm talking about maintaining the repository with a coding assistant.
 
 ### Checks and public content
 
