@@ -94,7 +94,7 @@ export function buildEmailHtml({ blocks }) {
       `<h1 style="margin:0 0 14px;font-family:'Iowan Old Style','Baskerville','Noto Serif SC','Songti SC',Georgia,serif;font-size:28px;font-weight:500;letter-spacing:-.035em;line-height:1.15;color:#232522;">${safeTitle}</h1>`,
       metaLine,
       `<p style="max-width:520px;margin:0 0 22px;font-size:16px;line-height:1.7;color:#696a65;">${esc(summary)}</p>`,
-      `<p style="margin:0 0 24px;"><a href="${esc(absoluteUrl)}" style="color:#232522;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none;">阅读全文 · Read more <span style="color:#35685d;">↗</span></a></p>`,
+      `<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tbody><tr><td align="left" bgcolor="#35685d" style="padding:12px 20px;border-radius:4px;"><a href="${esc(absoluteUrl)}" style="display:block;border-radius:4px;background-color:#35685d;color:#fff;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none;">阅读全文 · Read more ↗</a></td></tr></tbody></table>`,
       `</div>`,
     ].join('');
   });

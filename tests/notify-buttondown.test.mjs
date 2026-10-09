@@ -141,6 +141,10 @@ test('buildEmailHtml follows the site visual language', () => {
   assert.match(html, /color:#35685d/);
   assert.match(html, /Iowan Old Style/);
   assert.match(html, /border-top:1px solid #ddd8ce/);
+  assert.match(html, /<table role="presentation"/);
+  assert.match(html, /bgcolor="#35685d" style="padding:12px 20px;border-radius:4px;"/);
+  assert.match(html, /display:block;border-radius:4px;background-color:#35685d;color:#fff/);
+  assert.match(html, /阅读全文 · Read more/);
   assert.doesNotMatch(html, /#1456F0|border-radius:8px/);
 });
 
