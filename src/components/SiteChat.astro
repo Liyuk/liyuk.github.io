@@ -61,6 +61,21 @@ const copy = i18n(locale).chat;
     }
     const locale = window.location.pathname.startsWith('/en/') ? 'en' : 'zh-CN';
     const conversation: { role: 'user' | 'assistant'; content: string }[] = [];
+    const encoder = new TextEncoder();
+    const historyBytesLimit = 4_000;
+    const historyMessageBytesLimit = 1_200;
+
+    const limitHistoryText = (text: string) => {
+      let result = '';
+      let byteLength = 0;
+      for (const character of text) {
+        const characterBytes = encoder.encode(character).byteLength;
+        if (byteLength + characterBytes > historyMessageBytesLimit) break;
+        result += character;
+        byteLength += characterBytes;
+      }
+      return result;
+    };
 
     const setOpen = (open: boolean) => {
       panel.hidden = !open;
@@ -135,8 +150,17 @@ const copy = i18n(locale).chat;
         const result = await response.json() as ChatResponse;
         if (!response.ok || !result.answer) throw new Error(result.error?.message || copy.error);
         appendMessage(result.answer, 'assistant', result.sources);
-        conversation.push({ role: 'user', content: question }, { role: 'assistant', content: result.answer });
-        if (conversation.length > 4) conversation.splice(0, conversation.length - 4);
+        conversation.push(
+          { role: 'user', content: limitHistoryText(question) },
+          { role: 'assistant', content: limitHistoryText(result.answer) },
+        );
+        const historyByteLength = () => conversation.reduce(
+          (total, message) => total + encoder.encode(message.content).byteLength,
+          0,
+        );
+        while (conversation.length > 4 || historyByteLength() > historyBytesLimit) {
+          conversation.splice(0, Math.min(2, conversation.length));
+        }
       } catch {
         appendMessage(copy.error, 'assistant');
       } finally {

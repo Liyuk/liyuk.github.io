@@ -44,6 +44,7 @@ function validSources(value, origin) {
     && value.every((source) =>
       source
       && typeof source.title === 'string'
+      && (source.description === undefined || typeof source.description === 'string')
       && typeof source.url === 'string'
       && (source.locale === 'zh-CN' || source.locale === 'en')
       && source.url.startsWith('/')
@@ -74,11 +75,21 @@ function buildContext(sources) {
   const selected = [];
   for (const source of sources) {
     if (remaining <= 0) break;
-    const text = source.text.slice(0, remaining);
+    const separator = selected.length > 0 ? '\n\n' : '';
+    const prefix = `[S${selected.length + 1}] ${source.title}\n${source.url}\n`;
+    const textBudget = Math.max(0, remaining - separator.length - prefix.length);
+    if (textBudget === 0) break;
+    const text = source.text.slice(0, textBudget);
     selected.push({ ...source, text });
-    remaining -= text.length;
+    remaining -= separator.length + prefix.length + text.length;
   }
   return selected;
+}
+
+function isShortFollowUp(question) {
+  const normalized = question.trim().toLocaleLowerCase();
+  if (normalized.length > 80) return false;
+  return /^(?:why|how(?: so)?|what do you mean|tell me more|elaborate|expand(?: on that)?|can you explain(?: that)?|and (?:why|how|what else)|what about (?:it|that|this)|(?:it|that|this|those|these)\b|为什么|怎么|如何|这方面|它|上述|还有|再详细|具体说|展开说|多讲|继续)/iu.test(normalized);
 }
 
 export async function handleChatRequest(request, env, fetcher = fetch) {
@@ -141,7 +152,9 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
   }
 
   const previousUserQuestion = input.history.filter(({ role }) => role === 'user').at(-1)?.content;
-  const retrievalQuestion = [previousUserQuestion, input.question].filter(Boolean).join('\n');
+  const retrievalQuestion = previousUserQuestion && isShortFollowUp(input.question)
+    ? `${previousUserQuestion}\n${input.question}`
+    : input.question;
   const sources = findRelevantSources(index, retrievalQuestion, input.locale);
   if (sources.length === 0) {
     return json({ answer: localizedFallback(input.locale), sources: [] });
@@ -192,8 +205,9 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
   } catch {
     return error('MODEL_UNAVAILABLE', 'The AI service is temporarily unavailable.', 502);
   }
-  const answer = generated?.candidates?.[0]?.content?.parts
-    ?.map((part) => part?.text)
+  const parts = generated?.candidates?.[0]?.content?.parts;
+  const answer = (Array.isArray(parts) ? parts : [])
+    .map((part) => part?.text)
     .filter((part) => typeof part === 'string')
     .join('')
     .trim();

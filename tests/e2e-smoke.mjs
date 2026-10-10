@@ -56,7 +56,7 @@ try {
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
-        answer: `Answer ${chatRequests.length}`,
+        answer: payload.question === 'long answer' ? '答'.repeat(1_400) : `Answer ${chatRequests.length}`,
         sources: [
           { title: 'An article', url: '/writing/2026/08/example/' },
           { title: 'External source', url: 'https://attacker.example/' },
@@ -111,6 +111,18 @@ try {
     await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) => text.includes('暂时无法回答')));
   check('chat request keeps browser conversation in memory only',
     chatRequests.every((payload) => !('ip' in payload) && !('conversationId' in payload)));
+
+  await chatInput.fill('long answer');
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  await chatInput.fill('after long answer');
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  check('long model answers are kept within the API history limits',
+    chatRequests.at(-1).history.length <= 4 &&
+    chatRequests.at(-1).history.every((message) =>
+      message.content.length <= 1_200 && new TextEncoder().encode(message.content).byteLength <= 1_200) &&
+    chatRequests.at(-1).history.reduce((sum, message) => sum + new TextEncoder().encode(message.content).byteLength, 0) <= 4_000);
   await page.unroute('**/api/chat');
 
   const themeIcon = page.locator('[data-theme-toggle] [data-icon="theme"]');

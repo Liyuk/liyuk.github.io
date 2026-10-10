@@ -36,6 +36,18 @@ test('chat retrieval returns no source for an unrelated question', () => {
   assert.deepEqual(findRelevantSources(sources, 'What is the weather today?', 'en'), []);
 });
 
+test('chat retrieval ignores common question words and Chinese filler phrases', () => {
+  const articles = [
+    { title: 'Engineering notes', locale: 'en', url: '/en/writing/notes/', text: 'The system is designed for teams.' },
+    { title: '模型使用说明', locale: 'zh-CN', url: '/writing/model-notes/', text: '这个模型怎么样，主要用于团队协作。' },
+    { title: '北京房价数据', locale: 'zh-CN', url: '/writing/beijing-housing/', text: '北京房价数据与城市研究。' },
+    { title: '面向明天的工程团队', locale: 'zh-CN', url: '/writing/tomorrow-teams/', text: '明天的工程团队需要持续学习。' },
+  ];
+
+  assert.deepEqual(findRelevantSources(articles, 'What is the weather in Paris tomorrow?', 'en'), []);
+  assert.deepEqual(findRelevantSources(articles, '明天北京的天气怎么样？', 'zh-CN'), []);
+});
+
 test('chat retrieval ranks Chinese articles by matching title and body terms', () => {
   const results = findRelevantSources(sources, '反馈回路如何帮助团队改进？', 'zh-CN');
 
@@ -128,6 +140,21 @@ test('chat index overlaps neighboring chunks so a boundary does not split contex
 
   assert.ok(index[0].excerpts.length >= 2);
   assert.equal(index[0].excerpts[1].slice(0, 80).trim(), index[0].excerpts[0].slice(-80).trim());
+});
+
+test('chat index splits long text without sentence punctuation and keeps its ending', () => {
+  const body = `${'listitem '.repeat(160)}uniqueendmarker`;
+  const index = createChatIndex([{
+    collection: 'writing',
+    title: 'An unpunctuated list',
+    description: 'Long list description',
+    body,
+    url: '/writing/unpunctuated-list/',
+    locale: 'en',
+  }]);
+
+  assert.ok(index[0].excerpts.length > 1);
+  assert.ok(index[0].excerpts.some((excerpt) => excerpt.includes('uniqueendmarker')));
 });
 
 test('chat API rejects malformed requests before calling external services', async () => {
@@ -236,6 +263,65 @@ test('chat API uses the last user question to retrieve sources for a short follo
   ]);
 });
 
+test('chat API does not use previous topic to retrieve an unrelated new question', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({
+      question: 'What is the weather today?',
+      locale: 'en',
+      history: [{ role: 'user', content: 'What helps engineering teams improve?' }],
+    }),
+  });
+  let modelCalls = 0;
+  const response = await handleChatRequest(
+    request,
+    { GEMINI_API_KEY: 'test-only-api-key', ASSETS: { fetch: async () => Response.json(sources) } },
+    async () => {
+      modelCalls += 1;
+      throw new Error('A topic pivot should not call Gemini without a matching article');
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).sources, []);
+  assert.equal(modelCalls, 0);
+});
+
+test('chat retrieval context prioritizes matching excerpts before applying its total cap', async () => {
+  const index = Array.from({ length: 3 }, (_, sourceIndex) => ({
+    title: `Article ${sourceIndex + 1}`,
+    description: `Article ${sourceIndex + 1} overview`,
+    url: `/en/writing/2026/08/neutrino-article-${sourceIndex + 1}/`,
+    locale: 'en',
+    excerpts: [
+      `${sourceIndex === 0 ? 'neutrinos ' : ''}${'background '.repeat(55)}`,
+      `${sourceIndex === 1 ? 'neutrinos ' : ''}${'middle '.repeat(55)}`,
+      `${sourceIndex === 2 ? 'neutrinos ' : ''}${'conclusion '.repeat(55)}${sourceIndex === 2 ? 'uniqueendmarker' : ''}`,
+    ],
+  }));
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: 'neutrinos', locale: 'en' }),
+  });
+  let modelPayload;
+  const response = await handleChatRequest(
+    request,
+    { GEMINI_API_KEY: 'test-only-api-key', ASSETS: { fetch: async () => Response.json(index) } },
+    async (_input, init) => {
+      modelPayload = JSON.parse(init.body);
+      return Response.json({ candidates: [{ content: { parts: [{ text: 'Neutrinos are discussed. [S1]' }] } }] });
+    },
+  );
+
+  assert.equal(response.status, 200);
+  const excerptContext = modelPayload.contents.at(-1).parts[0].text.split('Published site excerpts:\n')[1];
+  assert.ok(excerptContext.length <= 5_000);
+  assert.match(excerptContext.split('[S3] Article 3')[1], /uniqueendmarker/);
+  assert.equal((await response.json()).sources[2].url, '/en/writing/2026/08/neutrino-article-3/');
+});
+
 test('chat API rejects malformed history instead of silently ignoring it', async () => {
   const request = new Request('https://liyuk.com/api/chat', {
     method: 'POST',
@@ -299,6 +385,26 @@ test('chat API rejects source URLs outside published article routes before calli
   assert.equal(modelCalls, 0);
 });
 
+test('chat API rejects malformed optional article metadata in its static index', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: 'What helps engineering teams improve?', locale: 'en' }),
+  });
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: { fetch: async () => Response.json([{ ...sources[0], description: { unexpected: true } }]) },
+    },
+    async () => {
+      throw new Error('Malformed index must be rejected before Gemini');
+    },
+  );
+
+  assert.equal(response.status, 503);
+});
+
 test('chat API returns a generic error for Gemini quota failures without leaking upstream details', async () => {
   const request = new Request('https://liyuk.com/api/chat', {
     method: 'POST',
@@ -315,6 +421,24 @@ test('chat API returns a generic error for Gemini quota failures without leaking
   assert.equal(response.status, 502);
   assert.match(result.error.message, /temporarily unavailable/i);
   assert.doesNotMatch(JSON.stringify(result), /private quota detail/);
+});
+
+test('chat API maps malformed Gemini parts to a generic error', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: 'What helps engineering teams improve?', locale: 'en' }),
+  });
+  const response = await handleChatRequest(
+    request,
+    { GEMINI_API_KEY: 'test-only-api-key', ASSETS: { fetch: async () => Response.json(sources) } },
+    async () => Response.json({ candidates: [{ content: { parts: { text: 'malformed' } } }] }),
+  );
+
+  assert.equal(response.status, 502);
+  assert.deepEqual(await response.json(), {
+    error: { code: 'MODEL_UNAVAILABLE', message: 'The AI service is temporarily unavailable.' },
+  });
 });
 
 test('chat API returns cited answer and never forwards the browser request body verbatim', async () => {
