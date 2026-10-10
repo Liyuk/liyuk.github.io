@@ -68,8 +68,8 @@ try {
       await route.fulfill({
         status: 200,
         contentType: 'text/event-stream',
-        body: 'event: text\ndata: {"text":"The answer arrives "}\n\n'
-          + 'event: text\ndata: {"text":"in streamed pieces."}\n\n'
+        body: 'event: text\ndata: {"text":"**The answer arrives** "}\n\n'
+          + 'event: text\ndata: {"text":"in streamed pieces. [S1]"}\n\n'
           + 'event: sources\ndata: {"sources":[{"title":"A streamed source","url":"/writing/2026/08/streamed-source/"}]}\n\n'
           + 'event: done\ndata: {}\n\n',
       });

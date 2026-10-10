@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { cleanArticleMarkdown, createChatIndex, findRelevantSources } from '../src/lib/site-chat.mjs';
+import { cleanArticleMarkdown, createChatIndex, findRelevantSources, formatChatAnswer } from '../src/lib/site-chat.mjs';
 import { handleChatRequest } from '../src/lib/site-chat-api.mjs';
 import { i18n } from '../src/i18n/index.mjs';
 
@@ -30,6 +30,13 @@ test('chat retrieval returns only matching sources in the requested locale', () 
 
   assert.equal(results.length, 1);
   assert.equal(results[0].title, 'Engineering management');
+});
+
+test('chat answer formatting removes markdown syntax and inline source markers', () => {
+  assert.equal(
+    formatChatAnswer('**核心判断**：[S1]\n- **先看目标**，再看约束。\n代码用 `router` 管理。'),
+    '核心判断：\n先看目标，再看约束。\n代码用 router 管理。',
+  );
 });
 
 test('chat retrieval returns no source for an unrelated question', () => {

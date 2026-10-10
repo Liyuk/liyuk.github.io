@@ -39,6 +39,18 @@ export function cleanArticleMarkdown(markdown) {
     .trim();
 }
 
+export function formatChatAnswer(answer) {
+  return answer
+    .replace(/\s*\[S\d+\]/gu, '')
+    .replace(/^\s*(?:[-*+]\s+|\d+[.)]\s+)/gmu, '')
+    .replace(/\*\*(.+?)\*\*/gsu, '$1')
+    .replace(/__(.+?)__/gsu, '$1')
+    .replace(/`([^`]+)`/gu, '$1')
+    .replace(/[ \t]+\n/gu, '\n')
+    .replace(/\n{3,}/gu, '\n\n')
+    .trim();
+}
+
 export function findRelevantSources(sources, question, locale, limit = 4) {
   const queryTerms = terms(question);
   if (queryTerms.size === 0) return [];
