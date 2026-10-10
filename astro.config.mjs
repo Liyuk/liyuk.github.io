@@ -48,7 +48,17 @@ export default defineConfig({
       rehypePlugins: [
         // `neutral` (grayscale) fits the site's muted palette better than `default`
         // (blue/purple). Dark-mode recolor of the inline SVG is handled in global.css.
-        [rehypeMermaid, { strategy: 'inline-svg', mermaidConfig: { theme: 'neutral' } }],
+        [
+          rehypeMermaid,
+          {
+            strategy: 'inline-svg',
+            mermaidConfig: {
+              theme: 'neutral',
+              fontFamily:
+                'Inter, "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
+            },
+          },
+        ],
         // A malformed formula renders in red instead of failing the whole build.
         [rehypeKatex, { throwOnError: false, strict: 'ignore' }],
         // Wrap wide tables/mermaid SVGs in a scroll container for narrow screens.
