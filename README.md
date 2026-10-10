@@ -29,7 +29,7 @@ npm run publish <slug> -- --confirm-editorial-review   # publish the sibling pai
 ```
 
 All new content is `draft: true`. Publishing goes through `npm run publish <slug> -- --confirm-editorial-review`, which refuses to flip a draft public without that flag; the flag asserts that the matching writing skill, `content-review`, and owner approval are all done. Pushing to `master`
-runs the full publish gate (format + content/image/column audits + tests + build + SEO/GEO/link audits) via a pre-push hook. Pull requests run the same verification; a successful push to `master` deploys through `.github/workflows/deploy.yml`.
+runs the full publish gate (format + content/image/column audits + tests + build + SEO/GEO/link audits) via a pre-push hook. Pull requests run the same verification; a successful push to `master` is verified, deployed to Cloudflare Pages, then checked for Buttondown notifications by `.github/workflows/deploy.yml`.
 
 ```sh
 git commit -m "publish: ..."
@@ -40,17 +40,24 @@ Skip the gate in an emergency with `git push --no-verify`. Personal workflow not
 
 The site is bilingual. Chinese is the source of truth. Published Chinese files use `translationStatus: original`, published English files use `translationStatus: reviewed`, and only unpublished English files may use `translationStatus: draft`. Writing, projects, galleries, and current research entries require an English sibling before publication; English archives and RSS remain English-only. `npm run audit:content` enforces these rules. The English UI shell lives in `src/i18n/index.mjs`. API secrets never belong in this repository.
 
+The main blog is hosted on Cloudflare Pages, and GitHub Pages deployment is disabled for this repository. Independent project demos continue to use their own repositories' GitHub Pages settings and URLs such as `https://liyuk.github.io/<repository>/`.
+
 ## Subscriber notifications (Buttondown)
 
-After GitHub Pages deploys successfully, the `notify` job in `.github/workflows/deploy.yml` diffs the pushed content and sends a short "new post" email (title + summary + link) through `scripts/notify-buttondown.mjs`. It only notifies newly added published entries or `draft: true → false` transitions; ordinary edits to already published entries do not trigger a new-post email. This sequencing prevents a subscriber email from preceding a failed deployment. Pull-request verification can be superseded; deploy and notify jobs serialize completed deployments independently. A notification failure remains visible and can be retried without rolling back the deployed site; existing emails are matched by subject and canonical URL; legacy subject-only records remain compatible.
+After Cloudflare Pages deploys successfully, the `notify` job in `.github/workflows/deploy.yml` diffs the pushed content and sends a short "new post" email (title + summary + link) through `scripts/notify-buttondown.mjs`. It only notifies newly added published entries or `draft: true → false` transitions; ordinary edits to already published entries do not trigger a new-post email. This sequencing prevents a subscriber email from preceding a failed deployment. Pull-request verification can be superseded; deploy and notify jobs serialize completed deployments independently. A notification failure remains visible and can be retried without rolling back the deployed site; existing emails are matched by subject and canonical URL; legacy subject-only records remain compatible.
 
-Set the API key as a repository secret so it never lands in git:
+Set these values under repository Settings → Secrets and variables → Actions. The Cloudflare Pages project must have automatic production deployments disabled so the verified GitHub Actions build is the one that gets deployed. Keep the Git integration connected if you want Cloudflare preview deployments.
 
-```sh
-# Repository settings → Secrets and variables → Actions → New repository secret
-#   Name:  BUTTONDOWN_API_KEY
-#   Value: your Buttondown API key (https://app.buttondown.com/settings#api-key)
-```
+| Kind   | Name                     | Value                                                                 |
+| ------ | ------------------------ | --------------------------------------------------------------------- |
+| Secret | `BUTTONDOWN_API_KEY`     | Buttondown API key                                                    |
+| Secret | `CLOUDFLARE_API_TOKEN`   | Cloudflare API token with Pages deployment edit permission            |
+| Variable | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID                                                  |
+| Variable | `CLOUDFLARE_PAGES_PROJECT` | Exact name of the Cloudflare Pages project                           |
+
+The Buttondown key configured in Cloudflare is not visible to GitHub Actions. `CLOUDFLARE_ZONE_ID` is no longer needed because the workflow deploys directly to Pages rather than purging the zone cache.
+
+The site assistant runs as a Cloudflare Pages Function at `POST /api/chat`; it does not need a separate Worker. Set the `GEMINI_API_KEY` runtime secret in the Cloudflare Pages project for both Production and Preview environments. Add a Cloudflare rate-limiting rule for `/api/chat` to protect the free-tier model quota. The static `/chat-index.json` contains only published writing, research, consulting, and project entries.
 
 Test locally without sending (dry-run prints what would be emailed):
 

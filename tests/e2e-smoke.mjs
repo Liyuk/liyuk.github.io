@@ -29,6 +29,90 @@ try {
   check('home loads', homeTitle.length > 0, homeTitle);
   const h1 = await page.textContent('h1');
   check('home has hero heading', h1.includes('烹饪指南') || h1.length > 0, h1);
+  const chatIndex = await page.evaluate(() => fetch('/chat-index.json').then((response) => response.json()));
+  check('static chat index contains only published article routes in both locales',
+    chatIndex.length > 0 && chatIndex.every((entry) =>
+      ['zh-CN', 'en'].includes(entry.locale) &&
+      /^\/(?:en\/)?(?:writing|research|consulting|projects)\/.+\/$/.test(entry.url)));
+  check('static chat index stays below 2 MB',
+    new TextEncoder().encode(JSON.stringify(chatIndex)).length < 2_000_000);
+  const chatLauncher = page.getByRole('button', { name: '站内问答' });
+  check('home exposes the Chinese site chat', await chatLauncher.count() === 1);
+  await chatLauncher.click();
+  check('chat opens with a labeled dialog', await page.getByRole('dialog', { name: '和站内内容聊聊' }).isVisible());
+  check('opening chat moves focus to its input', await page.locator('#site-chat-question').evaluate((element) => element === document.activeElement));
+  await page.keyboard.press('Escape');
+  check('Escape closes chat and restores focus', await page.getByRole('dialog').count() === 0 && await chatLauncher.evaluate((element) => element === document.activeElement));
+
+  const chatRequests = [];
+  await page.route('**/api/chat', async (route) => {
+    const payload = JSON.parse(route.request().postData() ?? '{}');
+    chatRequests.push(payload);
+    if (payload.question === 'fail') {
+      await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: { message: 'private failure detail' } }) });
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        answer: `Answer ${chatRequests.length}`,
+        sources: [
+          { title: 'An article', url: '/writing/2026/08/example/' },
+          { title: 'External source', url: 'https://attacker.example/' },
+        ],
+      }),
+    });
+  });
+
+  await chatLauncher.click();
+  const chatInput = page.locator('#site-chat-question');
+  await chatInput.fill('line one');
+  await chatInput.press('Shift+Enter');
+  await chatInput.pressSequentially('line two');
+  check('Shift+Enter inserts a newline without sending', await chatInput.inputValue() === 'line one\nline two' && chatRequests.length === 0);
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  check('Enter sends the question', chatRequests.length === 1 && chatRequests[0].question === 'line one\nline two');
+  check('answer shows a same-site source and filters external links',
+    await page.locator('[data-chat-messages] .assistant a').count() === 1 &&
+    await page.locator('[data-chat-messages] .assistant a').first().evaluate((link) => {
+      const url = new URL(link.href);
+      return url.origin === window.location.origin && url.pathname.startsWith('/writing/');
+    }));
+
+  await chatInput.fill('Follow up');
+  await chatInput.press('Control+Enter');
+  await page.waitForTimeout(150);
+  check('Ctrl+Enter sends and includes the previous exchange',
+    chatRequests.length === 2 &&
+    chatRequests[1].history.some((message) => message.role === 'user' && message.content === 'line one\nline two') &&
+    chatRequests[1].history.some((message) => message.role === 'assistant' && message.content === 'Answer 1'));
+
+  await chatInput.fill('Meta shortcut');
+  await chatInput.press('Meta+Enter');
+  await page.waitForTimeout(150);
+  check('⌘+Enter also sends and history stays within four messages',
+    chatRequests.length === 3 && chatRequests[2].question === 'Meta shortcut' && chatRequests[2].history.length === 4);
+
+  await chatInput.fill('composition check');
+  await chatInput.evaluate((element) => {
+    const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+    Object.defineProperty(event, 'isComposing', { value: true });
+    element.dispatchEvent(event);
+  });
+  await page.waitForTimeout(100);
+  check('Enter during IME composition does not send', chatRequests.length === 3 && await chatInput.inputValue() === 'composition check');
+
+  await chatInput.fill('fail');
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  check('API failures show localized generic copy',
+    await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) => text.includes('暂时无法回答')));
+  check('chat request keeps browser conversation in memory only',
+    chatRequests.every((payload) => !('ip' in payload) && !('conversationId' in payload)));
+  await page.unroute('**/api/chat');
+
   const themeIcon = page.locator('[data-theme-toggle] [data-icon="theme"]');
   check('theme toggle uses shared icon', await themeIcon.count() === 1, `count=${await themeIcon.count()}`);
   check('shared theme icon uses standard SVG contract',
@@ -166,6 +250,17 @@ try {
   // 15. 404 page
   await page.goto(`${BASE}/definitely-not-a-page/`, { waitUntil: 'networkidle' });
   check('404 renders', (await page.title()).length > 0, await page.title());
+
+  // 16. English chat copy and narrow-screen layout.
+  await page.goto(`${BASE}/en/`, { waitUntil: 'networkidle' });
+  const englishChatLauncher = page.getByRole('button', { name: 'Ask this site' });
+  check('English home exposes localized chat', await englishChatLauncher.count() === 1);
+  await page.setViewportSize({ width: 320, height: 700 });
+  await englishChatLauncher.click();
+  const chatPanel = page.getByRole('dialog', { name: 'Ask about the site' });
+  check('English chat opens at 320px width', await chatPanel.isVisible());
+  const panelBounds = await chatPanel.boundingBox();
+  check('chat panel stays inside a narrow viewport', Boolean(panelBounds && panelBounds.x >= 0 && panelBounds.x + panelBounds.width <= 320), JSON.stringify(panelBounds));
 
 } catch (err) {
   results.fail++;

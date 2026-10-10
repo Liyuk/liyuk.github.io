@@ -23,39 +23,35 @@ test('master verification is not interrupted by a later run', () => {
   assert.doesNotMatch(verify, /cancel-in-progress:\s*true/);
 });
 
-test('deploy only runs off master, after a successful verification', () => {
+test('Cloudflare deployment runs only on master after successful verification', () => {
   const deploy = jobBlock('deploy');
   assert.match(deploy, /needs:\s*verify/);
   assert.match(deploy, /needs\.verify\.result == 'success'/);
   assert.match(deploy, /github\.ref == 'refs\/heads\/master'/);
+  assert.match(deploy, /wrangler@4 pages deploy dist/);
+  assert.match(deploy, /CLOUDFLARE_API_TOKEN/);
+  assert.match(deploy, /CLOUDFLARE_ACCOUNT_ID/);
+  assert.match(deploy, /CLOUDFLARE_PAGES_PROJECT/);
+  assert.match(deploy, /download-artifact/);
 });
 
-test('purge and notify are independent consequences of a successful deploy', () => {
-  const purge = jobBlock('purge');
+test('Buttondown notification waits for a successful Cloudflare deployment', () => {
   const notify = jobBlock('notify');
-  for (const [name, job] of [['purge', purge], ['notify', notify]]) {
-    assert.match(job, /needs:\s*deploy/, `${name} should hang off deploy`);
-    assert.match(job, /needs\.deploy\.result == 'success'/, `${name} should require a successful deploy`);
-  }
-  // Neither may gate the other: a stale list page must not hold back a
-  // subscriber email, and a mail failure must not leave the CDN stale.
-  assert.doesNotMatch(notify, /needs:.*purge/);
-  assert.doesNotMatch(purge, /needs:.*notify/);
+  assert.match(notify, /needs:\s*deploy/);
+  assert.match(notify, /needs\.deploy\.result == 'success'/);
+  assert.match(notify, /BUTTONDOWN_API_KEY: \$\{\{ secrets\.BUTTONDOWN_API_KEY \}\}/);
 });
 
-test('missing credentials skip their job with an explanation instead of failing', () => {
-  const purge = jobBlock('purge');
+test('missing Buttondown credentials skip notification with an explanation', () => {
   const notify = jobBlock('notify');
-  assert.match(purge, /CLOUDFLARE_API_TOKEN != ''/);
-  assert.match(purge, /CLOUDFLARE_ZONE_ID != ''/);
-  assert.match(purge, /Explain skipped purge/);
   assert.match(notify, /BUTTONDOWN_API_KEY != ''/);
   assert.match(notify, /Explain skipped notification/);
 });
 
-test('pull requests do no Pages work', () => {
+test('GitHub Actions no longer publishes a GitHub Pages site', () => {
   const verify = jobBlock('verify');
-  const pagesSteps = verify.split('\n').filter((line) => /configure-pages|upload-pages-artifact/.test(line));
-  assert.equal(pagesSteps.length, 2);
-  assert.equal((verify.match(/if: \$\{\{ github\.ref == 'refs\/heads\/master' \}\}/g) ?? []).length, 2);
+  assert.doesNotMatch(workflow, /configure-pages|upload-pages-artifact|deploy-pages/);
+  assert.doesNotMatch(workflow, /  purge:/);
+  assert.match(verify, /upload-artifact/);
+  assert.match(verify, /if: \$\{\{ github\.ref == 'refs\/heads\/master' \}\}/);
 });

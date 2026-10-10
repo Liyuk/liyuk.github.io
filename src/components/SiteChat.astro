@@ -1,0 +1,186 @@
+---
+import { i18n } from '../i18n/index.mjs';
+
+const { locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props;
+const copy = i18n(locale).chat;
+---
+
+<aside class="site-chat" data-site-chat data-copy={JSON.stringify(copy)}>
+  <section id="site-chat-panel" class="site-chat-panel" data-chat-panel role="dialog" aria-modal="false" aria-labelledby="site-chat-title" hidden>
+    <header class="site-chat-header">
+      <h2 id="site-chat-title">{copy.title}</h2>
+      <button class="site-chat-close" type="button" data-chat-close aria-label={copy.close}>×</button>
+    </header>
+    <p class="site-chat-privacy">{copy.privacy}</p>
+    <ol class="site-chat-messages" data-chat-messages aria-live="polite" aria-relevant="additions text">
+      <li class="site-chat-message assistant"><p>{copy.greeting}</p></li>
+    </ol>
+    <form class="site-chat-form" data-chat-form>
+      <label for="site-chat-question">{copy.inputLabel}</label>
+      <textarea id="site-chat-question" name="question" rows="2" maxlength="600" required placeholder={copy.placeholder} data-chat-input></textarea>
+      <div class="site-chat-form-footer">
+        <span data-chat-status role="status"></span>
+        <button class="site-chat-send" type="submit" data-chat-send>{copy.send}</button>
+      </div>
+    </form>
+  </section>
+  <button class="site-chat-launcher" type="button" data-chat-launcher aria-expanded="false" aria-controls="site-chat-panel">
+    <span aria-hidden="true">✳</span>{copy.launcher}
+  </button>
+</aside>
+
+<script>
+  type ChatCopy = {
+    error: string;
+    sending: string;
+    sources: string;
+  };
+
+  type ChatResponse = {
+    answer?: string;
+    sources?: { title: string; url: string }[];
+    error?: { message: string };
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-site-chat]').forEach((widget) => {
+    const launcher = widget.querySelector<HTMLButtonElement>('[data-chat-launcher]');
+    const panel = widget.querySelector<HTMLElement>('[data-chat-panel]');
+    const close = widget.querySelector<HTMLButtonElement>('[data-chat-close]');
+    const form = widget.querySelector<HTMLFormElement>('[data-chat-form]');
+    const input = widget.querySelector<HTMLTextAreaElement>('[data-chat-input]');
+    const send = widget.querySelector<HTMLButtonElement>('[data-chat-send]');
+    const messages = widget.querySelector<HTMLOListElement>('[data-chat-messages]');
+    const status = widget.querySelector<HTMLElement>('[data-chat-status]');
+    if (!launcher || !panel || !close || !form || !input || !send || !messages || !status) return;
+
+    let copy: ChatCopy;
+    try {
+      copy = JSON.parse(widget.dataset.copy ?? '{}') as ChatCopy;
+    } catch {
+      return;
+    }
+    const locale = window.location.pathname.startsWith('/en/') ? 'en' : 'zh-CN';
+    const conversation: { role: 'user' | 'assistant'; content: string }[] = [];
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      launcher.setAttribute('aria-expanded', String(open));
+      if (open) input.focus();
+      else launcher.focus();
+    };
+
+    const appendMessage = (text: string, kind: 'assistant' | 'user', sources: ChatResponse['sources'] = []) => {
+      const item = document.createElement('li');
+      item.className = `site-chat-message ${kind}`;
+      const paragraph = document.createElement('p');
+      paragraph.textContent = text;
+      item.append(paragraph);
+
+      if (sources?.length) {
+        const heading = document.createElement('strong');
+        heading.className = 'site-chat-source-heading';
+        heading.textContent = copy.sources;
+        item.append(heading);
+        const list = document.createElement('ul');
+        for (const source of sources) {
+          try {
+            const url = new URL(source.url, window.location.origin);
+            if (url.origin !== window.location.origin) continue;
+            const link = document.createElement('a');
+            link.href = url.href;
+            link.textContent = source.title;
+            const sourceItem = document.createElement('li');
+            sourceItem.append(link);
+            list.append(sourceItem);
+          } catch {
+            // Ignore malformed source links rather than creating unsafe anchors.
+          }
+        }
+        if (list.childElementCount) item.append(list);
+      }
+
+      messages.append(item);
+      item.scrollIntoView({ block: 'nearest' });
+    };
+
+    launcher.addEventListener('click', () => setOpen(panel.hidden));
+    close.addEventListener('click', () => setOpen(false));
+    input.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' || event.shiftKey || event.isComposing) return;
+      event.preventDefault();
+      form.requestSubmit();
+    });
+    panel.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const question = input.value.trim();
+      if (!question || send.disabled) return;
+
+      appendMessage(question, 'user');
+      input.value = '';
+      input.disabled = true;
+      send.disabled = true;
+      status.textContent = copy.sending;
+      const history = conversation.slice(-4);
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ question, locale, history }),
+        });
+        const result = await response.json() as ChatResponse;
+        if (!response.ok || !result.answer) throw new Error(result.error?.message || copy.error);
+        appendMessage(result.answer, 'assistant', result.sources);
+        conversation.push({ role: 'user', content: question }, { role: 'assistant', content: result.answer });
+        if (conversation.length > 4) conversation.splice(0, conversation.length - 4);
+      } catch {
+        appendMessage(copy.error, 'assistant');
+      } finally {
+        input.disabled = false;
+        send.disabled = false;
+        status.textContent = '';
+        input.focus();
+      }
+    });
+  });
+</script>
+
+<style>
+  .site-chat { position: fixed; z-index: 50; right: 1rem; bottom: 1rem; color: var(--ink); font-family: var(--sans); }
+  .site-chat-panel { position: absolute; right: 0; bottom: calc(100% + .75rem); display: flex; width: min(24rem, calc(100vw - 2rem)); height: min(38rem, calc(100dvh - 7rem)); flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); box-shadow: 0 12px 38px rgba(var(--shadow-rgb), .2); }
+  .site-chat-panel[hidden] { display: none; }
+  .site-chat-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 1rem; border-bottom: 1px solid var(--line); background: var(--paper-strong); }
+  .site-chat-header h2 { margin: 0; font-family: var(--serif); font-size: 1.08rem; font-weight: 550; }
+  .site-chat-close { display: grid; width: 2rem; height: 2rem; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 1.2rem; cursor: pointer; }
+  .site-chat-privacy { margin: 0; padding: .65rem 1rem; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .72rem; line-height: 1.45; }
+  .site-chat-messages { display: flex; flex: 1; flex-direction: column; gap: .8rem; overflow-y: auto; margin: 0; padding: 1rem; list-style: none; }
+  .site-chat-message { max-width: 92%; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: 7px; background: var(--paper-strong); font-size: .88rem; line-height: 1.55; overflow-wrap: anywhere; }
+  .site-chat-message.user { align-self: flex-end; border-color: var(--accent); background: var(--accent-soft); }
+  .site-chat-message p { margin: 0; white-space: pre-wrap; }
+  .site-chat-message ul { margin: .55rem 0 0; padding-left: 1.1rem; }
+  .site-chat-message a { color: var(--accent); }
+  .site-chat-source-heading { display: block; margin-top: .65rem; font-size: .76rem; }
+  .site-chat-form { padding: .75rem 1rem 1rem; border-top: 1px solid var(--line); }
+  .site-chat-form label { display: block; margin-bottom: .3rem; color: var(--muted); font-size: .75rem; font-weight: 650; }
+  .site-chat-form textarea { display: block; width: 100%; min-height: 3.5rem; resize: vertical; padding: .65rem .7rem; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--ink); font: inherit; font-size: .88rem; }
+  .site-chat-form-footer { display: flex; min-height: 2.6rem; align-items: center; justify-content: space-between; gap: .8rem; padding-top: .55rem; }
+  .site-chat-form-footer [role='status'] { color: var(--muted); font-size: .74rem; }
+  .site-chat-send, .site-chat-launcher { border: 1px solid var(--accent); background: var(--accent); color: var(--paper); font: inherit; font-weight: 650; cursor: pointer; }
+  .site-chat-send { min-height: 2.35rem; padding: .45rem 1rem; border-radius: 5px; font-size: .85rem; }
+  .site-chat-send:disabled { opacity: .6; cursor: wait; }
+  .site-chat-launcher { display: flex; min-height: 2.8rem; align-items: center; gap: .45rem; padding: .6rem .9rem; border-radius: 999px; box-shadow: 0 4px 16px rgba(var(--shadow-rgb), .18); font-size: .82rem; }
+  .site-chat-launcher span { font-size: 1rem; }
+  .site-chat-launcher:hover, .site-chat-send:hover { background: var(--ink); border-color: var(--ink); }
+  @media (max-width: 30rem) {
+    .site-chat { right: .75rem; bottom: .75rem; }
+    .site-chat-panel { position: fixed; inset: auto .5rem 4.5rem; width: auto; height: min(38rem, calc(100dvh - 6rem)); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .site-chat-panel:not([hidden]) { animation: chat-in 140ms ease-out; }
+    @keyframes chat-in { from { opacity: 0; transform: translateY(.35rem); } to { opacity: 1; transform: translateY(0); } }
+  }
+</style>
