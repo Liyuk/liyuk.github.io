@@ -1,6 +1,6 @@
 # liyuk.github.io
 
-Personal site for writing, research, projects & photography — bilingual, built with Astro.
+Personal site for writing, research, consulting, projects, and photography — bilingual, built with Astro and deployed to Cloudflare Pages. The site assistant answers questions from published articles and links to its sources.
 
 ## Architecture at a glance
 
