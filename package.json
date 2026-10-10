@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "playwright install chromium --only-shell",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
