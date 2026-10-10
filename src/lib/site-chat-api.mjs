@@ -36,7 +36,8 @@ function parsePayload(payload) {
     if (historyLength > MAX_HISTORY_LENGTH) return undefined;
     messages.push({ role: message.role, content });
   }
-  return { question, locale: payload.locale, history: messages };
+  if (payload.stream !== undefined && typeof payload.stream !== 'boolean') return undefined;
+  return { question, locale: payload.locale, history: messages, stream: payload.stream === true };
 }
 
 function validSources(value, origin) {
@@ -68,6 +69,114 @@ function localizedFallback(locale) {
   return locale === 'en'
     ? 'I could not find enough information about this in the published content on this site.'
     : '我暂时没有在本站已发布的内容中找到足够的信息来回答这个问题。';
+}
+
+function isCapabilitiesQuestion(question) {
+  return /你能聊什么|你可以聊什么|你能回答什么|能问你什么|你会什么|what can you (?:talk about|help with|answer)/iu.test(question);
+}
+
+function isRecommendationQuestion(question) {
+  return /有什么(?:文章)?推荐|推荐(?:点|一些|几篇)?(?:文章)?(?:给我)?(?:吗|呢)?$|any recommendations|recommend something/iu.test(question.trim());
+}
+
+function topicSuggestions(locale) {
+  return locale === 'en'
+    ? ['Technology and architecture', 'Management and leadership', 'Product and decisions', 'Career development']
+    : ['技术与架构', '管理与领导力', '产品与决策', '职业发展'];
+}
+
+function capabilitiesResponse(locale) {
+  return locale === 'en'
+    ? { answer: 'I answer questions based on this site’s published writing, research, projects, and consulting content. Choose a topic or ask about a specific article.' }
+    : { answer: '我会根据本站已发布的写作、研究、项目和咨询内容回答。你可以选择一个主题，或直接问某篇文章。' };
+}
+
+function recommendationPrompt(locale) {
+  return locale === 'en'
+    ? 'I can recommend articles from this site. What topic would you like to read about?'
+    : '我可以按主题推荐本站文章。你想看哪一类？';
+}
+
+function eventStreamResponse({ answer, sources = [], suggestions = [] }) {
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode(`event: text\ndata: ${JSON.stringify({ text: answer })}\n\n`));
+      if (suggestions.length) {
+        controller.enqueue(encoder.encode(`event: suggestions\ndata: ${JSON.stringify({ suggestions })}\n\n`));
+      }
+      controller.enqueue(encoder.encode(`event: sources\ndata: ${JSON.stringify({ sources })}\n\n`));
+      controller.enqueue(encoder.encode('event: done\ndata: {}\n\n'));
+      controller.close();
+    },
+  });
+  return new Response(stream, {
+    headers: {
+      'Cache-Control': 'no-cache, no-transform',
+      'Content-Type': 'text/event-stream; charset=utf-8',
+    },
+  });
+}
+
+function proxyGeminiStream(response, sources) {
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+  const stream = new ReadableStream({
+    async start(controller) {
+      let buffer = '';
+      let hasText = false;
+      const sendText = (text) => {
+        if (typeof text !== 'string' || !text) return;
+        hasText = true;
+        controller.enqueue(encoder.encode(`event: text\ndata: ${JSON.stringify({ text })}\n\n`));
+      };
+      const consumeFrame = (frame) => {
+        const data = frame.split(/\r?\n/u)
+          .filter((line) => line.startsWith('data:'))
+          .map((line) => line.slice(5).trimStart())
+          .join('\n');
+        if (!data || data === '[DONE]') return;
+        let payload;
+        try {
+          payload = JSON.parse(data);
+        } catch {
+          // Ignore malformed keep-alive frames; transport failures are reported by the reader.
+          return;
+        }
+        if (payload.error) throw new Error('Upstream stream failed');
+        for (const part of payload.candidates?.[0]?.content?.parts ?? []) sendText(part?.text);
+      };
+
+      try {
+        if (!response.body) throw new Error('Missing upstream stream');
+        const reader = response.body.getReader();
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const frames = buffer.split(/\r?\n\r?\n/u);
+          buffer = frames.pop() ?? '';
+          for (const frame of frames) consumeFrame(frame);
+        }
+        buffer += decoder.decode();
+        if (buffer.trim()) consumeFrame(buffer);
+        if (!hasText) throw new Error('Empty upstream stream');
+        controller.enqueue(encoder.encode(`event: sources\ndata: ${JSON.stringify({ sources })}\n\n`));
+        controller.enqueue(encoder.encode('event: done\ndata: {}\n\n'));
+      } catch {
+        controller.enqueue(encoder.encode(`event: error\ndata: ${JSON.stringify({ message: 'The AI service is temporarily unavailable.' })}\n\n`));
+      } finally {
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Cache-Control': 'no-cache, no-transform',
+      'Content-Type': 'text/event-stream; charset=utf-8',
+    },
+  });
 }
 
 function buildContext(sources) {
@@ -124,6 +233,15 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
 
   const input = parsePayload(payload);
   if (!input) return error('INVALID_REQUEST', 'Invalid chat request.', 400);
+  if (isCapabilitiesQuestion(input.question)) {
+    const result = { ...capabilitiesResponse(input.locale), suggestions: topicSuggestions(input.locale), sources: [] };
+    return input.stream ? eventStreamResponse(result) : json(result);
+  }
+  const previousUserQuestion = input.history.filter(({ role }) => role === 'user').at(-1)?.content;
+  if (isRecommendationQuestion(input.question) && !previousUserQuestion) {
+    const result = { answer: recommendationPrompt(input.locale), suggestions: topicSuggestions(input.locale), sources: [] };
+    return input.stream ? eventStreamResponse(result) : json(result);
+  }
   if (!env?.GEMINI_API_KEY) {
     return error('SERVICE_NOT_CONFIGURED', 'The chat service is not configured yet.', 503);
   }
@@ -151,13 +269,17 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
     return error('CHAT_UNAVAILABLE', 'The chat service is temporarily unavailable.', 503);
   }
 
-  const previousUserQuestion = input.history.filter(({ role }) => role === 'user').at(-1)?.content;
-  const retrievalQuestion = previousUserQuestion && isShortFollowUp(input.question)
+  const retrievalQuestion = previousUserQuestion && (isShortFollowUp(input.question) || isRecommendationQuestion(input.question))
     ? `${previousUserQuestion}\n${input.question}`
     : input.question;
   const sources = findRelevantSources(index, retrievalQuestion, input.locale);
   if (sources.length === 0) {
-    return json({ answer: localizedFallback(input.locale), sources: [] });
+    if (isRecommendationQuestion(input.question)) {
+      const result = { answer: recommendationPrompt(input.locale), suggestions: topicSuggestions(input.locale), sources: [] };
+      return input.stream ? eventStreamResponse(result) : json(result);
+    }
+    const result = { answer: localizedFallback(input.locale), sources: [] };
+    return input.stream ? eventStreamResponse(result) : json(result);
   }
 
   const context = buildContext(sources);
@@ -179,7 +301,8 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
       role: 'user',
       parts: [{ text: `Question: ${input.question}\n\nPublished site excerpts:\n${sourceText}` }],
     });
-    modelResponse = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+    const streamQuery = input.stream ? ':streamGenerateContent?alt=sse' : ':generateContent';
+    modelResponse = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}${streamQuery}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -197,6 +320,9 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
 
   if (!modelResponse.ok) {
     return error('MODEL_UNAVAILABLE', 'The AI service is temporarily unavailable.', 502);
+  }
+  if (input.stream) {
+    return proxyGeminiStream(modelResponse, context.map(({ title, url }) => ({ title, url })));
   }
 
   let generated;

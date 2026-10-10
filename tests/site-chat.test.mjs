@@ -36,6 +36,18 @@ test('chat retrieval returns no source for an unrelated question', () => {
   assert.deepEqual(findRelevantSources(sources, 'What is the weather today?', 'en'), []);
 });
 
+test('chat retrieval does not mistake incidental everyday words for a relevant article', () => {
+  const articles = [{
+    title: '从肤色观察到产品选择',
+    description: '选彩妆时可以观察肤色、肤感和当天场景。',
+    url: '/writing/2025/04/makeup-observation/',
+    locale: 'zh-CN',
+    excerpts: ['试色记录应包括日期、天气与带妆时长。'],
+  }];
+
+  assert.deepEqual(findRelevantSources(articles, '今天天气怎么样？', 'zh-CN'), []);
+});
+
 test('chat retrieval ignores common question words and Chinese filler phrases', () => {
   const articles = [
     { title: 'Engineering notes', locale: 'en', url: '/en/writing/notes/', text: 'The system is designed for teams.' },
@@ -53,6 +65,50 @@ test('chat retrieval ranks Chinese articles by matching title and body terms', (
 
   assert.equal(results.length, 1);
   assert.equal(results[0].title, '工程管理中的反馈回路');
+});
+
+test('chat retrieval finds articles for common management, career, architecture, and AI questions', () => {
+  const articles = [
+    {
+      title: '管理者如何培养接班人',
+      description: '负责人培养、团队梯队和管理交接。',
+      url: '/writing/2026/08/leadership-succession/',
+      locale: 'zh-CN',
+      excerpts: ['管理者要找到并培养负责人，建立能够持续运作的团队梯队。'],
+    },
+    {
+      title: '目标、规划与复盘：把交作业变成自己的成长',
+      description: '职业成长需要目标、规划和持续复盘。',
+      url: '/writing/2025/01/career-growth/',
+      locale: 'zh-CN',
+      excerpts: ['把外部要求转化为个人目标，持续复盘并调整职业发展路径。'],
+    },
+    {
+      title: '让差异停留在配置层：多业务域平台架构设计',
+      description: '用配置管理多国家、多行业的业务差异，保护核心领域模型。',
+      url: '/writing/2026/08/configuration-driven-platform/',
+      locale: 'zh-CN',
+      excerpts: ['架构需要判断哪些变化应该配置，哪些变化应该编排，哪些变化需要独立建模。'],
+    },
+    {
+      title: 'AI Gateway：从后端调度到成本治理',
+      description: '多模型访问中的调度、容量控制、故障切换和成本治理。',
+      url: '/writing/2026/09/ai-gateway-costs/',
+      locale: 'zh-CN',
+      excerpts: ['AI Gateway 可以统一管理模型路由、用量统计和企业成本。'],
+    },
+  ];
+  const questions = [
+    ['管理者怎么培养接班人？', articles[0].title],
+    ['职业发展怎么规划？', articles[1].title],
+    ['多业务平台怎么隔离不同国家的差异？', articles[2].title],
+    ['如何控制调用多个 AI 模型的成本？', articles[3].title],
+  ];
+
+  for (const [question, expectedTitle] of questions) {
+    const results = findRelevantSources(articles, question, 'zh-CN');
+    assert.equal(results[0]?.title, expectedTitle, question);
+  }
 });
 
 test('chat retrieval merges matching excerpts from the same article into one source', () => {
@@ -106,7 +162,7 @@ test('chat index keeps readable article text while excluding code blocks', () =>
   assert.equal(cleanArticleMarkdown('[read this](https://example.com)'), 'read this');
 });
 
-test('chat index caps each article at three excerpts of at most 600 characters', () => {
+test('chat index keeps representative beginning, middle, and ending excerpts within the 600-character limit', () => {
   const body = Array.from({ length: 8 }, (_, index) =>
     `Section ${index + 1}: ${String.fromCharCode(97 + index).repeat(500)} ${index === 7 ? 'final marker for this article' : 'detail'}.`,
   ).join('\n\n');
@@ -123,6 +179,22 @@ test('chat index caps each article at three excerpts of at most 600 characters',
   assert.ok(index[0].excerpts.length <= 3);
   assert.ok(index[0].excerpts.every((excerpt) => excerpt.length <= 600));
   assert.match(index[0].excerpts.at(-1), /final marker for this article/);
+});
+
+test('chat index keeps a queryable excerpt from the middle of a long article', () => {
+  const body = Array.from({ length: 40 }, (_, index) =>
+    `Section ${index + 1}. ${'detail '.repeat(25)} ${index === 19 ? 'criticalmiddlemarker' : 'ordinary context'}.`,
+  ).join(' ');
+  const index = createChatIndex([{
+    collection: 'writing',
+    title: 'A detailed article',
+    description: 'A long description about the complete article.',
+    body,
+    url: '/writing/detailed-article/',
+    locale: 'en',
+  }]);
+
+  assert.ok(index[0].excerpts.some((excerpt) => excerpt.includes('criticalmiddlemarker')));
 });
 
 test('chat index overlaps neighboring chunks so a boundary does not split context', () => {
@@ -175,6 +247,58 @@ test('chat API rejects malformed requests before calling external services', asy
     error: { code: 'INVALID_REQUEST', message: 'Invalid chat request.' },
   });
   assert.equal(externalCalls, 0);
+});
+
+test('chat API explains its site-only scope and offers useful topic prompts', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: '你能聊什么？', locale: 'zh-CN' }),
+  });
+  const response = await handleChatRequest(request, {});
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.match(result.answer, /本站已发布/);
+  assert.deepEqual(result.suggestions, ['技术与架构', '管理与领导力', '产品与决策', '职业发展']);
+  assert.deepEqual(result.sources, []);
+});
+
+test('chat API turns a topic-free recommendation request into selectable topics', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: '有什么推荐吗？', locale: 'zh-CN' }),
+  });
+  const response = await handleChatRequest(request, {});
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.match(result.answer, /想看哪一类/);
+  assert.deepEqual(result.suggestions, ['技术与架构', '管理与领导力', '产品与决策', '职业发展']);
+  assert.deepEqual(result.sources, []);
+});
+
+test('chat API uses the previous topic when the reader asks for recommendations', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({
+      question: '有什么推荐吗？',
+      locale: 'zh-CN',
+      history: [{ role: 'user', content: '反馈回路如何帮助团队改进协作？' }],
+    }),
+  });
+  const response = await handleChatRequest(
+    request,
+    { GEMINI_API_KEY: 'test-only-api-key', ASSETS: { fetch: async () => Response.json(sources) } },
+    async () => Response.json({ candidates: [{ content: { parts: [{ text: '可以从这篇文章开始。' }] } }] }),
+  );
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(result.answer, '可以从这篇文章开始。');
+  assert.deepEqual(result.sources, [{ title: '工程管理中的反馈回路', url: '/writing/2026/08/feedback-loops/' }]);
 });
 
 test('chat API reads its index from the Pages static asset binding', async () => {
@@ -472,6 +596,62 @@ test('chat API returns cited answer and never forwards the browser request body 
   assert.equal(calls[0].init.headers['x-goog-api-key'], 'test-only-api-key');
   assert.match(calls[0].init.body, /feedback loops help engineering teams improve/i);
   assert.match(calls[0].init.body, /Published site excerpts/);
+});
+
+test('chat API streams answer text before sending source links and a completion event', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: 'What helps feedback loops?', locale: 'en', stream: true }),
+  });
+  let modelUrl;
+  const response = await handleChatRequest(
+    request,
+    { GEMINI_API_KEY: 'test-only-api-key', ASSETS: { fetch: async () => Response.json(sources) } },
+    async (input) => {
+      modelUrl = String(input);
+      const encoder = new TextEncoder();
+      return new Response(new ReadableStream({
+        start(controller) {
+          controller.enqueue(encoder.encode('data: {"candidates":[{"content":{"parts":[{"text":"Feedback loops "}]}}]}\n\n'));
+          controller.enqueue(encoder.encode('data: {"candidates":[{"content":{"parts":[{"text":"help teams improve."}]}}]}\n\n'));
+          controller.close();
+        },
+      }), { headers: { 'content-type': 'text/event-stream' } });
+    },
+  );
+  const body = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get('content-type'), /text\/event-stream/);
+  assert.match(modelUrl, /:streamGenerateContent\?alt=sse/);
+  assert.match(body, /event: text\ndata: \{"text":"Feedback loops "\}/);
+  assert.match(body, /event: text\ndata: \{"text":"help teams improve\."\}/);
+  assert.match(body, /event: sources/);
+  assert.match(body, /Engineering management/);
+  assert.match(body, /event: done/);
+});
+
+test('chat API reports an upstream stream error without emitting sources or completion', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: 'What helps feedback loops?', locale: 'en', stream: true }),
+  });
+  const response = await handleChatRequest(
+    request,
+    { GEMINI_API_KEY: 'test-only-api-key', ASSETS: { fetch: async () => Response.json(sources) } },
+    async () => new Response('data: {"candidates":[{"content":{"parts":[{"text":"partial answer"}]}}]}\n\n'
+      + 'data: {"error":{"message":"upstream unavailable"}}\n\n', {
+      headers: { 'content-type': 'text/event-stream' },
+    }),
+  );
+  const body = await response.text();
+
+  assert.match(body, /event: error/);
+  assert.doesNotMatch(body, /event: sources/);
+  assert.doesNotMatch(body, /event: done/);
+  assert.doesNotMatch(body, /upstream unavailable/);
 });
 
 test('chat API gives an on-site fallback without spending model quota when retrieval finds nothing', async () => {

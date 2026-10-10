@@ -11,7 +11,10 @@ const copy = i18n(locale).chat;
       <h2 id="site-chat-title">{copy.title}</h2>
       <button class="site-chat-close" type="button" data-chat-close aria-label={copy.close}>×</button>
     </header>
-    <p class="site-chat-privacy">{copy.privacy}</p>
+    <details class="site-chat-privacy">
+      <summary>{copy.privacySummary}</summary>
+      <p>{copy.privacy}</p>
+    </details>
     <ol class="site-chat-messages" data-chat-messages aria-live="polite" aria-relevant="additions text">
       <li class="site-chat-message assistant"><p>{copy.greeting}</p></li>
     </ol>
@@ -34,13 +37,17 @@ const copy = i18n(locale).chat;
     error: string;
     sending: string;
     sources: string;
+    privacySummary: string;
   };
 
   type ChatResponse = {
     answer?: string;
     sources?: { title: string; url: string }[];
+    suggestions?: string[];
     error?: { message: string };
   };
+
+  type ChatStreamResult = { answer: string; sources: ChatResponse['sources']; suggestions: string[] };
 
   document.querySelectorAll<HTMLElement>('[data-site-chat]').forEach((widget) => {
     const launcher = widget.querySelector<HTMLButtonElement>('[data-chat-launcher]');
@@ -65,32 +72,7 @@ const copy = i18n(locale).chat;
     const historyBytesLimit = 4_000;
     const historyMessageBytesLimit = 1_200;
 
-    const limitHistoryText = (text: string) => {
-      let result = '';
-      let byteLength = 0;
-      for (const character of text) {
-        const characterBytes = encoder.encode(character).byteLength;
-        if (byteLength + characterBytes > historyMessageBytesLimit) break;
-        result += character;
-        byteLength += characterBytes;
-      }
-      return result;
-    };
-
-    const setOpen = (open: boolean) => {
-      panel.hidden = !open;
-      launcher.setAttribute('aria-expanded', String(open));
-      if (open) input.focus();
-      else launcher.focus();
-    };
-
-    const appendMessage = (text: string, kind: 'assistant' | 'user', sources: ChatResponse['sources'] = []) => {
-      const item = document.createElement('li');
-      item.className = `site-chat-message ${kind}`;
-      const paragraph = document.createElement('p');
-      paragraph.textContent = text;
-      item.append(paragraph);
-
+    const appendMessageDetails = (item: HTMLLIElement, sources: ChatResponse['sources'], suggestions: ChatResponse['suggestions']) => {
       if (sources?.length) {
         const heading = document.createElement('strong');
         heading.className = 'site-chat-source-heading';
@@ -113,13 +95,112 @@ const copy = i18n(locale).chat;
         }
         if (list.childElementCount) item.append(list);
       }
+      if (suggestions?.length) {
+        const group = document.createElement('div');
+        group.className = 'site-chat-suggestions';
+        for (const suggestion of suggestions) {
+          const button = document.createElement('button');
+          button.className = 'site-chat-suggestion';
+          button.type = 'button';
+          button.dataset.chatSuggestion = '';
+          button.textContent = suggestion;
+          group.append(button);
+        }
+        item.append(group);
+      }
+    };
 
+    const limitHistoryText = (text: string) => {
+      let result = '';
+      let byteLength = 0;
+      for (const character of text) {
+        const characterBytes = encoder.encode(character).byteLength;
+        if (byteLength + characterBytes > historyMessageBytesLimit) break;
+        result += character;
+        byteLength += characterBytes;
+      }
+      return result;
+    };
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      launcher.setAttribute('aria-expanded', String(open));
+      if (open) input.focus();
+      else launcher.focus();
+    };
+
+    const appendMessage = (
+      text: string,
+      kind: 'assistant' | 'user',
+      sources: ChatResponse['sources'] = [],
+      suggestions: ChatResponse['suggestions'] = [],
+    ) => {
+      const item = document.createElement('li');
+      item.className = `site-chat-message ${kind}`;
+      const paragraph = document.createElement('p');
+      paragraph.textContent = text;
+      item.append(paragraph);
+      appendMessageDetails(item, sources, suggestions);
       messages.append(item);
       item.scrollIntoView({ block: 'nearest' });
+      return item;
+    };
+
+    const readChatStream = async (response: Response, paragraph: HTMLParagraphElement): Promise<ChatStreamResult> => {
+      if (!response.body) throw new Error('Missing chat response stream');
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let answer = '';
+      let sources: ChatResponse['sources'] = [];
+      let suggestions: string[] = [];
+      let completed = false;
+
+      const consumeFrame = (frame: string) => {
+        const lines = frame.split(/\r?\n/u);
+        const event = lines.find((line) => line.startsWith('event:'))?.slice(6).trim();
+        const data = lines.filter((line) => line.startsWith('data:')).map((line) => line.slice(5).trimStart()).join('\n');
+        if (!event || !data) return;
+        const payload = JSON.parse(data) as { text?: string; sources?: ChatResponse['sources']; suggestions?: string[]; message?: string };
+        if (event === 'text' && typeof payload.text === 'string') {
+          answer += payload.text;
+          paragraph.textContent = answer;
+          messages.scrollTop = messages.scrollHeight;
+        } else if (event === 'sources' && Array.isArray(payload.sources)) {
+          sources = payload.sources;
+        } else if (event === 'suggestions' && Array.isArray(payload.suggestions)) {
+          suggestions = payload.suggestions.filter((suggestion) => typeof suggestion === 'string');
+        } else if (event === 'error') {
+          throw new Error(payload.message || copy.error);
+        } else if (event === 'done') {
+          completed = true;
+        }
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const frames = buffer.split(/\r?\n\r?\n/u);
+        buffer = frames.pop() ?? '';
+        for (const frame of frames) consumeFrame(frame);
+      }
+      buffer += decoder.decode();
+      if (buffer.trim()) consumeFrame(buffer);
+      if (!completed) throw new Error('Incomplete chat response stream');
+      return { answer, sources, suggestions };
     };
 
     launcher.addEventListener('click', () => setOpen(panel.hidden));
     close.addEventListener('click', () => setOpen(false));
+    messages.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const suggestion = target.closest<HTMLButtonElement>('[data-chat-suggestion]');
+      if (!suggestion || input.disabled) return;
+      input.value = suggestion.textContent ?? '';
+      form.requestSubmit();
+    });
     input.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' || event.shiftKey || event.isComposing) return;
       event.preventDefault();
@@ -140,20 +221,34 @@ const copy = i18n(locale).chat;
       send.disabled = true;
       status.textContent = copy.sending;
       const history = conversation.slice(-4);
+      let streamingItem: HTMLLIElement | undefined;
 
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ question, locale, history }),
+          body: JSON.stringify({ question, locale, history, stream: true }),
         });
-        const result = await response.json() as ChatResponse;
-        if (!response.ok || !result.answer) throw new Error(result.error?.message || copy.error);
-        appendMessage(result.answer, 'assistant', result.sources);
-        conversation.push(
-          { role: 'user', content: limitHistoryText(question) },
-          { role: 'assistant', content: limitHistoryText(result.answer) },
-        );
+        if (!response.ok) throw new Error(copy.error);
+        if (response.headers.get('content-type')?.includes('text/event-stream')) {
+          streamingItem = appendMessage('', 'assistant');
+          const paragraph = streamingItem.querySelector('p');
+          if (!paragraph) throw new Error(copy.error);
+          const result = await readChatStream(response, paragraph);
+          appendMessageDetails(streamingItem, result.sources, result.suggestions);
+          conversation.push(
+            { role: 'user', content: limitHistoryText(question) },
+            { role: 'assistant', content: limitHistoryText(result.answer) },
+          );
+        } else {
+          const result = await response.json() as ChatResponse;
+          if (!result.answer) throw new Error(result.error?.message || copy.error);
+          appendMessage(result.answer, 'assistant', result.sources, result.suggestions);
+          conversation.push(
+            { role: 'user', content: limitHistoryText(question) },
+            { role: 'assistant', content: limitHistoryText(result.answer) },
+          );
+        }
         const historyByteLength = () => conversation.reduce(
           (total, message) => total + encoder.encode(message.content).byteLength,
           0,
@@ -162,6 +257,7 @@ const copy = i18n(locale).chat;
           conversation.splice(0, Math.min(2, conversation.length));
         }
       } catch {
+        streamingItem?.remove();
         appendMessage(copy.error, 'assistant');
       } finally {
         input.disabled = false;
@@ -171,6 +267,7 @@ const copy = i18n(locale).chat;
       }
     });
   });
+
 </script>
 
 <style>
@@ -180,7 +277,9 @@ const copy = i18n(locale).chat;
   .site-chat-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 1rem; border-bottom: 1px solid var(--line); background: var(--paper-strong); }
   .site-chat-header h2 { margin: 0; font-family: var(--serif); font-size: 1.08rem; font-weight: 550; }
   .site-chat-close { display: grid; width: 2rem; height: 2rem; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 1.2rem; cursor: pointer; }
-  .site-chat-privacy { margin: 0; padding: .65rem 1rem; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .72rem; line-height: 1.45; }
+  .site-chat-privacy { margin: 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .72rem; line-height: 1.45; }
+  .site-chat-privacy summary { padding: .5rem 1rem; cursor: pointer; }
+  .site-chat-privacy p { margin: 0; padding: 0 1rem .65rem; }
   .site-chat-messages { display: flex; flex: 1; flex-direction: column; gap: .8rem; overflow-y: auto; margin: 0; padding: 1rem; list-style: none; }
   .site-chat-message { max-width: 92%; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: 7px; background: var(--paper-strong); font-size: .88rem; line-height: 1.55; overflow-wrap: anywhere; }
   .site-chat-message.user { align-self: flex-end; border-color: var(--accent); background: var(--accent-soft); }
@@ -188,6 +287,9 @@ const copy = i18n(locale).chat;
   .site-chat-message ul { margin: .55rem 0 0; padding-left: 1.1rem; }
   .site-chat-message a { color: var(--accent); }
   .site-chat-source-heading { display: block; margin-top: .65rem; font-size: .76rem; }
+  .site-chat-suggestions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .65rem; }
+  .site-chat-suggestion { padding: .35rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--accent); font: inherit; font-size: .76rem; cursor: pointer; }
+  .site-chat-suggestion:hover { border-color: var(--accent); background: var(--accent-soft); }
   .site-chat-form { padding: .75rem 1rem 1rem; border-top: 1px solid var(--line); }
   .site-chat-form label { display: block; margin-bottom: .3rem; color: var(--muted); font-size: .75rem; font-weight: 650; }
   .site-chat-form textarea { display: block; width: 100%; min-height: 3.5rem; resize: vertical; padding: .65rem .7rem; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--ink); font: inherit; font-size: .88rem; }

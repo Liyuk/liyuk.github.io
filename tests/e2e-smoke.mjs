@@ -52,6 +52,29 @@ try {
       await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: { message: 'private failure detail' } }) });
       return;
     }
+    if (payload.question === '你能聊什么？') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          answer: '我会根据本站已发布内容回答。',
+          suggestions: ['技术与架构', '管理与领导力'],
+          sources: [],
+        }),
+      });
+      return;
+    }
+    if (payload.question === 'streaming test') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'text/event-stream',
+        body: 'event: text\ndata: {"text":"The answer arrives "}\n\n'
+          + 'event: text\ndata: {"text":"in streamed pieces."}\n\n'
+          + 'event: sources\ndata: {"sources":[{"title":"A streamed source","url":"/writing/2026/08/streamed-source/"}]}\n\n'
+          + 'event: done\ndata: {}\n\n',
+      });
+      return;
+    }
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -123,6 +146,22 @@ try {
     chatRequests.at(-1).history.every((message) =>
       message.content.length <= 1_200 && new TextEncoder().encode(message.content).byteLength <= 1_200) &&
     chatRequests.at(-1).history.reduce((sum, message) => sum + new TextEncoder().encode(message.content).byteLength, 0) <= 4_000);
+
+  await chatInput.fill('streaming test');
+  await chatInput.press('Enter');
+  await page.getByText('The answer arrives in streamed pieces.').waitFor();
+  check('chat renders streamed text and adds sources after the answer',
+    await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) =>
+      text.includes('The answer arrives in streamed pieces.') && text.includes('A streamed source')));
+
+  await chatInput.fill('你能聊什么？');
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  check('chat displays selectable topic suggestions', await page.locator('[data-chat-suggestion]').count() === 2);
+  await page.locator('[data-chat-suggestion]').first().click();
+  await page.waitForTimeout(150);
+  check('selecting a topic suggestion sends that topic', chatRequests.at(-1).question === '技术与架构');
+  check('chat requests opt into streaming responses', chatRequests.every((payload) => payload.stream === true));
   await page.unroute('**/api/chat');
 
   const themeIcon = page.locator('[data-theme-toggle] [data-icon="theme"]');
