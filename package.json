@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "prebuild": "playwright install chromium --only-shell",
-    "build": "astro build && pagefind --site dist",
+    "build": "astro build && node scripts/audit-rendered-content.mjs && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "audit:images": "node scripts/audit-images.mjs",

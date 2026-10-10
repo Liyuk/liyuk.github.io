@@ -848,7 +848,11 @@ h1, h2, h3, p { margin-top: 0; }
 .prose svg[id^="mermaid-"] .node circle,
 .prose svg[id^="mermaid-"] .node ellipse,
 .prose svg[id^="mermaid-"] .node polygon,
-.prose svg[id^="mermaid-"] .node path,
+.prose svg[id^="mermaid-"] .node path {
+  fill: var(--accent-soft) !important;
+  stroke: var(--accent) !important;
+}
+
 .prose svg[id^="mermaid-"] .cluster rect {
   fill: var(--paper-strong) !important;
   stroke: var(--line) !important;
@@ -857,13 +861,13 @@ h1, h2, h3, p { margin-top: 0; }
 .prose svg[id^="mermaid-"] .flowchart-link,
 .prose svg[id^="mermaid-"] .edgePath .path,
 .prose svg[id^="mermaid-"] .transition {
-  stroke: var(--muted) !important;
+  stroke: var(--accent) !important;
 }
 
 .prose svg[id^="mermaid-"] .marker,
 .prose svg[id^="mermaid-"] .arrowheadPath {
-  fill: var(--muted) !important;
-  stroke: var(--muted) !important;
+  fill: var(--accent) !important;
+  stroke: var(--accent) !important;
 }
 
 .prose svg[id^="mermaid-"] .label,

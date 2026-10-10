@@ -32,9 +32,11 @@ function greet(name: string): string {
 
 ```mermaid
 graph TD
-  A[Start] --> B{Decision?}
-  B -->|Yes| C[Continue]
-  B -->|No| D[Return]
+  accTitle: 示例流程图
+  accDescr: 从开始到判断，分别展示继续和返回两条路径。
+  A[开始] --> B{判断？}
+  B -->|是| C[继续]
+  B -->|否| D[返回]
 ```
 
 ## 图片
