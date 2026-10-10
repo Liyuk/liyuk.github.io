@@ -84,7 +84,7 @@ This table is the canonical verification matrix (`agent/architecture.md` points 
 
 Pull requests run verification only, and a superseded pull-request run is cancelled. Master verification is not cancelled while it is running; the workflow's pending-run policy has a separate concurrency limit, documented with the workflow and tested before changing notification behavior.
 
-A successful `master` verification deploys GitHub Pages. Two jobs then hang off a successful deployment, independently of each other: `purge` clears the Cloudflare cache so list pages pick up the deploy immediately, and `notify` prepares/sends Buttondown updates. Repository secrets: `BUTTONDOWN_API_KEY`, plus `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ZONE_ID`. Each job explains itself and skips rather than failing when its credentials are absent. Local `npm run notify:buttondown` is dry-run by default; `--apply` requires explicit owner authorization.
+A successful `master` verification uploads the built site; the `deploy` job publishes that exact artifact to Cloudflare Pages with Wrangler, and `notify` runs only after deployment succeeds. Cloudflare Pages automatic production deployments must be disabled to avoid publishing an unverified parallel build; Git integration can remain enabled for previews. Configure the GitHub Actions secret `CLOUDFLARE_API_TOKEN` with Pages deployment permission, repository variables `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_PAGES_PROJECT`, and the `BUTTONDOWN_API_KEY` secret. Configure the Pages runtime secret `GEMINI_API_KEY` in both Production and Preview environments for the site assistant. Local `npm run notify:buttondown` is dry-run by default; `--apply` requires explicit owner authorization.
 
 ## Safety boundaries
 

@@ -13,7 +13,7 @@ jobs:
   verify:
     name: verify
     concurrency:
-      group: pages-verify-${{ github.ref }}
+      group: site-verify-${{ github.ref }}
       # Superseding a pull-request run is free. Superseding a master run is not:
       # a cancelled run never reaches `notify`, and the next push's
       # `github.event.before` starts *after* the commits it skipped, so their
@@ -22,8 +22,6 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     permissions:
       contents: read
-      pages: write
-      id-token: write
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -47,82 +45,42 @@ jobs:
           path: artifacts/browser-checks/
           if-no-files-found: ignore
           retention-days: 14
-      # Only a master ref can reach `deploy`, so pull requests skip the Pages
-      # API call and the full dist/ upload. Verification itself is unchanged —
-      # the production build already ran inside publish:check.
-      - uses: actions/configure-pages@v6
+      # Pass the verified build to the Cloudflare deployment job. Pull requests
+      # do not upload a production artifact.
+      - name: Upload verified site
         if: ${{ github.ref == 'refs/heads/master' }}
-      - uses: actions/upload-pages-artifact@v5
-        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: actions/upload-artifact@v7
         with:
-          path: ./dist
+          name: verified-site
+          path: dist/
+          retention-days: 1
 
   deploy:
-    name: Deploy GitHub Pages
+    name: Deploy Cloudflare Pages
     concurrency:
-      group: pages-deploy
+      group: cloudflare-pages-deploy
       cancel-in-progress: false
     permissions:
-      pages: write
-      id-token: write
+      contents: read
     needs: verify
     if: ${{ needs.verify.result == 'success' && github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v5
-
-  purge:
-    name: Purge Cloudflare cache
-    concurrency:
-      group: cloudflare-purge
-      cancel-in-progress: false
-    permissions:
-      contents: read
-    needs: deploy
-    # Pages that already had a cached copy -- the home page, the section lists --
-    # keep serving it after a deploy, while brand-new URLs are fresh. That is
-    # what makes a new entry reachable by link and by RSS but missing from
-    # `/writing/`. Runs beside `notify` rather than before it: a stale list page
-    # must not hold back a subscriber email, and neither should block the other.
-    if: ${{ needs.deploy.result == 'success' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
     steps:
-      - name: Purge the zone after deployment
-        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ZONE_ID != '' }}
-        run: |
-          set -euo pipefail
-          response=$(curl -sS -X POST \
-            "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
-            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            -H "Content-Type: application/json" \
-            --data '{"purge_everything":true}')
-          echo "$response" | python3 -c '
-          import json, sys
-          d = json.load(sys.stdin)
-          if d.get("success"):
-              print("Cloudflare cache purged.")
-              sys.exit(0)
-          errors = d.get("errors", [])
-          print("Purge failed:", json.dumps(errors, ensure_ascii=False))
-          # Zone ID and Account ID are both 32-char hex and sit next to each
-          # other on the dashboard, so this is the likely mistake. Cache purge
-          # is a zone-level call; the account identifier will not work here.
-          if any(str(e.get("code")) in {"7003", "1049"} or "identifier" in str(e.get("message", "")).lower() for e in errors):
-              print("Hint: CLOUDFLARE_ZONE_ID must be the Zone ID for liyuk.com (Cloudflare dashboard -> the domain -> Overview -> API), not the Account ID shown beside it.")
-          sys.exit(1)
-          '
-      - name: Explain skipped purge
-        if: ${{ env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ZONE_ID == '' }}
-        run: echo "CLOUDFLARE_API_TOKEN / CLOUDFLARE_ZONE_ID are not configured; deployed without purging the CDN. List pages may serve a cached copy until their TTL expires."
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.node-version'
+      - uses: actions/download-artifact@v7
+        with:
+          name: verified-site
+          path: dist/
+      - name: Deploy verified build to Cloudflare Pages
+        run: npx --yes wrangler@4 pages deploy dist --project-name "$CLOUDFLARE_PAGES_PROJECT" --branch master
 
   notify:
     name: Notify Buttondown subscribers
@@ -133,7 +91,7 @@ jobs:
       contents: read
     needs: deploy
     # A notification failure is intentionally visible and retryable, but it
-    # cannot roll back the completed Pages deployment.
+    # cannot roll back the completed Cloudflare Pages deployment.
     if: ${{ needs.deploy.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
