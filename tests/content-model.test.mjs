@@ -53,6 +53,8 @@ test('system copy is available in Chinese and English', () => {
   assert.equal(i18n('zh-CN').navigation.writing, '写作');
   assert.equal(i18n('en').navigation.writing, 'Writing');
   assert.equal(i18n('en').theme.toDark, 'Switch to dark mode');
+  assert.equal(i18n('zh-CN').chat.title, '和站内内容聊聊');
+  assert.match(i18n('en').chat.privacy, /Google Gemini/);
 });
 
 test('public page copy is centrally managed for both languages', () => {

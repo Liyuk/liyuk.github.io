@@ -29,6 +29,211 @@ try {
   check('home loads', homeTitle.length > 0, homeTitle);
   const h1 = await page.textContent('h1');
   check('home has hero heading', h1.includes('烹饪指南') || h1.length > 0, h1);
+  const chatIndex = await page.evaluate(() => fetch('/chat-index.json').then((response) => response.json()));
+  check('static chat index contains only published article routes in both locales',
+    chatIndex.length > 0 && chatIndex.every((entry) =>
+      ['zh-CN', 'en'].includes(entry.locale) &&
+      /^\/(?:en\/)?(?:writing|research|consulting|projects)\/.+\/$/.test(entry.url)));
+  check('static chat index stays below 2 MB',
+    new TextEncoder().encode(JSON.stringify(chatIndex)).length < 2_000_000);
+  const chatLauncher = page.getByRole('button', { name: '站内问答' });
+  check('home exposes the Chinese site chat', await chatLauncher.count() === 1);
+  await chatLauncher.click();
+  check('chat opens with a labeled dialog', await page.getByRole('dialog', { name: '和站内内容聊聊' }).isVisible());
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  check('chat disables nonessential motion when reduced motion is requested',
+    await page.locator('[data-chat-panel]').evaluate((element) => getComputedStyle(element).animationName === 'none'));
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  check('opening chat moves focus to its input', await page.locator('#site-chat-question').evaluate((element) => element === document.activeElement));
+  await page.keyboard.press('Escape');
+  check('Escape closes chat and restores focus', await page.getByRole('dialog').count() === 0 && await chatLauncher.evaluate((element) => element === document.activeElement));
+
+  const chatRequests = [];
+  await page.route('**/api/chat', async (route) => {
+    const payload = JSON.parse(route.request().postData() ?? '{}');
+    chatRequests.push(payload);
+    if (payload.question === 'fail') {
+      await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: { message: 'private failure detail' } }) });
+      return;
+    }
+    if (payload.question === '你能聊什么？') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          answer: '我会根据本站已发布内容回答。',
+          suggestions: ['技术与架构', '管理与领导力'],
+          sources: [],
+        }),
+      });
+      return;
+    }
+    if (payload.question === 'streaming test') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'text/event-stream',
+        body: 'event: text\ndata: {"text":"**The answer arrives** "}\n\n'
+          + 'event: text\ndata: {"text":"in streamed pieces. [S1]"}\n\n'
+          + 'event: sources\ndata: {"sources":[{"title":"A streamed source","url":"/writing/2026/08/streamed-source/"}]}\n\n'
+          + 'event: done\ndata: {}\n\n',
+      });
+      return;
+    }
+    if (payload.question === 'formatting test') {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      await route.fulfill({
+        status: 200,
+        contentType: 'text/event-stream',
+        body: 'event: text\ndata: {"text":"## A clear answer\\n\\nA **useful point** with `code`.\\n\\n- First item\\n- Second item\\n\\n```js\\nconst answer = true;\\n```\\n\\n<img src=x onerror=alert(1)>"}\n\n'
+          + 'event: done\ndata: {}\n\n',
+      });
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        answer: payload.question === 'long answer' ? '答'.repeat(1_400) : `Answer ${chatRequests.length}`,
+        sources: [
+          { title: 'An article', url: '/writing/2026/08/example/' },
+          { title: 'External source', url: 'https://attacker.example/' },
+        ],
+      }),
+    });
+  });
+
+  await chatLauncher.click();
+  const chatInput = page.locator('#site-chat-question');
+  await chatInput.fill('line one');
+  await chatInput.press('Shift+Enter');
+  await chatInput.pressSequentially('line two');
+  check('Shift+Enter inserts a newline without sending', await chatInput.inputValue() === 'line one\nline two' && chatRequests.length === 0);
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  check('Enter sends the question', chatRequests.length === 1 && chatRequests[0].question === 'line one\nline two');
+  check('user messages render as right-aligned chat bubbles',
+    await page.locator('[data-chat-messages] .user').last().evaluate((element) =>
+      getComputedStyle(element).alignSelf === 'flex-end' && getComputedStyle(element).backgroundColor !== 'rgba(0, 0, 0, 0)'));
+  check('answer shows a same-site source and filters external links',
+    await page.locator('[data-chat-messages] .assistant a').count() === 1 &&
+    await page.locator('[data-chat-messages] .assistant a').first().evaluate((link) => {
+      const url = new URL(link.href);
+      return url.origin === window.location.origin && url.pathname.startsWith('/writing/');
+    }));
+
+  await chatInput.fill('Follow up');
+  await chatInput.press('Control+Enter');
+  await page.waitForTimeout(150);
+  check('Ctrl+Enter sends and includes the previous exchange',
+    chatRequests.length === 2 &&
+    chatRequests[1].history.some((message) => message.role === 'user' && message.content === 'line one\nline two') &&
+    chatRequests[1].history.some((message) => message.role === 'assistant' && message.content === 'Answer 1'));
+
+  await chatInput.fill('Meta shortcut');
+  await chatInput.press('Meta+Enter');
+  await page.waitForTimeout(150);
+  check('⌘+Enter also sends and history stays within four messages',
+    chatRequests.length === 3 && chatRequests[2].question === 'Meta shortcut' && chatRequests[2].history.length === 4);
+
+  await chatInput.fill('composition check');
+  await chatInput.evaluate((element) => {
+    const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+    Object.defineProperty(event, 'isComposing', { value: true });
+    element.dispatchEvent(event);
+  });
+  await page.waitForTimeout(100);
+  check('Enter during IME composition does not send', chatRequests.length === 3 && await chatInput.inputValue() === 'composition check');
+
+  await chatInput.fill('fail');
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  check('API failures show localized generic copy',
+    await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) => text.includes('暂时无法回答')));
+  check('chat request keeps browser conversation in memory only',
+    chatRequests.every((payload) => !('ip' in payload) && !('conversationId' in payload)));
+
+  await chatInput.fill('long answer');
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  await chatInput.fill('after long answer');
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  check('long model answers are kept within the API history limits',
+    chatRequests.at(-1).history.length <= 4 &&
+    chatRequests.at(-1).history.every((message) =>
+      message.content.length <= 1_200 && new TextEncoder().encode(message.content).byteLength <= 1_200) &&
+    chatRequests.at(-1).history.reduce((sum, message) => sum + new TextEncoder().encode(message.content).byteLength, 0) <= 4_000);
+
+  await chatInput.fill('streaming test');
+  await chatInput.press('Enter');
+  await page.getByText('The answer arrives in streamed pieces.').waitFor();
+  check('chat renders streamed text and adds sources after the answer',
+    await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) =>
+      text.includes('The answer arrives in streamed pieces.') && text.includes('A streamed source')));
+  check('streamed source links remain visible after the answer completes',
+    await page.locator('[data-chat-messages] .assistant').last().getByRole('link', { name: 'A streamed source' }).isVisible());
+
+  await chatInput.fill('formatting test');
+  await chatInput.press('Enter');
+  const loadingMessage = page.locator('[data-chat-messages] .assistant.is-loading');
+  await loadingMessage.waitFor({ state: 'visible' });
+  check('chat shows an assistant loading state before the first streamed token',
+    (await loadingMessage.textContent()).includes('正在查找和回答'));
+  check('loading dots animate when motion is allowed',
+    await loadingMessage.locator('.site-chat-loading-dots i').first().evaluate((element) => getComputedStyle(element).animationName === 'chat-dot'));
+  const formattedAnswer = page.locator('[data-chat-messages] .assistant').last();
+  await formattedAnswer.locator('pre code').waitFor();
+  check('streamed answers render headings, emphasis, lists, and fenced code as readable blocks',
+    await formattedAnswer.locator('h4').textContent().then((text) => text === 'A clear answer') &&
+    await formattedAnswer.locator('strong').textContent().then((text) => text === 'useful point') &&
+    await formattedAnswer.locator('ul li').allTextContents().then((items) => items.join('|') === 'First item|Second item') &&
+    await formattedAnswer.locator('pre code').textContent().then((text) => text === 'const answer = true;'));
+  check('assistant markdown renders untrusted HTML as text',
+    await formattedAnswer.locator('img').count() === 0 &&
+    await formattedAnswer.textContent().then((text) => text.includes('<img src=x onerror=alert(1)>')));
+  check('completed answers stop showing the live stream cursor',
+    !(await formattedAnswer.evaluate((element) => element.classList.contains('is-streaming'))));
+
+  await chatInput.fill('你能聊什么？');
+  await chatInput.press('Enter');
+  await page.waitForTimeout(150);
+  check('chat displays selectable topic suggestions', await page.locator('[data-chat-suggestion]').count() === 2);
+  await page.locator('[data-chat-suggestion]').first().click();
+  await page.waitForTimeout(150);
+  check('selecting a topic suggestion sends that topic', chatRequests.at(-1).question === '技术与架构');
+  check('chat requests opt into streaming responses', chatRequests.every((payload) => payload.stream === true));
+  await page.unroute('**/api/chat');
+
+  await page.evaluate(() => {
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (input, init) => {
+      const url = new URL(typeof input === 'string' ? input : input instanceof Request ? input.url : String(input), window.location.origin);
+      if (url.pathname !== '/api/chat') return originalFetch(input, init);
+      const encoder = new TextEncoder();
+      const body = new ReadableStream({
+        start(controller) {
+          controller.enqueue(encoder.encode('event: text\ndata: {"text":"Streaming "}\n\n'));
+          setTimeout(() => {
+            controller.enqueue(encoder.encode('event: text\ndata: {"text":"continues."}\n\n'));
+            controller.enqueue(encoder.encode('event: done\ndata: {}\n\n'));
+            controller.close();
+          }, 600);
+        },
+      });
+      return new Response(body, { headers: { 'content-type': 'text/event-stream' } });
+    };
+  });
+  await chatInput.fill('live stream test');
+  await chatInput.press('Enter');
+  const liveStream = page.locator('[data-chat-messages] .assistant.is-streaming').last();
+  await page.waitForFunction(() => document.querySelector('.site-chat-message.is-streaming')?.textContent?.includes('Streaming'));
+  check('live streamed answers show an animated cursor while generation is in progress',
+    await liveStream.evaluate((element) =>
+      element.getAttribute('aria-busy') === 'true' && getComputedStyle(element, '::after').animationName === 'chat-cursor'));
+  await liveStream.waitFor({ state: 'detached' });
+  check('live stream settles into a complete assistant message',
+    await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) => text === 'Streaming continues.'));
+
   const themeIcon = page.locator('[data-theme-toggle] [data-icon="theme"]');
   check('theme toggle uses shared icon', await themeIcon.count() === 1, `count=${await themeIcon.count()}`);
   check('shared theme icon uses standard SVG contract',
@@ -166,6 +371,17 @@ try {
   // 15. 404 page
   await page.goto(`${BASE}/definitely-not-a-page/`, { waitUntil: 'networkidle' });
   check('404 renders', (await page.title()).length > 0, await page.title());
+
+  // 16. English chat copy and narrow-screen layout.
+  await page.goto(`${BASE}/en/`, { waitUntil: 'networkidle' });
+  const englishChatLauncher = page.getByRole('button', { name: 'Ask this site' });
+  check('English home exposes localized chat', await englishChatLauncher.count() === 1);
+  await page.setViewportSize({ width: 320, height: 700 });
+  await englishChatLauncher.click();
+  const chatPanel = page.getByRole('dialog', { name: 'Ask about the site' });
+  check('English chat opens at 320px width', await chatPanel.isVisible());
+  const panelBounds = await chatPanel.boundingBox();
+  check('chat panel stays inside a narrow viewport', Boolean(panelBounds && panelBounds.x >= 0 && panelBounds.x + panelBounds.width <= 320), JSON.stringify(panelBounds));
 
 } catch (err) {
   results.fail++;

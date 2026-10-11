@@ -4,6 +4,7 @@ import 'katex/dist/katex.min.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SiteChat from '../components/SiteChat.astro';
 import { site } from '../data/site.mjs';
 import { i18n } from '../i18n/index.mjs';
 import { getPageSeo, type SeoPage } from '../lib/seo.ts';
@@ -158,5 +159,6 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <Header currentPath={Astro.url.pathname} locale={locale} />
     <main id="content"><slot /></main>
     <Footer locale={locale} />
+    <SiteChat locale={locale} />
   </body>
 </html>
