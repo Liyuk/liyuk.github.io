@@ -32,10 +32,10 @@ test('chat retrieval returns only matching sources in the requested locale', () 
   assert.equal(results[0].title, 'Engineering management');
 });
 
-test('chat answer formatting removes markdown syntax and inline source markers', () => {
+test('chat answer formatting removes internal source markers while preserving markdown structure', () => {
   assert.equal(
     formatChatAnswer('**核心判断**：[S1]\n- **先看目标**，再看约束。\n代码用 `router` 管理。'),
-    '核心判断：\n先看目标，再看约束。\n代码用 router 管理。',
+    '**核心判断**：\n- **先看目标**，再看约束。\n代码用 `router` 管理。',
   );
 });
 

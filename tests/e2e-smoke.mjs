@@ -40,6 +40,10 @@ try {
   check('home exposes the Chinese site chat', await chatLauncher.count() === 1);
   await chatLauncher.click();
   check('chat opens with a labeled dialog', await page.getByRole('dialog', { name: '和站内内容聊聊' }).isVisible());
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  check('chat disables nonessential motion when reduced motion is requested',
+    await page.locator('[data-chat-panel]').evaluate((element) => getComputedStyle(element).animationName === 'none'));
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   check('opening chat moves focus to its input', await page.locator('#site-chat-question').evaluate((element) => element === document.activeElement));
   await page.keyboard.press('Escape');
   check('Escape closes chat and restores focus', await page.getByRole('dialog').count() === 0 && await chatLauncher.evaluate((element) => element === document.activeElement));
@@ -75,6 +79,16 @@ try {
       });
       return;
     }
+    if (payload.question === 'formatting test') {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      await route.fulfill({
+        status: 200,
+        contentType: 'text/event-stream',
+        body: 'event: text\ndata: {"text":"## A clear answer\\n\\nA **useful point** with `code`.\\n\\n- First item\\n- Second item\\n\\n```js\\nconst answer = true;\\n```\\n\\n<img src=x onerror=alert(1)>"}\n\n'
+          + 'event: done\ndata: {}\n\n',
+      });
+      return;
+    }
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -97,6 +111,9 @@ try {
   await chatInput.press('Enter');
   await page.waitForTimeout(150);
   check('Enter sends the question', chatRequests.length === 1 && chatRequests[0].question === 'line one\nline two');
+  check('user messages render as right-aligned chat bubbles',
+    await page.locator('[data-chat-messages] .user').last().evaluate((element) =>
+      getComputedStyle(element).alignSelf === 'flex-end' && getComputedStyle(element).backgroundColor !== 'rgba(0, 0, 0, 0)'));
   check('answer shows a same-site source and filters external links',
     await page.locator('[data-chat-messages] .assistant a').count() === 1 &&
     await page.locator('[data-chat-messages] .assistant a').first().evaluate((link) => {
@@ -153,6 +170,29 @@ try {
   check('chat renders streamed text and adds sources after the answer',
     await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) =>
       text.includes('The answer arrives in streamed pieces.') && text.includes('A streamed source')));
+  check('streamed source links remain visible after the answer completes',
+    await page.locator('[data-chat-messages] .assistant').last().getByRole('link', { name: 'A streamed source' }).isVisible());
+
+  await chatInput.fill('formatting test');
+  await chatInput.press('Enter');
+  const loadingMessage = page.locator('[data-chat-messages] .assistant.is-loading');
+  await loadingMessage.waitFor({ state: 'visible' });
+  check('chat shows an assistant loading state before the first streamed token',
+    (await loadingMessage.textContent()).includes('正在查找和回答'));
+  check('loading dots animate when motion is allowed',
+    await loadingMessage.locator('.site-chat-loading-dots i').first().evaluate((element) => getComputedStyle(element).animationName === 'chat-dot'));
+  const formattedAnswer = page.locator('[data-chat-messages] .assistant').last();
+  await formattedAnswer.locator('pre code').waitFor();
+  check('streamed answers render headings, emphasis, lists, and fenced code as readable blocks',
+    await formattedAnswer.locator('h4').textContent().then((text) => text === 'A clear answer') &&
+    await formattedAnswer.locator('strong').textContent().then((text) => text === 'useful point') &&
+    await formattedAnswer.locator('ul li').allTextContents().then((items) => items.join('|') === 'First item|Second item') &&
+    await formattedAnswer.locator('pre code').textContent().then((text) => text === 'const answer = true;'));
+  check('assistant markdown renders untrusted HTML as text',
+    await formattedAnswer.locator('img').count() === 0 &&
+    await formattedAnswer.textContent().then((text) => text.includes('<img src=x onerror=alert(1)>')));
+  check('completed answers stop showing the live stream cursor',
+    !(await formattedAnswer.evaluate((element) => element.classList.contains('is-streaming'))));
 
   await chatInput.fill('你能聊什么？');
   await chatInput.press('Enter');
