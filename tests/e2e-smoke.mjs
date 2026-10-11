@@ -204,6 +204,36 @@ try {
   check('chat requests opt into streaming responses', chatRequests.every((payload) => payload.stream === true));
   await page.unroute('**/api/chat');
 
+  await page.evaluate(() => {
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (input, init) => {
+      const url = new URL(typeof input === 'string' ? input : input instanceof Request ? input.url : String(input), window.location.origin);
+      if (url.pathname !== '/api/chat') return originalFetch(input, init);
+      const encoder = new TextEncoder();
+      const body = new ReadableStream({
+        start(controller) {
+          controller.enqueue(encoder.encode('event: text\ndata: {"text":"Streaming "}\n\n'));
+          setTimeout(() => {
+            controller.enqueue(encoder.encode('event: text\ndata: {"text":"continues."}\n\n'));
+            controller.enqueue(encoder.encode('event: done\ndata: {}\n\n'));
+            controller.close();
+          }, 600);
+        },
+      });
+      return new Response(body, { headers: { 'content-type': 'text/event-stream' } });
+    };
+  });
+  await chatInput.fill('live stream test');
+  await chatInput.press('Enter');
+  const liveStream = page.locator('[data-chat-messages] .assistant.is-streaming').last();
+  await page.waitForFunction(() => document.querySelector('.site-chat-message.is-streaming')?.textContent?.includes('Streaming'));
+  check('live streamed answers show an animated cursor while generation is in progress',
+    await liveStream.evaluate((element) =>
+      element.getAttribute('aria-busy') === 'true' && getComputedStyle(element, '::after').animationName === 'chat-cursor'));
+  await liveStream.waitFor({ state: 'detached' });
+  check('live stream settles into a complete assistant message',
+    await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) => text === 'Streaming continues.'));
+
   const themeIcon = page.locator('[data-theme-toggle] [data-icon="theme"]');
   check('theme toggle uses shared icon', await themeIcon.count() === 1, `count=${await themeIcon.count()}`);
   check('shared theme icon uses standard SVG contract',
