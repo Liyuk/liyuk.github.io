@@ -1,6 +1,6 @@
 ---
-title: 从关键词到向量：给博客问答机器人做一次 RAG 检索实验
-description: 从站内问答机器人的检索问题出发，记录 RAG、中文关键词检索、切段、embedding 和 benchmark 的实验过程，并对照论文与公司的实践理解哪些方法值得继续试。
+title: 从站内搜索到 RAG：给博客问答机器人做一次检索实验
+description: 从站内搜索和问答机器人的差异出发，记录 RAG、中文关键词检索、切段、embedding 和 benchmark 的实验过程，并对照论文与公司的实践理解哪些方法值得继续试。
 createdAt: 2026-10-11
 type: case-study
 draft: true
@@ -8,6 +8,9 @@ translationStatus: original
 tags: [ai, algorithms, reproducibility, static-site, technology]
 citationUrls:
   - https://arxiv.org/abs/2005.11401
+  - https://arxiv.org/abs/1706.03762
+  - https://pagefind.app/docs/
+  - https://pagefind.app/docs/ranking/
   - https://arxiv.org/abs/2104.08663
   - https://www.anthropic.com/engineering/contextual-retrieval
   - https://slack.engineering/how-we-built-enterprise-search-to-be-secure-and-private/
@@ -65,6 +68,31 @@ RAG 是 Retrieval-Augmented Generation，通常译作“检索增强生成”。
 所以“把一套数据集接入大模型”只能算一个粗略类比。准确说，文章是运行时查询的外部知识库；测试问题及其正确来源是评测数据；模型参数没有因为这次接入而改变。RAG 可以让模型在回答时拿到站点的文章和观点，但它不会保证模型一定理解正确，也不会普遍修好计算、逻辑或多步推理问题。它能做的前提是：答案所需的证据存在于内容中，并且检索确实把证据交给了模型。
 
 这不是只有个人项目才会这样做。Slack 的工程团队介绍过，他们在 AI Answers 和企业搜索中使用 RAG，让模型在请求时读取用户有权限访问的内容，而不是用客户消息训练模型。[Slack 的企业搜索实践](https://slack.engineering/how-we-built-enterprise-search-to-be-secure-and-private/) Anthropic 则公开了他们在检索系统中组合上下文、BM25、向量检索和重排的实验。他们报告，在自己的多数据集评估中，给片段补上下文并结合 BM25 后，top-20 检索失败率从 5.7% 降到 2.9%；再加 reranker 后降到 1.9%。这是 Anthropic 的实验结果，语料、模型和候选数量都不同，不能当成我的博客会得到的提升。[Anthropic 的 Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval)
+
+## 站内搜索、RAG 和向量检索，分别在哪一层
+
+我后来又卡在“向量化”这个词上。站内搜索、机器人召回和 Gemini 都会处理文字，听起来像一套东西，实际各在不同层。先看这个站点现在的实现：
+
+| 功能 | 做什么 | 返回什么 |
+| --- | --- | --- |
+| 站内搜索 | Pagefind 在静态站点构建后，从生成的页面制作全文索引；读者输入词语后，按词频、页面长度、标题和元数据权重等因素排序 | 一组相关页面，供读者自己打开和阅读 |
+| 机器人当前的召回 | 读取单独构建的文章段落索引，用双字词、字段权重和 IDF 等词面信号给文章和段落打分 | 少量候选文章段落，交给生成模型作答 |
+| 向量召回 | embedding 模型把文章段落和问题编码成向量，再按向量相似度找候选段落 | 少量语义相近的文章段落；它本身不写回答 |
+| RAG | 把一个检索器和生成模型连起来：检索器提供证据，生成模型依据证据组织回答 | 一段带文章来源的自然语言回答 |
+
+Pagefind 是给读者使用的站内全文搜索；机器人有自己的召回流程，因为它需要把具体段落作为上下文发给 Gemini。当前机器人已经属于 RAG：它用的是词面检索器。把检索器换成向量检索，或把两种检索结果合并，才是后续可以比较的实现方案。[Pagefind 的索引说明](https://pagefind.app/docs/)、[排序说明](https://pagefind.app/docs/ranking/)
+
+这里的 embedding 也要和大模型内部处理文字时形成的表示分开。Gemini 收到问题和段落后，会在模型内部把输入转换成适合计算的表示，再生成回答；这些内部表示不会自动成为一个可供网站搜索的文章向量库。显式的 embedding 接口会为每篇文章段落生成可保存、可比较的向量，用户提问时也要生成查询向量，再由检索系统计算相似度。之后，系统仍要把检索到的原文段落交给 Gemini 的生成接口。换句话说，**向量检索负责找材料，生成模型负责根据材料写回答；RAG 描述的是两者如何配合。** Gemini 的 embedding 文档也把嵌入和生成回答作为不同任务说明。[Gemini embeddings 文档](https://ai.google.dev/gemini-api/docs/embeddings) Transformer 论文讨论的是模型处理序列时的表示与注意力机制，可帮助理解模型内部处理，但它不意味着每个使用模型的应用都自动建好了外部向量索引。[Transformer 论文](https://arxiv.org/abs/1706.03762)
+
+如果这个站点以后加入向量召回，流程会多出一个明确的索引步骤：
+
+```text
+建索引时：文章段落 → embedding 接口 → 保存段落向量
+提问时：读者问题 → embedding 接口 → 查询向量
+         查询向量 → 相似度排序 → 相关原文段落 → Gemini 生成回答
+```
+
+这是备选方案的流程，不是当前线上实现。现在的 Pagefind 搜索和机器人段落召回都没有调用 Gemini embedding，也没有保存文章向量。理解这条边界后，“从站内搜索到 RAG”就不是把搜索框接上 Gemini：需要先确定搜索要返回页面还是证据段落，再决定用词面、向量还是混合检索找到证据，最后才由生成模型组织答案。
 
 ## 先把问题定位在检索，而不是模型
 
