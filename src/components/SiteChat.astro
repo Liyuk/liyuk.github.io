@@ -402,7 +402,13 @@ const copy = i18n(locale).chat;
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ question, locale, history, stream: true }),
+          body: JSON.stringify({
+            question,
+            locale,
+            history,
+            stream: true,
+            currentPath: window.location.pathname,
+          }),
         });
         if (!response.ok) throw new Error(copy.error);
         if (response.headers.get('content-type')?.includes('text/event-stream')) {

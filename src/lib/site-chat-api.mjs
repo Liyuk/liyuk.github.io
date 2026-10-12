@@ -39,7 +39,14 @@ function parsePayload(payload) {
     messages.push({ role: message.role, content });
   }
   if (payload.stream !== undefined && typeof payload.stream !== 'boolean') return undefined;
-  return { question, locale: payload.locale, history: messages, stream: payload.stream === true };
+  if (payload.currentPath !== undefined && (typeof payload.currentPath !== 'string' || payload.currentPath.length > 300)) return undefined;
+  return {
+    question,
+    locale: payload.locale,
+    history: messages,
+    stream: payload.stream === true,
+    currentPath: payload.currentPath,
+  };
 }
 
 function validSources(value, origin) {
@@ -98,6 +105,39 @@ function localizedFallback(locale) {
 
 function isCapabilitiesQuestion(question) {
   return /你能聊什么|你可以聊什么|你能回答什么|能问你什么|你会什么|what can you (?:talk about|help with|answer)/iu.test(question);
+}
+
+function isCurrentPageQuestion(question) {
+  return /这篇|本文|这篇文章|文中|这页|这段|作者在这里|this article|this page|this post|the article|in this post|what is it about/iu.test(question);
+}
+
+async function getCurrentPageSource(index, input, requestUrl, assets) {
+  if (!input.currentPath || !isCurrentPageQuestion(input.question)) return undefined;
+  try {
+    const pageUrl = new URL(input.currentPath, requestUrl);
+    if (pageUrl.origin !== new URL(requestUrl).origin) return undefined;
+    const document = index.documents.find((candidate) =>
+      candidate.url === pageUrl.pathname && candidate.locale === input.locale,
+    );
+    if (!document) return undefined;
+    let text;
+    try {
+      const contextUrl = `/chat-context${document.url.replace(/\/$/u, '')}.json`;
+      const response = await assets.fetch(new Request(new URL(contextUrl, requestUrl)));
+      if (response.ok) {
+        const context = await response.json();
+        if (context?.title === document.title && context?.url === document.url && context?.locale === document.locale && typeof context?.text === 'string') {
+          text = context.text;
+        }
+      }
+    } catch {
+      // A context asset failure falls back to the excerpts already in the published search index.
+    }
+    text ||= document.excerpts?.join('\n\n') || document.text || '';
+    return { ...document, text };
+  } catch {
+    return undefined;
+  }
 }
 
 function isRecommendationQuestion(question) {
@@ -287,9 +327,15 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
   const retrievalQuestion = previousUserQuestion && (isShortFollowUp(input.question) || isRecommendationQuestion(input.question))
     ? `${previousUserQuestion}\n${input.question}`
     : input.question;
-  const sources = findRelevantSources(index, retrievalQuestion, input.locale, 4, {
-    minMatchingTerms: MIN_CHAT_MATCHING_TERMS,
-  });
+  const currentPageQuestion = isCurrentPageQuestion(input.question);
+  const currentPageSource = await getCurrentPageSource(index, input, request.url, env.ASSETS);
+  const sources = currentPageSource
+    ? [currentPageSource]
+    : currentPageQuestion && input.currentPath
+      ? []
+      : findRelevantSources(index, retrievalQuestion, input.locale, 4, {
+      minMatchingTerms: MIN_CHAT_MATCHING_TERMS,
+    });
   if (sources.length === 0) {
     if (isRecommendationQuestion(input.question)) {
       const result = { answer: recommendationPrompt(input.locale), suggestions: topicSuggestions(input.locale), sources: [] };

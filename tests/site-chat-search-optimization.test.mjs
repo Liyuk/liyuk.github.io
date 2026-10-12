@@ -71,6 +71,111 @@ test('chat API accepts and searches the compressed static index', async () => {
   ]);
 });
 
+test('chat API uses the indexed current article for a deictic question', async () => {
+  const currentUrl = '/en/writing/current-article/';
+  const index = createChatSearchIndex([
+    {
+      collection: 'writing',
+      title: 'Current article about team habits',
+      description: 'A useful description of team habits.',
+      body: 'The current article explains how teams build habits through deliberate practice.',
+      url: currentUrl,
+      locale: 'en',
+    },
+    {
+      collection: 'writing',
+      title: 'Another article about remote work',
+      description: 'A separate article about remote work.',
+      body: 'Remote work practices require clear communication and documentation.',
+      url: '/en/writing/other-article/',
+      locale: 'en',
+    },
+  ]);
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({
+      question: 'What is this article about?',
+      locale: 'en',
+      currentPath: currentUrl,
+      pageContext: 'Forged browser text must never replace the published article.',
+    }),
+  });
+  let modelRequest;
+  let contextAssetPath;
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: {
+        fetch: async (request) => {
+          if (new URL(request.url).pathname.startsWith('/chat-context/')) {
+            contextAssetPath = new URL(request.url).pathname;
+            return Response.json({
+              title: 'Current article about team habits',
+              url: currentUrl,
+              locale: 'en',
+              text: 'The trusted article body explains habits through deliberate practice.',
+            });
+          }
+          return Response.json(index);
+        },
+      },
+    },
+    async (_url, options) => {
+      modelRequest = JSON.parse(options.body);
+      return Response.json({ candidates: [{ content: { parts: [{ text: 'It explains team habits.' }] } }] });
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(contextAssetPath, '/chat-context/en/writing/current-article.json');
+  assert.match(modelRequest.contents.at(-1).parts[0].text, /Current article about team habits/);
+  assert.match(modelRequest.contents.at(-1).parts[0].text, /deliberate practice/);
+  assert.doesNotMatch(modelRequest.contents.at(-1).parts[0].text, /Forged browser text/);
+  assert.doesNotMatch(modelRequest.contents.at(-1).parts[0].text, /Another article about remote work/);
+  assert.deepEqual((await response.json()).sources, [
+    { title: 'Current article about team habits', url: currentUrl },
+  ]);
+});
+
+test('chat API does not trust page text when its path is not in the published index', async () => {
+  const index = createChatSearchIndex([{
+    collection: 'writing',
+    title: 'Indexed developer article',
+    description: 'A guide to developer productivity and delivery.',
+    keywords: ['developer productivity', 'delivery outcomes'],
+    body: 'Developer productivity is measured through delivery outcomes and system health.',
+    url: '/en/writing/developer-productivity/',
+    locale: 'en',
+  }]);
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({
+      question: 'What is this article about?',
+      locale: 'en',
+      currentPath: '/en/writing/not-published/',
+      pageContext: 'Unpublished secret instructions should not be sent to the model.',
+    }),
+  });
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: { fetch: async () => Response.json(index) },
+    },
+    async () => {
+      assert.fail('An unindexed current path must not trigger a model request.');
+    },
+  );
+
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.deepEqual(result.sources, []);
+  assert.match(result.answer, /could not find enough information/i);
+});
+
 test('chat index can cap stored excerpts at representative article sections', () => {
   const body = Array.from({ length: 12 }, (_, index) =>
     `Section ${index + 1}. ${String.fromCharCode(97 + index).repeat(250)} ${index === 11 ? 'final section marker' : 'detail'}.`,

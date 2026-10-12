@@ -44,6 +44,13 @@ try {
   check('static chat indexes cap each article at three excerpts and stay below Pages asset limit',
     chatIndexes.every(({ index, bytes }) =>
       index.documents.every((entry) => entry.excerpts.length <= 3) && bytes < 25 * 1024 * 1024));
+  const articleContext = await page.evaluate(async () => {
+    const response = await fetch('/chat-context/writing/2021/03/data-definitions-are-collaboration-interfaces.json');
+    return response.ok ? response.json() : undefined;
+  });
+  check('published article context is available as a server-readable static asset',
+    articleContext?.url === '/writing/2021/03/data-definitions-are-collaboration-interfaces/' &&
+    articleContext.locale === 'zh-CN' && articleContext.text.length > 100);
   const chatLauncher = page.getByRole('button', { name: '站内问答' });
   check('home exposes the Chinese site chat', await chatLauncher.count() === 1);
   await chatLauncher.click();
@@ -210,6 +217,18 @@ try {
   await page.waitForTimeout(150);
   check('selecting a topic suggestion sends that topic', chatRequests.at(-1).question === '技术与架构');
   check('chat requests opt into streaming responses', chatRequests.every((payload) => payload.stream === true));
+
+  const currentArticlePath = '/writing/2021/03/data-definitions-are-collaboration-interfaces/';
+  await page.goto(`${BASE}${currentArticlePath}`, { waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: '站内问答' }).click();
+  await page.locator('#site-chat-question').fill('这篇讲了什么？');
+  await page.locator('#site-chat-question').press('Enter');
+  await page.waitForTimeout(150);
+  const currentArticleRequest = chatRequests.at(-1);
+  check('current article questions send the path without trusting browser-supplied article text',
+    currentArticleRequest.question === '这篇讲了什么？' &&
+    currentArticleRequest.currentPath === currentArticlePath &&
+    !('pageContext' in currentArticleRequest));
   await page.unroute('**/api/chat');
 
   await page.evaluate(() => {
@@ -241,6 +260,8 @@ try {
   await liveStream.waitFor({ state: 'detached' });
   check('live stream settles into a complete assistant message',
     await page.locator('[data-chat-messages] .assistant').last().textContent().then((text) => text === 'Streaming continues.'));
+
+  await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
 
   const themeIcon = page.locator('[data-theme-toggle] [data-icon="theme"]');
   check('theme toggle uses shared icon', await themeIcon.count() === 1, `count=${await themeIcon.count()}`);
