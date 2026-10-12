@@ -29,13 +29,21 @@ try {
   check('home loads', homeTitle.length > 0, homeTitle);
   const h1 = await page.textContent('h1');
   check('home has hero heading', h1.includes('烹饪指南') || h1.length > 0, h1);
-  const chatIndex = await page.evaluate(() => fetch('/chat-index.json').then((response) => response.json()));
-  check('static chat index contains only published article routes in both locales',
-    chatIndex.length > 0 && chatIndex.every((entry) =>
-      ['zh-CN', 'en'].includes(entry.locale) &&
-      /^\/(?:en\/)?(?:writing|research|consulting|projects)\/.+\/$/.test(entry.url)));
-  check('static chat index stays below 2 MB',
-    new TextEncoder().encode(JSON.stringify(chatIndex)).length < 2_000_000);
+  const chatIndexes = await page.evaluate(async () => Promise.all(
+    ['zh-CN', 'en'].map(async (locale) => {
+      const response = await fetch(`/chat-index/${locale}.json`);
+      const body = await response.text();
+      return { locale, index: JSON.parse(body), bytes: new TextEncoder().encode(body).byteLength };
+    }),
+  ));
+  check('localized static chat indexes contain only published routes',
+    chatIndexes.every(({ locale, index }) =>
+      index.documents.length > 0 && index.documents.every((entry) =>
+        entry.locale === locale &&
+        /^\/(?:en\/)?(?:writing|research|consulting|projects)\/.+\/$/.test(entry.url))));
+  check('static chat indexes cap each article at three excerpts and stay below Pages asset limit',
+    chatIndexes.every(({ index, bytes }) =>
+      index.documents.every((entry) => entry.excerpts.length <= 3) && bytes < 25 * 1024 * 1024));
   const chatLauncher = page.getByRole('button', { name: '站内问答' });
   check('home exposes the Chinese site chat', await chatLauncher.count() === 1);
   await chatLauncher.click();

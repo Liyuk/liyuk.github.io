@@ -162,14 +162,14 @@ test('chat index keeps readable article text while excluding code blocks', () =>
   }]);
   const indexedText = index.flatMap((source) => source.excerpts).join(' ');
 
-  assert.match(indexedText, /published description/);
+  assert.match(index[0].description, /published description/);
   assert.match(indexedText, /feedback loops/);
   assert.match(indexedText, /collaboration/);
   assert.doesNotMatch(indexedText, /secretExample/);
   assert.equal(cleanArticleMarkdown('[read this](https://example.com)'), 'read this');
 });
 
-test('chat index keeps representative beginning, middle, and ending excerpts within the 600-character limit', () => {
+test('chat index keeps every article passage within the default 1,200-character limit', () => {
   const body = Array.from({ length: 8 }, (_, index) =>
     `Section ${index + 1}: ${String.fromCharCode(97 + index).repeat(500)} ${index === 7 ? 'final marker for this article' : 'detail'}.`,
   ).join('\n\n');
@@ -183,9 +183,28 @@ test('chat index keeps representative beginning, middle, and ending excerpts wit
   }]);
 
   assert.equal(index.length, 1);
-  assert.ok(index[0].excerpts.length <= 3);
-  assert.ok(index[0].excerpts.every((excerpt) => excerpt.length <= 600));
+  assert.ok(index[0].excerpts.length > 3);
+  assert.ok(index[0].excerpts.every((excerpt) => excerpt.length <= 1_200));
   assert.match(index[0].excerpts.at(-1), /final marker for this article/);
+});
+
+test('chat index caps long articles at representative first, middle, and last excerpts', () => {
+  const body = Array.from({ length: 9 }, (_, index) =>
+    `Section ${index + 1}: ${String.fromCharCode(97 + index).repeat(180)} section detail.`,
+  ).join('\n\n');
+  const index = createChatIndex([{
+    collection: 'writing',
+    title: 'Long article',
+    description: 'A sufficiently long description for indexing.',
+    body,
+    url: '/writing/long-article/',
+    locale: 'en',
+  }], { maxExcerptLength: 200, maxExcerptsPerDocument: 3 });
+
+  assert.equal(index[0].excerpts.length, 3);
+  assert.match(index[0].excerpts[0], /Section 1:/);
+  assert.match(index[0].excerpts[1], /Section 5:/);
+  assert.match(index[0].excerpts[2], /Section 9:/);
 });
 
 test('chat index keeps a queryable excerpt from the middle of a long article', () => {
@@ -204,7 +223,7 @@ test('chat index keeps a queryable excerpt from the middle of a long article', (
   assert.ok(index[0].excerpts.some((excerpt) => excerpt.includes('criticalmiddlemarker')));
 });
 
-test('chat index overlaps neighboring chunks so a boundary does not split context', () => {
+test('chat index keeps every sentence searchable without duplicating overlap', () => {
   const body = Array.from({ length: 10 }, (_, index) =>
     `Sentence ${index + 1} describes a distinct part of the system and how its pieces relate to decisions.`,
   ).join(' ');
@@ -215,10 +234,11 @@ test('chat index overlaps neighboring chunks so a boundary does not split contex
     body,
     url: '/writing/connected-article/',
     locale: 'en',
-  }]);
+  }], { maxExcerptLength: 200 });
 
   assert.ok(index[0].excerpts.length >= 2);
-  assert.equal(index[0].excerpts[1].slice(0, 80).trim(), index[0].excerpts[0].slice(-80).trim());
+  assert.ok(index[0].excerpts.every((excerpt) => excerpt.length <= 200));
+  assert.match(index[0].excerpts.at(-1), /Sentence 10/);
 });
 
 test('chat index splits long text without sentence punctuation and keeps its ending', () => {
@@ -332,7 +352,7 @@ test('chat API reads its index from the Pages static asset binding', async () =>
   );
 
   assert.equal(response.status, 200);
-  assert.deepEqual(assetPaths, ['/chat-index.json']);
+  assert.deepEqual(assetPaths, ['/chat-index/en.json']);
 });
 
 test('chat API forwards only bounded user and assistant history to Gemini', async () => {

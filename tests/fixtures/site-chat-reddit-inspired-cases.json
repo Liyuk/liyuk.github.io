@@ -1,0 +1,408 @@
+[
+  {
+    "id": "reddit-knowledge-transfer-01",
+    "kind": "in-scope",
+    "category": "knowledge-transfer",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/zgwrag/best_practices_for_knowledge_transfer_when_a/",
+    "locale": "en",
+    "question": "A developer who owns several services is leaving. What should we ask them to hand over so the next person can actually operate the system?",
+    "relevantUrls": [
+      "/en/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/",
+      "/en/writing/2020/10/documents-are-collaboration-interfaces/",
+      "/en/writing/2020/10/what-good-technical-sharing-should-change/"
+    ]
+  },
+  {
+    "id": "reddit-knowledge-transfer-02",
+    "kind": "in-scope",
+    "category": "knowledge-transfer",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1e2dh98/best_ways_to_handle_knowledge_transfer_from/",
+    "locale": "zh-CN",
+    "question": "项目快结束时才让支持团队接手，开发团队又不知道该讲哪些坑，怎么把交接做得更早、更具体？",
+    "relevantUrls": [
+      "/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/",
+      "/writing/2020/10/documents-are-collaboration-interfaces/",
+      "/writing/2021/04/engineering-poc-faq-responsibility-boundaries/"
+    ]
+  },
+  {
+    "id": "reddit-knowledge-transfer-03",
+    "kind": "in-scope",
+    "category": "knowledge-transfer",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/zgwrag/best_practices_for_knowledge_transfer_when_a/",
+    "locale": "en",
+    "question": "When a handoff request is too vague, how can a team figure out which knowledge is important before the person leaves?",
+    "relevantUrls": [
+      "/en/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/",
+      "/en/writing/2020/10/what-good-technical-sharing-should-change/"
+    ]
+  },
+  {
+    "id": "reddit-onboarding-01",
+    "kind": "in-scope",
+    "category": "onboarding",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1gtonmx/whats_a_great_onboarding_experience_for_new/",
+    "locale": "en",
+    "question": "A new engineer spends the first week chasing access and asking where things live. What should a team make ready before day one?",
+    "relevantUrls": [
+      "/en/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/",
+      "/en/writing/2020/10/mentor-relationship-and-first-90-days/"
+    ]
+  },
+  {
+    "id": "reddit-onboarding-02",
+    "kind": "in-scope",
+    "category": "onboarding",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/yj02ej/what_are_your_onboarding_expectations/",
+    "locale": "zh-CN",
+    "question": "新人拿到一堆过时文档，连该问谁都不知道，团队的 onboarding 应该先补哪一块？",
+    "relevantUrls": [
+      "/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/",
+      "/writing/2020/10/mentor-relationship-and-first-90-days/"
+    ]
+  },
+  {
+    "id": "reddit-onboarding-03",
+    "kind": "in-scope",
+    "category": "onboarding",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1j11jwy/help_with_mentoring/",
+    "locale": "en",
+    "question": "How do I mentor a junior engineer without turning every question into either a lecture or micromanagement?",
+    "relevantUrls": [
+      "/en/writing/2020/10/mentor-relationship-and-first-90-days/",
+      "/en/writing/2021/08/specific-growth-milestones/",
+      "/en/writing/2023/03/frontline-engineering-management/"
+    ]
+  },
+  {
+    "id": "reddit-onboarding-04",
+    "kind": "in-scope",
+    "category": "onboarding",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/183yvqr/onboarding_new_team_mate_problems/",
+    "locale": "zh-CN",
+    "question": "同一个新人问题总要回答好几次，怎么把答案留下来，又不让新人觉得以后不能再问？",
+    "relevantUrls": [
+      "/writing/2020/10/mentor-relationship-and-first-90-days/",
+      "/writing/2020/10/documents-are-collaboration-interfaces/",
+      "/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/"
+    ]
+  },
+  {
+    "id": "reddit-management-01",
+    "kind": "in-scope",
+    "category": "management-practice",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/ggiuaf/",
+    "locale": "en",
+    "question": "I just became an engineering manager. What should a useful one-on-one actually accomplish, beyond asking for status?",
+    "relevantUrls": [
+      "/en/writing/2021/02/one-on-one-from-definition-to-action/",
+      "/en/writing/2023/03/one-on-ones-and-decision-rights/",
+      "/en/writing/2023/03/frontline-engineering-management/"
+    ]
+  },
+  {
+    "id": "reddit-management-02",
+    "kind": "in-scope",
+    "category": "management-practice",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/nepmmt/",
+    "locale": "zh-CN",
+    "question": "从资深工程师转管理之后，怎么判断自己是在帮团队成长，还是只是替大家收拾问题？",
+    "relevantUrls": [
+      "/writing/2023/03/frontline-engineering-management/",
+      "/writing/2022/01/team-growth-is-not-expansion/",
+      "/writing/2023/06/team-development-compounds/"
+    ]
+  },
+  {
+    "id": "reddit-management-03",
+    "kind": "in-scope",
+    "category": "management-practice",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1frd8eh/staff_engineers_how_much_decisionmaking_power/",
+    "locale": "en",
+    "question": "I am expected to influence architecture across teams, but I do not own the people or roadmap. How can I make decisions stick without overstepping?",
+    "relevantUrls": [
+      "/en/writing/2021/11/ownership-with-boundaries/",
+      "/en/writing/2021/08/requirement-poc-responsibilities/",
+      "/en/writing/2023/03/resolving-project-conflicts/"
+    ]
+  },
+  {
+    "id": "reddit-management-04",
+    "kind": "in-scope",
+    "category": "management-practice",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1bywygc/",
+    "locale": "zh-CN",
+    "question": "我在 IC 和管理岗位之间犹豫，除了薪资和头衔，还可以用什么判断哪种工作更适合自己？",
+    "relevantUrls": [
+      "/writing/2023/03/how-close-managers-should-stay-to-code/",
+      "/writing/2026/08/managing-managers-and-leader-profile/",
+      "/writing/2022/01/how-to-tell-if-work-helps-you-grow/"
+    ]
+  },
+  {
+    "id": "reddit-engineering-01",
+    "kind": "in-scope",
+    "category": "engineering-judgment",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/qfubfu/",
+    "locale": "en",
+    "question": "How can I tell whether an architecture is genuinely too complicated or just unfamiliar to me?",
+    "relevantUrls": [
+      "/en/writing/2026/09/every-choice-is-a-trade/",
+      "/en/writing/2025/11/technical-planning-business-and-competitive-analysis/",
+      "/en/writing/2023/03/why-code-decays/"
+    ]
+  },
+  {
+    "id": "reddit-engineering-02",
+    "kind": "in-scope",
+    "category": "engineering-judgment",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1p2eyqh/was_told_my_pr_comments_were_unclear/",
+    "locale": "zh-CN",
+    "question": "PR 里大家对设计的理解不一样，讨论了很久还是各说各话，怎么把分歧落到可验证的判断上？",
+    "relevantUrls": [
+      "/writing/2022/06/structured-thinking-at-work/",
+      "/writing/2023/03/resolving-project-conflicts/",
+      "/writing/2025/12/turn-spoken-ideas-into-decision-documents/"
+    ]
+  },
+  {
+    "id": "reddit-engineering-03",
+    "kind": "in-scope",
+    "category": "engineering-judgment",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ProductManagement/comments/1e73814/how_do_you_prioritize_feature_requests_when/",
+    "locale": "en",
+    "question": "A feature request is already committed, but nobody can explain what user problem it solves. What should engineering ask before building it?",
+    "relevantUrls": [
+      "/en/writing/2018/04/product-apocalypse-one/",
+      "/en/writing/2022/03/product-judgment-for-engineers/",
+      "/en/writing/2022/02/engineer-product-judgment/"
+    ]
+  },
+  {
+    "id": "reddit-engineering-04",
+    "kind": "in-scope",
+    "category": "engineering-judgment",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1rmfbpu/",
+    "locale": "zh-CN",
+    "question": "项目进度每周都在汇报，但负责人还是不知道要拍板什么，更新内容应该怎么改？",
+    "relevantUrls": [
+      "/writing/2023/03/information-sync-for-decisions/",
+      "/writing/2021/09/product-overview-is-a-decision-model/",
+      "/writing/2025/12/turn-spoken-ideas-into-decision-documents/"
+    ]
+  },
+  {
+    "id": "reddit-engineering-05",
+    "kind": "in-scope",
+    "category": "engineering-judgment",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1frd8eh/staff_engineers_how_much_decisionmaking_power/",
+    "locale": "en",
+    "question": "Two teams report different error rates even though neither made a math mistake. What definition should we align on first?",
+    "relevantUrls": [
+      "/en/writing/2021/03/data-definitions-are-collaboration-interfaces/",
+      "/en/writing/2021/03/define-the-measurement-before-arguing-about-metrics/",
+      "/en/research/2026/08/data-measurement-organizational-protocol/"
+    ]
+  },
+  {
+    "id": "reddit-engineering-06",
+    "kind": "in-scope",
+    "category": "engineering-judgment",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1r4u0mo/by_what_real_metrics_has_ai_improved_software/",
+    "locale": "zh-CN",
+    "question": "团队上了 AI 编程工具，代码写快了，但交付结果没变好。怎么判断它到底有没有提升研发效能？",
+    "relevantUrls": [
+      "/research/2026/08/developer-productivity-feedback-loops/",
+      "/writing/2026/08/ai-productivity-complex-systems/",
+      "/writing/2025/11/technical-planning-business-and-competitive-analysis/"
+    ]
+  },
+  {
+    "id": "reddit-engineering-07",
+    "kind": "in-scope",
+    "category": "engineering-judgment",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/txilc6/whats_a_great_onboarding_process_for_new/",
+    "locale": "en",
+    "question": "Our team is small and the backlog is bigger than our capacity. How do we decide what not to do without burning people out?",
+    "relevantUrls": [
+      "/en/writing/2023/03/working-under-resource-constraints/",
+      "/en/writing/2023/03/defining-what-not-to-do/",
+      "/en/writing/2022/03/product-judgment-for-engineers/"
+    ]
+  },
+  {
+    "id": "reddit-career-01",
+    "kind": "in-scope",
+    "category": "career-reflection",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/nepmmt/",
+    "locale": "en",
+    "question": "I am busy every week, but I cannot point to anything I have learned that would transfer to another team. How should I assess whether this job is helping me grow?",
+    "relevantUrls": [
+      "/en/writing/2022/01/how-to-tell-if-work-helps-you-grow/",
+      "/en/writing/2023/07/goals-retrospectives-and-next-actions/",
+      "/en/writing/2022/09/honest-self-assessment/"
+    ]
+  },
+  {
+    "id": "reddit-career-02",
+    "kind": "in-scope",
+    "category": "career-reflection",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/ExperiencedDevs/comments/1bywygc/",
+    "locale": "zh-CN",
+    "question": "做了很多重复交付，想升职前怎么证明自己不只是更忙，而是真的形成了新的判断能力？",
+    "relevantUrls": [
+      "/writing/2022/09/honest-self-assessment/",
+      "/writing/2021/08/specific-growth-milestones/",
+      "/writing/2023/08/career-growth-ten-questions/"
+    ]
+  },
+  {
+    "id": "reddit-blog-01",
+    "kind": "in-scope",
+    "category": "blogging-and-search",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1c0cgfe/blog_3_months_old_zero_traffic/",
+    "locale": "en",
+    "question": "My new blog has been up for a few months and search traffic is still tiny. What should I check before assuming the site is broken?",
+    "relevantUrls": [
+      "/en/writing/2026/08/seo-search-fundamentals/",
+      "/en/writing/2026/08/seo-indexing-recovery/",
+      "/en/writing/2026/08/seo-experiments/"
+    ]
+  },
+  {
+    "id": "reddit-blog-02",
+    "kind": "in-scope",
+    "category": "blogging-and-search",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1hri712/attention_bloggers_ask_your_questions_in_this/",
+    "locale": "zh-CN",
+    "question": "文章已经被搜索引擎收录，但几乎没人点进来，怎么区分是曝光少、标题问题还是内容没有匹配需求？",
+    "relevantUrls": [
+      "/writing/2026/08/seo-search-fundamentals/",
+      "/writing/2026/08/seo-value-funnel/",
+      "/writing/2026/08/seo-content-engineering/"
+    ]
+  },
+  {
+    "id": "reddit-blog-03",
+    "kind": "in-scope",
+    "category": "blogging-and-search",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1dnkyo8/question_for_personal_blog_readers/",
+    "locale": "en",
+    "question": "People say a personal blog needs a narrow niche, but writing only one kind of post makes me stop publishing. How can I tell whether my different topics still belong together?",
+    "relevantUrls": [
+      "/en/writing/2026/08/rebuilding-this-site/",
+      "/en/writing/2026/08/seo-content-engineering/",
+      "/en/writing/2026/08/seo-search-fundamentals/"
+    ]
+  },
+  {
+    "id": "reddit-blog-04",
+    "kind": "in-scope",
+    "category": "blogging-and-search",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1c4hydh/how_can_someone_attract_readers_to_a_brand_new/",
+    "locale": "zh-CN",
+    "question": "新博客没有老读者，先去社交平台推广，还是先把能回答具体问题的文章写扎实？",
+    "relevantUrls": [
+      "/writing/2026/08/seo-search-fundamentals/",
+      "/writing/2026/08/seo-content-engineering/",
+      "/writing/2026/08/seo-value-funnel/"
+    ]
+  },
+  {
+    "id": "reddit-blog-05",
+    "kind": "in-scope",
+    "category": "blogging-and-search",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1ve8tyi/do_multitopic_blogs_work_or_is_focusing_on_one/",
+    "locale": "en",
+    "question": "I want to write about engineering, management, and photography on one site. What would help readers understand how those topics fit together?",
+    "relevantUrls": [
+      "/en/writing/2026/08/rebuilding-this-site/",
+      "/en/writing/2026/08/seo-content-engineering/"
+    ]
+  },
+  {
+    "id": "reddit-out-of-scope-01",
+    "kind": "out-of-scope",
+    "category": "site-feedback",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/gbdsgq/",
+    "locale": "en",
+    "question": "Could you review my homepage and tell me what is confusing or visually off?",
+    "expectedUrl": null
+  },
+  {
+    "id": "reddit-out-of-scope-02",
+    "kind": "out-of-scope",
+    "category": "external-blogging-advice",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1hri712/attention_bloggers_ask_your_questions_in_this/",
+    "locale": "zh-CN",
+    "question": "我刚开始写博客，WordPress、Ghost 和自己搭静态站哪个平台现在最值得选？",
+    "expectedUrl": null
+  },
+  {
+    "id": "reddit-out-of-scope-03",
+    "kind": "out-of-scope",
+    "category": "external-blogging-advice",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1hri712/attention_bloggers_ask_your_questions_in_this/",
+    "locale": "en",
+    "question": "How many posts per week do I need to publish to reach one thousand email subscribers by the end of the year?",
+    "expectedUrl": null
+  },
+  {
+    "id": "reddit-out-of-scope-04",
+    "kind": "out-of-scope",
+    "category": "site-unanswerable",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1hri712/attention_bloggers_ask_your_questions_in_this/",
+    "locale": "zh-CN",
+    "question": "这篇博客昨天有多少访问者？",
+    "expectedUrl": null
+  },
+  {
+    "id": "reddit-out-of-scope-05",
+    "kind": "out-of-scope",
+    "category": "site-feedback",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1dnkyo8/question_for_personal_blog_readers/",
+    "locale": "zh-CN",
+    "question": "你个人喜欢我写的摄影文章吗？说实话，你会订阅这个博客吗？",
+    "expectedUrl": null
+  },
+  {
+    "id": "reddit-out-of-scope-06",
+    "kind": "out-of-scope",
+    "category": "site-unanswerable",
+    "sourceType": "reddit-inspired-synthetic",
+    "sourceUrl": "https://www.reddit.com/r/Blogging/comments/1c0cgfe/blog_3_months_old_zero_traffic/",
+    "locale": "en",
+    "question": "Which of my articles got the most Google clicks last month, and what was its click-through rate?",
+    "expectedUrl": null
+  }
+]
