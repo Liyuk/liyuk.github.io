@@ -367,6 +367,14 @@ const copy = i18n(locale).chat;
 
     launcher.addEventListener('click', () => setOpen(panel.hidden));
     close.addEventListener('click', () => setOpen(false));
+    window.addEventListener('site-chat:ask', (event) => {
+      const { question } = (event as CustomEvent<{ question?: string }>).detail ?? {};
+      const trimmedQuestion = question?.trim();
+      if (!trimmedQuestion || trimmedQuestion.length > 600 || send.disabled) return;
+      input.value = trimmedQuestion;
+      setOpen(true);
+      form.requestSubmit();
+    });
     messages.addEventListener('click', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;

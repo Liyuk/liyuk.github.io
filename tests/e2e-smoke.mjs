@@ -51,10 +51,10 @@ try {
   check('published article context is available as a server-readable static asset',
     articleContext?.url === '/writing/2021/03/data-definitions-are-collaboration-interfaces/' &&
     articleContext.locale === 'zh-CN' && articleContext.text.length > 100);
-  const chatLauncher = page.getByRole('button', { name: '站内问答' });
+  const chatLauncher = page.getByRole('button', { name: '站内 AI 助手' });
   check('home exposes the Chinese site chat', await chatLauncher.count() === 1);
   await chatLauncher.click();
-  check('chat opens with a labeled dialog', await page.getByRole('dialog', { name: '和站内内容聊聊' }).isVisible());
+  check('chat opens with a labeled dialog', await page.getByRole('dialog', { name: '问问本站内容' }).isVisible());
   await page.emulateMedia({ reducedMotion: 'reduce' });
   check('chat disables nonessential motion when reduced motion is requested',
     await page.locator('[data-chat-panel]').evaluate((element) => getComputedStyle(element).animationName === 'none'));
@@ -218,9 +218,26 @@ try {
   check('selecting a topic suggestion sends that topic', chatRequests.at(-1).question === '技术与架构');
   check('chat requests opt into streaming responses', chatRequests.every((payload) => payload.stream === true));
 
+  await page.goto(`${BASE}/search/`, { waitUntil: 'networkidle' });
+  const searchInput = page.locator('#site-search');
+  const askFromSearch = page.getByRole('button', { name: '让 AI 根据本站文章回答' });
+  check('search does not show an AI action before the reader enters a query', await askFromSearch.isHidden());
+  const requestsBeforeSearch = chatRequests.length;
+  await searchInput.fill('管理');
+  await askFromSearch.waitFor();
+  await page.locator('#search-results li').first().waitFor();
+  check('typing a query keeps search local and shows ordinary results',
+    chatRequests.length === requestsBeforeSearch && await page.locator('#search-results li').count() > 0);
+  await askFromSearch.click();
+  await page.waitForFunction(() => Array.from(document.querySelectorAll('[data-chat-messages] .user')).at(-1)?.textContent?.includes('管理'));
+  check('search keeps keyword results available alongside an explicit AI action',
+    await page.locator('#search-results').count() === 1 && await askFromSearch.isVisible());
+  check('choosing the search AI action opens chat and sends the entered query',
+    await page.getByRole('dialog', { name: '问问本站内容' }).isVisible() && chatRequests.at(-1).question === '管理');
+
   const currentArticlePath = '/writing/2021/03/data-definitions-are-collaboration-interfaces/';
   await page.goto(`${BASE}${currentArticlePath}`, { waitUntil: 'networkidle' });
-  await page.getByRole('button', { name: '站内问答' }).click();
+  await page.getByRole('button', { name: '站内 AI 助手' }).click();
   await page.locator('#site-chat-question').fill('这篇讲了什么？');
   await page.locator('#site-chat-question').press('Enter');
   await page.waitForTimeout(150);
@@ -403,11 +420,11 @@ try {
 
   // 16. English chat copy and narrow-screen layout.
   await page.goto(`${BASE}/en/`, { waitUntil: 'networkidle' });
-  const englishChatLauncher = page.getByRole('button', { name: 'Ask this site' });
+  const englishChatLauncher = page.getByRole('button', { name: 'Site AI assistant' });
   check('English home exposes localized chat', await englishChatLauncher.count() === 1);
   await page.setViewportSize({ width: 320, height: 700 });
   await englishChatLauncher.click();
-  const chatPanel = page.getByRole('dialog', { name: 'Ask about the site' });
+  const chatPanel = page.getByRole('dialog', { name: 'Ask about this site' });
   check('English chat opens at 320px width', await chatPanel.isVisible());
   const panelBounds = await chatPanel.boundingBox();
   check('chat panel stays inside a narrow viewport', Boolean(panelBounds && panelBounds.x >= 0 && panelBounds.x + panelBounds.width <= 320), JSON.stringify(panelBounds));

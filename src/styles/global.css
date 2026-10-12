@@ -362,10 +362,18 @@ h1, h2, h3, p { margin-top: 0; }
 .search-page input:focus { border-color: var(--accent); }
 .search-page input::placeholder { color: var(--muted); opacity: 1; }
 .search-page > p { min-height: 1.5rem; margin: 1rem 0; color: var(--muted); font-size: .85rem; }
+.search-ai-card { display: flex; width: min(100%, 48rem); align-items: center; justify-content: space-between; gap: 1rem; margin: 0 0 1rem; padding: .85rem 1rem; border: 1px solid var(--line); background: var(--paper-strong); }
+.search-ai-card[hidden] { display: none; }
+.search-ai-card p { margin: 0; color: var(--muted); font-size: .85rem; }
+.search-ai-card button { flex: 0 0 auto; padding: .55rem .8rem; border: 1px solid var(--accent); border-radius: 0; background: var(--accent); color: var(--paper); font: inherit; font-size: .8rem; font-weight: 700; cursor: pointer; }
+.search-ai-card button:hover { background: var(--ink); border-color: var(--ink); }
 .search-results { width: min(100%, 48rem); margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
 .search-results li { padding: 1.2rem 0; border-bottom: 1px solid var(--line); }
 .search-results a { font-family: var(--serif); font-size: 1.5rem; font-weight: 500; letter-spacing: -.035em; text-decoration: none; }
 .search-results p { margin: .45rem 0 0; color: var(--muted); }
+@media (max-width: 36rem) {
+  .search-ai-card { align-items: flex-start; flex-direction: column; }
+}
 .writing-years { display: flex; flex-wrap: wrap; gap: .4rem .9rem; margin-bottom: 1.5rem; }
 .writing-years a { color: var(--muted); font-size: .8rem; font-weight: 700; text-decoration: none; }
 .writing-years a:hover { color: var(--accent); }
