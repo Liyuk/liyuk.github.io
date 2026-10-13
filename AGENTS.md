@@ -122,4 +122,4 @@ An agent may prepare drafts, code, tests, dry-run reports, and local verificatio
 5. add, stage, or otherwise turn local `docs/` material into a repository deliverable;
 6. discard unfamiliar worktree changes, generated diagnostics needed for debugging, or user-owned local files.
 
-CI behavior is intentional: pull requests verify; only successful `master` verification deploys; Buttondown notification runs only after successful deployment and is visibly retryable if it fails. Before requesting review, report the files changed, checks run, remaining warnings, and any intentional policy exception.
+CI behavior is intentional: pull requests verify; only successful `master` verification deploys the verified build to Cloudflare Pages; Buttondown notification runs only after successful deployment and is visibly retryable if it fails. Cloudflare Pages production auto-deployment is disabled so this ordering is preserved. Before requesting review, report the files changed, checks run, remaining warnings, and any intentional policy exception.

@@ -29,6 +29,13 @@ try {
   check('home loads', homeTitle.length > 0, homeTitle);
   const h1 = await page.textContent('h1');
   check('home has hero heading', h1.includes('烹饪指南') || h1.length > 0, h1);
+  const chatLauncher = page.getByRole('button', { name: '站内问答' });
+  check('home exposes the Chinese site chat', await chatLauncher.count() === 1);
+  await chatLauncher.click();
+  check('chat opens with a labeled dialog', await page.getByRole('dialog', { name: '和站内内容聊聊' }).isVisible());
+  check('opening chat moves focus to its input', await page.locator('#site-chat-question').evaluate((element) => element === document.activeElement));
+  await page.keyboard.press('Escape');
+  check('Escape closes chat and restores focus', await page.getByRole('dialog').count() === 0 && await chatLauncher.evaluate((element) => element === document.activeElement));
   const themeIcon = page.locator('[data-theme-toggle] [data-icon="theme"]');
   check('theme toggle uses shared icon', await themeIcon.count() === 1, `count=${await themeIcon.count()}`);
   check('shared theme icon uses standard SVG contract',
@@ -166,6 +173,17 @@ try {
   // 15. 404 page
   await page.goto(`${BASE}/definitely-not-a-page/`, { waitUntil: 'networkidle' });
   check('404 renders', (await page.title()).length > 0, await page.title());
+
+  // 16. English chat copy and narrow-screen layout.
+  await page.goto(`${BASE}/en/`, { waitUntil: 'networkidle' });
+  const englishChatLauncher = page.getByRole('button', { name: 'Ask this site' });
+  check('English home exposes localized chat', await englishChatLauncher.count() === 1);
+  await page.setViewportSize({ width: 320, height: 700 });
+  await englishChatLauncher.click();
+  const chatPanel = page.getByRole('dialog', { name: 'Ask about the site' });
+  check('English chat opens at 320px width', await chatPanel.isVisible());
+  const panelBounds = await chatPanel.boundingBox();
+  check('chat panel stays inside a narrow viewport', Boolean(panelBounds && panelBounds.x >= 0 && panelBounds.x + panelBounds.width <= 320), JSON.stringify(panelBounds));
 
 } catch (err) {
   results.fail++;

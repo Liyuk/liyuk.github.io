@@ -1,6 +1,7 @@
 # --- 运行时产物与缓存（任意深度） ---
 **/node_modules/
 **/.astro/
+**/.wrangler/
 **/dist/
 **/.DS_Store
 output/
