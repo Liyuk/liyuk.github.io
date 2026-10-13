@@ -1,7 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { planChatVectorSync, serializeVectorizeNdjson } from '../src/lib/chat-vector-sync.mjs';
+import {
+  createVectorizeUploadForm,
+  planChatVectorSync,
+  serializeVectorizeNdjson,
+} from '../src/lib/chat-vector-sync.mjs';
 
 test('vector sync embeds only new or changed passages and deletes passages no longer published', () => {
   const stableHash = planChatVectorSync([
@@ -51,4 +55,17 @@ test('Vectorize upload serialization emits one JSON vector record per NDJSON lin
     { id: 'second', values: [0.3, 0.4], namespace: 'zh-CN', metadata: { contentHash: 'hash-2' } },
   ]);
   assert.ok(serialized.endsWith('\n'));
+});
+
+test('Vectorize upsert upload sends NDJSON in the vectors multipart field', async () => {
+  const vectors = [{ id: 'passage-1', values: [0.1, 0.2], namespace: 'en' }];
+
+  const form = createVectorizeUploadForm(vectors);
+  const file = form.get('vectors');
+
+  assert.equal(form.has('body'), false);
+  assert.ok(file instanceof File);
+  assert.equal(file.name, 'vectors.ndjson');
+  assert.equal(file.type, 'application/x-ndjson');
+  assert.deepEqual(JSON.parse(await file.text()), vectors[0]);
 });

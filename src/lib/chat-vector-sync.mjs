@@ -40,3 +40,13 @@ export function planChatVectorSync(passages, previousManifest) {
 export function serializeVectorizeNdjson(vectors) {
   return `${vectors.map((vector) => JSON.stringify(vector)).join('\n')}\n`;
 }
+
+export function createVectorizeUploadForm(vectors) {
+  const form = new FormData();
+  form.append(
+    'vectors',
+    new Blob([serializeVectorizeNdjson(vectors)], { type: 'application/x-ndjson' }),
+    'vectors.ndjson',
+  );
+  return form;
+}

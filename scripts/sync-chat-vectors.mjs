@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { planChatVectorSync, serializeVectorizeNdjson } from '../src/lib/chat-vector-sync.mjs';
+import { createVectorizeUploadForm, planChatVectorSync } from '../src/lib/chat-vector-sync.mjs';
 
 const API_BASE = 'https://api.cloudflare.com/client/v4';
 const MODEL = '@cf/baai/bge-m3';
@@ -107,12 +107,7 @@ async function upsertVectors(records, { accountId, token, indexName }) {
         },
       }));
     if (vectors.length === 0) continue;
-    const body = new FormData();
-    body.append(
-      'body',
-      new Blob([serializeVectorizeNdjson(vectors)], { type: 'application/x-ndjson' }),
-      'vectors.ndjson',
-    );
+    const body = createVectorizeUploadForm(vectors);
     const result = await cloudflareRequest(`${API_BASE}/accounts/${accountId}/vectorize/v2/indexes/${indexName}/upsert`, {
       method: 'POST',
       headers: {
