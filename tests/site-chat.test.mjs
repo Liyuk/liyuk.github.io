@@ -508,6 +508,50 @@ test('chat API ignores vector passages whose content hash no longer matches the 
   assert.equal(modelCalls, 1);
 });
 
+test('chat API keeps strong keyword results for a short topic query when vector confidence is low', async () => {
+  const article = {
+    title: '管理者如何带团队',
+    description: '管理者需要围绕目标、责任和协作建立团队工作方式。',
+    url: '/writing/2026/08/managing-a-team/',
+    locale: 'zh-CN',
+    excerpts: ['管理者需要围绕目标、责任和协作建立团队工作方式。'],
+  };
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: '管理', locale: 'zh-CN' }),
+  });
+  let modelCalls = 0;
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: { fetch: async () => Response.json([article]) },
+      AI: { run: async () => ({ data: [Array(1024).fill(0.01)] }) },
+      VECTOR_INDEX: {
+        query: async () => ({ matches: [{
+          metadata: {
+            url: article.url,
+            passageIndex: 0,
+            contentHash: createHash('sha256').update(`title: ${article.title} | text: ${article.excerpts[0]}`).digest('hex'),
+          },
+          score: 0.41,
+        }] }),
+      },
+    },
+    async () => {
+      modelCalls += 1;
+      return Response.json({ candidates: [{ content: { parts: [{ text: '这篇文章讨论管理者如何围绕目标和责任带领团队。' }] } }] });
+    },
+  );
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.match(result.answer, /管理者如何围绕目标和责任带领团队/);
+  assert.deepEqual(result.sources.map(({ url }) => url), [article.url]);
+  assert.equal(modelCalls, 1);
+});
+
 test('chat API uses the benchmarked vector threshold to abstain from a lexical false match', async () => {
   const request = new Request('https://liyuk.com/api/chat', {
     method: 'POST',

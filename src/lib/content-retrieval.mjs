@@ -7,6 +7,11 @@ function isCurrentPageQuestion(question) {
   return /这篇|本文|这篇文章|文中|这页|这段|作者在这里|this article|this page|this post|the article|in this post|what is it about/iu.test(question);
 }
 
+function isShortTopicQuery(question) {
+  const normalized = question.trim();
+  return Array.from(normalized).length <= 12 && !/[?？。！!，,]/u.test(normalized);
+}
+
 async function getCurrentPageSource(index, input, requestUrl, assets) {
   if (!input.currentPath || !isCurrentPageQuestion(input.question)) return undefined;
   try {
@@ -122,7 +127,10 @@ export async function retrieveContentSources({ index, input, question, requestUr
   const hybridSources = vectorResult.available
     ? vectorResult.bestScore >= VECTOR_MIN_SCORE
       ? fuseSources([keywordSources, vectorResult.sources], 4)
-      : []
+      // A short topic can have clear title/tag evidence even when its embedding score is low.
+      : isShortTopicQuery(question)
+        ? keywordSources.slice(0, 4)
+        : []
     : keywordSources;
   const sources = currentPageSource
     ? [currentPageSource]
