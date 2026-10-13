@@ -1,6 +1,6 @@
 ---
 title: 给博客加 AI 问答：为什么暂时没上向量检索
-description: 给文章多、却不容易找的个人博客增加站内 AI 助手；记录一次在免费额度约束下，由 AI 协助实现和评测关键词检索、切段与向量方案的过程。
+description: 给文章多、却不容易找的个人博客增加站内 AI 助手；记录 AI 协助实现检索、比较切段，并评估免费额度下是否值得接入向量的过程。
 createdAt: 2026-10-11
 type: case-study
 draft: true
@@ -23,6 +23,8 @@ citationUrls:
   - https://cormack.uwaterloo.ca/cormack/cormacksigir09-rrf.pdf
   - https://ai.google.dev/gemini-api/docs/embeddings
   - https://ai.google.dev/gemini-api/docs/pricing
+  - https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/rag-evaluators
+  - https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-llm-evaluation-phase
   - https://metr.org/Early_2025_AI_Experienced_OS_Devs_Study-paper.pdf
   - https://metr.org/blog/2026-02-24-uplift-update/
   - https://developers.google.com/search/docs/appearance/ai-features
@@ -123,9 +125,17 @@ flowchart TB
 
 ## 当前实现和免费额度的取舍
 
-现在的版本用静态倒排索引、双语标签和少量主题别名；当前页问题会读取已发布文章的正文，全站问题则按段落检索。索引只保留每篇文章最多 3 个代表性片段，构建产物合计约 795 段、5.2 MB。完整正文的离线实验有约 3,183 段、11.3 MB，但这份更大的索引不会部署。
+现在部署的版本没有向量，也没有实际使用的向量维数。它用静态倒排索引、双语标签和少量主题别名；当前页问题会读取已发布文章的正文，全站问题则按段落检索。线上索引每篇文章最多保留 3 个代表性片段，构建产物合计约 795 段、5.2 MB。离线切段实验生成过约 3,183 段、11.3 MB 的完整正文索引，但这份更大的索引不会部署。
 
-向量方案看起来也装得下：按每段 768 维估算，3,183 段占约 244 万存储维度，低于 Cloudflare Vectorize Workers Free 的 500 万存储维度。限制在查询量：Cloudflare 把索引向量和查询向量都计入查询维度，所以每次查询约消耗 $(3183+1)\times768$，每月 3,000 万查询维度大约只够 12 次。若只存当前 795 段，每月理论上约 49 次。这个估算假设每个问题只查一次、每段 768 维，不含重试或额外查询；它是容量上限估算，不是实际用量预测。[Vectorize 定价和计算方式](https://developers.cloudflare.com/vectorize/platform/pricing/)
+如果以后做向量对照，可以先用 Gemini Embedding 2 的 768 维输出试算。768 维就是每段文章和每个问题分别表示成 768 个数；写入索引和查询时必须使用相同维数。Google 文档说明该模型默认输出 3,072 维，也支持把输出维度设为 768、1,536 等；这里的 768 只是估算参数，模型和维度都还没为本站正式选定。[Gemini embeddings 文档](https://ai.google.dev/gemini-api/docs/embeddings)
+
+| 方案估算 | 向量条目数 | 维数 | 存储维度 | 按免费查询额度估算的月查询数 |
+| --- | ---: | ---: | ---: | ---: |
+| 当前线上索引，不含向量 | 0 | — | 0 | 不调用 Vectorize |
+| 只给线上 795 个片段建向量 | 795 | 768 | 约 61.1 万（12.2%） | 约 49 次 |
+| 给离线完整正文 3,183 个片段建向量 | 3,183 | 768 | 约 244.5 万（48.9%） | 约 12 次 |
+
+后两行按 Cloudflare Vectorize Workers Free 每月 500 万存储维度、3,000 万查询维度计算。查询维度会把索引里的向量和查询向量一起计入，所以估算式是 $30,000,000 / ((N+1)\times768)$；没有算重试、一次提问多次查询或文章增长。存储方面装得下，不代表免费额度能支撑多少次搜索。这个数字也不是已运行出来的用量，而是还没接入前的容量估算。[Vectorize 定价和计算方式](https://developers.cloudflare.com/vectorize/platform/pricing/)
 
 Gemini embedding 的免费额度并不能抵消 Vectorize 的查询上限；免费层提交给 Gemini 的内容还可能用于改进 Google 产品。因此当前先不把文章向量接到线上：这个站点的检索质量尚未用独立问题集验证，付出更多索引和维护复杂度之前，应该先证明它能稳定减少语义改写漏召回，同时不提高无答案误答率。[Gemini API 定价与数据使用说明](https://ai.google.dev/gemini-api/docs/pricing)
 
@@ -220,7 +230,17 @@ AI 调整别名、权重、拒答门槛和片段抽样时使用了这批题，�
 
 人工或 AI 编写的问题可以补上不同问法，但也可能把编写者的表达习惯误当成读者习惯。相关评测研究也会把检索和回答拆开看：RAGAS、ARES、UAEval4RAG 关注的维度并不一样，Hit@3 只说明正确文章有没有出现，不能代替忠实度或拒答质量。[合成检索评测集研究](https://www.microsoft.com/en-us/research/publication/synthetic-test-collections-for-retrieval-evaluation/) [Can we Evaluate RAGs with Synthetic Data?](https://arxiv.org/abs/2508.11758) [RAGAS](https://arxiv.org/abs/2309.15217) [ARES](https://aclanthology.org/2024.naacl-long.20/) [UAEval4RAG](https://aclanthology.org/2025.acl-long.415/)
 
-在这组题上，词面检索会漏掉一部分社区式问法，无答案题也常把相近主题当成答案。下一轮评测应留出一批不参与调参的问题，并标出每题真正依赖的段落；否则分数再高，也很难判断是检索变好了，还是答案被调进了题库。
+## 这些分数能和行业 benchmark 比吗
+
+目前没有一个适用于所有 RAG 产品的统一及格分数。BEIR 把 18 个检索数据集放在一起比较不同方法，结论之一是 BM25 仍是强基线，重排方法平均表现更好但计算成本更高；不同领域的结果也会变化。它适合比较检索方法的跨数据集表现，不是给某个个人博客规定 Hit@3 应该达到多少。[BEIR 论文](https://arxiv.org/abs/2104.08663)
+
+生产团队公开的结果也要看实验口径。Anthropic 报告过一组跨领域测试：以 top-20 段落的检索失败率衡量，基础检索为 5.7%，加入上下文化 embedding 和 BM25 后为 2.9%，再加 reranking 后为 1.9%。这个结果来自 Anthropic 自己的语料、模型和实验设置；它测的是 top-20 段落是否漏掉相关内容，和本站的 Hit@3（正确文章是否进入前三）不是同一个指标，不能拿两边的百分比直接排名。[Anthropic 实验](https://www.anthropic.com/engineering/contextual-retrieval)
+
+更能借鉴的是怎么拆评估。RAGAS 和 ARES 分别考察检索上下文是否相关、回答是否忠于证据、回答是否切题；Microsoft 的评估文档也把检索过程评估和最终回答评估分开，并建议按具体工作负载决定优先级。生成结果有随机性，Microsoft 也建议以目标区间看表现，而不是迷信单次分数。它们提供的是评估维度和方法，不是行业共同承认的最低分数。[RAGAS](https://arxiv.org/abs/2309.15217) [ARES](https://arxiv.org/abs/2311.09476) [Microsoft RAG evaluators](https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/rag-evaluators) [Microsoft end-to-end evaluation](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-llm-evaluation-phase)
+
+按这个标准看，本站现在的 benchmark 还只是开发阶段的检索对照：70 道主问题、25 道 Reddit 启发题都参与过检索调整；标签主要指向文章，没有逐题标出必须命中的证据段落；评测也没有调用 Gemini。因此 70% 的 Hit@3 只能说明这批题里有多少正确文章进了前三，不能代表未见问题，更不能说明最终回答质量。无答案题中，60% 和 83.3% 仍召回了文章，说明错误候选经常能通过当前检索门槛；但由于没有跑生成评测，还不能据此断言 Gemini 最后一定会误答。每个问题对 70 题集的比例影响约 1.4 个百分点，对 25 题集则是 4 个百分点，数字本身也容易随少数问题变化。
+
+我不会把这轮结果写成“达到行业水准”。它确实暴露了问题，但还没有一套独立的验收集。下一轮应先冻结一批不参与调参的问题，并由人核对可回答性、合理来源和证据段落；再用同一批问题比较关键词基线、不同切段和混合检索。检索指标之外，还要抽查回答是否忠于证据、是否答全、引用是否指向正确段落，以及无答案时有没有拒答。向量方案也应该先跑离线对照，只有在独立题集上减少漏召回、没有恶化无答案问题后，才值得讨论接入生产。
 
 ## 哪些优化值得先试
 
