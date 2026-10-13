@@ -1,4 +1,4 @@
-import { findRelevantSources, MIN_CHAT_MATCHING_TERMS } from './site-chat.mjs';
+import { retrieveContentSources } from './content-retrieval.mjs';
 
 const MAX_BODY_BYTES = 8_000;
 const MAX_QUESTION_LENGTH = 600;
@@ -7,8 +7,6 @@ const MAX_HISTORY_MESSAGES = 4;
 const MAX_HISTORY_MESSAGE_LENGTH = 1_200;
 const MAX_HISTORY_LENGTH = 3_000;
 const MODEL = 'gemini-3.5-flash-lite';
-const VECTOR_MODEL = '@cf/baai/bge-m3';
-const VECTOR_MIN_SCORE = 0.6;
 const INDEX_CACHE_TTL_MS = 5 * 60_000;
 const parsedIndexByAssets = new WeakMap();
 
@@ -107,39 +105,6 @@ function localizedFallback(locale) {
 
 function isCapabilitiesQuestion(question) {
   return /你能聊什么|你可以聊什么|你能回答什么|能问你什么|你会什么|what can you (?:talk about|help with|answer)/iu.test(question);
-}
-
-function isCurrentPageQuestion(question) {
-  return /这篇|本文|这篇文章|文中|这页|这段|作者在这里|this article|this page|this post|the article|in this post|what is it about/iu.test(question);
-}
-
-async function getCurrentPageSource(index, input, requestUrl, assets) {
-  if (!input.currentPath || !isCurrentPageQuestion(input.question)) return undefined;
-  try {
-    const pageUrl = new URL(input.currentPath, requestUrl);
-    if (pageUrl.origin !== new URL(requestUrl).origin) return undefined;
-    const document = index.documents.find((candidate) =>
-      candidate.url === pageUrl.pathname && candidate.locale === input.locale,
-    );
-    if (!document) return undefined;
-    let text;
-    try {
-      const contextUrl = `/chat-context${document.url.replace(/\/$/u, '')}.json`;
-      const response = await assets.fetch(new Request(new URL(contextUrl, requestUrl)));
-      if (response.ok) {
-        const context = await response.json();
-        if (context?.title === document.title && context?.url === document.url && context?.locale === document.locale && typeof context?.text === 'string') {
-          text = context.text;
-        }
-      }
-    } catch {
-      // A context asset failure falls back to the excerpts already in the published search index.
-    }
-    text ||= document.excerpts?.join('\n\n') || document.text || '';
-    return { ...document, text };
-  } catch {
-    return undefined;
-  }
 }
 
 function isRecommendationQuestion(question) {
@@ -262,88 +227,6 @@ function buildContext(sources) {
   return selected;
 }
 
-async function findVectorSources(index, question, locale, env) {
-  if (!env?.AI || !env?.VECTOR_INDEX) return { available: false, bestScore: Number.NEGATIVE_INFINITY, sources: [] };
-  try {
-    const embedding = await env.AI.run(VECTOR_MODEL, { text: [question] });
-    const vector = embedding?.data?.[0];
-    if (!Array.isArray(vector) || vector.length !== 1_024) {
-      return { available: false, bestScore: Number.NEGATIVE_INFINITY, sources: [] };
-    }
-    const result = await env.VECTOR_INDEX.query(vector, {
-      topK: 50,
-      namespace: locale,
-      returnMetadata: 'all',
-    });
-    const documents = Array.isArray(index) ? index : index.documents;
-    const allowed = new Map(
-      documents
-        .filter((document) => document.locale === locale)
-        .map((document) => [document.url, document]),
-    );
-    const bestByArticle = new Map();
-    let bestScore = Number.NEGATIVE_INFINITY;
-    let ignoredStalePassage = false;
-    for (const match of result.matches ?? []) {
-      const document = allowed.get(match.metadata?.url);
-      const passageIndex = match.metadata?.passageIndex;
-      const excerpt = Number.isInteger(passageIndex)
-        ? document?.excerpts?.[passageIndex]
-        : undefined;
-      if (!document || typeof excerpt !== 'string') {
-        ignoredStalePassage = true;
-        continue;
-      }
-      const passageText = `title: ${document.title} | text: ${excerpt}`;
-      const passageHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(passageText));
-      const expectedHash = [...new Uint8Array(passageHash)]
-        .map((byte) => byte.toString(16).padStart(2, '0'))
-        .join('');
-      if (match.metadata?.contentHash !== expectedHash) {
-        ignoredStalePassage = true;
-        continue;
-      }
-      bestScore = Math.max(bestScore, match.score);
-      const previous = bestByArticle.get(document.url);
-      if (!previous || match.score > previous.score) {
-        bestByArticle.set(document.url, {
-          source: { ...document, text: excerpt },
-          score: match.score,
-        });
-      }
-    }
-    const sources = [...bestByArticle.values()]
-      .filter(({ score }) => score >= VECTOR_MIN_SCORE)
-      .sort((left, right) => right.score - left.score)
-      .slice(0, 20)
-      .map(({ source }) => source);
-    return {
-      available: !ignoredStalePassage || sources.length > 0,
-      bestScore: sources.length > 0 ? bestScore : ignoredStalePassage ? Number.NEGATIVE_INFINITY : bestScore,
-      sources,
-    };
-  } catch {
-    // Vectorize is an optional retrieval path; keyword retrieval stays available.
-    return { available: false, bestScore: Number.NEGATIVE_INFINITY, sources: [] };
-  }
-}
-
-function fuseSources(rankings, limit = 4) {
-  const fused = new Map();
-  for (const ranking of rankings) {
-    ranking.forEach((source, index) => {
-      const entry = fused.get(source.url) ?? { ...source, score: 0 };
-      const evidence = [entry.text, source.text].filter((text, textIndex, values) =>
-        typeof text === 'string' && values.indexOf(text) === textIndex,
-      );
-      entry.text = evidence.join('\n\n');
-      entry.score += 1 / (60 + index + 1);
-      fused.set(source.url, entry);
-    });
-  }
-  return [...fused.values()].sort((left, right) => right.score - left.score).slice(0, limit);
-}
-
 function isShortFollowUp(question) {
   const normalized = question.trim().toLocaleLowerCase();
   if (normalized.length > 80) return false;
@@ -411,24 +294,14 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
   const retrievalQuestion = previousUserQuestion && (isShortFollowUp(input.question) || isRecommendationQuestion(input.question))
     ? `${previousUserQuestion}\n${input.question}`
     : input.question;
-  const currentPageQuestion = isCurrentPageQuestion(input.question);
-  const currentPageSource = await getCurrentPageSource(index, input, request.url, env.ASSETS);
-  const keywordSources = findRelevantSources(index, retrievalQuestion, input.locale, 20, {
-    minMatchingTerms: MIN_CHAT_MATCHING_TERMS,
+  const { sources } = await retrieveContentSources({
+    index,
+    input,
+    question: retrievalQuestion,
+    requestUrl: request.url,
+    assets: env.ASSETS,
+    env,
   });
-  const vectorResult = currentPageSource || (currentPageQuestion && input.currentPath)
-    ? { available: false, bestScore: Number.NEGATIVE_INFINITY, sources: [] }
-    : await findVectorSources(index, retrievalQuestion, input.locale, env);
-  const hybridSources = vectorResult.available
-    ? vectorResult.bestScore >= VECTOR_MIN_SCORE
-      ? fuseSources([keywordSources, vectorResult.sources], 4)
-      : []
-    : keywordSources;
-  const sources = currentPageSource
-    ? [currentPageSource]
-    : currentPageQuestion && input.currentPath
-      ? []
-      : hybridSources;
   if (sources.length === 0) {
     if (isRecommendationQuestion(input.question)) {
       const result = { answer: recommendationPrompt(input.locale), suggestions: topicSuggestions(input.locale), sources: [] };
