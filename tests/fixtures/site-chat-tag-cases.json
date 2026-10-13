@@ -1,0 +1,74 @@
+[
+  {
+    "id": "knowledge-management-handoff",
+    "tag": "knowledge-management",
+    "question": "经验交接",
+    "sourcePath": "src/content/writing/2020/01/why-technical-knowledge-bases-need-entry-pages/zh.md"
+  },
+  {
+    "id": "technical-writing-freshness",
+    "tag": "technical-writing",
+    "question": "文档有效性",
+    "sourcePath": "src/content/writing/2020/10/documents-are-collaboration-interfaces/zh.md"
+  },
+  {
+    "id": "onboarding-readiness",
+    "tag": "onboarding",
+    "question": "入职准备",
+    "sourcePath": "src/content/writing/2020/10/mentor-relationship-and-first-90-days/zh.md"
+  },
+  {
+    "id": "mentoring-responsibility",
+    "tag": "mentoring",
+    "question": "逐步承担责任",
+    "sourcePath": "src/content/writing/2023/06/team-development-compounds/zh.md"
+  },
+  {
+    "id": "engineering-management-practice",
+    "tag": "engineering-management",
+    "question": "管理者日常",
+    "sourcePath": "src/content/writing/2023/03/how-close-managers-should-stay-to-code/zh.md"
+  },
+  {
+    "id": "ownership-without-authority",
+    "tag": "ownership",
+    "question": "没有汇报关系",
+    "sourcePath": "src/content/writing/2021/11/ownership-with-boundaries/zh.md"
+  },
+  {
+    "id": "cross-team-collaboration",
+    "tag": "collaboration",
+    "question": "跨团队同步",
+    "sourcePath": "src/content/writing/2020/10/reusable-engineering-retrospective/zh.md"
+  },
+  {
+    "id": "problem-framing",
+    "tag": "thinking",
+    "question": "模糊问题",
+    "sourcePath": "src/content/writing/2022/06/structured-thinking-at-work/zh.md"
+  },
+  {
+    "id": "product-tradeoffs",
+    "tag": "product-thinking",
+    "question": "技术方案取舍",
+    "sourcePath": "src/content/writing/2022/03/product-judgment-for-engineers/zh.md"
+  },
+  {
+    "id": "developer-productivity",
+    "tag": "developer-productivity",
+    "question": "研发效率",
+    "sourcePath": "src/content/writing/2026/08/ai-productivity-complex-systems/zh.md"
+  },
+  {
+    "id": "seo-performance",
+    "tag": "seo",
+    "question": "搜索曝光",
+    "sourcePath": "src/content/writing/2026/08/seo-search-fundamentals/zh.md"
+  },
+  {
+    "id": "personal-blog-structure",
+    "tag": "site-notes",
+    "question": "博客结构",
+    "sourcePath": "src/content/writing/2026/08/rebuilding-this-site/zh.md"
+  }
+]
