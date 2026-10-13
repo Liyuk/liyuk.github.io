@@ -789,7 +789,7 @@ test('chat API rejects malformed optional article metadata in its static index',
     request,
     {
       GEMINI_API_KEY: 'test-only-api-key',
-      ASSETS: { fetch: async () => Response.json([{ ...sources[0], description: { unexpected: true } }]) },
+      ASSETS: { fetch: async () => Response.json([{ ...sources[0], tagLabels: { unexpected: true } }]) },
     },
     async () => {
       throw new Error('Malformed index must be rejected before Gemini');

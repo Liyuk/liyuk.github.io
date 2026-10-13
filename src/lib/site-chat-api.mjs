@@ -62,6 +62,7 @@ function validSources(value, origin) {
       source
       && typeof source.title === 'string'
       && (source.description === undefined || typeof source.description === 'string')
+      && (source.tagLabels === undefined || (Array.isArray(source.tagLabels) && source.tagLabels.every((label) => typeof label === 'string')))
       && typeof source.url === 'string'
       && (source.locale === 'zh-CN' || source.locale === 'en')
       && source.url.startsWith('/')

@@ -315,6 +315,7 @@ test('content discovery builds one localized record for the static retrieval cor
     collection: 'writing',
     title: 'Discovery example',
     description: 'An article description.',
+    tagLabels: ['技术'],
     keywords: ['技术', '数据度量工作指南', '从数据口径到周期复盘，建立一套能支持协作与决策的度量系统。'],
     body: 'Published article body.',
     url: '/writing/2026/10/discovery-example/',

@@ -24,11 +24,13 @@ export function createContentDiscoveryDocument(
 ) {
   const features = getContentFeatures(entry);
   const localeIndex = locale === 'en' ? 1 : 0;
+  const tagLabels = features.tags
+    .map((tag) => tags[tag]?.[localeIndex])
+    .filter((label): label is string => Boolean(label));
   const keywords = [
     ...features.tags.flatMap((tag) => {
-      const label = tags[tag]?.[localeIndex];
       const aliases = tagSearchAliases[tag]?.[localeIndex] ?? [];
-      return [...(label ? [label] : []), ...aliases];
+      return [...(tags[tag] ? [tags[tag][localeIndex]] : []), ...aliases];
     }),
     ...(features.columnSlug
       ? [columns[features.columnSlug]?.label[locale], columns[features.columnSlug]?.description[locale]]
@@ -40,6 +42,7 @@ export function createContentDiscoveryDocument(
     collection,
     title: entry.data.title,
     description: entry.data.description,
+    tagLabels,
     keywords,
     body: entry.body ?? '',
     url: contentUrl(collection, entry.id, locale),

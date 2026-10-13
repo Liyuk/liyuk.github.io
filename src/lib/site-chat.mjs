@@ -291,7 +291,28 @@ export function formatChatAnswer(answer) {
     .trim();
 }
 
+function findExactTagLabelSources(sources, question, locale, limit) {
+  const documents = Array.isArray(sources) ? sources : sources?.documents;
+  if (!Array.isArray(documents)) return [];
+  const normalizedQuestion = question.trim().replace(/^#\s*/u, '').toLocaleLowerCase();
+  if (!normalizedQuestion) return [];
+  return documents
+    .filter((source) =>
+      source.locale === locale &&
+      Array.isArray(source.tagLabels) &&
+      source.tagLabels.some((label) => label.trim().toLocaleLowerCase() === normalizedQuestion),
+    )
+    .slice(0, limit)
+    .map((source) => ({
+      ...source,
+      text: source.excerpts?.[0] ?? source.text ?? '',
+    }));
+}
+
 export function findRelevantSources(sources, question, locale, limit = 4, { minMatchingTerms = MIN_CHAT_MATCHING_TERMS } = {}) {
+  const exactTagSources = findExactTagLabelSources(sources, question, locale, limit);
+  if (exactTagSources.length > 0) return exactTagSources;
+
   const queryTerms = queryTermsForSearch(question);
   if (queryTerms.size === 0) return [];
   const requiredMatchingTerms = Math.min(minMatchingTerms, queryTerms.size);
@@ -479,6 +500,7 @@ export function createChatIndex(
       {
         title: document.title,
         description: (document.description || '').slice(0, 180),
+        tagLabels: document.tagLabels ?? [],
         keywords: document.keywords ?? [],
         url: document.url,
         locale: document.locale,
