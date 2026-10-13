@@ -127,13 +127,13 @@ export function evaluateChunkSweep(cases, sources, sizes = [600, 900, 1_200, 1_5
       : Array.isArray(sources)
         ? sources
         : sources.documents;
-  const documents = allSources.map(({ title, description, url, locale, excerpts }) => {
-    const text = (excerpts ?? []).join('\n\n');
-    const body =
+  const documents = allSources.map(({ title, description, url, locale, excerpts, body }) => {
+    const text = Array.isArray(excerpts) ? excerpts.join('\n\n') : (body ?? '');
+    const bodyText =
       description && text.startsWith(description)
         ? text.slice(description.length).replace(/^\s+/, '')
         : text;
-    return { title, description, url, locale, body };
+    return { title, description, url, locale, body: bodyText };
   });
 
   return sizes.map((maxExcerptLength) => {

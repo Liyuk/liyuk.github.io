@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist",
+    "prebuild": "playwright install chromium --only-shell",
+    "build": "astro build && node scripts/audit-rendered-content.mjs && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "audit:images": "node scripts/audit-images.mjs",
@@ -31,7 +32,8 @@
     "test:a11y": "node scripts/run-browser-checks.mjs tests/a11y-smoke.mjs",
     "test:a11y:fresh": "npm run build && npm run test:a11y",
     "test:browser:ci": "node scripts/run-browser-checks.mjs tests/e2e-smoke.mjs tests/a11y-smoke.mjs",
-    "test:draft:dev": "node scripts/run-dev-browser-checks.mjs"
+    "test:draft:dev": "node scripts/run-dev-browser-checks.mjs",
+    "evaluate:chat-search": "node scripts/evaluate-chat-retrieval.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -39,11 +41,11 @@
     "@astrojs/sitemap": "^3.7.4",
     "@axe-core/playwright": "^4.13.0",
     "@types/qrcode": "^1.5.6",
-    "astro": "^7.3.3",
-    "katex": "^0.18.7",
+    "astro": "^7.3.5",
+    "katex": "^0.19.0",
     "pagefind": "^1.5.2",
     "playwright": "^1.63.0",
-    "prettier": "^3.9.8",
+    "prettier": "^3.9.9",
     "qrcode": "^1.5.4",
     "rehype-katex": "^7.0.1",
     "rehype-mermaid": "^3.0.0",

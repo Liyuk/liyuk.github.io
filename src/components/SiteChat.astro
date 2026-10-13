@@ -11,7 +11,10 @@ const copy = i18n(locale).chat;
       <h2 id="site-chat-title">{copy.title}</h2>
       <button class="site-chat-close" type="button" data-chat-close aria-label={copy.close}>×</button>
     </header>
-    <p class="site-chat-privacy">{copy.privacy}</p>
+    <details class="site-chat-privacy">
+      <summary>{copy.privacySummary}</summary>
+      <p>{copy.privacy}</p>
+    </details>
     <ol class="site-chat-messages" data-chat-messages aria-live="polite" aria-relevant="additions text">
       <li class="site-chat-message assistant"><p>{copy.greeting}</p></li>
     </ol>
@@ -30,17 +33,23 @@ const copy = i18n(locale).chat;
 </aside>
 
 <script>
+  import { formatChatAnswer } from '../lib/site-chat.mjs';
+
   type ChatCopy = {
     error: string;
     sending: string;
     sources: string;
+    privacySummary: string;
   };
 
   type ChatResponse = {
     answer?: string;
     sources?: { title: string; url: string }[];
+    suggestions?: string[];
     error?: { message: string };
   };
+
+  type ChatStreamResult = { answer: string; sources: ChatResponse['sources']; suggestions: string[] };
 
   document.querySelectorAll<HTMLElement>('[data-site-chat]').forEach((widget) => {
     const launcher = widget.querySelector<HTMLButtonElement>('[data-chat-launcher]');
@@ -60,21 +69,12 @@ const copy = i18n(locale).chat;
       return;
     }
     const locale = window.location.pathname.startsWith('/en/') ? 'en' : 'zh-CN';
+    const conversation: { role: 'user' | 'assistant'; content: string }[] = [];
+    const encoder = new TextEncoder();
+    const historyBytesLimit = 4_000;
+    const historyMessageBytesLimit = 1_200;
 
-    const setOpen = (open: boolean) => {
-      panel.hidden = !open;
-      launcher.setAttribute('aria-expanded', String(open));
-      if (open) input.focus();
-      else launcher.focus();
-    };
-
-    const appendMessage = (text: string, kind: 'assistant' | 'user', sources: ChatResponse['sources'] = []) => {
-      const item = document.createElement('li');
-      item.className = `site-chat-message ${kind}`;
-      const paragraph = document.createElement('p');
-      paragraph.textContent = text;
-      item.append(paragraph);
-
+    const appendMessageDetails = (item: HTMLLIElement, sources: ChatResponse['sources'], suggestions: ChatResponse['suggestions']) => {
       if (sources?.length) {
         const heading = document.createElement('strong');
         heading.className = 'site-chat-source-heading';
@@ -97,13 +97,297 @@ const copy = i18n(locale).chat;
         }
         if (list.childElementCount) item.append(list);
       }
+      if (suggestions?.length) {
+        const group = document.createElement('div');
+        group.className = 'site-chat-suggestions';
+        for (const suggestion of suggestions) {
+          const button = document.createElement('button');
+          button.className = 'site-chat-suggestion';
+          button.type = 'button';
+          button.dataset.chatSuggestion = '';
+          button.textContent = suggestion;
+          group.append(button);
+        }
+        item.append(group);
+      }
+    };
 
+    const limitHistoryText = (text: string) => {
+      let result = '';
+      let byteLength = 0;
+      for (const character of text) {
+        const characterBytes = encoder.encode(character).byteLength;
+        if (byteLength + characterBytes > historyMessageBytesLimit) break;
+        result += character;
+        byteLength += characterBytes;
+      }
+      return result;
+    };
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      launcher.setAttribute('aria-expanded', String(open));
+      if (open) input.focus();
+      else launcher.focus();
+    };
+
+    const appendMessage = (
+      text: string,
+      kind: 'assistant' | 'user',
+      sources: ChatResponse['sources'] = [],
+      suggestions: ChatResponse['suggestions'] = [],
+    ) => {
+      const item = document.createElement('li');
+      item.className = `site-chat-message ${kind}`;
+      if (kind === 'assistant') renderAssistantMarkdown(item, text);
+      else {
+        const paragraph = document.createElement('p');
+        paragraph.textContent = text;
+        item.append(paragraph);
+      }
+      appendMessageDetails(item, sources, suggestions);
       messages.append(item);
       item.scrollIntoView({ block: 'nearest' });
+      return item;
+    };
+
+    const appendLoadingMessage = () => {
+      const item = appendMessage(copy.sending, 'assistant');
+      item.classList.add('is-loading');
+      item.setAttribute('role', 'status');
+      item.setAttribute('aria-busy', 'true');
+      const paragraph = item.querySelector('p');
+      if (paragraph) {
+        const dots = document.createElement('span');
+        dots.className = 'site-chat-loading-dots';
+        dots.setAttribute('aria-hidden', 'true');
+        dots.append(document.createElement('i'), document.createElement('i'), document.createElement('i'));
+        paragraph.append(' ', dots);
+      }
+      return item;
+    };
+
+    const appendInlineMarkdown = (parent: HTMLElement, source: string) => {
+      const tokenPattern = /(`[^`]+`|\*\*[^*]+\*\*|__[^_]+__|\*[^*\n]+\*|_[^_\n]+_|\[[^\]]+\]\([^)]+\))/gu;
+      let offset = 0;
+      for (const match of source.matchAll(tokenPattern)) {
+        const token = match[0];
+        const start = match.index ?? 0;
+        if (start > offset) parent.append(document.createTextNode(source.slice(offset, start)));
+        if (token.startsWith('`')) {
+          const code = document.createElement('code');
+          code.textContent = token.slice(1, -1);
+          parent.append(code);
+        } else if (token.startsWith('**') || token.startsWith('__')) {
+          const strong = document.createElement('strong');
+          strong.textContent = token.slice(2, -2);
+          parent.append(strong);
+        } else if (token.startsWith('*') || token.startsWith('_')) {
+          const emphasis = document.createElement('em');
+          emphasis.textContent = token.slice(1, -1);
+          parent.append(emphasis);
+        } else {
+          const linkMatch = /^\[([^\]]+)\]\(([^)]+)\)$/u.exec(token);
+          if (!linkMatch) {
+            parent.append(document.createTextNode(token));
+          } else {
+            try {
+              const url = new URL(linkMatch[2], window.location.origin);
+              if (url.protocol !== 'https:' && url.protocol !== 'http:') throw new Error('Unsupported link protocol');
+              const link = document.createElement('a');
+              link.href = url.href;
+              link.textContent = linkMatch[1];
+              if (url.origin !== window.location.origin) {
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+              }
+              parent.append(link);
+            } catch {
+              parent.append(document.createTextNode(linkMatch[1]));
+            }
+          }
+        }
+        offset = start + token.length;
+      }
+      if (offset < source.length) parent.append(document.createTextNode(source.slice(offset)));
+    };
+
+    const renderAssistantMarkdown = (container: HTMLElement, source: string) => {
+      const lines = formatChatAnswer(source).replace(/\r\n?/gu, '\n').split('\n');
+      container.replaceChildren();
+      let paragraph: string[] = [];
+      let list: HTMLOListElement | HTMLUListElement | undefined;
+      let codeLines: string[] | undefined;
+
+      const flushParagraph = () => {
+        if (!paragraph.length) return;
+        const element = document.createElement('p');
+        appendInlineMarkdown(element, paragraph.join(' '));
+        container.append(element);
+        paragraph = [];
+      };
+      const flushList = () => {
+        if (list) container.append(list);
+        list = undefined;
+      };
+
+      for (const line of lines) {
+        const fence = /^```(?:[\w+-]+)?\s*$/u.test(line.trim());
+        if (fence) {
+          flushParagraph();
+          flushList();
+          if (codeLines) {
+            const pre = document.createElement('pre');
+            const code = document.createElement('code');
+            code.textContent = codeLines.join('\n');
+            pre.append(code);
+            container.append(pre);
+            codeLines = undefined;
+          } else {
+            codeLines = [];
+          }
+          continue;
+        }
+        if (codeLines) {
+          codeLines.push(line);
+          continue;
+        }
+        if (!line.trim()) {
+          flushParagraph();
+          flushList();
+          continue;
+        }
+        const heading = /^(#{1,3})\s+(.+)$/u.exec(line);
+        if (heading) {
+          flushParagraph();
+          flushList();
+          const element = document.createElement(heading[1].length === 1 ? 'h3' : 'h4');
+          appendInlineMarkdown(element, heading[2]);
+          container.append(element);
+          continue;
+        }
+        const quote = /^>\s?(.*)$/u.exec(line);
+        if (quote) {
+          flushParagraph();
+          flushList();
+          const element = document.createElement('blockquote');
+          appendInlineMarkdown(element, quote[1]);
+          container.append(element);
+          continue;
+        }
+        const listItem = /^\s*(?:(- |\* |\+ )|(\d+[.)]\s+))(.+)$/u.exec(line);
+        if (listItem) {
+          flushParagraph();
+          const ordered = Boolean(listItem[2]);
+          if (!list || (ordered && list.tagName !== 'OL') || (!ordered && list.tagName !== 'UL')) {
+            flushList();
+            list = document.createElement(ordered ? 'ol' : 'ul');
+          }
+          const element = document.createElement('li');
+          appendInlineMarkdown(element, listItem[3]);
+          list.append(element);
+          continue;
+        }
+        flushList();
+        paragraph.push(line.trim());
+      }
+
+      flushParagraph();
+      flushList();
+      if (codeLines) {
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        code.textContent = codeLines.join('\n');
+        pre.append(code);
+        container.append(pre);
+      }
+    };
+
+    const readChatStream = async (response: Response, item: HTMLLIElement): Promise<ChatStreamResult> => {
+      if (!response.body) throw new Error('Missing chat response stream');
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let answer = '';
+      let renderFrame: number | undefined;
+      let sources: ChatResponse['sources'] = [];
+      let suggestions: string[] = [];
+      let completed = false;
+
+      const isFollowingLatestMessage = () => messages.scrollHeight - messages.scrollTop - messages.clientHeight < 48;
+      const queueAnswerRender = () => {
+        if (renderFrame !== undefined) return;
+        renderFrame = requestAnimationFrame(() => {
+          renderFrame = undefined;
+          const shouldFollow = isFollowingLatestMessage();
+          renderAssistantMarkdown(item, answer);
+          if (shouldFollow) messages.scrollTop = messages.scrollHeight;
+        });
+      };
+
+      const consumeFrame = (frame: string) => {
+        const lines = frame.split(/\r?\n/u);
+        const event = lines.find((line) => line.startsWith('event:'))?.slice(6).trim();
+        const data = lines.filter((line) => line.startsWith('data:')).map((line) => line.slice(5).trimStart()).join('\n');
+        if (!event || !data) return;
+        const payload = JSON.parse(data) as { text?: string; sources?: ChatResponse['sources']; suggestions?: string[]; message?: string };
+        if (event === 'text' && typeof payload.text === 'string') {
+          answer += payload.text;
+          queueAnswerRender();
+        } else if (event === 'sources' && Array.isArray(payload.sources)) {
+          sources = payload.sources;
+        } else if (event === 'suggestions' && Array.isArray(payload.suggestions)) {
+          suggestions = payload.suggestions.filter((suggestion) => typeof suggestion === 'string');
+        } else if (event === 'error') {
+          throw new Error(payload.message || copy.error);
+        } else if (event === 'done') {
+          completed = true;
+        }
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const frames = buffer.split(/\r?\n\r?\n/u);
+        buffer = frames.pop() ?? '';
+        for (const frame of frames) consumeFrame(frame);
+      }
+      buffer += decoder.decode();
+      if (buffer.trim()) consumeFrame(buffer);
+      if (!completed) throw new Error('Incomplete chat response stream');
+      if (renderFrame !== undefined) cancelAnimationFrame(renderFrame);
+      const shouldFollow = isFollowingLatestMessage();
+      renderAssistantMarkdown(item, answer);
+      if (shouldFollow) messages.scrollTop = messages.scrollHeight;
+      item.classList.remove('is-streaming');
+      item.removeAttribute('aria-busy');
+      return { answer, sources, suggestions };
     };
 
     launcher.addEventListener('click', () => setOpen(panel.hidden));
     close.addEventListener('click', () => setOpen(false));
+    window.addEventListener('site-chat:ask', (event) => {
+      const { question } = (event as CustomEvent<{ question?: string }>).detail ?? {};
+      const trimmedQuestion = question?.trim();
+      if (!trimmedQuestion || trimmedQuestion.length > 600 || send.disabled) return;
+      input.value = trimmedQuestion;
+      setOpen(true);
+      form.requestSubmit();
+    });
+    messages.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const suggestion = target.closest<HTMLButtonElement>('[data-chat-suggestion]');
+      if (!suggestion || input.disabled) return;
+      input.value = suggestion.textContent ?? '';
+      form.requestSubmit();
+    });
+    input.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' || event.shiftKey || event.isComposing) return;
+      event.preventDefault();
+      form.requestSubmit();
+    });
     panel.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') setOpen(false);
     });
@@ -117,18 +401,57 @@ const copy = i18n(locale).chat;
       input.value = '';
       input.disabled = true;
       send.disabled = true;
-      status.textContent = copy.sending;
+      const loadingItem = appendLoadingMessage();
+      status.textContent = '';
+      const history = conversation.slice(-4);
+      let streamingItem: HTMLLIElement | undefined;
 
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ question, locale, pageUrl: window.location.pathname }),
+          body: JSON.stringify({
+            question,
+            locale,
+            history,
+            stream: true,
+            currentPath: window.location.pathname,
+          }),
         });
-        const result = await response.json() as ChatResponse;
-        if (!response.ok || !result.answer) throw new Error(result.error?.message || copy.error);
-        appendMessage(result.answer, 'assistant', result.sources);
+        if (!response.ok) throw new Error(copy.error);
+        if (response.headers.get('content-type')?.includes('text/event-stream')) {
+          streamingItem = loadingItem;
+          streamingItem.replaceChildren();
+          streamingItem.classList.remove('is-loading');
+          streamingItem.classList.add('is-streaming');
+          streamingItem.removeAttribute('role');
+          const result = await readChatStream(response, streamingItem);
+          const shouldFollow = messages.scrollHeight - messages.scrollTop - messages.clientHeight < 48;
+          appendMessageDetails(streamingItem, result.sources, result.suggestions);
+          if (shouldFollow) messages.scrollTop = messages.scrollHeight;
+          conversation.push(
+            { role: 'user', content: limitHistoryText(question) },
+            { role: 'assistant', content: limitHistoryText(result.answer) },
+          );
+        } else {
+          const result = await response.json() as ChatResponse;
+          if (!result.answer) throw new Error(result.error?.message || copy.error);
+          loadingItem.remove();
+          appendMessage(result.answer, 'assistant', result.sources, result.suggestions);
+          conversation.push(
+            { role: 'user', content: limitHistoryText(question) },
+            { role: 'assistant', content: limitHistoryText(result.answer) },
+          );
+        }
+        const historyByteLength = () => conversation.reduce(
+          (total, message) => total + encoder.encode(message.content).byteLength,
+          0,
+        );
+        while (conversation.length > 4 || historyByteLength() > historyBytesLimit) {
+          conversation.splice(0, Math.min(2, conversation.length));
+        }
       } catch {
+        loadingItem.remove();
         appendMessage(copy.error, 'assistant');
       } finally {
         input.disabled = false;
@@ -138,6 +461,7 @@ const copy = i18n(locale).chat;
       }
     });
   });
+
 </script>
 
 <style>
@@ -147,14 +471,33 @@ const copy = i18n(locale).chat;
   .site-chat-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 1rem; border-bottom: 1px solid var(--line); background: var(--paper-strong); }
   .site-chat-header h2 { margin: 0; font-family: var(--serif); font-size: 1.08rem; font-weight: 550; }
   .site-chat-close { display: grid; width: 2rem; height: 2rem; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 1.2rem; cursor: pointer; }
-  .site-chat-privacy { margin: 0; padding: .65rem 1rem; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .72rem; line-height: 1.45; }
+  .site-chat-privacy { margin: 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .72rem; line-height: 1.45; }
+  .site-chat-privacy summary { padding: .5rem 1rem; cursor: pointer; }
+  .site-chat-privacy p { margin: 0; padding: 0 1rem .65rem; }
   .site-chat-messages { display: flex; flex: 1; flex-direction: column; gap: .8rem; overflow-y: auto; margin: 0; padding: 1rem; list-style: none; }
-  .site-chat-message { max-width: 92%; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: 7px; background: var(--paper-strong); font-size: .88rem; line-height: 1.55; overflow-wrap: anywhere; }
-  .site-chat-message.user { align-self: flex-end; border-color: var(--accent); background: var(--accent-soft); }
-  .site-chat-message p { margin: 0; white-space: pre-wrap; }
-  .site-chat-message ul { margin: .55rem 0 0; padding-left: 1.1rem; }
-  .site-chat-message a { color: var(--accent); }
-  .site-chat-source-heading { display: block; margin-top: .65rem; font-size: .76rem; }
+  :global(.site-chat-message) { max-width: 92%; padding: .65rem .75rem; border: 1px solid var(--line); border-radius: 7px; background: var(--paper-strong); font-size: .9rem; line-height: 1.65; overflow-wrap: anywhere; }
+  :global(.site-chat-message.assistant) { max-width: 100%; padding: .2rem 0; border: 0; background: transparent; }
+  :global(.site-chat-message.user) { align-self: flex-end; border-color: var(--accent); background: var(--accent-soft); }
+  :global(.site-chat-message p) { margin: 0; white-space: pre-wrap; }
+  :global(.site-chat-message.assistant p) { white-space: normal; }
+  :global(.site-chat-message.assistant p + p) { margin-top: .65rem; }
+  :global(.site-chat-message.assistant h3), :global(.site-chat-message.assistant h4) { margin: .8rem 0 .35rem; font-family: var(--serif); line-height: 1.35; }
+  :global(.site-chat-message.assistant h3) { font-size: 1.05rem; }
+  :global(.site-chat-message.assistant h4) { font-size: .96rem; }
+  :global(.site-chat-message.assistant ul), :global(.site-chat-message.assistant ol) { display: grid; gap: .25rem; margin: .45rem 0 .65rem; padding-left: 1.25rem; }
+  :global(.site-chat-message.assistant blockquote) { margin: .55rem 0; padding-left: .8rem; border-left: 1px solid var(--line); color: var(--muted); }
+  :global(.site-chat-message.assistant pre) { max-width: 100%; overflow-x: auto; margin: .55rem 0; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: 5px; background: var(--paper-strong); font-size: .82rem; line-height: 1.5; }
+  :global(.site-chat-message.assistant code) { padding: .08em .25em; border-radius: 3px; background: var(--accent-soft); font-family: var(--mono, monospace); font-size: .9em; }
+  :global(.site-chat-message.assistant pre code) { padding: 0; background: transparent; font-size: inherit; }
+  :global(.site-chat-message.is-loading) { max-width: 100%; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: 6px; background: var(--paper-strong); color: var(--muted); font-size: .82rem; }
+  :global(.site-chat-loading-dots) { display: inline-flex; gap: .18rem; vertical-align: middle; }
+  :global(.site-chat-loading-dots i) { width: .28rem; height: .28rem; border-radius: 50%; background: var(--accent); opacity: .35; }
+  :global(.site-chat-message.is-streaming::after) { display: inline-block; width: .38rem; height: .95em; margin-left: .15rem; background: var(--accent); content: ''; vertical-align: -.12em; }
+  :global(.site-chat-message a) { color: var(--accent); }
+  :global(.site-chat-source-heading) { display: block; margin-top: .65rem; font-size: .76rem; }
+  :global(.site-chat-suggestions) { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .65rem; }
+  :global(.site-chat-suggestion) { padding: .35rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--accent); font: inherit; font-size: .76rem; cursor: pointer; }
+  :global(.site-chat-suggestion:hover) { border-color: var(--accent); background: var(--accent-soft); }
   .site-chat-form { padding: .75rem 1rem 1rem; border-top: 1px solid var(--line); }
   .site-chat-form label { display: block; margin-bottom: .3rem; color: var(--muted); font-size: .75rem; font-weight: 650; }
   .site-chat-form textarea { display: block; width: 100%; min-height: 3.5rem; resize: vertical; padding: .65rem .7rem; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--ink); font: inherit; font-size: .88rem; }
@@ -173,5 +516,13 @@ const copy = i18n(locale).chat;
   @media (prefers-reduced-motion: no-preference) {
     .site-chat-panel:not([hidden]) { animation: chat-in 140ms ease-out; }
     @keyframes chat-in { from { opacity: 0; transform: translateY(.35rem); } to { opacity: 1; transform: translateY(0); } }
+    :global(.site-chat-loading-dots i) { animation: chat-dot 900ms ease-in-out infinite alternate; }
+    :global(.site-chat-loading-dots i:nth-child(2)) { animation-delay: 150ms; }
+    :global(.site-chat-loading-dots i:nth-child(3)) { animation-delay: 300ms; }
+    :global(.site-chat-message.is-streaming::after) { animation: chat-cursor 850ms steps(2, end) infinite; }
+    :global(.site-chat-source-heading), :global(.site-chat-suggestions) { animation: chat-details-in 180ms ease-out both; }
+    @keyframes chat-dot { to { opacity: 1; transform: translateY(-.12rem); } }
+    @keyframes chat-cursor { 50% { opacity: 0; } }
+    @keyframes chat-details-in { from { opacity: 0; } to { opacity: 1; } }
   }
 </style>

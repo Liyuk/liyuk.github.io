@@ -1,8 +1,9 @@
 const HAN_RUN = /\p{Script=Han}+/gu;
 const TOKEN = /[\p{L}\p{N}]{2,}/gu;
+const CHAT_COLLECTIONS = new Set(['writing', 'research', 'consulting', 'project']);
 const QUERY_STOP_TERMS = new Set([
-  'about', 'after', 'also', 'and', 'are', 'can', 'could', 'do', 'does', 'for', 'from', 'help',
-  'how', 'into', 'is', 'it', 'me', 'my', 'of', 'on', 'please', 'that', 'the', 'this', 'to',
+  'about', 'after', 'also', 'and', 'are', 'can', 'could', 'do', 'does', 'for', 'from', 'help', 'helps',
+  'how', 'into', 'is', 'it', 'me', 'my', 'of', 'on', 'please', 'should', 'that', 'the', 'this', 'to',
   'today', 'we', 'what', 'when', 'where', 'which', 'who', 'why', 'with', 'would', 'you',
   '今天', '最近', '怎么样', '怎么', '么样', '如何', '什么', '有没', '没有', '帮我', '一下', '一个',
   '这个', '那个', '这篇', '本文', '本站', '是不是', '能不', '不能', '可以', '应该', '是否', '为什么',
@@ -282,7 +283,15 @@ export function cleanArticleMarkdown(markdown) {
   return paragraphs.join('\n\n');
 }
 
-export function findRelevantSources(sources, question, locale, limit = 4, { minMatchingTerms = 0 } = {}) {
+export function formatChatAnswer(answer) {
+  return answer
+    .replace(/\s*\[S\d+\]/gu, '')
+    .replace(/[ \t]+\n/gu, '\n')
+    .replace(/\n{3,}/gu, '\n\n')
+    .trim();
+}
+
+export function findRelevantSources(sources, question, locale, limit = 4, { minMatchingTerms = MIN_CHAT_MATCHING_TERMS } = {}) {
   const queryTerms = queryTermsForSearch(question);
   if (queryTerms.size === 0) return [];
   const requiredMatchingTerms = Math.min(minMatchingTerms, queryTerms.size);
@@ -444,14 +453,27 @@ function splitIntoChunks(text, maxLength = 900) {
   return chunks;
 }
 
-export function createChatIndex(documents, { maxExcerptLength = 1_200 } = {}) {
+export function createChatIndex(
+  documents,
+  { maxExcerptLength = 1_200, maxExcerptsPerDocument = Number.POSITIVE_INFINITY } = {},
+) {
   if (!Number.isInteger(maxExcerptLength) || maxExcerptLength < 1) {
     throw new TypeError('maxExcerptLength must be a positive integer.');
   }
+  if (maxExcerptsPerDocument !== Number.POSITIVE_INFINITY && (!Number.isInteger(maxExcerptsPerDocument) || maxExcerptsPerDocument < 1)) {
+    throw new TypeError('maxExcerptsPerDocument must be a positive integer or Infinity.');
+  }
 
-  return documents.flatMap((document) => {
-    const text = cleanArticleMarkdown(`${document.description || ''}\n\n${document.body || ''}`);
-    const excerpts = splitIntoChunks(text, maxExcerptLength).filter((chunk) => chunk.length >= 20);
+  return documents
+    .filter((document) => !document.collection || CHAT_COLLECTIONS.has(document.collection))
+    .flatMap((document) => {
+    const text = cleanArticleMarkdown(document.body || '') || cleanArticleMarkdown(document.description || '');
+    const allExcerpts = splitIntoChunks(text, maxExcerptLength).filter((chunk) => chunk.length >= 20);
+    const excerpts = allExcerpts.length > maxExcerptsPerDocument
+      ? [...new Set([0, Math.floor((allExcerpts.length - 1) / 2), allExcerpts.length - 1])]
+          .slice(0, maxExcerptsPerDocument)
+          .map((index) => allExcerpts[index])
+      : allExcerpts;
     if (excerpts.length === 0) return [];
     return [
       {

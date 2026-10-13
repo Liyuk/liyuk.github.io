@@ -188,7 +188,7 @@ test('chunk sweep compares sizes with the same questions and reports index cost'
         description: '一篇关于研发效率的文章。',
         url: '/article/',
         locale: 'zh-CN',
-        excerpts: ['一篇关于研发效率的文章。', '研发效率需要团队共同定义并持续改进。'],
+        body: '研发效率需要团队共同定义并持续改进。这篇文章讨论反馈周期、持续集成、代码审查、自动化测试和团队协作如何影响研发效率。'.repeat(3),
       },
     ],
     [40, 50],

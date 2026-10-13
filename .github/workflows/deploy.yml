@@ -79,6 +79,13 @@ jobs:
         with:
           name: verified-site
           path: dist/
+      - name: Restore chat vector manifest cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/chat-vectors/manifest.json
+          key: chat-vector-manifest-${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            chat-vector-manifest-${{ github.repository }}-
       - name: Sync published chat passages to Vectorize
         run: node scripts/sync-chat-vectors.mjs
       - name: Deploy verified build to Cloudflare Pages

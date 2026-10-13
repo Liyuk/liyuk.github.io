@@ -9,6 +9,7 @@ output/
 .playwright-mcp/
 viz/
 artifacts/
+.cache/chat-vectors/
 
 # --- Personal local notes and workflows ---
 # The entire docs/ tree is local-only and never enters Git or repository checks.

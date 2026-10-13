@@ -10,8 +10,12 @@ const copy = i18n(locale).page.search;
   <section class="page-heading shell search-heading"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   <section class="shell search-page" aria-labelledby="search-label">
     <label id="search-label" for="site-search">{copy.label}</label>
-    <input id="site-search" type="search" placeholder={copy.placeholder} autocomplete="off" />
+    <input id="site-search" type="search" maxlength="600" placeholder={copy.placeholder} autocomplete="off" />
     <p id="search-status" role="status" aria-live="polite"></p>
+    <aside class="search-ai-card" data-search-ai-card hidden>
+      <p>{copy.aiHint}</p>
+      <button type="button" data-search-ask-ai>{copy.aiAction}</button>
+    </aside>
     <ol id="search-results" class="search-results"></ol>
   </section>
 </BaseLayout>
@@ -22,6 +26,8 @@ const copy = i18n(locale).page.search;
   const input = document.querySelector('#site-search');
   const status = document.querySelector('#search-status');
   const results = document.querySelector('#search-results');
+  const aiCard = document.querySelector('[data-search-ai-card]');
+  const askAi = document.querySelector('[data-search-ask-ai]');
   let pagefind;
   let timer;
   const pagefindModule = '/pagefind/pagefind.js';
@@ -50,7 +56,17 @@ const copy = i18n(locale).page.search;
   };
 
   if (input instanceof HTMLInputElement) input.addEventListener('input', () => {
+    const query = input.value.trim();
+    if (aiCard instanceof HTMLElement) aiCard.hidden = !query;
     window.clearTimeout(timer);
-    timer = window.setTimeout(() => search(input.value.trim()), DEBOUNCE_MS);
+    timer = window.setTimeout(() => search(query), DEBOUNCE_MS);
   });
+
+  if (input instanceof HTMLInputElement && askAi instanceof HTMLButtonElement) {
+    askAi.addEventListener('click', () => {
+      const question = input.value.trim();
+      if (!question) return;
+      window.dispatchEvent(new CustomEvent('site-chat:ask', { detail: { question } }));
+    });
+  }
 </script>

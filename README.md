@@ -1,6 +1,6 @@
 # liyuk.github.io
 
-Personal site for writing, research, projects & photography — bilingual, built with Astro.
+Personal site for writing, research, consulting, projects, and photography — bilingual, built with Astro and deployed to Cloudflare Pages. The site assistant answers questions from published articles and links to its sources.
 
 ## Architecture at a glance
 
@@ -40,7 +40,7 @@ Skip the gate in an emergency with `git push --no-verify`. Personal workflow not
 
 The site is bilingual. Chinese is the source of truth. Published Chinese files use `translationStatus: original`, published English files use `translationStatus: reviewed`, and only unpublished English files may use `translationStatus: draft`. Writing, projects, galleries, and current research entries require an English sibling before publication; English archives and RSS remain English-only. `npm run audit:content` enforces these rules. The English UI shell lives in `src/i18n/index.mjs`. API secrets never belong in this repository.
 
-The main blog is hosted on Cloudflare Pages. To keep independent project demos available at `https://liyuk.github.io/<repository>/`, remove `liyuk.com` from the `liyuk.github.io` repository's GitHub Pages custom-domain setting; GitHub applies a user site's custom domain to project sites unless an individual project overrides it. Project demo repositories keep their own GitHub Pages publishing settings.
+The main blog is hosted on Cloudflare Pages, and GitHub Pages deployment is disabled for this repository. Independent project demos continue to use their own repositories' GitHub Pages settings and URLs such as `https://liyuk.github.io/<repository>/`.
 
 ## Subscriber notifications (Buttondown)
 
@@ -56,6 +56,8 @@ Set these values under repository Settings → Secrets and variables → Actions
 | Variable | `CLOUDFLARE_PAGES_PROJECT` | Exact name of the Cloudflare Pages project                           |
 
 The Buttondown key configured in Cloudflare is not visible to GitHub Actions. `CLOUDFLARE_ZONE_ID` is no longer needed because the workflow deploys directly to Pages rather than purging the zone cache.
+
+The site assistant runs as a Cloudflare Pages Function at `POST /api/chat`; it does not need a separate Worker. Set the `GEMINI_API_KEY` runtime secret in the Cloudflare Pages project for both Production and Preview environments. It retrieves passages with the static keyword index and Cloudflare Vectorize, fuses both rankings, and streams the grounded Gemini answer to the browser. The `VECTOR_INDEX` binding and `AI` embedding binding are defined in `wrangler.jsonc`. After a verified production build, `scripts/sync-chat-vectors.mjs` embeds only new or changed passages, removes vectors for passages no longer published, and waits for Vectorize to process the write before deployment. The deploy job caches a local content-hash manifest; on the first run or after changing indexes, it reconciles against Vectorize directly. Configure `CLOUDFLARE_API_TOKEN` with Pages deploy, Workers AI, and Vectorize write permissions. The index name in `wrangler.jsonc` is also used by the sync script. The static chat index contains only published writing, research, consulting, and project entries.
 
 Test locally without sending (dry-run prints what would be emailed):
 
