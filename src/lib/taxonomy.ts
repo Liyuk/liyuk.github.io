@@ -168,6 +168,86 @@ export const tags: Record<string, [string, string]> = {
   workflow: ['工作流', 'Workflow'],
 };
 
+/** Search aliases bridge common reader wording to the site's editorial vocabulary. */
+export const tagSearchAliases: Record<string, [string[], string[]]> = {
+  'developer-productivity': [
+    ['研发效率', '研发效能', '工程效率', '提交数', '代码评审积压', 'CI 等待'],
+    ['engineering productivity', 'developer efficiency', 'commit count', 'code review backlog'],
+  ],
+  'team-building': [
+    ['老员工经验', '经验传承', '梯队培养', '能力培养', '知识传递'],
+    ['passing on experience', 'team capability building', 'succession planning'],
+  ],
+  'knowledge-management': [
+    ['知识交接', '经验交接', '知识转移', '新人接手', '交接清单'],
+    ['knowledge handoff', 'knowledge transfer', 'handover', 'onboarding documentation'],
+  ],
+  'technical-writing': [
+    ['技术资料', '维护责任', '文档有效性', '运行手册', '入口页'],
+    ['technical docs', 'runbook', 'documentation ownership', 'documentation freshness'],
+  ],
+  'technical-sharing': [
+    ['技术知识分享', '分享后的行动', '经验沉淀', '知识协作'],
+    ['technical knowledge sharing', 'knowledge retention', 'sharing outcomes'],
+  ],
+  onboarding: [
+    ['新人入职', '新员工上手', '入职准备', '新手引导'],
+    ['new hire onboarding', 'new engineer onboarding', 'first weeks'],
+  ],
+  mentoring: [
+    ['导师关系', '新人辅导', '逐步承担责任', '指导而非代做'],
+    ['mentor relationship', 'mentoring new engineers', 'guided responsibility'],
+  ],
+  'engineering-management': [
+    ['工程师转管理', 'IC 转管理', '管理者日常', '管理和写代码'],
+    ['engineering manager transition', 'IC to manager', 'manager practice', 'management versus IC'],
+  ],
+  ownership: [
+    ['影响力', '没有汇报关系', '决策边界', '跨团队推动'],
+    ['influence without authority', 'decision boundaries', 'cross-team influence'],
+  ],
+  collaboration: [
+    ['一对一', '1:1', '项目交接', '跨团队同步', '决策更新'],
+    ['one-on-one', '1:1 meeting', 'project handoff', 'cross-team update', 'decision update'],
+  ],
+  thinking: [
+    ['结构化表达', '整理思路', '拆解问题', '问题分解', '模糊问题'],
+    ['structured communication', 'organize thinking', 'problem framing'],
+  ],
+  'product-thinking': [
+    ['产品判断', '需求判断', '需求规划', '技术方案取舍', '业务价值'],
+    ['product judgment', 'evaluate requirements', 'technical trade-offs', 'business value'],
+  ],
+  documentation: [
+    ['聊天记录', '减少反复确认', '经验沉淀', '知识复用'],
+    ['chat history', 'reduce repeated clarification', 'knowledge reuse'],
+  ],
+  'career-development': [
+    ['工作成长', '职业成长', '换工作', '重复任务', '原地打转', '可迁移能力', '晋升准备'],
+    ['career growth', 'job change', 'repetitive work', 'career stagnation', 'transferable skills', 'promotion readiness'],
+  ],
+  prioritization: [
+    ['明确不做', '需求取舍', '排期取舍', '资源不够', '待办太多'],
+    ['what not to do', 'backlog trade-offs', 'limited capacity', 'prioritization decisions'],
+  ],
+  seo: [
+    ['搜索流量', '自然流量', '搜索曝光', '点击率', '网站收录', '搜索表现'],
+    ['organic traffic', 'search impressions', 'click-through rate', 'search indexing', 'search performance'],
+  ],
+  'site-notes': [
+    ['个人博客', '个人出版物', '多主题博客', '博客结构'],
+    ['personal blog', 'personal publication', 'multi-topic blog', 'blog structure'],
+  ],
+  communication: [
+    ['反馈表达', '分歧确认', '冲突沟通', '有效反馈'],
+    ['giving feedback', 'clarify disagreement', 'conflict communication'],
+  ],
+  governance: [
+    ['AI 权限', '智能体权限', '责任边界', 'AI 治理'],
+    ['AI permissions', 'agent permissions', 'responsibility boundaries', 'AI governance'],
+  ],
+};
+
 export const columns: Record<string, { label: { 'zh-CN': string; en: string }; description: { 'zh-CN': string; en: string } }> = {
   'data-metrics-guide': {
     label: { 'zh-CN': '数据度量工作指南', en: 'Data Metrics Guide' },

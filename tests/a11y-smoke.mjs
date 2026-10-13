@@ -8,6 +8,7 @@ const BASE = process.env.E2E_BASE ?? 'http://localhost:4321';
 // index-only scan leaves the complex half of the site unverified.
 const routes = [
   '/',
+  '/search/',
   '/writing/',
   '/en/writing/',
   '/research/',

@@ -53,7 +53,11 @@ test('system copy is available in Chinese and English', () => {
   assert.equal(i18n('zh-CN').navigation.writing, '写作');
   assert.equal(i18n('en').navigation.writing, 'Writing');
   assert.equal(i18n('en').theme.toDark, 'Switch to dark mode');
-  assert.equal(i18n('zh-CN').chat.title, '和站内内容聊聊');
+  assert.equal(i18n('zh-CN').chat.launcher, '站内 AI 助手');
+  assert.equal(i18n('zh-CN').chat.title, '问问本站内容');
+  assert.equal(i18n('zh-CN').page.search.aiAction, '让 AI 根据本站文章回答');
+  assert.equal(i18n('en').chat.launcher, 'Site AI assistant');
+  assert.equal(i18n('en').page.search.aiAction, 'Ask AI using site articles');
   assert.match(i18n('en').chat.privacy, /Google Gemini/);
 });
 

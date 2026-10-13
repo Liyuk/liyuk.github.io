@@ -29,7 +29,8 @@
     "test:a11y": "node scripts/run-browser-checks.mjs tests/a11y-smoke.mjs",
     "test:a11y:fresh": "npm run build && npm run test:a11y",
     "test:browser:ci": "node scripts/run-browser-checks.mjs tests/e2e-smoke.mjs tests/a11y-smoke.mjs",
-    "test:draft:dev": "node scripts/run-dev-browser-checks.mjs"
+    "test:draft:dev": "node scripts/run-dev-browser-checks.mjs",
+    "evaluate:chat-search": "node scripts/evaluate-chat-retrieval.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

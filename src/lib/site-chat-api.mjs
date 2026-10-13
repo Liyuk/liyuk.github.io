@@ -1,4 +1,4 @@
-import { findRelevantSources } from './site-chat.mjs';
+import { findRelevantSources, MIN_CHAT_MATCHING_TERMS } from './site-chat.mjs';
 
 const MAX_BODY_BYTES = 8_000;
 const MAX_QUESTION_LENGTH = 600;
@@ -7,6 +7,8 @@ const MAX_HISTORY_MESSAGES = 4;
 const MAX_HISTORY_MESSAGE_LENGTH = 1_200;
 const MAX_HISTORY_LENGTH = 3_000;
 const MODEL = 'gemini-3.5-flash-lite';
+const INDEX_CACHE_TTL_MS = 5 * 60_000;
+const parsedIndexByAssets = new WeakMap();
 
 const json = (body, status = 200) =>
   Response.json(body, {
@@ -37,12 +39,26 @@ function parsePayload(payload) {
     messages.push({ role: message.role, content });
   }
   if (payload.stream !== undefined && typeof payload.stream !== 'boolean') return undefined;
-  return { question, locale: payload.locale, history: messages, stream: payload.stream === true };
+  if (payload.currentPath !== undefined && (typeof payload.currentPath !== 'string' || payload.currentPath.length > 300)) return undefined;
+  return {
+    question,
+    locale: payload.locale,
+    history: messages,
+    stream: payload.stream === true,
+    currentPath: payload.currentPath,
+  };
 }
 
 function validSources(value, origin) {
-  return Array.isArray(value)
-    && value.every((source) =>
+  const sources = Array.isArray(value) ? value : value?.documents;
+  const hasSearchIndex =
+    Array.isArray(value) ||
+    (typeof value?.vocabulary === 'string' &&
+      Array.isArray(value?.vocabularyOffsets) &&
+      Array.isArray(value?.postingOffsets) &&
+      typeof value?.postings === 'string');
+  return hasSearchIndex && Array.isArray(sources)
+    && sources.every((source) =>
       source
       && typeof source.title === 'string'
       && (source.description === undefined || typeof source.description === 'string')
@@ -65,6 +81,22 @@ function validSources(value, origin) {
     );
 }
 
+async function getStaticIndex(assets, requestUrl, locale) {
+  const cachedIndexes = parsedIndexByAssets.get(assets) ?? new Map();
+  const cached = cachedIndexes.get(locale);
+  if (cached && cached.expiresAt > Date.now()) return cached.index;
+
+  const response = await assets.fetch(
+    new Request(new URL(`/chat-index/${locale}.json`, requestUrl)),
+  );
+  if (!response.ok) return undefined;
+  const index = await response.json();
+  if (!validSources(index, new URL(requestUrl).origin)) return undefined;
+  cachedIndexes.set(locale, { index, expiresAt: Date.now() + INDEX_CACHE_TTL_MS });
+  parsedIndexByAssets.set(assets, cachedIndexes);
+  return index;
+}
+
 function localizedFallback(locale) {
   return locale === 'en'
     ? 'I could not find enough information about this in the published content on this site.'
@@ -73,6 +105,39 @@ function localizedFallback(locale) {
 
 function isCapabilitiesQuestion(question) {
   return /你能聊什么|你可以聊什么|你能回答什么|能问你什么|你会什么|what can you (?:talk about|help with|answer)/iu.test(question);
+}
+
+function isCurrentPageQuestion(question) {
+  return /这篇|本文|这篇文章|文中|这页|这段|作者在这里|this article|this page|this post|the article|in this post|what is it about/iu.test(question);
+}
+
+async function getCurrentPageSource(index, input, requestUrl, assets) {
+  if (!input.currentPath || !isCurrentPageQuestion(input.question)) return undefined;
+  try {
+    const pageUrl = new URL(input.currentPath, requestUrl);
+    if (pageUrl.origin !== new URL(requestUrl).origin) return undefined;
+    const document = index.documents.find((candidate) =>
+      candidate.url === pageUrl.pathname && candidate.locale === input.locale,
+    );
+    if (!document) return undefined;
+    let text;
+    try {
+      const contextUrl = `/chat-context${document.url.replace(/\/$/u, '')}.json`;
+      const response = await assets.fetch(new Request(new URL(contextUrl, requestUrl)));
+      if (response.ok) {
+        const context = await response.json();
+        if (context?.title === document.title && context?.url === document.url && context?.locale === document.locale && typeof context?.text === 'string') {
+          text = context.text;
+        }
+      }
+    } catch {
+      // A context asset failure falls back to the excerpts already in the published search index.
+    }
+    text ||= document.excerpts?.join('\n\n') || document.text || '';
+    return { ...document, text };
+  } catch {
+    return undefined;
+  }
 }
 
 function isRecommendationQuestion(question) {
@@ -246,33 +311,31 @@ export async function handleChatRequest(request, env, fetcher = fetch) {
     return error('SERVICE_NOT_CONFIGURED', 'The chat service is not configured yet.', 503);
   }
 
-  let indexResponse;
+  let index;
   try {
     if (!env?.ASSETS || typeof env.ASSETS.fetch !== 'function') {
       return error('CHAT_UNAVAILABLE', 'The chat service is temporarily unavailable.', 503);
     }
-    indexResponse = await env.ASSETS.fetch(new Request(new URL('/chat-index.json', request.url)));
+    index = await getStaticIndex(env.ASSETS, request.url, input.locale);
   } catch {
     return error('CHAT_UNAVAILABLE', 'The chat service is temporarily unavailable.', 503);
   }
-  if (!indexResponse.ok) {
-    return error('CHAT_UNAVAILABLE', 'The chat service is temporarily unavailable.', 503);
-  }
-
-  let index;
-  try {
-    index = await indexResponse.json();
-  } catch {
-    return error('CHAT_UNAVAILABLE', 'The chat service is temporarily unavailable.', 503);
-  }
-  if (!validSources(index, new URL(request.url).origin)) {
+  if (!index) {
     return error('CHAT_UNAVAILABLE', 'The chat service is temporarily unavailable.', 503);
   }
 
   const retrievalQuestion = previousUserQuestion && (isShortFollowUp(input.question) || isRecommendationQuestion(input.question))
     ? `${previousUserQuestion}\n${input.question}`
     : input.question;
-  const sources = findRelevantSources(index, retrievalQuestion, input.locale);
+  const currentPageQuestion = isCurrentPageQuestion(input.question);
+  const currentPageSource = await getCurrentPageSource(index, input, request.url, env.ASSETS);
+  const sources = currentPageSource
+    ? [currentPageSource]
+    : currentPageQuestion && input.currentPath
+      ? []
+      : findRelevantSources(index, retrievalQuestion, input.locale, 4, {
+      minMatchingTerms: MIN_CHAT_MATCHING_TERMS,
+    });
   if (sources.length === 0) {
     if (isRecommendationQuestion(input.question)) {
       const result = { answer: recommendationPrompt(input.locale), suggestions: topicSuggestions(input.locale), sources: [] };
