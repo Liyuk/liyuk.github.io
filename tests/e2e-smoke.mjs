@@ -226,8 +226,14 @@ try {
   await searchInput.fill('管理');
   await askFromSearch.waitFor();
   await page.locator('#search-results li').first().waitFor();
+  const firstSearchResult = page.locator('#search-results li').first();
   check('typing a query keeps search local and shows ordinary results',
     chatRequests.length === requestsBeforeSearch && await page.locator('#search-results li').count() > 0);
+  check('search results show a readable article path and publication date',
+    await firstSearchResult.locator('.search-result-path').textContent().then((text) => text.includes('liyuk.com') && text.includes('writing')) &&
+    await firstSearchResult.locator('time.search-result-date').getAttribute('datetime').then((value) => /^\d{4}-\d{2}-\d{2}$/u.test(value ?? '')));
+  check('search results show a useful excerpt below the title',
+    await firstSearchResult.locator('.search-result-excerpt').textContent().then((text) => text.trim().length >= 60));
   await askFromSearch.click();
   await page.waitForFunction(() => Array.from(document.querySelectorAll('[data-chat-messages] .user')).at(-1)?.textContent?.includes('管理'));
   check('search keeps keyword results available alongside an explicit AI action',

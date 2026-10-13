@@ -92,6 +92,7 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    {publishedAt && <meta data-pagefind-meta="publishedAt[content]" content={publishedAt} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="theme-color" content="#f4f1ea" />
     <meta name="google-site-verification" content="FXPD4M6ETfaWY-qsVu1YiYLmKJFrFO28w6ya3odrNok" />

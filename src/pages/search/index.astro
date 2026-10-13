@@ -20,7 +20,7 @@ const copy = i18n(locale).page.search;
   </section>
 </BaseLayout>
 
-<script define:vars={{ statusTemplate: copy.statusTemplate }}>
+<script define:vars={{ statusTemplate: copy.statusTemplate, siteHostname: Astro.site?.hostname ?? 'liyuk.com' }}>
   const MAX_RESULTS = 20;
   const DEBOUNCE_MS = 180;
   const input = document.querySelector('#site-search');
@@ -36,12 +36,32 @@ const copy = i18n(locale).page.search;
     if (!(results instanceof HTMLOListElement)) return;
     results.replaceChildren(...items.map((item) => {
       const row = document.createElement('li');
+      const meta = document.createElement('div');
+      meta.className = 'search-result-meta';
+      const path = document.createElement('span');
+      path.className = 'search-result-path';
+      const url = new URL(item.url, window.location.origin);
+      const breadcrumbs = [siteHostname, ...url.pathname.split('/').filter(Boolean)];
+      path.textContent = breadcrumbs.join(' › ');
+      meta.append(path);
+      if (item.meta.publishedAt) {
+        const date = document.createElement('time');
+        date.className = 'search-result-date';
+        date.dateTime = item.meta.publishedAt;
+        const locale = document.documentElement.lang === 'en' ? 'en' : 'zh-CN';
+        date.textContent = new Intl.DateTimeFormat(locale, {
+          year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC',
+        }).format(new Date(`${item.meta.publishedAt}T00:00:00Z`));
+        meta.append(date);
+      }
       const link = document.createElement('a');
+      link.className = 'search-result-title';
       link.href = item.url;
       link.textContent = item.meta.title;
       const excerpt = document.createElement('p');
+      excerpt.className = 'search-result-excerpt';
       excerpt.textContent = item.plain_excerpt || item.meta.description || '';
-      row.append(link, excerpt);
+      row.append(meta, link, excerpt);
       return row;
     }));
   };
@@ -49,6 +69,7 @@ const copy = i18n(locale).page.search;
   const search = async (query) => {
     if (!(status instanceof HTMLElement) || !query) { render([]); if (status instanceof HTMLElement) status.textContent = ''; return; }
     pagefind ??= await import(/* @vite-ignore */ pagefindModule);
+    await pagefind.options({ excerptLength: 45 });
     const response = await pagefind.search(query);
     const items = await Promise.all(response.results.slice(0, MAX_RESULTS).map((result) => result.data()));
     render(items);
