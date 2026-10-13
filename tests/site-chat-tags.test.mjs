@@ -196,8 +196,11 @@ test('every published tag shown on the site has an answer with a matching articl
         const hasTagBrowseGuidance = locale === 'en'
           ? modelInstruction.includes('treat it as a request to browse that topic')
           : modelInstruction.includes('将它视为浏览该主题的请求');
+        const hasTagBrowseContext = locale === 'en'
+          ? modelPrompt.includes('The reader selected the site tag')
+          : modelPrompt.includes('用户从站点标签列表中选择了');
 
-        if (response.status !== 200 || !result.answer?.trim() || !matchingSource || !groundedInPrompt || !hasTagBrowseGuidance) {
+        if (response.status !== 200 || !result.answer?.trim() || !matchingSource || !groundedInPrompt || !hasTagBrowseGuidance || !hasTagBrowseContext) {
           misses.push({
             locale,
             tag: slug,
@@ -207,6 +210,7 @@ test('every published tag shown on the site has an answer with a matching articl
             returnedSources: result.sources?.map(({ url }) => url),
             groundedInPrompt: Boolean(groundedInPrompt),
             hasTagBrowseGuidance,
+            hasTagBrowseContext,
           });
         }
       }
