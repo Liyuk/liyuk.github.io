@@ -170,6 +170,7 @@ test('every published tag shown on the site has an answer with a matching articl
 
       for (const question of [`#${label}`, label]) {
         let modelPrompt = '';
+        let modelInstruction = '';
         const response = await handleChatRequest(new Request('https://liyuk.com/api/chat', {
           method: 'POST',
           headers: { origin: 'https://liyuk.com', 'content-type': 'application/json' },
@@ -180,6 +181,7 @@ test('every published tag shown on the site has an answer with a matching articl
         }, async (_url, options) => {
           const payload = JSON.parse(options.body);
           modelPrompt = payload.contents.at(-1).parts[0].text;
+          modelInstruction = payload.systemInstruction.parts[0].text;
           const answer = locale === 'en'
             ? `I found published articles about ${label} on this site.`
             : `我在本站找到关于“${label}”的已发布文章。`;
@@ -191,8 +193,11 @@ test('every published tag shown on the site has an answer with a matching articl
         const groundedInPrompt = sourceDocument
           && modelPrompt.includes(sourceDocument.title)
           && sourceDocument.excerpts.some((excerpt) => modelPrompt.includes(excerpt.slice(0, 80)));
+        const hasTagBrowseGuidance = locale === 'en'
+          ? modelInstruction.includes('treat it as a request to browse that topic')
+          : modelInstruction.includes('将它视为浏览该主题的请求');
 
-        if (response.status !== 200 || !result.answer?.trim() || !matchingSource || !groundedInPrompt) {
+        if (response.status !== 200 || !result.answer?.trim() || !matchingSource || !groundedInPrompt || !hasTagBrowseGuidance) {
           misses.push({
             locale,
             tag: slug,
@@ -201,6 +206,7 @@ test('every published tag shown on the site has an answer with a matching articl
             answer: result.answer,
             returnedSources: result.sources?.map(({ url }) => url),
             groundedInPrompt: Boolean(groundedInPrompt),
+            hasTagBrowseGuidance,
           });
         }
       }
