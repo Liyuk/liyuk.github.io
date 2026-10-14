@@ -1,4 +1,5 @@
 import type { ColumnableEntry } from './types.ts';
+import { getContentFeatures } from './content-features.ts';
 
 export const tags: Record<string, [string, string]> = {
   technology: ['技术', 'Technology'],
@@ -402,7 +403,8 @@ export function getRelatedEntries<T extends ColumnableEntry>(
   limit: number = RELATED_LIMIT,
   locale = 'zh-CN',
 ): { entry: T; reasons: string[] }[] {
-  const currentTags = new Set(currentEntry.data.tags ?? []);
+  const currentFeatures = getContentFeatures(currentEntry);
+  const currentTags = new Set(currentFeatures.tags);
   const en = locale === 'en';
 
   // 排除同专栏相邻篇（已在专栏导航展示，避免推荐重复）
@@ -425,7 +427,7 @@ export function getRelatedEntries<T extends ColumnableEntry>(
 
       // 1. 同专栏：强相关但不独占
       const sameColumn = Boolean(
-        currentEntry.data.column?.slug && entry.data.column?.slug === currentEntry.data.column.slug,
+        currentFeatures.columnSlug && getContentFeatures(entry).columnSlug === currentFeatures.columnSlug,
       );
       if (sameColumn) {
         score += RELATED_SCORING.sameColumn;
@@ -433,7 +435,7 @@ export function getRelatedEntries<T extends ColumnableEntry>(
       }
 
       // 2. 共享标签：每个共享标签一个基础分，不按罕见度加权
-      const shared = (entry.data.tags ?? []).filter((slug) => currentTags.has(slug));
+      const shared = getContentFeatures(entry).tags.filter((slug) => currentTags.has(slug));
       score += shared.length * RELATED_SCORING.sharedTag;
       if (shared.length > 0) {
         reasons.push(

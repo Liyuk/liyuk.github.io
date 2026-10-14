@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "liyuk-github-io",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-10-12",
+  "ai": { "binding": "AI" },
+  "vectorize": [
+    {
+      "binding": "VECTOR_INDEX",
+      "index_name": "liyuk-bge-m3-eval-20261013"
+    }
+  ]
+}

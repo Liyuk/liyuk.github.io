@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 
 import { cleanArticleMarkdown, createChatIndex, findRelevantSources, formatChatAnswer } from '../src/lib/site-chat.mjs';
 import { handleChatRequest } from '../src/lib/site-chat-api.mjs';
@@ -355,6 +356,248 @@ test('chat API reads its index from the Pages static asset binding', async () =>
   assert.deepEqual(assetPaths, ['/chat-index/en.json']);
 });
 
+test('chat API fuses Vectorize passage matches with keyword sources and keeps the JSON response contract', async () => {
+  const index = [
+    {
+      title: 'Feedback loops for engineering teams',
+      description: 'How feedback loops improve collaboration and delivery.',
+      url: '/en/writing/2026/08/feedback-loops/',
+      locale: 'en',
+      excerpts: [
+        'Feedback loops help engineering teams improve collaboration and delivery.',
+        'A second passage explains how feedback signals reduce repeated work.',
+      ],
+    },
+    {
+      title: 'Making decisions with incomplete information',
+      description: 'A practical guide to decision quality.',
+      url: '/en/writing/2026/09/decision-quality/',
+      locale: 'en',
+      excerpts: ['Good decisions separate uncertainty from risk and make assumptions explicit.'],
+    },
+  ];
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: 'How do feedback loops improve engineering teams?', locale: 'en' }),
+  });
+  let vectorQuery;
+  let modelPayload;
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: { fetch: async () => Response.json(index) },
+      AI: { run: async () => ({ data: [Array(1024).fill(0.01)] }) },
+      VECTOR_INDEX: {
+        query: async (vector, options) => {
+          vectorQuery = { vector, options };
+          return {
+            matches: [{
+              metadata: {
+                url: index[1].url,
+                passageIndex: 0,
+                contentHash: createHash('sha256').update(`title: ${index[1].title} | text: ${index[1].excerpts[0]}`).digest('hex'),
+              },
+              score: 0.72,
+            }],
+          };
+        },
+      },
+    },
+    async (_input, init) => {
+      modelPayload = JSON.parse(init.body);
+      return Response.json({
+        candidates: [{ content: { parts: [{ text: 'Feedback loops help teams improve.' }] } }],
+      });
+    },
+  );
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(vectorQuery.vector.length, 1024);
+  assert.equal(vectorQuery.options.namespace, 'en');
+  assert.equal(vectorQuery.options.topK, 50);
+  assert.deepEqual(result.sources.map(({ url }) => url), [index[0].url, index[1].url]);
+  assert.match(modelPayload.contents.at(-1).parts[0].text, /separate uncertainty from risk/);
+});
+
+test('chat API validates vector passage hashes and includes semantic evidence when keyword retrieval found the same article', async () => {
+  const article = {
+    title: 'Feedback loops for engineering teams',
+    description: 'How feedback loops improve collaboration and delivery.',
+    url: '/en/writing/2026/08/feedback-loops/',
+    locale: 'en',
+    excerpts: [
+      'Feedback loops help engineering teams improve collaboration and delivery.',
+      'Signals from weekly reviews reduce handoff delays.',
+    ],
+  };
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: 'How do feedback loops improve engineering teams?', locale: 'en' }),
+  });
+  let modelPayload;
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: { fetch: async () => Response.json([article]) },
+      AI: { run: async () => ({ data: [Array(1024).fill(0.01)] }) },
+      VECTOR_INDEX: {
+        query: async () => ({ matches: [{
+          metadata: {
+            url: article.url,
+            passageIndex: 1,
+            contentHash: createHash('sha256').update(`title: ${article.title} | text: ${article.excerpts[1]}`).digest('hex'),
+          },
+          score: 0.72,
+        }] }),
+      },
+    },
+    async (_input, init) => {
+      modelPayload = JSON.parse(init.body);
+      return Response.json({ candidates: [{ content: { parts: [{ text: 'Feedback signals reduce repeated work.' }] } }] });
+    },
+  );
+  const result = await response.json();
+  const context = modelPayload.contents.at(-1).parts[0].text;
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(result.sources.map(({ url }) => url), [article.url]);
+  assert.match(context, /Feedback loops help engineering teams improve collaboration/);
+  assert.match(context, /Signals from weekly reviews reduce handoff delays/);
+});
+
+test('chat API ignores vector passages whose content hash no longer matches the published index', async () => {
+  const article = {
+    title: 'Feedback loops for engineering teams',
+    description: 'How feedback loops improve collaboration and delivery.',
+    url: '/en/writing/2026/08/feedback-loops/',
+    locale: 'en',
+    excerpts: ['Feedback loops help engineering teams improve collaboration and delivery.'],
+  };
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: 'How do feedback loops improve engineering teams?', locale: 'en' }),
+  });
+  let modelCalls = 0;
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: { fetch: async () => Response.json([article]) },
+      AI: { run: async () => ({ data: [Array(1024).fill(0.01)] }) },
+      VECTOR_INDEX: {
+        query: async () => ({ matches: [{
+          metadata: { url: article.url, passageIndex: 0, contentHash: 'stale-content-hash' },
+          score: 0.91,
+        }] }),
+      },
+    },
+    async () => {
+      modelCalls += 1;
+      return Response.json({ candidates: [{ content: { parts: [{ text: 'The current passage supports this.' }] } }] });
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).sources.map(({ url }) => url), [article.url]);
+  assert.equal(modelCalls, 1);
+});
+
+test('chat API keeps strong keyword results for a short topic query when vector confidence is low', async () => {
+  const article = {
+    title: '管理者如何带团队',
+    description: '管理者需要围绕目标、责任和协作建立团队工作方式。',
+    url: '/writing/2026/08/managing-a-team/',
+    locale: 'zh-CN',
+    excerpts: ['管理者需要围绕目标、责任和协作建立团队工作方式。'],
+  };
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({ question: '管理', locale: 'zh-CN' }),
+  });
+  let modelCalls = 0;
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: { fetch: async () => Response.json([article]) },
+      AI: { run: async () => ({ data: [Array(1024).fill(0.01)] }) },
+      VECTOR_INDEX: {
+        query: async () => ({ matches: [{
+          metadata: {
+            url: article.url,
+            passageIndex: 0,
+            contentHash: createHash('sha256').update(`title: ${article.title} | text: ${article.excerpts[0]}`).digest('hex'),
+          },
+          score: 0.41,
+        }] }),
+      },
+    },
+    async () => {
+      modelCalls += 1;
+      return Response.json({ candidates: [{ content: { parts: [{ text: '这篇文章讨论管理者如何围绕目标和责任带领团队。' }] } }] });
+    },
+  );
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.match(result.answer, /管理者如何围绕目标和责任带领团队/);
+  assert.deepEqual(result.sources.map(({ url }) => url), [article.url]);
+  assert.equal(modelCalls, 1);
+});
+
+test('chat API uses the benchmarked vector threshold to abstain from a lexical false match', async () => {
+  const request = new Request('https://liyuk.com/api/chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://liyuk.com' },
+    body: JSON.stringify({
+      question: 'How do feedback loops improve engineering teams weather tomorrow?',
+      locale: 'en',
+    }),
+  });
+  let modelCalls = 0;
+  const response = await handleChatRequest(
+    request,
+    {
+      GEMINI_API_KEY: 'test-only-api-key',
+      ASSETS: { fetch: async () => Response.json([{
+        title: 'Feedback loops for engineering teams',
+        description: 'How feedback loops improve collaboration and delivery.',
+        url: '/en/writing/2026/08/feedback-loops/',
+        locale: 'en',
+        excerpts: ['Feedback loops help engineering teams improve collaboration and delivery.'],
+      }]) },
+      AI: { run: async () => ({ data: [Array(1024).fill(0.01)] }) },
+      VECTOR_INDEX: {
+        query: async () => ({
+          matches: [{
+            metadata: {
+              url: '/en/writing/2026/08/feedback-loops/',
+              passageIndex: 0,
+              contentHash: createHash('sha256').update('title: Feedback loops for engineering teams | text: Feedback loops help engineering teams improve collaboration and delivery.').digest('hex'),
+            },
+            score: 0.41,
+          }],
+        }),
+      },
+    },
+    async () => {
+      modelCalls += 1;
+      throw new Error('A below-threshold query must abstain before spending Gemini quota.');
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).sources, []);
+  assert.equal(modelCalls, 0);
+});
+
 test('chat API forwards only bounded user and assistant history to Gemini', async () => {
   const request = new Request('https://liyuk.com/api/chat', {
     method: 'POST',
@@ -546,7 +789,7 @@ test('chat API rejects malformed optional article metadata in its static index',
     request,
     {
       GEMINI_API_KEY: 'test-only-api-key',
-      ASSETS: { fetch: async () => Response.json([{ ...sources[0], description: { unexpected: true } }]) },
+      ASSETS: { fetch: async () => Response.json([{ ...sources[0], tagLabels: { unexpected: true } }]) },
     },
     async () => {
       throw new Error('Malformed index must be rejected before Gemini');

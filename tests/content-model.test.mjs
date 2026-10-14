@@ -10,6 +10,8 @@ import { columnEntryUrl, columnUrl, consultingUrl, contentUrl, entryUrl, gallery
 import { parseColumnField } from '../scripts/audit-columns.mjs';
 import { parseContentDate } from '../src/lib/content-date.ts';
 import { getColumn, getColumnEntries, getIndexableTags, getRelatedEntries, getTag } from '../src/lib/taxonomy.ts';
+import { getContentFeatures } from '../src/lib/content-features.ts';
+import { createContentDiscoveryDocument } from '../src/lib/content-discovery.ts';
 import { getGalleryCover } from '../src/lib/gallery.ts';
 
 test('previewable exposes real drafts only in development', () => {
@@ -283,6 +285,43 @@ test('related content prefers a non-adjacent same-column entry over one that onl
   const distant = { id: 'distant', data: { column: { slug: 'data-metrics-guide', order: 4 }, createdAt: new Date('2018-01-02') } };
   const sharedTags = { id: 'tags', data: { tags: ['metrics', 'data'], createdAt: new Date('2021-01-02') } };
   assert.deepEqual(getRelatedEntries([current, prev, filler, distant, sharedTags], current, 5).map(({ entry }) => entry.id), ['distant', 'tags']);
+});
+
+test('content discovery exposes the same tag and column features used by recommendations', () => {
+  const features = getContentFeatures({
+    data: { tags: ['decision-making', 'leadership'], column: { slug: 'thinking-training', order: 2 } },
+  });
+
+  assert.deepEqual(features, {
+    tags: ['decision-making', 'leadership'],
+    columnSlug: 'thinking-training',
+  });
+  assert.deepEqual(getContentFeatures({ data: {} }), { tags: [], columnSlug: undefined });
+});
+
+test('content discovery builds one localized record for the static retrieval corpus', () => {
+  const record = createContentDiscoveryDocument({
+    id: '2026/10/discovery-example/zh',
+    body: 'Published article body.',
+    data: {
+      title: 'Discovery example',
+      description: 'An article description.',
+      tags: ['technology'],
+      column: { slug: 'data-metrics-guide', order: 2 },
+    },
+  }, 'writing', 'zh-CN');
+
+  assert.deepEqual(record, {
+    collection: 'writing',
+    title: 'Discovery example',
+    description: 'An article description.',
+    tagLabels: ['技术'],
+    keywords: ['技术', '数据度量工作指南', '从数据口径到周期复盘，建立一套能支持协作与决策的度量系统。'],
+    body: 'Published article body.',
+    url: '/writing/2026/10/discovery-example/',
+    locale: 'zh-CN',
+    features: { tags: ['technology'], columnSlug: 'data-metrics-guide' },
+  });
 });
 
 test('related content excludes same-column neighbors already shown in column navigation', () => {

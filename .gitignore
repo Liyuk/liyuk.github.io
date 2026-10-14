@@ -1,6 +1,7 @@
 # --- 运行时产物与缓存（任意深度） ---
 **/node_modules/
 **/.astro/
+**/.wrangler/
 **/dist/
 **/.DS_Store
 output/
@@ -8,6 +9,7 @@ output/
 .playwright-mcp/
 viz/
 artifacts/
+.cache/chat-vectors/
 
 # --- Personal local notes and workflows ---
 # The entire docs/ tree is local-only and never enters Git or repository checks.
