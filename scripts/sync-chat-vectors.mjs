@@ -19,7 +19,15 @@ function passageId(url, passageIndex) {
 }
 
 async function cloudflareRequest(url, init, label) {
-  const response = await fetch(url, init);
+  let response;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    response = await fetch(url, init);
+    // Retry only reads: replaying embedding requests can consume quota twice.
+    const retryable = (init.method ?? 'GET') === 'GET' && [502, 503, 504].includes(response.status);
+    if (!retryable || attempt === 2) break;
+    await response.body?.cancel();
+    await sleep((attempt + 1) * 1_000);
+  }
   let payload;
   try {
     payload = await response.json();
@@ -28,7 +36,11 @@ async function cloudflareRequest(url, init, label) {
   }
   if (!response.ok || payload?.success !== true) {
     const detail = payload?.errors?.map(({ message }) => message).filter(Boolean).join('; ');
-    throw new Error(`${label} failed (HTTP ${response.status})${detail ? `: ${detail}` : '.'}`);
+    const permission = label.startsWith('Vectorize') ? 'Vectorize Edit' : 'Workers AI Read';
+    const hint = [401, 403].includes(response.status)
+      ? ` Check CLOUDFLARE_API_TOKEN validity, account scope, and Account > ${permission} permission in GitHub Actions; local Wrangler login does not configure this secret.`
+      : '';
+    throw new Error(`${label} failed (HTTP ${response.status})${detail ? `: ${detail}` : '.'}${hint}`);
   }
   return payload.result;
 }
