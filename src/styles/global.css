@@ -457,7 +457,6 @@ h1, h2, h3, p { margin-top: 0; }
   color: var(--ink);
 }
 .about-map,
-.about-fiction,
 .about-cooperate,
 .about-background,
 .consulting-columns,
@@ -469,7 +468,6 @@ h1, h2, h3, p { margin-top: 0; }
   padding-block: clamp(3rem, 6vw, 5rem);
 }
 .about-map h2,
-.about-fiction h2,
 .about-cooperate h2,
 .about-background h2,
 .consulting-columns h2,
@@ -518,32 +516,17 @@ h1, h2, h3, p { margin-top: 0; }
   color: var(--muted);
   font-size: .9rem;
 }
-.about-fiction-desc {
+.about-fiction-archive {
+  max-width: 950px;
+  padding-block: 1.5rem;
+}
+.about-fiction-archive .eyebrow { margin-bottom: .5rem; }
+.about-fiction-archive-copy {
   max-width: 42rem;
-  color: var(--muted);
-  line-height: 1.7;
-}
-.about-novel-list {
-  display: grid;
-  gap: .75rem;
-}.about-novel {
-  display: flex;
-  flex-direction: column;
-  gap: .3rem;
-  padding: 1rem 1.1rem;
-  border-left: 3px solid var(--accent);
-  background: var(--paper-strong);
-  text-decoration: none;
-  color: var(--ink);
-}
-.about-novel strong {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-.about-novel span {
+  margin: 0;
   color: var(--muted);
   font-size: .9rem;
+  line-height: 1.7;
 }
 .about-cooperate-desc {
   max-width: 42rem;
@@ -991,7 +974,8 @@ h1, h2, h3, p { margin-top: 0; }
   .hero h1, .page-heading h1 { font-size: clamp(3rem, 13vw, 4.6rem); }
   .hero-copy { max-width: 31rem; margin-top: 2.25rem; }
   .split-section { display: block; padding-block: 4rem; }
-  .about-map, .about-fiction, .about-cooperate, .about-contact, .about-maomao, .about-boundary, .about-guestbook { padding-block: 3rem; }
+  .about-map, .about-cooperate, .about-contact, .about-maomao, .about-boundary, .about-guestbook { padding-block: 3rem; }
+  .about-fiction-archive { padding-block: 1.25rem; }
   .links-friends, .links-apply { padding-block: 3rem; }
   .section-intro { margin-bottom: 3.5rem; }
   .practice-grid { grid-template-columns: 1fr; margin-inline: auto; }

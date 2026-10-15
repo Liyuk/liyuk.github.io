@@ -53,20 +53,6 @@ const [zhWord, enWord] = locale.startsWith('en') ? [enFmt(zhChars), enFmt(enWord
     </div>
   </section>
 
-  <section class="shell section about-fiction" aria-labelledby="about-fiction-heading">
-    <p class="eyebrow">{copy.fictionEyebrow}</p>
-    <h2 id="about-fiction-heading">{copy.fictionTitle}</h2>
-    <p class="about-fiction-desc">{copy.fictionDesc}</p>
-    <div class="about-novel-list">
-      {copy.fictionNovels.map((novel) => (
-        <a class="about-novel" href={url(novel.url)}>
-          <strong>{novel.title}</strong>
-          <span>{novel.desc}</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
   <section class="shell section about-cooperate" aria-labelledby="about-cooperate-heading">
     <p class="eyebrow">{copy.cooperateEyebrow}</p>
     <h2 id="about-cooperate-heading">{copy.cooperateTitle}</h2>
@@ -105,6 +91,16 @@ const [zhWord, enWord] = locale.startsWith('en') ? [enFmt(zhChars), enFmt(enWord
   <section class="shell section about-boundary">
     <p class="eyebrow">{copy.boundaryEyebrow}</p>
     <p>{copy.boundary}</p>
+  </section>
+
+  <section class="shell section about-fiction-archive" aria-label={copy.fictionEyebrow}>
+    <p class="eyebrow">{copy.fictionEyebrow}</p>
+    <p class="about-fiction-archive-copy">
+      {copy.fictionDesc}{' '}
+      {copy.fictionNovels.map((novel, index) => (
+        <>{index > 0 && ' · '}<a class="text-link" href={url(novel.url)}>{novel.title}</a></>
+      ))}
+    </p>
   </section>
 
   <section class="shell section about-guestbook" id="guestbook">
