@@ -374,14 +374,17 @@ test('writing detail pages show publication and optional update dates without cr
   assert.match(ui, /updatedAt: '更新于'/);
 });
 
-test('homepage puts latest writing before a capped, deduplicated recommendation list', async () => {
+test('homepage shows the requested recent content counts in reading order', async () => {
   const page = await readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
 
   assert.match(page, /const latest = writing\.slice\(0, HOME_POSTS\)/);
-  assert.match(page, /const HOME_FEATURED = 3/);
-  assert.match(page, /\.filter\(\(entry\) => !latestIds\.has\(entry\.id\)\)/);
-  assert.match(page, /\.slice\(0, HOME_FEATURED\)/);
-  assert.ok(page.indexOf('copy.writing.latest') < page.indexOf('copy.writing.featured'));
+  assert.match(page, /const HOME_POSTS = 5/);
+  assert.match(page, /const HOME_PROJECTS = 3/);
+  assert.match(page, /const HOME_RESEARCH = 3/);
+  assert.ok(page.indexOf('class="start-callout"') < page.indexOf('data-home-section="writing"'));
+  assert.ok(page.indexOf('data-home-section="writing"') < page.indexOf('data-home-section="projects"'));
+  assert.ok(page.indexOf('data-home-section="projects"') < page.indexOf('data-home-section="research"'));
+  assert.ok(page.indexOf('data-home-section="research"') < page.indexOf('class="home-consulting"'));
 });
 
 test('start page includes every column-bearing content collection', async () => {

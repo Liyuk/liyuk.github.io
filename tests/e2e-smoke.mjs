@@ -29,18 +29,32 @@ try {
   check('home loads', homeTitle.length > 0, homeTitle);
   const h1 = await page.textContent('h1');
   check('home has hero heading', h1.includes('烹饪指南') || h1.length > 0, h1);
-  const homeProjectHref = await page.locator('.home-project-card h3 a').getAttribute('href');
-  const homeSectionsOrdered = await page.evaluate(() => {
+  const homeSummary = await page.evaluate(() => {
     const start = document.querySelector('.start-callout');
-    const projects = document.querySelector('.home-projects');
-    const writing = document.querySelector('#writing-heading')?.closest('section');
-    return Boolean(start && projects && writing &&
-      start.compareDocumentPosition(projects) & Node.DOCUMENT_POSITION_FOLLOWING &&
-      projects.compareDocumentPosition(writing) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const writing = document.querySelector('[data-home-section="writing"]');
+    const projects = document.querySelector('[data-home-section="projects"]');
+    const research = document.querySelector('[data-home-section="research"]');
+    const consulting = document.querySelector('.home-consulting');
+    const follows = (first, next) => Boolean(first && next &&
+      (first.compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING));
+    return {
+      order: follows(start, writing) && follows(writing, projects) && follows(projects, research) && follows(research, consulting),
+      writing: writing?.querySelectorAll('.entry-card').length,
+      projects: projects?.querySelectorAll('.entry-card').length,
+      research: research?.querySelectorAll('.entry-card').length,
+      consultingCards: consulting?.querySelectorAll('.home-consulting-card').length,
+      projectHref: projects?.querySelector('.entry-card h2 a')?.getAttribute('href'),
+      researchHref: research?.querySelector('.entry-card h2 a')?.getAttribute('href'),
+      consultingHref: consulting?.querySelector('.home-consulting-card')?.getAttribute('href'),
+    };
   });
-  check('home puts reading paths and latest project before the writing archive', homeSectionsOrdered);
-  check('home surfaces a published project with a detail link', Boolean(homeProjectHref?.startsWith('/projects/')),
-    homeProjectHref ?? 'missing project');
+  check('home sections follow reading, writing, projects, research, and consulting', homeSummary.order);
+  check('home shows the requested latest item counts', homeSummary.writing === 5 && homeSummary.projects === 3 && homeSummary.research === 3,
+    JSON.stringify(homeSummary));
+  check('home uses localized detail routes and one consulting card',
+    homeSummary.projectHref?.startsWith('/projects/') && homeSummary.researchHref?.startsWith('/research/') &&
+    homeSummary.consultingHref === '/consulting/' && homeSummary.consultingCards === 1,
+    JSON.stringify(homeSummary));
   const chatIndexes = await page.evaluate(async () => Promise.all(
     ['zh-CN', 'en'].map(async (locale) => {
       const response = await fetch(`/chat-index/${locale}.json`);
@@ -310,12 +324,10 @@ try {
   check('invalid stored theme falls back to light or dark', recoveredTheme === 'light' || recoveredTheme === 'dark', recoveredTheme ?? 'missing');
   await page.evaluate(() => localStorage.removeItem('liyuk-theme'));
 
-  const practiceCards = page.locator('.practice-card');
-  check('home practice cards share one desktop row', await practiceCards.count() === 3 &&
-    (await practiceCards.evaluateAll((nodes) => {
-      const tops = nodes.map((node) => Math.round(node.getBoundingClientRect().top));
-      return new Set(tops).size === 1;
-    })));
+  check('home collection lists stay in the main content column', await page.locator('[data-home-section="writing"] .entry-list').evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return bounds.width > 0 && bounds.left >= 0 && bounds.right <= window.innerWidth;
+  }));
 
   // 2. Writing index
   await page.goto(`${BASE}/writing/`, { waitUntil: 'networkidle' });
@@ -441,18 +453,21 @@ try {
   const englishChatLauncher = page.getByRole('button', { name: 'Site AI assistant' });
   check('English home exposes localized chat', await englishChatLauncher.count() === 1);
   const englishHomeSections = {
-    projects: (await page.locator('.home-projects').innerText()).includes('Recently updated'),
-    projectHref: await page.locator('.home-project-card h3 a').getAttribute('href'),
+    writing: await page.locator('[data-home-section="writing"] .entry-card').count(),
+    projects: await page.locator('[data-home-section="projects"] .entry-card').count(),
+    research: await page.locator('[data-home-section="research"] .entry-card').count(),
+    projectHref: await page.locator('[data-home-section="projects"] .entry-card h2 a').first().getAttribute('href'),
+    consultingHref: await page.locator('.home-consulting-card').getAttribute('href'),
   };
-  check('English home localizes reading paths and the latest project',
+  check('English home shows localized recent content and collaboration links',
     await page.locator('.start-callout a[href="/en/start/"]').count() === 1 &&
-    englishHomeSections.projects && englishHomeSections.projectHref?.startsWith('/en/projects/'),
+    englishHomeSections.writing === 5 && englishHomeSections.projects === 3 && englishHomeSections.research === 3 &&
+    englishHomeSections.projectHref?.startsWith('/en/projects/') && englishHomeSections.consultingHref === '/en/consulting/',
     JSON.stringify(englishHomeSections));
   await page.setViewportSize({ width: 320, height: 700 });
-  check('latest project section fits a narrow viewport', await page.locator('.home-projects').evaluate((element) => {
+  check('collaboration card fits a narrow viewport', await page.locator('.home-consulting-card').evaluate((element) => {
     const bounds = element.getBoundingClientRect();
-    const linkBounds = element.querySelector('.home-projects-heading .text-link')?.getBoundingClientRect();
-    return bounds.left >= 0 && bounds.right <= window.innerWidth && Boolean(linkBounds && linkBounds.left >= 0 && linkBounds.right <= window.innerWidth);
+    return bounds.left >= 0 && bounds.right <= window.innerWidth;
   }));
   await englishChatLauncher.click();
   const chatPanel = page.getByRole('dialog', { name: 'Ask about this site' });

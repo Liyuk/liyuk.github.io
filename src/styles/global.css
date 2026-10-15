@@ -327,14 +327,12 @@ h1, h2, h3, p { margin-top: 0; }
 .favorites-clear:hover { border-color: var(--accent); color: var(--accent); }
 .start-callout { padding-block: clamp(4rem, 8vw, 7rem); }
 .start-callout > p:not(.eyebrow) { max-width: 36rem; color: var(--muted); font-size: 1.05rem; }
-.home-projects { padding-block: clamp(3rem, 6vw, 5rem); }
-.home-projects-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
-.home-projects-heading .eyebrow { margin-bottom: .75rem; }
-.home-projects-heading h2 { margin: 0; font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.05; }
-.home-project-card { margin-top: 1.25rem; }
-.home-project-card h3 { max-width: 23ch; margin: .6rem 0 .75rem; font-family: var(--serif); font-size: clamp(1.65rem, 2.4vw, 2.5rem); font-weight: 500; letter-spacing: -.045em; line-height: 1.08; }
-.home-project-card h3 a { text-decoration: none; }
-.home-project-card p { max-width: 54ch; margin-bottom: 0; color: var(--muted); }
+.home-consulting { padding-block: clamp(3rem, 6vw, 5rem); }
+.home-consulting-card { display: block; max-width: 48rem; padding: clamp(1.5rem, 4vw, 3rem); border: 1px solid var(--line); background: var(--paper-strong); color: var(--ink); text-decoration: none; transition: border-color 180ms ease, background-color 180ms ease; }
+.home-consulting-card:hover { border-color: var(--accent); background: var(--paper); }
+.home-consulting-card h2 { margin: 0; font-family: var(--serif); font-size: clamp(1.8rem, 3.3vw, 3rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.08; }
+.home-consulting-card p { max-width: 40rem; margin: .85rem 0 1.25rem; color: var(--muted); }
+.home-consulting-cta { color: var(--accent); font-size: .88rem; font-weight: 700; }
 .start-groups { margin-bottom: clamp(4rem, 10vw, 9rem); }
 .start-group { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px solid var(--line); }
 .start-group-head { margin: 0 0 1.5rem; }
@@ -997,7 +995,6 @@ h1, h2, h3, p { margin-top: 0; }
   .links-friends, .links-apply { padding-block: 3rem; }
   .section-intro { margin-bottom: 3.5rem; }
   .practice-grid { grid-template-columns: 1fr; margin-inline: auto; }
-  .home-projects-heading { align-items: start; flex-direction: column; gap: .25rem; }
   .practice-card, .practice-card:first-child { min-height: 15rem; border-right: 1px solid var(--line); border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .entry-card h2 { font-size: 1.8rem; }
   .entry-meta { font-size: .75rem; }
