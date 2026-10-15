@@ -3,31 +3,33 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import { getCollection } from 'astro:content';
 import { publishedIn } from '../lib/content-model.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import EntryCard from '../components/EntryCard.astro';
+import HomeEntry from '../components/HomeEntry.astro';
+import { startGroups } from '../lib/taxonomy.ts';
 import RssSubscribe from '../components/RssSubscribe.astro';
 import { i18n } from '../i18n/index.mjs';
 import { site } from '../data/site.mjs';
-import { sortByCreatedAt } from '../lib/timeline.ts';
+import { sortByCreatedAt, sortByLastUpdatedAt } from '../lib/timeline.ts';
 
-const HOME_POSTS = 3;
-const HOME_FEATURED = 3;
+const HOME_POSTS = 5;
+const HOME_PROJECTS = 3;
+const HOME_RESEARCH = 3;
 
 const locale = Astro.currentLocale ?? 'zh-CN';
 const published = publishedIn(locale);
 const writing = sortByCreatedAt(await getCollection('writing', published));
 const latest = writing.slice(0, HOME_POSTS);
-const latestIds = new Set(latest.map((entry) => entry.id));
-const featured = sortByCreatedAt(await getCollection('writing', (entry) => published(entry) && entry.data.featured === true))
-  .filter((entry) => !latestIds.has(entry.id))
-  .slice(0, HOME_FEATURED);
-const projectCount = (await getCollection('project', published)).length;
-const researchCount = (await getCollection('research', published)).length;
-const copy = i18n(locale).page.home;
+const allProjects = sortByLastUpdatedAt(await getCollection('project', published));
+const projects = allProjects.slice(0, HOME_PROJECTS);
+const allResearch = sortByCreatedAt(await getCollection('research', published));
+const research = allResearch.slice(0, HOME_RESEARCH);
+const ui = i18n(locale);
+const copy = ui.page.home;
+const readingPaths = startGroups.map((group) => ({ key: group.key, ...ui.page.start.groups[group.key] }));
 const path = (p: string) => getRelativeLocaleUrl(locale, p);
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.description} seoPage="home">
-  <section class="hero shell">
+  <section class="hero shell home-hero">
     <p class="eyebrow">{copy.eyebrow}</p>
     <h1>{copy.title[0]}<br />{copy.title[1]}</h1>
     <div class="hero-copy">
@@ -38,7 +40,14 @@ const path = (p: string) => getRelativeLocaleUrl(locale, p);
     </div>
   </section>
 
-  <section class="section shell split-section" aria-labelledby="writing-heading">
+  <section class="section shell start-callout home-start" aria-labelledby="start-heading">
+    <p class="eyebrow">{copy.start.eyebrow}</p><h2 id="start-heading">{copy.start.title}</h2><p>{copy.start.description}</p><a class="text-link" href={path('/start/')}>{copy.start.link} <span aria-hidden="true">↗</span></a>
+    <nav class="home-reading-paths" aria-label={copy.start.title}>
+      {readingPaths.map((group) => <a href={`${path('/start/')}#${group.key}`}><strong>{group.title}</strong><span>{group.description}</span></a>)}
+    </nav>
+  </section>
+
+  <section class="section shell split-section home-list-section" aria-labelledby="writing-heading" data-home-section="writing">
     <div class="section-intro">
       <p class="eyebrow">{copy.writing.eyebrow}</p>
       <h2 id="writing-heading">{copy.writing.title[0]}<br />{copy.writing.title[1]}</h2>
@@ -47,24 +56,40 @@ const path = (p: string) => getRelativeLocaleUrl(locale, p);
       <RssSubscribe locale={locale} />
     </div>
     <div class="entry-list">
-      <h3 class="entry-list-heading">{copy.writing.latest}</h3>
-      {latest.length ? latest.map((entry) => <EntryCard entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
-      {featured.length > 0 && (
-        <>
-          <h3 class="entry-list-heading">{copy.writing.featured}</h3>
-          {featured.map((entry) => <EntryCard entry={entry} locale={locale} />)}
-        </>
-      )}
+      {latest.length ? latest.map((entry) => <HomeEntry entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
     </div>
   </section>
 
-  <section class="section shell practice-grid" aria-label={copy.practiceGridAria}>
-    <a href={path('/projects/')} class="practice-card"><span>{copy.practices.projects.label}</span><strong>{copy.practices.projects.title}</strong><em>{copy.practices.projects.description}</em><small>{copy.practices.projects.count(projectCount)}</small></a>
-    <a href={path('/research/')} class="practice-card"><span>{copy.practices.research.label}</span><strong>{copy.practices.research.title}</strong><em>{copy.practices.research.description}</em><small>{copy.practices.research.count(researchCount)}</small></a>
-    <a href={path('/consulting/')} class="practice-card"><span>{copy.practices.consulting.label}</span><strong>{copy.practices.consulting.title}</strong><em>{copy.practices.consulting.description}</em><small>{copy.practices.consulting.cta}</small></a>
+  <section class="section shell home-project-section" aria-labelledby="projects-heading" data-home-section="projects">
+    <div class="section-intro">
+      <p class="eyebrow">{copy.projects.eyebrow}</p>
+      <h2 id="projects-heading">{copy.projects.title}</h2>
+      <p class="writing-scale">{copy.projects.archiveHint(allProjects.length)}</p>
+      <a class="text-link" href={path('/projects/')}>{copy.projects.link} <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="entry-list home-project-grid">
+      {projects.length ? projects.map((entry) => <HomeEntry entry={entry} locale={locale} />) : <p>{copy.projects.empty}</p>}
+    </div>
   </section>
 
-  <section class="section shell start-callout">
-    <p class="eyebrow">{copy.start.eyebrow}</p><h2>{copy.start.title}</h2><p>{copy.start.description}</p><a class="text-link" href={path('/start/')}>{copy.start.link} <span aria-hidden="true">↗</span></a>
+  <section class="section shell split-section home-list-section" aria-labelledby="research-heading" data-home-section="research">
+    <div class="section-intro">
+      <p class="eyebrow">{copy.research.eyebrow}</p>
+      <h2 id="research-heading">{copy.research.title}</h2>
+      <p class="writing-scale">{copy.research.archiveHint(allResearch.length)}</p>
+      <a class="text-link" href={path('/research/')}>{copy.research.link} <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="entry-list">
+      {research.length ? research.map((entry) => <HomeEntry entry={entry} locale={locale} />) : <p>{copy.research.empty}</p>}
+    </div>
+  </section>
+
+  <section class="section shell home-consulting" aria-labelledby="consulting-heading">
+    <p class="eyebrow">{copy.consulting.eyebrow}</p>
+    <a class="home-consulting-card" href={path('/consulting/')}>
+      <h2 id="consulting-heading">{copy.consulting.title}</h2>
+      <p>{copy.consulting.description}</p>
+      <span class="home-consulting-cta">{copy.consulting.link} <span aria-hidden="true">↗</span></span>
+    </a>
   </section>
 </BaseLayout>
