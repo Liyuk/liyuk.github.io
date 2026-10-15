@@ -43,8 +43,8 @@ try {
       projects: projects?.querySelectorAll('.entry-card').length,
       research: research?.querySelectorAll('.entry-card').length,
       consultingCards: consulting?.querySelectorAll('.home-consulting-card').length,
-      projectHref: projects?.querySelector('.entry-card h2 a')?.getAttribute('href'),
-      researchHref: research?.querySelector('.entry-card h2 a')?.getAttribute('href'),
+      projectHref: projects?.querySelector('.entry-card h3 a')?.getAttribute('href'),
+      researchHref: research?.querySelector('.entry-card h3 a')?.getAttribute('href'),
       consultingHref: consulting?.querySelector('.home-consulting-card')?.getAttribute('href'),
     };
   });
@@ -456,7 +456,7 @@ try {
     writing: await page.locator('[data-home-section="writing"] .entry-card').count(),
     projects: await page.locator('[data-home-section="projects"] .entry-card').count(),
     research: await page.locator('[data-home-section="research"] .entry-card').count(),
-    projectHref: await page.locator('[data-home-section="projects"] .entry-card h2 a').first().getAttribute('href'),
+    projectHref: await page.locator('[data-home-section="projects"] .entry-card h3 a').first().getAttribute('href'),
     consultingHref: await page.locator('.home-consulting-card').getAttribute('href'),
   };
   check('English home shows localized recent content and collaboration links',

@@ -381,7 +381,7 @@ test('homepage shows the requested recent content counts in reading order', asyn
   assert.match(page, /const HOME_POSTS = 5/);
   assert.match(page, /const HOME_PROJECTS = 3/);
   assert.match(page, /const HOME_RESEARCH = 3/);
-  assert.ok(page.indexOf('class="start-callout"') < page.indexOf('data-home-section="writing"'));
+  assert.ok(page.indexOf('start-callout') < page.indexOf('data-home-section="writing"'));
   assert.ok(page.indexOf('data-home-section="writing"') < page.indexOf('data-home-section="projects"'));
   assert.ok(page.indexOf('data-home-section="projects"') < page.indexOf('data-home-section="research"'));
   assert.ok(page.indexOf('data-home-section="research"') < page.indexOf('home-consulting'));

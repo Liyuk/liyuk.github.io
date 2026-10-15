@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { contentUrl } from '../lib/content-paths.ts';
+import { formatFullDate, isoDate } from '../lib/format-dates.ts';
+import { publishedDate, lastUpdatedDate } from '../lib/timeline.ts';
+import { i18n } from '../i18n/index.mjs';
+
+interface Props {
+  entry: CollectionEntry<'writing' | 'project' | 'research'>;
+  locale: string;
+}
+const { entry, locale } = Astro.props;
+const ui = i18n(locale);
+const project = entry.collection === 'project';
+const date = project ? lastUpdatedDate(entry) : publishedDate(entry);
+const label = project && entry.data.updatedAt ? ui.entry.updatedAt : ui.entry.publishedAt;
+---
+
+<article class:list={['entry-card', 'home-entry', { 'home-project-entry': project }]}>
+  <div class="entry-meta">
+    <time datetime={isoDate(date)}>{label} {formatFullDate(date, locale)}</time>
+    {entry.collection === 'project' && <span>{ui.page.home.projects.status[entry.data.status]}</span>}
+  </div>
+  <h3><a href={contentUrl(entry.collection, entry.id, locale)}>{entry.data.title}</a></h3>
+  <p>{entry.data.description}</p>
+</article>

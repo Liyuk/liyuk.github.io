@@ -38,7 +38,7 @@ const moreWays = copy.moreWays.items.map((item) => ({ ...item, url: getRelativeL
     </div>
 
     {groups.map((group) => (
-      <section class="start-group">
+      <section class="start-group" id={group.key}>
         <div class="start-group-head"><h2>{group.head.title}</h2><p>{group.head.description}</p></div>
         <div class="start-group-list">
           {group.columns.map((column) => (
