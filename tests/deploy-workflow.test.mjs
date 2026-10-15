@@ -48,6 +48,19 @@ test('missing Buttondown credentials skip notification with an explanation', () 
   assert.match(notify, /Explain skipped notification/);
 });
 
+test('manual Buttondown recovery targets one entry without rebuilding or deploying', async () => {
+  const recovery = await readFile(
+    new URL('../.github/workflows/retry-buttondown.yml', import.meta.url),
+    'utf8',
+  );
+  assert.match(recovery, /workflow_dispatch:/);
+  assert.match(recovery, /entry_key:/);
+  assert.match(recovery, /required:\s*true/);
+  assert.match(recovery, /GITHUB_REF.*refs\/heads\/master/);
+  assert.match(recovery, /notify-buttondown\.mjs --entry .*--apply/);
+  assert.doesNotMatch(recovery, /publish:check|wrangler@4 pages deploy/);
+});
+
 test('GitHub Actions no longer publishes a GitHub Pages site', () => {
   const verify = jobBlock('verify');
   assert.doesNotMatch(workflow, /configure-pages|upload-pages-artifact|deploy-pages/);
