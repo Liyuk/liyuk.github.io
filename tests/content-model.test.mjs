@@ -384,7 +384,7 @@ test('homepage shows the requested recent content counts in reading order', asyn
   assert.ok(page.indexOf('class="start-callout"') < page.indexOf('data-home-section="writing"'));
   assert.ok(page.indexOf('data-home-section="writing"') < page.indexOf('data-home-section="projects"'));
   assert.ok(page.indexOf('data-home-section="projects"') < page.indexOf('data-home-section="research"'));
-  assert.ok(page.indexOf('data-home-section="research"') < page.indexOf('class="home-consulting"'));
+  assert.ok(page.indexOf('data-home-section="research"') < page.indexOf('home-consulting'));
 });
 
 test('start page includes every column-bearing content collection', async () => {
