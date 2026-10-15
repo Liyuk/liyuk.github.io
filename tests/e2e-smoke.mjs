@@ -29,6 +29,18 @@ try {
   check('home loads', homeTitle.length > 0, homeTitle);
   const h1 = await page.textContent('h1');
   check('home has hero heading', h1.includes('烹饪指南') || h1.length > 0, h1);
+  const homeProjectHref = await page.locator('.home-project-card h3 a').getAttribute('href');
+  const homeSectionsOrdered = await page.evaluate(() => {
+    const start = document.querySelector('.start-callout');
+    const projects = document.querySelector('.home-projects');
+    const writing = document.querySelector('#writing-heading')?.closest('section');
+    return Boolean(start && projects && writing &&
+      start.compareDocumentPosition(projects) & Node.DOCUMENT_POSITION_FOLLOWING &&
+      projects.compareDocumentPosition(writing) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  check('home puts reading paths and latest project before the writing archive', homeSectionsOrdered);
+  check('home surfaces a published project with a detail link', Boolean(homeProjectHref?.startsWith('/projects/')),
+    homeProjectHref ?? 'missing project');
   const chatIndexes = await page.evaluate(async () => Promise.all(
     ['zh-CN', 'en'].map(async (locale) => {
       const response = await fetch(`/chat-index/${locale}.json`);
@@ -428,7 +440,20 @@ try {
   await page.goto(`${BASE}/en/`, { waitUntil: 'networkidle' });
   const englishChatLauncher = page.getByRole('button', { name: 'Site AI assistant' });
   check('English home exposes localized chat', await englishChatLauncher.count() === 1);
+  const englishHomeSections = {
+    projects: (await page.locator('.home-projects').innerText()).includes('Recently updated'),
+    projectHref: await page.locator('.home-project-card h3 a').getAttribute('href'),
+  };
+  check('English home localizes reading paths and the latest project',
+    await page.locator('.start-callout a[href="/en/start/"]').count() === 1 &&
+    englishHomeSections.projects && englishHomeSections.projectHref?.startsWith('/en/projects/'),
+    JSON.stringify(englishHomeSections));
   await page.setViewportSize({ width: 320, height: 700 });
+  check('latest project section fits a narrow viewport', await page.locator('.home-projects').evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const linkBounds = element.querySelector('.home-projects-heading .text-link')?.getBoundingClientRect();
+    return bounds.left >= 0 && bounds.right <= window.innerWidth && Boolean(linkBounds && linkBounds.left >= 0 && linkBounds.right <= window.innerWidth);
+  }));
   await englishChatLauncher.click();
   const chatPanel = page.getByRole('dialog', { name: 'Ask about this site' });
   check('English chat opens at 320px width', await chatPanel.isVisible());
