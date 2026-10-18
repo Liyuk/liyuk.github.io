@@ -37,11 +37,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@astrojs/markdown-remark": "^7.3.1",
+    "@astrojs/markdown-remark": "^7.3.2",
     "@astrojs/sitemap": "^3.7.4",
     "@axe-core/playwright": "^4.13.0",
     "@types/qrcode": "^1.5.6",
-    "astro": "^7.3.5",
+    "astro": "^7.3.8",
     "katex": "^0.19.0",
     "pagefind": "^1.5.2",
     "playwright": "^1.64.0",
