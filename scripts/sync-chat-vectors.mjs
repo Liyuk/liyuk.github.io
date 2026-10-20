@@ -10,7 +10,7 @@ const MODEL = '@cf/baai/bge-m3';
 const EMBEDDING_BATCH_SIZE = 24;
 const DELETE_BATCH_SIZE = 100;
 const POLL_INTERVAL_MS = 1_000;
-const POLL_TIMEOUT_MS = 300_000;
+const POLL_TIMEOUT_MS = 90_000;
 
 const sleep = (duration) => new Promise((resolve) => setTimeout(resolve, duration));
 
@@ -133,30 +133,19 @@ async function upsertVectors(records, { accountId, token, indexName }) {
   return mutationIds;
 }
 
-export async function waitForMutations(mutationIds, {
-  accountId,
-  token,
-  indexName,
-  timeoutMs = POLL_TIMEOUT_MS,
-  pollIntervalMs = POLL_INTERVAL_MS,
-  now = Date.now,
-  pause = sleep,
-}) {
+async function waitForMutations(mutationIds, { accountId, token, indexName }) {
   if (mutationIds.length === 0) return;
   const url = `${API_BASE}/accounts/${accountId}/vectorize/v2/indexes/${indexName}/info`;
-  const deadline = now() + timeoutMs;
+  const deadline = Date.now() + POLL_TIMEOUT_MS;
   const targetMutation = mutationIds.at(-1);
-  let lastProcessedMutation;
-  while (now() < deadline) {
+  while (Date.now() < deadline) {
     const info = await cloudflareRequest(url, {
       headers: { authorization: `Bearer ${token}` },
     }, 'Vectorize index info');
-    lastProcessedMutation = info.processedUpToMutation;
     if (info.processedUpToMutation === targetMutation) return;
-    await pause(pollIntervalMs);
+    await sleep(POLL_INTERVAL_MS);
   }
-  const lastProcessed = lastProcessedMutation ?? 'not reported';
-  throw new Error(`Vectorize did not finish mutation ${targetMutation} within ${timeoutMs / 1_000} seconds (last processed mutation: ${lastProcessed}).`);
+  throw new Error(`Vectorize did not finish mutation ${targetMutation} within ${POLL_TIMEOUT_MS / 1_000} seconds.`);
 }
 
 async function readPreviousManifest(manifestPath) {
