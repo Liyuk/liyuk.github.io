@@ -71,7 +71,7 @@ export const tags: Record<string, [string, string]> = {
   delivery: ['Delivery', 'Delivery'],
   'developer-experience': ['Developer Experience', 'Developer Experience'],
   'distributed-work': ['Distributed Work', 'Distributed Work'],
-  hiring: ['Hiring', 'Hiring'],
+  hiring: ['招聘', 'Hiring'],
   'information-architecture': ['Information Architecture', 'Information Architecture'],
   judgment: ['Judgment', 'Judgment'],
   'knowledge-management': ['Knowledge Management', 'Knowledge Management'],
