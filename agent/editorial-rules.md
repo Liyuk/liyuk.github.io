@@ -55,9 +55,29 @@ No detector is wired into this repository: nothing in `npm run publish:check` me
 - **A detector was run** — name the tool and the date, give the score, and revise anything above 5% before finalizing.
 - **No detector was run** — say so plainly, and the qualitative AI-signal pass in `.claude/skills/content-review` carries this gate on its own judgment. An unrun check is reported as unrun, never as a pass.
 
-Getting under the threshold is not about scrubbing an AI vocabulary blocklist onto otherwise-generic prose. The detectable signal is structural: uniform sentence length and rhythm, predictable connective tissue ("此外"、"值得注意的是"、"综上所述" and their English equivalents "moreover", "furthermore", "it's worth noting"), claims left abstract instead of cashed out into concrete criteria, and hedges bolted onto a sentence instead of built into it. `agent/writing-style.md` describes what this site's actual voice does instead — calibrate against it, not against a generic "sound human" checklist. The `.claude/skills/humanize-writing` skill operationalizes this check.
+Qualitative review assesses clarity, argument, fidelity, and the author's voice. A phrase, punctuation mark, sentence-length distribution, or detector score alone cannot establish authorship. Treat repeated framing and generic connective tissue as prompts to inspect the passage in context. Sentence-length uniformity alone is not a reason to revise; preserve deliberate cadence and structures carrying real information. `agent/writing-style.md` remains the voice reference, and `.claude/skills/humanize-writing` operationalizes this pass.
 
 The project-local `.claude/skills/shuorenhua` package is the Chinese implementation layer for this pass. Use its scene, protected-span, severity, scope, and two-way fidelity rules after calibrating against the author's voice. The project-local `.claude/skills/humanizer` package is the English implementation layer; use it after 信达雅 translation review to audit English-specific AI patterns. Neither package authorizes invented personal detail, factual drift, detector evasion, or a change to publication state.
+
+## Revision contract
+
+Apply this contract to Chinese calibration, Chinese cleanup, English prose editing, and final review. The author's voice and the collection's register take precedence over generic cleanup heuristics.
+
+1. **Set task and scope.** Identify source material, requested mode (draft / review / revision), locale, and permitted structural change. Existing writing defaults to local edits; restructuring requires an explicit request. Review returns findings and proposed repairs.
+2. **Lock meaning before style.** Preserve entities, numbers and their subjects, conditions, negation, uncertainty, causal and temporal relationships, citations, code, and quotations. Existing specifics may replace a vague restatement; absent specifics become a question for the author. Abstract material stays abstract until evidence is supplied. Hypothetical examples must remain recognizable as examples and never become purported lived experience.
+3. **Require a local reason to edit.** Identify the passage, concrete problem, voice/genre exemption, and smallest repair for each proposed change. Unmatched text stays unchanged during cleanup. Report factual or clarity issues on their own merits; editorial preference alone is not evidence of AI authorship.
+4. **Protect ordinary language.** Questions, question headings, metaphors, inline parallelism, repeated technical nouns, passive constructions, long sentences, and ordinary list punctuation are valid forms. Their presence or frequency alone does not warrant rewriting. Preserve genuine changes of mind and informative contrasts; remove a contrast only when its setup invents a misconception or adds no meaning. Retain genre-appropriate numbering, including research sections and referenced steps.
+5. **Read back both ways.** Every source claim and qualification must survive, and every output claim must have a source. Preserve headings, section order, lists, tables, and paragraph boundaries during cleanup unless the user authorized structural change. English sentence-level freedom remains governed by `translation-spec.md`.
+
+A revision handoff records target files, source version, mode/scope, material gaps, representative edits with reasons, protected voice features, and unresolved issues. Keep it in the conversation or a requested working artifact, outside reader-facing prose. When nothing needs changing, report that outcome and finish.
+
+## Maintaining cleanup rules
+
+[Lieflat Less AI Tone](https://github.com/larashero3-dotcom/lieflat-less-ai-tone/blob/main/SKILL.md) and its [research notes](https://github.com/larashero3-dotcom/lieflat-less-ai-tone/blob/main/RESEARCH.md) inform the narrow-edit safeguards above. Its reported corpus results are external hypotheses for this author and these genres: the underlying corpus is unavailable for independent verification. Do not copy frequency ratios into project thresholds, infer authorship from a hit, or apply Chinese findings to English.
+
+Before adding or broadening a cleanup rule, record its trigger, source/evidence limits, smallest allowed edit, and exemptions. Include an example that should change and an example that should remain intact. For automated matching, inspect up to 20 actual hits (all hits if fewer), including legitimate author/genre uses, before accepting aggregate counts; document how many were inspected and which were false positives. Count comparable units and exclude frontmatter, code, quotations, tables, and other protected spans as appropriate. These diagnostics advise review; making them publication blockers requires a separate approved policy change.
+
+Use `agent/writing-check-cases.md` to review workflow and preservation boundaries when changing writing rules or skills. This manual review is not evidence of detector accuracy or a measured model benchmark.
 
 ## Review and revision are separate stages
 
