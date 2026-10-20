@@ -6,7 +6,7 @@ locale: zh-CN
 translationStatus: original
 status: active
 repositoryUrl: https://github.com/Liyuk/interview-compass
-draft: true
+draft: false
 tags: [interview, promotion, hiring, open-source, engineering-management]
 translationKey: 2026/10/interview-compass
 ---
@@ -48,13 +48,13 @@ translationKey: 2026/10/interview-compass
 
 ```mermaid
 flowchart LR
-    A[招聘需要] --> B[岗位结果]
-    B --> C[责任与级别]
-    C --> D[能力与行为]
-    D --> E[题目意图]
-    E --> F[证据与追问]
-    F --> G[结合情境判断]
-    G --> H[练习与校准]
+    A[Hiring Need] --> B[Role Outcomes]
+    B --> C[Responsibility and Level]
+    C --> D[Capability and Behavior]
+    D --> E[Question Intent]
+    E --> F[Evidence and Probes]
+    F --> G[Contextual Judgment]
+    G --> H[Practice and Calibration]
     H --> D
 ```
 
@@ -130,27 +130,27 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph Inputs[岗位与招聘背景]
+    subgraph Inputs[Role and Hiring Context]
         direction TB
-        I1[招聘目标]
-        I2[岗位与责任阶段]
-        I3[八个能力域]
+        I1[Hiring Goals]
+        I2[Role and Responsibility Stage]
+        I3[Eight Capability Domains]
     end
-    subgraph Library[题目参考]
+    subgraph Library[Question Reference]
         direction TB
-        Q1[中英双语题库]
-        Q2[题目意图与信号]
-        Q3[追问与证据锚点]
+        Q1[Bilingual Question Bank]
+        Q2[Question Intent and Signals]
+        Q3[Probes and Evidence Anchors]
     end
-    subgraph Entry[读者入口]
+    subgraph Entry[Reader Entry Points]
         direction TB
-        E1[候选人准备]
-        E2[面试官设计问题]
-        E3[招聘管理者对齐]
+        E1[Candidate Preparation]
+        E2[Interviewer Design]
+        E3[Hiring Manager Alignment]
     end
     Inputs --> Library
     Library --> Entry
-    Entry --> O[由人结合情境作出判断]
+    Entry --> O[People Apply Context and Make Decisions]
 ```
 
 这张图画的是内容之间的关系，与网站的调用顺序无关。入口可以不同，岗位预期、问题意图和证据之间的关联要尽量保持一致；具体岗位和组织仍有差异，最终判断也留给人。

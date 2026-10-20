@@ -1,30 +1,30 @@
 ---
-title: "After ~1,000 interviews, I turned my hiring method into an open reference site"
+title: "After interviewing about 1,000 candidates, I turned my hiring method into an open reference site"
 description: "Interview Compass is a bilingual interview and promotion reference: understand the role's goals, scope, and level, then use question intent and checkable evidence to prepare stories and judge fit. Candidates, interviewers, and hiring managers work from the same material."
 createdAt: 2026-10-20
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 status: active
 repositoryUrl: https://github.com/Liyuk/interview-compass
-draft: true
+draft: false
 tags: [interview, promotion, hiring, open-source, engineering-management]
 translationKey: 2026/10/interview-compass
 ---
 
 **Interviews shouldn't be guesswork: know the role, show the evidence**
 
-Over the past five years I've interviewed about 1,000 candidates, and one gap keeps showing up. Job descriptions ask for judgment, influence, and a focus on results, yet the interview often comes down to one or two questions and a lot of guessing. Candidates guess what the interviewer wants to hear. Interviewers judge ability by how smoothly a story is told. And the team may never agree on what this hire is supposed to solve.
+Over the past five years I've interviewed about 1,000 candidates, and one gap keeps showing up. Job descriptions ask for judgment, influence, and a focus on results, yet the interview often comes down to one or two questions and a lot of guessing. Candidates guess what the interviewer wants to hear. Interviewers may infer ability from how smoothly a story is told. And the team may never agree on what this hire is supposed to solve.
 
 **Interview Compass** is the bilingual, open reference site where I've written down ten years of my hiring method. The idea fits in one line: **know the role, show the evidence.** Candidates learn what a question is really testing and how to back their stories with evidence. Interviewers learn what to probe. Hiring managers start by saying why they're hiring. → [Open the site](https://liyuk.github.io/interview-compass/) · [GitHub](https://github.com/Liyuk/interview-compass)
 
 > Built from ten years of my own work, and informed by screening criteria from some leading internet companies.
 >
 > - ~**1,000** candidates interviewed and ~**300** people coached in the past five years
-> - **200+** managers have attended my manager training
-> - Used in promotions from junior roles up to **second-line managers**
+> - **200+** managers have attended my management training
+> - Used to support promotions from junior roles through **second-line management**
 > - The earlier version reached roughly **20,000–30,000** reads
 
-I have organized these experiences into role responsibilities, question intent, signals to look for, and evidence standards, explaining why a criterion exists and what kind of answer can support a judgment. The site reflects my interpretation of this material. Any specific role still needs to be understood in its own context.
+I have organized these lessons into role responsibilities, question intent, signals to look for, and evidence standards. The site tries to explain why a criterion exists and what kind of answer can support a judgment. Any specific role still needs to be understood in its own context.
 
 > **The 30-second version**
 >
@@ -161,7 +161,9 @@ The diagram shows how the content relates, independent of the order in which the
 
 ## How this differs from mock interviews and AI scoring
 
-Public question banks and answer frameworks make it easier to look things up and study independently. Human or AI mock interviews are better suited to practicing how to communicate under pressure. Automated scoring can return feedback quickly. The [Interviewing.io homepage](https://interviewing.io/) puts mock interviews with senior engineers and AI-led interviews up front, alongside expert feedback; [ClearRound](https://clearround.io/) brings role-specific tracks, voice-based practice, structured frameworks, and AI grading into one practice flow (both also provide questions and frameworks; this comparison describes the emphasis of their public product pages). Interview Compass starts with a reference layer for judgment: it connects hiring goals, responsibility stages, question intent, and evidence, so the reasoning can be revisited and recombined, it becomes easier to explain why a question is relevant or what an answer is missing, and the hiring team’s role and evidence criteria sit in the same chain. The trade-off: live interview practice and delivery practice belong to mock interviews, and whether someone fits a particular team is judged in the real situation. These approaches complement each other. Scoring depends on whether its dimensions match the role and whether the feedback explains its reasoning; a reference framework asks readers to apply it to the situation in front of them. My choice was to make the basis for a judgment easier to see first.
+Public question banks and answer frameworks make it easier to look things up and study independently. Human or AI mock interviews help people practice communicating under pressure, while automated scoring can return feedback quickly. The [Interviewing.io homepage](https://interviewing.io/) foregrounds mock interviews with senior engineers, AI-led interviews, and expert feedback. [ClearRound](https://clearround.io/) brings role-specific tracks, voice-based practice, structured frameworks, and AI grading into one practice flow. Both also provide questions and frameworks; this comparison describes the emphasis of their public product pages.
+
+Interview Compass starts with a reference layer for judgment. It connects hiring goals, responsibility stages, question intent, and evidence. Readers can return to those criteria, combine them, explain why a question is relevant or what an answer is missing, and bring the hiring team's role requirements into the same discussion. The trade-off is that mock interviews are better for practicing live delivery. Whether someone fits a particular team still depends on the actual context. These approaches can complement each other. Scoring depends on whether its dimensions fit the role and whether the feedback explains its reasoning. A reference framework, in turn, asks readers to apply it to the situation in front of them. My choice was to make the basis for a judgment easier to see first.
 
 ## Boundaries and risks
 
