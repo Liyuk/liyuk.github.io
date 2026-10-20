@@ -4,6 +4,7 @@
 // locale-independent identifier shared by a post's zh.md and en.md.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import {
   buildMeta,
   buildEmailHtml,
@@ -19,6 +20,29 @@ import {
 } from '../scripts/notify-buttondown.mjs';
 
 const CONTENT = 'src/content/';
+
+test('targeted notification dry-run includes only the requested published entry', () => {
+  const result = spawnSync(
+    process.execPath,
+    ['scripts/notify-buttondown.mjs', '--entry', 'projects/2026/10/liyuk-skills'],
+    { encoding: 'utf8' },
+  );
+  assert.equal(result.status, 0, result.stderr);
+  const output = result.stdout;
+  assert.match(output, /Liyuk Skills: Engineering and Management Methods You Can Call on Demand/);
+  assert.match(output, /将发送 1 封/);
+  assert.doesNotMatch(output, /Adding an AI assistant to a blog/);
+});
+
+test('invalid targeted notification keys fail without falling back to a site-wide scan', () => {
+  const result = spawnSync(
+    process.execPath,
+    ['scripts/notify-buttondown.mjs', '--entry', '../writing'],
+    { encoding: 'utf8' },
+  );
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /entry must be one exact content key/);
+});
 
 test('entryKey returns the same identifier for zh.md and en.md of one post', () => {
   const zh = entryKey(`${CONTENT}projects/2026/08/dsh-skin-chatlab/zh.md`);

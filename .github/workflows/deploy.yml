@@ -75,12 +75,12 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: verified-site
           path: dist/
       - name: Restore chat vector manifest cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .cache/chat-vectors/manifest.json
           key: chat-vector-manifest-${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}

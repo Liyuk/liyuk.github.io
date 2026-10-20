@@ -40,11 +40,13 @@ function parseArgs(argv) {
   const args = {
     apply: false, // false = dry-run, true = actually create emails
     baseRef: null, // git ref to diff against (e.g. github.event.before)
+    entry: null, // exact locale-independent content key for one recovery send
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--apply') args.apply = true;
     else if (a === '--baseRef') args.baseRef = argv[++i] ?? null;
+    else if (a === '--entry') args.entry = argv[++i] ?? '';
   }
   return args;
 }
@@ -168,6 +170,26 @@ function changedContentPaths(baseRef) {
         out.push(path.join(process.cwd(), line.trim()));
     }
     return { files: out, error: null };
+  } catch (error) {
+    return { files: [], error };
+  }
+}
+
+// Recovery mode scans tracked content for one exact article key. Limiting the
+// key shape and matching via entryKey keeps manual retries narrow and locale-safe.
+function contentPathsForEntry(entry) {
+  const key = entry?.trim().replace(/^src\/content\//, '').replace(/\/+$/, '');
+  const validKey = /^(?:writing|research|projects|consulting)\/\d{4}\/(?:0[1-9]|1[0-2])\/[a-z0-9][a-z0-9-]*$|^galleries\/[a-z0-9][a-z0-9-]*$/;
+  if (!key || !validKey.test(key)) {
+    return { files: [], error: new Error('entry must be one exact content key, e.g. projects/2026/10/liyuk-skills') };
+  }
+  try {
+    const tracked = git('ls-files -z -- src/content')
+      .split('\0')
+      .filter((file) => file && /\.mdx?$/.test(file))
+      .map((file) => path.join(process.cwd(), file));
+    const files = tracked.filter((file) => entryKey(file) === key);
+    return { files, error: null };
   } catch (error) {
     return { files: [], error };
   }
@@ -382,14 +404,19 @@ async function main() {
   );
 
   // 1. Which content md files changed in this push?
-  const baseRef = resolveBaseRef(args.baseRef);
-  const changed = changedContentPaths(baseRef);
+  const entryMode = args.entry !== null;
+  const baseRef = entryMode ? null : resolveBaseRef(args.baseRef);
+  const changed = entryMode ? contentPathsForEntry(args.entry) : changedContentPaths(baseRef);
   if (changed.error) {
     console.error(`✘ 无法读取 content 变更：${changed.error.message}`);
     return 1;
   }
   const changedFiles = changed.files;
-  console.log(`  变更基准 ref: ${baseRef}，检测到 ${changedFiles.length} 个 content md/mdx 变更。`);
+  console.log(
+    entryMode
+      ? `  定向补发条目: ${args.entry}，找到 ${changedFiles.length} 个语言文件。`
+      : `  变更基准 ref: ${baseRef}，检测到 ${changedFiles.length} 个 content md/mdx 变更。`,
+  );
 
   // 2. Parse only the ones that became / are published. Group files by article
   //    so zh.md and en.md of the same post are merged into one email.
@@ -398,7 +425,7 @@ async function main() {
     const raw = await readFile(file, 'utf8').catch(() => null);
     if (!raw) continue;
     const fm = parseFrontmatter(raw);
-    const baseRaw = baseRef === 'HEAD' ? null : gitShow(baseRef, file);
+    const baseRaw = entryMode || baseRef === 'HEAD' ? null : gitShow(baseRef, file);
     if (!becamePublished(baseRaw, raw)) continue;
     const key = entryKey(file);
     if (!key) {

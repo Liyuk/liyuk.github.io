@@ -26,4 +26,6 @@ Don't invent a straw-man alternative just to make the chosen design look better 
 
 ## Handoff
 
-Same downstream sequence as any collection: `.claude/skills/humanize-writing` → translation via `agent/translation-spec.md` / `.claude/skills/xinda-ya-translation` → `.claude/skills/content-review` before `draft: false`. Engineering projects have no bilingual fallback exception — the English sibling is required.
+Follow `agent/README.md`'s writing workflow and the revision handoff in `agent/editorial-rules.md`: Chinese calibration, English translation, then final review. The calibration and translation skills each own their cleanup pass.
+
+Engineering projects require the English sibling; they have no bilingual fallback exception.
