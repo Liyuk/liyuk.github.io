@@ -1,135 +1,176 @@
 ---
-title: "After interviewing about 1,000 candidates, I turned a hiring method into an open reference site"
-description: "A bilingual interview and promotion reference shaped by a decade of work. Know the role, show the evidence: candidates use it to prepare stories; interviewers and managers use it to align criteria and probe the basis for a judgment."
+title: "After ~1,000 interviews, I turned my hiring method into an open reference site"
+description: "Interview Compass is a bilingual interview and promotion reference: understand the role's goals, scope, and level, then use question intent and checkable evidence to prepare stories and judge fit. Candidates, interviewers, and hiring managers work from the same material."
 createdAt: 2026-10-20
 locale: en
 translationStatus: draft
 status: active
 repositoryUrl: https://github.com/Liyuk/interview-compass
 draft: true
-tags:
-  - interview
-  - promotion
-  - hiring
-  - open-source
+tags: [interview, promotion, hiring, open-source, engineering-management]
 translationKey: 2026/10/interview-compass
 ---
 
-Over the past five years, I have interviewed about 1,000 candidates. The same gap kept showing up: job descriptions ask for judgment, influence, and ownership of results, but the interview can turn into guesswork. Candidates try to infer what the interviewer wants to hear. Interviewers may infer ability from how smoothly a story is told. By the end, the group may still not have agreed on what the role needs this person to solve.
+**Interviews shouldn't be guesswork: know the role, show the evidence**
 
-I shaped Interview Compass from a decade of work, informed in part by screening criteria used at some leading internet companies. It is a bilingual interview and promotion reference. The central idea is simple: **Know the role. Show the evidence.** Candidates can learn what a question is trying to assess and support their account with experience. Interviewers and hiring managers can use the same material to define the role, probe for evidence, and align their judgments.
+Over the past five years I've interviewed about 1,000 candidates, and one gap keeps showing up. Job descriptions ask for judgment, influence, and a focus on results, yet the interview often comes down to one or two questions and a lot of guessing. Candidates guess what the interviewer wants to hear. Interviewers judge ability by how smoothly a story is told. And the team may never agree on what this hire is supposed to solve.
 
-> In the past five years, I have interviewed about 1,000 candidates and coached about 300 people.
-> More than 200 managers have attended my management training. The method has also been used in promotions from junior roles through second-line management.
-> An earlier version received roughly 20,000–30,000 reads.
+**Interview Compass** is the bilingual, open reference site where I've written down ten years of my hiring method. The idea fits in one line: **know the role, show the evidence.** Candidates learn what a question is really testing and how to back their stories with evidence. Interviewers learn what to probe. Hiring managers start by saying why they're hiring. → [Open the site](https://liyuk.github.io/interview-compass/) · [GitHub](https://github.com/Liyuk/interview-compass)
 
-### The idea in 30 seconds
+> Built from ten years of my own work, and informed by screening criteria from some leading internet companies.
+>
+> - ~**1,000** candidates interviewed and ~**300** people coached in the past five years
+> - **200+** managers have attended my manager training
+> - Used in promotions from junior roles up to **second-line managers**
+> - The earlier version reached roughly **20,000–30,000** reads
 
-- **The problem:** Role goals and responsibilities often remain vague, so both sides guess at what a question or answer means.
-- **The method:** Role needs → outcomes and responsibility → capabilities and behaviors → question intent → evidence and follow-ups → judgment in context.
-- **For candidates:** Understand the role and assess fit, then tell a story that connects goals, responsibility, decisions, actions, and results.
-- **For interviewers and managers:** State why the team is hiring and what the role owns, then ask for evidence and calibrate the judgment.
-- **The boundary:** Analysis and evidence anchors help people understand the criteria. They do not prescribe one answer or make hiring and promotion decisions.
+I have organized these experiences into role responsibilities, question intent, signals to look for, and evidence standards, explaining why a criterion exists and what kind of answer can support a judgment. The site reflects my interpretation of this material. Any specific role still needs to be understood in its own context.
 
-## Know the role. Show the evidence.
+> **The 30-second version**
+>
+> - The problem: both sides of the interview are guessing, and role requirements never turn into evidence anyone can observe.
+> - The method: hiring need → outcomes and responsibility → capability and behavior → question intent → evidence and probes → contextual judgment.
+> - Candidates: organize an experience in six steps, and separate the team's results from your own contribution.
+> - Interviewers and hiring managers: start by stating why you're hiring, then probe for evidence, treating the signal list as prompts for follow-up rather than a checklist.
+> - Boundaries: no model answers, no automatic scoring; people make the final judgment.
 
-Hiring should start with why the team needs someone. A manager needs to explain the problem to solve, the outcomes the role should own, and its responsibility, decision, and collaboration boundaries. Words such as “senior” or “influential” become assessable only when tied to a role and its scope.
+## Start by clarifying why the role is needed
 
-Once the goal is clear, the team can identify the capabilities and behaviors it needs, then design questions that gather useful information. A candidate’s account should follow the same logic: What was the goal? What were you responsible for? Which decisions and trade-offs did you make? What did you do, and what outcome or checkable evidence followed? An outcome alone does not show who caused it; context and personal contribution still need to be established.
+Hiring starts with the reason for the role; interview questions come later. A hiring manager first needs to explain why the team needs someone, what outcomes the role should deliver, what the person will own, and where the work depends on others. Otherwise, words such as “senior” and “influential” can remain little more than impressions. An individual contributor and a manager may work in the same situation, but their areas of responsibility, decision-making authority, and accountability can differ.
+
+Once the role and its scope are clear, it becomes easier to translate expectations into observable capabilities and behaviors. Questions should then gather the information needed for a judgment; covering a question type is secondary. Answers also need to return to the original goal and constraints: what the candidate owned, what choices they made and why, what those choices cost, and what the result and evidence show.
+
+> An outcome does not by itself tell us who caused it.
+
+Without context and attribution, an interviewer may hear an impressive ending without understanding how it came about.
+
+This is the chain I use to think about interviews and organize Interview Compass:
 
 ```mermaid
 flowchart LR
-    A[Role Need] --> B[Expected Outcomes]
+    A[Hiring Need] --> B[Role Outcomes]
     B --> C[Responsibility and Level]
-    C --> D[Capabilities and Behaviors]
+    C --> D[Capability and Behavior]
     D --> E[Question Intent]
-    E --> F[Evidence and Follow-ups]
+    E --> F[Evidence and Probes]
     F --> G[Contextual Judgment]
+    G --> H[Practice and Calibration]
+    H --> D
 ```
 
-This sequence helps both sides find the basis for a judgment. It is not a script to recite in order. An interview answer may begin with a result, a failure, or a technical trade-off. What matters is whether the listener can follow the links between the goal, the candidate’s responsibility, their decisions, their actions, and the evidence.
+The chain describes an order of understanding, and anyone can enter it at whichever link fits. In an interview, a story might start with the outcome, a failure, or a technical trade-off. What matters is whether the listener can follow the links between the goal, the candidate’s responsibility, their judgment, their actions, and the evidence. Causality matters here: what else affected the outcome, what did the candidate actually change, and how far can the evidence support a conclusion?
 
-## Candidates: make a story clear enough to assess
+## Candidates: tell one experience clearly in six steps
 
-Start with a target role. Understand the problem it needs to solve, its scope, and its level; then choose an experience that is relevant. Use these six checks to organize the story:
+I want the practice material to answer two questions. First, why is this question being asked? Second, how can someone tell an experience clearly enough to support a judgment? The first calls for an analysis of the question’s goal, the situations where it applies, and other plausible interpretations. The second is about helping the listener follow the causal thread: What needed to be solved? Why did the candidate need to get involved? What did they own? What judgment did they make? What happened as a result, and what evidence suggests their actions contributed to it?
 
-1. **Lead with the point:** In a sentence or two, say what this experience can show.
-2. **Add the necessary context:** Explain the goal, constraints, and key difficulty. Keep only what the listener needs to follow the decision.
-3. **Clarify responsibility:** Separate the team’s result from your part, and explain your authority and collaboration boundaries.
-4. **Show the judgment:** Name the problem you saw, the options you compared, why you chose one under those conditions, and what the alternatives would have cost.
-5. **Connect action to outcome:** Focus on the actions that reveal your reasoning, then share the result and evidence that can be checked. Include external factors when they affected the outcome.
-6. **Set the limits:** Say what this experience supports and what would need more evidence.
+A candidate can organize an answer in this order:
 
-These steps are a way to organize material, not a template to memorize. The listener should be able to reconstruct the situation: what needed to change, what you owned, why you acted as you did, and what happened next. If an interviewer probes one part, expand that part.
+1. **Lead with the point:** In a sentence or two, state the judgment or outcome the story will support so the listener knows where it is going.
+2. **Give the necessary context:** Explain the goal, constraints, and main difficulty needed to understand the question. Save the rest of the project for follow-up questions.
+3. **Clarify your responsibility:** Separate what the team accomplished from what you owned, including your decision-making authority and collaboration boundaries.
+4. **Explain your judgment:** Describe the problem you saw, the options you considered, and why you chose one under those conditions. Include the cost of the alternatives you set aside.
+5. **Connect actions to results:** Choose the actions that show your reasoning, then give the outcome or evidence that can be checked. If other people or external conditions also shaped the outcome, say so.
+6. **Close with what the story supports:** State what this experience can and cannot demonstrate. When relevant, explain what you changed afterward.
+
+This order is a scaffold for organizing a story; there is no need to recite it as headings. A story can begin wherever it best makes the point. Starting with the point and then adding only the context the listener needs is often easier to follow than recounting everything chronologically. Expand the part the interviewer asks about. A good answer responds to the question’s assessment goal, and it can use as many of the six steps as that goal needs.
+
+The same structure helps candidates show their strengths. If you want to show that you can move cross-team work forward, saying “I’m good at communication” is only a starting point. Explain where the teams’ goals differed, what coordination or decision-making you owned, what you did, and what changed as a result. Point to evidence that supports your contribution. If the team produced the outcome together, distinguish its shared result from your own role.
 
 > A strength is not a label you give yourself. It is a conclusion the listener can draw from your decisions and evidence.
 
-STAR can help structure a story around situation, task, action, and result. Those four elements alone do not show what the question is testing or establish that the result came from your contribution. Connecting role expectations, question intent, personal responsibility, and the basis for the outcome gives both sides something specific to discuss.
+### Why STAR isn't enough
 
-### One question, four levels of evidence
+Frameworks such as STAR can help organize a story, but situation, task, action, and result do not answer everything. STAR does not tell a candidate what the interviewer is assessing, and it does not establish that the candidate caused the result. Interview Compass brings question intent and evidence standards into the preparation process. Candidates first work out what the question is meant to assess, then choose the parts of an experience that speak to it. That way, each story is aimed at what its own question is assessing.
 
-Consider this question: an AI assistant times out after initiating a refund, and the system cannot tell whether the refund completed. A direct retry could refund twice. The difference between answers is not whether someone can name idempotency; it is whether they address the unknown state, user authorization, and responsibility for recovery.
+### Four evidence levels for one question
 
-| Reference level | What the answer does | What it can support |
+Consider a question in the library: an AI assistant times out while issuing a refund, so the system does not know whether the refund went through. Retrying automatically could issue it twice. The point of the exercise is to distinguish checking a status from issuing another side-effecting operation, determine whether the current state is known, consider whether the user’s authorization still applies, and explain how to pause, verify, and recover when the outcome cannot be confirmed. Saying the word “idempotency” is only where it begins. The question analysis lays out evidence anchors at different levels and suggests follow-up questions.
+
+The evidence levels for this question are specific:
+
+| Level | What the answer does | What it shows |
 | --- | --- | --- |
-| 1 · Needs verification | Treats the timeout as a failure and retries without distinguishing completed, incomplete, and unknown states. | Does not yet explain how duplicate side effects are controlled. |
-| 2 · Basic safe path | Uses an idempotency key or checks operation status to avoid executing the same refund twice. | Shows a basic understanding of retry protection. |
-| 3 · Handles key trade-offs | Compares retrying, checking status, pausing, and manual verification; considers authorization timing, partial completion, and dependency failures. | Shows an ability to design for risk and context. |
-| 4 · Owns recovery | Explains reconciliation, recovery, authorization changes, and ownership when the partner’s status cannot be checked. | Accounts for abnormal states and what happens next. |
+| 1 | Retries every time after a timeout | Duplicate side effects are left unaddressed |
+| 2 | Names idempotency or checks the status first | Basic risk control |
+| 3 | Also weighs the operation’s side effects and the user’s authorization | A more complete judgment |
+| 4 | If the external state still cannot be confirmed, explains how to pause, reconcile, and take responsibility for recovery | The failure path has been thought through |
 
-[Read the full question analysis and follow-ups](https://liyuk.github.io/interview-compass/en/questions/a-ai-engineering-agent-duplicate-side-effect/).
+> Practice means understanding where these distinctions come from, so the reasoning can be derived again in a different situation.
 
-These levels are evidence references for this question, not a universal score for every role. Change the scope, dependency, or risk and the basis for judgment may change too.
+Candidates can answer a question before reading its analysis, then ask what they left out: the goal, their responsibility, the trade-offs, or the evidence? An answer that explains the conditions behind an action shows the underlying rule is clear; the right terminology alone is only part of it. Applying the same reasoning to a different experience helps show whether it transfers. The question analysis and evidence references on a four-level scale are there to calibrate thinking.
 
-## How candidates, interviewers, and managers use it
+## How candidates, interviewers, and hiring managers use it
 
-| Role | First question to answer | How to use the site | What to keep in view |
+| Perspective | What it's for | Where to start | What to watch for |
 | --- | --- | --- | --- |
-| Candidate | What does this role need, and does my experience fit? | Read the role and responsibility-stage profile, find relevant questions, and organize a story around its goal, ownership, decisions, actions, and evidence. | Use your own experience. Do not turn an evidence anchor into a model answer. |
-| Interviewer | What information would support a judgment about this candidate? | Start with question intent, compare approaches, and probe context, personal contribution, trade-offs, and attribution. | Follow the answer instead of treating a signal list as a checklist. |
-| Hiring manager | Why are we hiring, and what will this role own? | Define the goal, scope, and expected outcomes, then align the interview team on what to examine. | The hiring team has to define its own criteria for the role and organization. |
+| Candidate | Understand how the role is defined, judge fit, prepare stories | Role profiles and stage guides, then question intent and evidence references | Test the expectations against your own experience, and consider whether the organization fits |
+| Interviewer | Gather enough information from a question to support a judgment | Angles, follow-up prompts, and comparison dimensions in the question analysis | Adapt to the candidate's answers; use the signal list as prompts for follow-up |
+| Hiring manager | Answer “Why are we hiring?” and clarify role requirements and assessment criteria | Roles and responsibility stages, the capability model | Connect team goals to role responsibilities, expected outcomes, and risks first |
 
-The three audiences enter through different paths, but the material underneath is shared: roles and responsibility stages describe expectations, question analysis explains intent, and evidence references help identify what is missing from an answer.
+For candidates, the first task is to understand how the role is defined: what problem it exists to solve, what outcomes it owns, where its decision-making and collaboration boundaries lie, and what level of responsibility it carries. Guessing which questions might come up can wait. Only then can you judge whether your experience and capabilities fit, what gaps you may need to address, and whether you want the work the role entails. The role profiles and stage guides provide a reference point. From there, candidates can use question intent and evidence references to choose relevant experiences and explain the goals, responsibility, judgment, and results. They still need to test the expectations against their own experience and consider whether the organization fits. The material is a reference to compare against; the answer itself has to come from your own experience.
 
-## Why start with a reference site
+Interviewers need to gather enough information from a question to support a judgment. The question analysis offers relevant angles, follow-up prompts, and comparison dimensions. It can help interviewers develop a question and check the context, individual contribution, trade-offs, and attribution behind a result. In the interview itself, they still need to adapt their questions to the candidate’s answers, using the list of signals as prompts for follow-up rather than as a checklist. A reliable assessment starts with clear role goals; even a thorough question framework depends on them.
 
-Live or AI mock interviews help people practice delivery, pace, and pressure. Immediate feedback can also show candidates what to practice next. For example, [interviewing.io](https://interviewing.io/) offers human and AI mock interviews, while [ClearRound](https://clearround.io/) describes voice mocks, AI feedback, and structured frameworks as part of its product. Those approaches focus on practice and feedback.
+Hiring managers need to answer “Why are we hiring?” They have to connect team goals to role responsibilities, expected outcomes, and risks, then agree with interviewers on what to assess. When the group discusses a candidate’s experience, the focus belongs on how that experience relates to the actual work; how polished the story sounds matters less. The site gives managers a reference for structuring that thinking. Defining levels, designing the full hiring process, and making the hiring decision stay with each company.
 
-I started Interview Compass as a reference because candidates often need to understand the role and the question before practice begins. Interviewers and managers also need material they can discuss together. The site first lays out why a question is asked, what to observe, and what evidence can support a judgment, so the same basis can serve both sides of the interview table. It cannot replace live practice or make a hiring decision. When the problem is delivery or performance under pressure, a mock interview is more direct.
+The three perspectives have different entry points, but share the same underlying material. Roles and responsibility stages describe expectations. The capability model defines areas to examine. Question analyses explain assessment intent and evidence. Candidates use this material to prepare and judge fit, interviewers to shape questions, and hiring managers to clarify role requirements and assessment criteria.
 
-## What is inside
+## What's on the site
 
-Interview Compass currently includes:
+Every audience shares one question bank and simply starts from a different entry point:
 
-- Goal-based paths for candidate preparation, interviewer evidence gathering, hiring, and promotion.
-- Role references across six engineering specializations and different responsibility stages.
-- Eight capability domains, curated question sets, and a filterable bilingual question bank.
-- Individually reviewed analysis for selected core questions: intent, signals, context probes, trade-offs, and evidence anchors.
-- Prompts readers can copy into an external AI tool of their choice.
-
-The content fits together like this:
+- **Chinese and English content.**
+- **Role models** across six engineering specializations and multiple responsibility stages, which help narrow the scope.
+- **Eight capability domains.**
+- **Goal paths and curated sets** that let readers start with a purpose.
+- **A searchable, filterable full library**, filterable by capability, scenario, topic, and format.
+- **Question analyses**: a question page shows its intent, signals, possible interpretations, context probes, trade-offs, and evidence anchors. Questions with an individual analysis have a full question-level breakdown; shared reading prompts are labeled as rule-based references.
+- **AI analysis prompts**: a question page can generate an analysis prompt for the external AI tool a reader chooses. The site does not collect answers or send them anywhere.
 
 ```mermaid
 flowchart LR
-    A[Role Goals and Scope] --> B[Capability Expectations]
-    B --> C[Question Intent]
-    C --> D[Signals and Follow-ups]
-    D --> E[Evidence Anchors]
-    F[Candidate Preparation] --> C
-    G[Interviewer Design] --> C
-    H[Hiring Manager Alignment] --> A
+    subgraph Inputs[Role and Hiring Context]
+        direction TB
+        I1[Hiring Goals]
+        I2[Role and Responsibility Stage]
+        I3[Eight Capability Domains]
+    end
+    subgraph Library[Question Reference]
+        direction TB
+        Q1[Bilingual Question Bank]
+        Q2[Question Intent and Signals]
+        Q3[Probes and Evidence Anchors]
+    end
+    subgraph Entry[Reader Entry Points]
+        direction TB
+        E1[Candidate Preparation]
+        E2[Interviewer Design]
+        E3[Hiring Manager Alignment]
+    end
+    Inputs --> Library
+    Library --> Entry
+    Entry --> O[People Apply Context and Make Decisions]
 ```
 
-Goal paths and curated sets offer a place to start. Role and responsibility-stage profiles narrow the scope. Question analysis connects intent, follow-ups, and evidence. A reader can examine one question or use the material to plan a fuller preparation path.
+The diagram shows how the content relates, independent of the order in which the site runs. Readers can enter in different places, but the links between role expectations, question intent, and evidence should remain consistent. Roles and organizations vary, so people still make the final judgment.
 
-![Interview Compass home page: role and audience entry points, with a four-level evidence example](/images/projects/interview-compass/home.jpg)
+![Interview Compass homepage: role and audience entry points under the project's central slogan](/images/projects/interview-compass/home.jpg)
 
-![An AI refund-timeout question showing its intent and four evidence levels](/images/projects/interview-compass/question.jpg)
+![A refund-timeout question showing its intent and four evidence levels](/images/projects/interview-compass/question.jpg)
 
-## Limits and use
+## How this differs from mock interviews and AI scoring
 
-Evidence anchors explain differences between answers. They are not a validated universal leveling standard and should not be used to score people outside the role, responsibility, and context in question. The analyses offer reasoning to inspect; people who understand the actual job still make hiring, promotion, and fit decisions.
+Public question banks and answer frameworks make it easier to look things up and study independently. Human or AI mock interviews are better suited to practicing how to communicate under pressure. Automated scoring can return feedback quickly. The [Interviewing.io homepage](https://interviewing.io/) puts mock interviews with senior engineers and AI-led interviews up front, alongside expert feedback; [ClearRound](https://clearround.io/) brings role-specific tracks, voice-based practice, structured frameworks, and AI grading into one practice flow (both also provide questions and frameworks; this comparison describes the emphasis of their public product pages). Interview Compass starts with a reference layer for judgment: it connects hiring goals, responsibility stages, question intent, and evidence, so the reasoning can be revisited and recombined, it becomes easier to explain why a question is relevant or what an answer is missing, and the hiring team’s role and evidence criteria sit in the same chain. The trade-off: live interview practice and delivery practice belong to mock interviews, and whether someone fits a particular team is judged in the real situation. These approaches complement each other. Scoring depends on whether its dimensions match the role and whether the feedback explains its reasoning; a reference framework asks readers to apply it to the situation in front of them. My choice was to make the basis for a judgment easier to see first.
 
-## Start with one question
+## Boundaries and risks
 
-[Open Interview Compass and try a question](https://liyuk.github.io/interview-compass/) · [Visit the open-source repository and star it](https://github.com/Liyuk/interview-compass) · [Suggest a question to add](https://github.com/Liyuk/interview-compass/issues/new)
+There is also a practical risk: evidence anchors can easily be used as a checklist or misread as a universal score. The site therefore treats the anchors as references for explaining differences, and keeps the context probes and alternative interpretations alongside them. Reaching a conclusion about a person takes that context; matching answers against the entries is not enough.
+
+The question analyses and the four-level evidence references are not model answers, and the site does not automatically score candidates. The site as a whole remains a heuristic reference, not a validated universal leveling standard. Readers need to account for the role’s scope, evaluation practices, and team constraints. Candidates also need to practice with their own experience beyond the evidence anchors.
+
+The questions I hope readers carry with them are: What is this question trying to find out? What assumptions does the judgment depend on? What evidence can distinguish a visible outcome from someone’s actual contribution? If those questions help candidates explain their strengths, interviewers gather more useful information, and hiring managers state their reasons for hiring more clearly, then Interview Compass has helped.
+
+> 👉 [Try Interview Compass](https://liyuk.github.io/interview-compass/en/). Pick the candidate or interviewer path and try one question.
+>
+> ⭐ If it helps, [star the repo on GitHub](https://github.com/Liyuk/interview-compass) or open an issue with a question you'd like covered.

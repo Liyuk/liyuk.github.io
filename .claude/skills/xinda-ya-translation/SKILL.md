@@ -9,6 +9,8 @@ This skill covers both producing a new `en.md` and reviewing one that already ex
 
 For the English-side AI-pattern pass, this project also installs `.claude/skills/humanizer/SKILL.md`. Apply it only after the translation satisfies 信 and 达: it is a final English prose review for generic framing, inflated claims, repetitive structure, chatbot residue, and rhythm. It supplements the translation standard and never overrides source fidelity, heading structure, protected facts, or the author's calibrated voice.
 
+Apply `agent/editorial-rules.md`'s revision contract and `agent/README.md`'s workflow. Identify the Chinese source version before translating; report affected passages when it changes. Chinese corpus findings do not form an English blocklist. Run Humanizer once per English revision, then review the result without silently rewriting it again.
+
 ## Producing a new `en.md`
 
 1. Confirm the `zh.md` is actually final (see the relevant `agent/category-guides/*.md` for that collection's drafting order) and select the matching source-state branch in `agent/translation-spec.md`.
