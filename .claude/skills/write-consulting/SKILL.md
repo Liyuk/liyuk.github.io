@@ -31,4 +31,6 @@ Read `agent/category-guides/consulting.md` in full before drafting — it is the
 
 ## Handoff
 
-Same downstream sequence as any collection: `.claude/skills/humanize-writing` → translation via `agent/translation-spec.md` / `.claude/skills/xinda-ya-translation` → `.claude/skills/content-review` before `draft: false`. `content-review`'s privacy checklist re-verifies de-identification independently — passing this skill's pass does not skip that step.
+Follow `agent/README.md`'s writing workflow and the revision handoff in `agent/editorial-rules.md`: Chinese calibration, English translation, then final review. The calibration and translation skills each own their cleanup pass.
+
+Content review independently re-verifies de-identification; the drafting pass does not replace it.

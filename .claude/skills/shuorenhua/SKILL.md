@@ -9,6 +9,12 @@ description: 检查和清理中英文文本里的 AI 套路，适用于“去 AI
 
 这份 skill 不是敏感词替换器，也不是反技术、反抽象、反专业。它的目标是减少模板感、表演感和语域漂移，同时保住事实、术语和责任主体。
 
+## Project integration
+
+For this repository's writing work, read `agent/editorial-rules.md`'s revision contract and `agent/writing-style.md` first. They govern conflicting generic rules or examples below and in `references/`. `humanize-writing` owns Chinese calibration and invokes this cleanup pass; `agent/README.md` defines the full workflow.
+
+For existing site content, edit only located problems after checking voice/genre exemptions. Preserve unmatched text. Sentence-length variation is not a target; questions, metaphors, passive constructions, and informative contrasts are not automatic triggers. Keep paragraph and section boundaries unless structural revision was requested. Use `bounded` for long Chinese public writing and `in-place` for shorter existing passages unless the requested scope says otherwise. Review-only remains annotation-only. The canonical contract overrides structural defaults and generic examples below, including suggestions to replace abstract claims with unsupported numbers or actions.
+
 ## When to use
 
 在下面这些需求里使用：

@@ -29,4 +29,6 @@ Read `agent/category-guides/gallery.md` in full before drafting. This collection
 
 ## Handoff
 
-Same downstream sequence as any collection: translation via `agent/translation-spec.md` / `.claude/skills/xinda-ya-translation` (gallery's `alt`/`caption`/`description` are all translated, not copied verbatim) → `.claude/skills/content-review` before `draft: false`. `content-review`'s public-risk checklist re-verifies the consent pass independently — passing this skill's pass does not skip that step.
+Follow `agent/README.md`'s writing workflow and the revision handoff in `agent/editorial-rules.md`: Chinese calibration, English translation, then final review. The calibration and translation skills each own their cleanup pass.
+
+Gallery calibration applies to captions and descriptions, not an essay-length target. Translation covers `alt`, `caption`, and `description`. Content review independently re-verifies consent.

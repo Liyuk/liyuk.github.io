@@ -28,4 +28,6 @@ Don't pad with a literature-review section for its own sake. Don't force `agent/
 
 ## Handoff
 
-Same downstream sequence as any collection: `.claude/skills/humanize-writing` → translation via `agent/translation-spec.md` / `.claude/skills/xinda-ya-translation` (or a deliberate, acknowledged use of the research Chinese-fallback exception in `agent/adr/0002-bilingual-fallback-policy.md`) → `.claude/skills/content-review` before `draft: false`.
+Follow `agent/README.md`'s writing workflow and the revision handoff in `agent/editorial-rules.md`: Chinese calibration, English translation, then final review. The calibration and translation skills each own their cleanup pass.
+
+A deliberate use of the research Chinese-fallback exception must be acknowledged under `agent/adr/0002-bilingual-fallback-policy.md`.

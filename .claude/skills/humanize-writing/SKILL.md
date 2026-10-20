@@ -17,6 +17,8 @@ Keep three layers separate:
 
 The target of this skill is layer 2, not layer 3. If the user explicitly requests a publish-ready or site-style pass, layer 3 is an additional mode; never apply it silently.
 
+Apply `agent/editorial-rules.md`'s revision contract throughout and use `agent/README.md` for handoffs. Cleanup requires a concrete local reason to edit; sentence lengths and punctuation counts alone are insufficient. Preserve genuine self-correction even when its wording resembles a listed pattern.
+
 ## Material gate before prose
 
 Before drafting a long piece, classify the source as **fragment**, **outline**, or **substantial draft**.
@@ -56,14 +58,16 @@ AI-like drift in this context is often the opposite of messiness: a draft that i
 4. Apply `.claude/skills/shuorenhua/SKILL.md` as a Chinese cleanup pass. Identify the scene, protected spans, severity tier, rewrite level, and scope before changing prose. For long Chinese public writing, keep its `bounded` default unless the user explicitly asks for structural rewriting.
 5. Pass over the draft and flag, per paragraph:
    - Polished abstractions that have lost the concrete event or person that generated them
-   - Suspiciously symmetric sentences, section openings, or conclusions
+   - Repeated sentence frames, section openings, or conclusions that add no meaning; symmetry alone is insufficient
    - Generic connective phrases doing the work an argument should be doing
+   - Paragraph-opening evaluations with an unclear referent: recover an unambiguous subject from the source or flag ambiguity; do not invent a causal link
+   - Vague restatements covering specifics already present in the source: retain those specifics and their qualifications
    - Invented first-person intimacy, jokes, uncertainty, or anecdotes not present in the source
    - Premature checklists, named frameworks, negation-reframes, FAQs, or Mermaid diagrams added only to resemble the site
    - Personal detours that were flattened even though they explain the author's judgment
 6. In review-only mode, stop after recording the findings and the smallest repair that would resolve each one. Otherwise rewrite flagged passages. Recover the author's own material where possible; do not manufacture "human touches." Preserve facts, argument, uncertainty, and conclusions. When source material is missing, mark the gap or ask for it rather than inventing autobiographical detail. If an invented illustrative example is used instead (with the user's sign-off), see `agent/writing-style.md`'s "Constructed examples must read as prose" rule — the fact that it's constructed stays out of the reader-facing sentence.
 7. Do the two readbacks required by `shuorenhua`: first verify every fact, condition, scope, subject, number, and certainty level; then check for remaining AI-pattern density without flattening intentional voice. Check length against `agent/writing-style.md`'s "Minimum length by form" table.
-8. Report the trade-off: what was preserved as native voice, what was clarified, and what publication structure was deliberately not added. Do not claim an AI-detector percentage you did not measure. If the repository's publish gate requires a detector check, report that separately from voice calibration.
+8. Record the revision handoff required by `agent/editorial-rules.md`, including source version, mode/scope, representative repairs and unresolved issues. Report the trade-off: what was preserved as native voice, what was clarified, and what publication structure was deliberately not added. Do not claim an AI-detector percentage you did not measure. If the repository's publish gate requires a detector check, report that separately from voice calibration.
 
 ## What this skill does not do
 
