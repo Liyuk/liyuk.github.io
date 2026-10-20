@@ -155,9 +155,9 @@ flowchart LR
 
 The diagram shows how the content relates, independent of the order in which the site runs. Readers can enter in different places, but the links between role expectations, question intent, and evidence should remain consistent. Roles and organizations vary, so people still make the final judgment.
 
-![Interview Compass homepage: role and audience entry points under the project's central slogan](/images/projects/interview-compass/home.jpg)
+![Interview Compass homepage in English, showing candidate and hiring entry points and role-based browsing](/images/projects/interview-compass/home-en.webp)
 
-![A refund-timeout question showing its intent and four evidence levels](/images/projects/interview-compass/question.jpg)
+![An English question analysis for a refund timeout, with its objective and four evidence levels](/images/projects/interview-compass/question-en.webp)
 
 ## How this differs from mock interviews and AI scoring
 
