@@ -1,6 +1,6 @@
 ---
-title: "After interviewing about 1,000 candidates, I turned my hiring method into an open reference site"
-description: "Interview Compass is a bilingual interview and promotion reference: understand the role's goals, scope, and level, then use question intent and checkable evidence to prepare stories and judge fit. Candidates, interviewers, and hiring managers work from the same material."
+title: "Interview Compass: A guide to engineering interviews and promotions"
+description: "A guide to engineering interviews and promotions, shaped by a decade of work. Know the role. Show the evidence. Examine role fit for interviews and next-stage responsibilities for promotions; interviewers and managers can align on the basis for their judgments."
 createdAt: 2026-10-20
 locale: en
 translationStatus: reviewed
@@ -11,11 +11,11 @@ tags: [interview, promotion, hiring, open-source, engineering-management]
 translationKey: 2026/10/interview-compass
 ---
 
-**Interviews shouldn't be guesswork: know the role, show the evidence**
+**Know the role. Show the evidence.**
 
 Over the past five years I've interviewed about 1,000 candidates, and one gap keeps showing up. Job descriptions ask for judgment, influence, and a focus on results, yet the interview often comes down to one or two questions and a lot of guessing. Candidates guess what the interviewer wants to hear. Interviewers may infer ability from how smoothly a story is told. And the team may never agree on what this hire is supposed to solve.
 
-**Interview Compass** is the bilingual, open reference site where I've written down ten years of my hiring method. The idea fits in one line: **know the role, show the evidence.** Candidates learn what a question is really testing and how to back their stories with evidence. Interviewers learn what to probe. Hiring managers start by saying why they're hiring. → [Open the site](https://liyuk.github.io/interview-compass/) · [GitHub](https://github.com/Liyuk/interview-compass)
+**Interview Compass: A guide to engineering interviews and promotions** is the bilingual, open reference site where I've written down ten years of my hiring method. The idea fits in one line: **know the role, show the evidence.** Candidates learn what a question is really testing and how to back their stories with evidence. People preparing for promotion compare their experience and evidence with the responsibilities expected at the next stage. Interviewers learn what to probe. Hiring managers start by saying why they're hiring. → [Open the site](https://liyuk.github.io/interview-compass/) · [GitHub](https://github.com/Liyuk/interview-compass)
 
 > Built from ten years of my own work, and informed by screening criteria from some leading internet companies.
 >
@@ -31,6 +31,7 @@ I have organized these lessons into role responsibilities, question intent, sign
 > - The problem: both sides of the interview are guessing, and role requirements never turn into evidence anyone can observe.
 > - The method: hiring need → outcomes and responsibility → capability and behavior → question intent → evidence and probes → contextual judgment.
 > - Candidates: organize an experience in six steps, and separate the team's results from your own contribution.
+> - Promotion preparation: compare your work, decisions, and impact with the target stage’s responsibilities, then identify gaps in the evidence.
 > - Interviewers and hiring managers: start by stating why you're hiring, then probe for evidence, treating the signal list as prompts for follow-up rather than a checklist.
 > - Boundaries: no model answers, no automatic scoring; people make the final judgment.
 
@@ -100,21 +101,24 @@ The evidence levels for this question are specific:
 
 Candidates can answer a question before reading its analysis, then ask what they left out: the goal, their responsibility, the trade-offs, or the evidence? An answer that explains the conditions behind an action shows the underlying rule is clear; the right terminology alone is only part of it. Applying the same reasoning to a different experience helps show whether it transfers. The question analysis and evidence references on a four-level scale are there to calibrate thinking.
 
-## How candidates, interviewers, and hiring managers use it
+## Using it for interviews, promotions, and hiring
 
 | Perspective | What it's for | Where to start | What to watch for |
 | --- | --- | --- | --- |
 | Candidate | Understand how the role is defined, judge fit, prepare stories | Role profiles and stage guides, then question intent and evidence references | Test the expectations against your own experience, and consider whether the organization fits |
+| Person preparing for promotion | Examine which experiences show responsibility at the next stage | Responsibility-stage guides, relevant questions, and evidence references | Discuss actual responsibility and impact; do not equate question levels with company job levels |
 | Interviewer | Gather enough information from a question to support a judgment | Angles, follow-up prompts, and comparison dimensions in the question analysis | Adapt to the candidate's answers; use the signal list as prompts for follow-up |
 | Hiring manager | Answer “Why are we hiring?” and clarify role requirements and assessment criteria | Roles and responsibility stages, the capability model | Connect team goals to role responsibilities, expected outcomes, and risks first |
 
 For candidates, the first task is to understand how the role is defined: what problem it exists to solve, what outcomes it owns, where its decision-making and collaboration boundaries lie, and what level of responsibility it carries. Guessing which questions might come up can wait. Only then can you judge whether your experience and capabilities fit, what gaps you may need to address, and whether you want the work the role entails. The role profiles and stage guides provide a reference point. From there, candidates can use question intent and evidence references to choose relevant experiences and explain the goals, responsibility, judgment, and results. They still need to test the expectations against their own experience and consider whether the organization fits. The material is a reference to compare against; the answer itself has to come from your own experience.
 
+People preparing for promotion can also organize their material around role expectations, responsibility, and evidence. Start with the responsibilities expected at the target stage. Examine which experiences demonstrate judgment, collaboration, and impact at that scope, and which results do not yet support the conclusion. The same experience can inform a discussion of role fit in an interview; in a promotion review, it needs to be examined against the responsibilities expected at the next stage.
+
 Interviewers need to gather enough information from a question to support a judgment. The question analysis offers relevant angles, follow-up prompts, and comparison dimensions. It can help interviewers develop a question and check the context, individual contribution, trade-offs, and attribution behind a result. In the interview itself, they still need to adapt their questions to the candidate’s answers, using the list of signals as prompts for follow-up rather than as a checklist. A reliable assessment starts with clear role goals; even a thorough question framework depends on them.
 
 Hiring managers need to answer “Why are we hiring?” They have to connect team goals to role responsibilities, expected outcomes, and risks, then agree with interviewers on what to assess. When the group discusses a candidate’s experience, the focus belongs on how that experience relates to the actual work; how polished the story sounds matters less. The site gives managers a reference for structuring that thinking. Defining levels, designing the full hiring process, and making the hiring decision stay with each company.
 
-The three perspectives have different entry points, but share the same underlying material. Roles and responsibility stages describe expectations. The capability model defines areas to examine. Question analyses explain assessment intent and evidence. Candidates use this material to prepare and judge fit, interviewers to shape questions, and hiring managers to clarify role requirements and assessment criteria.
+These perspectives have different entry points, but share the same underlying material. Roles and responsibility stages describe expectations. The capability model defines areas to examine. Question analyses explain assessment intent and evidence. Candidates use this material to prepare and judge fit, interviewers to shape questions, and hiring managers to clarify role requirements and assessment criteria.
 
 ## What's on the site
 
@@ -147,6 +151,7 @@ flowchart LR
         E1[Candidate Preparation]
         E2[Interviewer Design]
         E3[Hiring Manager Alignment]
+        E4[Promotion Preparation]
     end
     Inputs --> Library
     Library --> Entry
