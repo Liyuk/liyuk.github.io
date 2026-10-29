@@ -2,10 +2,10 @@
 title: "From Conversation to Delivery: When Has a Personal Agent Finished the Job?"
 description: "Starting from a quantitative research task, this essay looks at how Personal Agents carry long-running work forward, organize capabilities and collaboration, and deliver results that can be reviewed."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/10/from-conversation-to-delivery
 createdAt: 2026-10-29
-draft: true
+draft: false
 type: essay
 tags: [technology, agent-systems, developer-productivity]
 citationUrls:

@@ -4,7 +4,7 @@ description: 从一次量化研究经历出发，讨论 Personal Agent 如何接
 locale: zh-CN
 translationStatus: original
 createdAt: 2026-10-29
-draft: true
+draft: false
 type: essay
 tags: [technology, agent-systems, developer-productivity]
 citationUrls:
