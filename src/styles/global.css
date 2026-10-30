@@ -1056,3 +1056,60 @@ h1, h2, h3, p { margin-top: 0; }
   .home-list-section { display: block; }
   .home-list-section .section-intro { margin-bottom: 1.5rem; }
 }
+
+/* Comment-system diagrams scale to the article column and open in a native image viewer. */
+.prose figure.comment-diagram {
+  max-width: 100%;
+  margin: 1.8em auto;
+}
+.prose .comment-diagram-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+.prose .comment-diagram-scroll > a {
+  display: block;
+  width: min(100%, var(--comment-diagram-width, 960px));
+  cursor: zoom-in;
+}
+.prose figure.comment-diagram img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+.prose figure.comment-diagram figcaption {
+  margin-top: .65rem;
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.5;
+}
+.prose figure.comment-diagram .zoom-hint { white-space: nowrap; }
+.diagram-viewer {
+  width: min(96vw, 72rem);
+  max-width: none;
+  max-height: 94vh;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+.diagram-viewer::backdrop { background: rgb(20 22 25 / 82%); }
+.diagram-viewer-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
+.diagram-viewer-toolbar h2 { margin: 0; font: 600 .9rem/1.4 var(--sans); }
+.diagram-viewer-actions { display: flex; align-items: center; gap: 1rem; font-size: .82rem; }
+.diagram-viewer-actions a { color: var(--muted); text-underline-offset: .2em; }
+.diagram-viewer-actions button { padding: .4rem .7rem; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; cursor: pointer; }
+.diagram-viewer-actions button:disabled { opacity: .45; cursor: not-allowed; }
+.diagram-viewer-actions [data-diagram-zoom-value] { min-width: 3.2em; text-align: center; font-variant-numeric: tabular-nums; }
+.diagram-viewer-canvas { overflow: auto; max-height: calc(94vh - 4.5rem); text-align: center; }
+.diagram-viewer-canvas img { display: block; width: 100%; max-width: none; max-height: none; height: auto; margin: 0 auto; object-fit: contain; }
+@media (max-width: 36rem) {
+  .diagram-viewer { width: 100vw; max-height: 100dvh; padding: .75rem; border: 0; }
+  .diagram-viewer-canvas { max-height: calc(100dvh - 4rem); }
+  .diagram-viewer-toolbar { align-items: flex-start; flex-direction: column; }
+  .diagram-viewer-actions { width: 100%; justify-content: space-between; gap: .35rem; }
+  .diagram-viewer-actions button, .diagram-viewer-actions a { font-size: .75rem; }
+}

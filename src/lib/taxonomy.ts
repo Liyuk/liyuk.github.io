@@ -250,6 +250,10 @@ export const tagSearchAliases: Record<string, [string[], string[]]> = {
 };
 
 export const columns: Record<string, { label: { 'zh-CN': string; en: string }; description: { 'zh-CN': string; en: string } }> = {
+  'comment-systems-guide': {
+    label: { 'zh-CN': '评论系统', en: 'Comment Systems' },
+    description: { 'zh-CN': '五篇文章，从专栏导读、指标和产品形态，到评论治理、数据模型与算法，系统梳理评论产品的设计与实现。', en: 'Five chapters introduce the series, then cover metrics, product forms, governance, data models, and algorithms for comment systems.' },
+  },
   'data-metrics-guide': {
     label: { 'zh-CN': '数据度量工作指南', en: 'Data Metrics Guide' },
     description: { 'zh-CN': '从数据口径到周期复盘，建立一套能支持协作与决策的度量系统。', en: 'A practical system for definitions, metrics, collaboration, and retrospective learning.' },
@@ -328,7 +332,7 @@ export const columns: Record<string, { label: { 'zh-CN': string; en: string }; d
 // 一个分组里——tests/column-audit.test.mjs 会校验这一点，避免新增专栏时
 // 悄悄漏掉 start 页入口。
 export const startGroups: { key: 'method' | 'management' | 'engineering'; columns: string[] }[] = [
-  { key: 'method', columns: ['data-metrics-guide', 'thinking-training'] },
+  { key: 'method', columns: ['data-metrics-guide', 'thinking-training', 'comment-systems-guide'] },
   {
     key: 'management',
     columns: [

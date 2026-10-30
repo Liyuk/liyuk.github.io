@@ -3,7 +3,7 @@
 // resolvable at build time — keeping the pure model predicates importable by
 // the Node test suite.
 import { getCollection } from 'astro:content';
-import { publishedIn } from './content-model.ts';
+import { columnVisibleIn, publishedIn } from './content-model.ts';
 
 // Load every published entry across all five collections in parallel, for one
 // locale. Shared by the tag index, tag detail, and cross-collection queries.
@@ -21,12 +21,13 @@ export async function getAllPublished(locale = 'zh-CN') {
 // Columns can mix writing, consulting, research, and gallery entries (see
 // taxonomy.ts). Projects never carry a `column`, so they are deliberately
 // excluded here.
-export async function getColumnCollections(locale = 'zh-CN') {
+export async function getColumnCollections(locale = 'zh-CN', includeDrafts = false) {
+  const visibleIn = columnVisibleIn(locale, includeDrafts);
   const [writing, consulting, research, galleries] = await Promise.all([
-    getCollection('writing', publishedIn(locale)),
-    getCollection('consulting', publishedIn(locale)),
-    getCollection('research', publishedIn(locale)),
-    getCollection('gallery', publishedIn(locale)),
+    getCollection('writing', visibleIn),
+    getCollection('consulting', visibleIn),
+    getCollection('research', visibleIn),
+    getCollection('gallery', visibleIn),
   ]);
   return { writing, consulting, research, galleries };
 }

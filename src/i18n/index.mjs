@@ -51,6 +51,7 @@ export const dict = {
       selectAria: '选择照片',
       viewPhotoAria: (n, alt) => `查看第 ${n} 张：${alt}`,
     },
+    diagramViewer: { title: '图表大图', original: '打开原图', close: '关闭', zoomIn: '放大图表', zoomOut: '缩小图表', zoomReset: '适合窗口' },
     tip: {
       eyebrow: '打赏',
       title: '如果这篇文章对你有帮助',
@@ -118,6 +119,7 @@ export const dict = {
     count: { photos: (n) => `${n} photos` },
     photosLoadMore: { label: 'Load more', done: 'Everything shown' },
     gallery: { carouselAria: (title) => `${title} gallery`, previous: '← Previous', next: 'Next →', previousAria: 'Previous photo', nextAria: 'Next photo', selectAria: 'Choose photo', viewPhotoAria: (n, alt) => `View photo ${n}: ${alt}` },
+    diagramViewer: { title: 'Diagram', original: 'Open original', close: 'Close', zoomIn: 'Zoom in', zoomOut: 'Zoom out', zoomReset: 'Fit window' },
     tip: {
       eyebrow: 'Tip',
       title: 'If this helped',

@@ -1,0 +1,25 @@
+---
+import { i18n } from '../i18n/index.mjs';
+import lightboxScript from '../lib/diagram-lightbox.js?url';
+
+const copy = i18n(Astro.props.locale ?? Astro.currentLocale ?? 'zh-CN').diagramViewer;
+---
+
+<dialog class="diagram-viewer" data-diagram-viewer aria-labelledby="diagram-viewer-title">
+  <div class="diagram-viewer-toolbar">
+    <h2 id="diagram-viewer-title" data-diagram-viewer-title>{copy.title}</h2>
+    <div class="diagram-viewer-actions">
+      <button type="button" data-diagram-zoom-out aria-label={copy.zoomOut}>−</button>
+      <span data-diagram-zoom-value aria-live="polite">100%</span>
+      <button type="button" data-diagram-zoom-in aria-label={copy.zoomIn}>+</button>
+      <button type="button" data-diagram-zoom-reset>{copy.zoomReset}</button>
+      <a data-diagram-viewer-original target="_blank" rel="noopener">{copy.original}</a>
+      <button type="button" data-diagram-viewer-close autofocus>{copy.close}</button>
+    </div>
+  </div>
+  <div class="diagram-viewer-canvas">
+    <img data-diagram-viewer-image alt="" />
+  </div>
+</dialog>
+
+<script src={lightboxScript} defer></script>

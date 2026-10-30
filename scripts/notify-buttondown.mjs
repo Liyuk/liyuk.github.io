@@ -2,7 +2,7 @@
 //
 // Goal: when you publish a post (flip draft: true → false and push), a GitHub
 // Actions workflow runs this script so your Buttondown subscribers get a short
-// "new post" email (title + summary + link) — the free way to auto-notify
+// new-post email (or one digest when a push publishes multiple entries) — the free way to auto-notify
 // readers without Buttondown's paid RSS-to-email feature.
 //
 // Design:
@@ -20,6 +20,7 @@
 //                     --baseRef <sha> --apply
 //
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
@@ -82,8 +83,8 @@ function stripInlineMarkdown(text = '') {
 // wrapped around every email by Buttondown. The unsubscribe footer is also
 // added automatically by Buttondown, so this function only produces the
 // article content itself.
-export function buildEmailHtml({ blocks }) {
-  const sections = blocks.map(({ lang, title, summary, url, meta }) => {
+export function buildEmailHtml({ blocks = null, articles = null }) {
+  const renderBlock = ({ lang, title, summary, url, meta }) => {
     const safeTitle = esc(title);
     const absoluteUrl = new URL(url, SITE_ORIGIN).href;
     const langLabel = lang === 'zh' ? '中文 · Chinese' : 'English';
@@ -99,16 +100,94 @@ export function buildEmailHtml({ blocks }) {
       `<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tbody><tr><td align="left" bgcolor="#35685d" style="padding:12px 20px;border-radius:4px;"><a href="${esc(absoluteUrl)}" style="display:block;border-radius:4px;background-color:#35685d;color:#fff;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none;">阅读全文 · Read more ↗</a></td></tr></tbody></table>`,
       `</div>`,
     ].join('');
-  });
+  };
+
+  // Keep the existing single-post email format. When a push publishes several
+  // entries, show them in one digest instead of sending one email per entry.
+  const digest = Array.isArray(articles) && articles.length > 1;
+  const sections = digest
+    ? articles
+        .map(({ title, blocks: languageBlocks }, index) => {
+          const articleTitle = esc(title || languageBlocks[0]?.title || 'New article');
+          const languageLinks = languageBlocks
+            .map(({ lang, title: languageTitle, summary, url, meta }) => {
+              const absoluteUrl = new URL(url, SITE_ORIGIN).href;
+              const label = lang === 'zh' ? '中文阅读' : 'Read in English';
+              return [
+                `<div style="margin:0 0 16px;">`,
+                `<p style="margin:0 0 6px;font-size:13px;line-height:1.5;color:#696a65;">${lang === 'zh' ? '中文' : 'English'} · ${esc(languageTitle)}</p>`,
+                `<p style="margin:0 0 6px;font-size:14px;line-height:1.6;color:#696a65;">${esc(summary)}</p>`,
+                meta ? `<p style="margin:0 0 8px;font-size:12px;line-height:1.5;color:#8a8b85;">${esc(meta)}</p>` : '',
+                `<a href="${esc(absoluteUrl)}" style="color:#35685d;font-size:14px;font-weight:700;text-decoration:none;">${label} ↗</a>`,
+                `</div>`,
+              ].join('');
+            })
+            .join('');
+          return [
+            `<section style="border-top:1px solid #ddd8ce;padding-top:22px;margin-top:8px;">`,
+            `<p style="margin:0 0 8px;font-size:11px;line-height:1.3;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#35685d;">ARTICLE ${index + 1}</p>`,
+            `<h2 style="margin:0 0 16px;font-family:'Iowan Old Style','Baskerville','Noto Serif SC','Songti SC',Georgia,serif;font-size:22px;font-weight:500;letter-spacing:-.025em;line-height:1.2;color:#232522;">${articleTitle}</h2>`,
+            languageLinks,
+            `</section>`,
+          ].join('');
+        })
+        .join('')
+    : (articles?.[0]?.blocks ?? blocks ?? []).map(renderBlock).join('');
+
+  const intro = digest
+    ? `<p style="margin:0 0 24px;font-size:15px;line-height:1.65;color:#696a65;">本次汇总了 ${articles.length} 篇新文章。 · This issue collects ${articles.length} newly published articles.</p>`
+    : '';
 
   return [
     `<!doctype html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f7f4ee;font-family:Inter,'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif;color:#232522;">`,
     `<div style="max-width:600px;margin:0 auto;padding:40px 24px 32px;">`,
     `<div style="padding:0 0 24px;"><p style="margin:0;color:#232522;font-size:12px;font-weight:700;letter-spacing:.08em;">LIYUK <span style="color:#35685d;">/</span> FIELD NOTES</p></div>`,
-    sections.join(''),
+    intro,
+    sections,
     `<div style="border-top:1px solid #ddd8ce;margin-top:8px;padding-top:18px;"><p style="margin:0;color:#696a65;font-size:12px;line-height:1.6;">沉默土豆的烹饪指南 · Silent Potato’s Cookbook</p></div>`,
     `</div></body></html>`,
   ].join('');
+}
+
+// Group entries published by one push: one entry keeps the existing email;
+// multiple entries become one digest. The guide is included like any article.
+export function groupPublishBatch(candidates) {
+  if (candidates.length <= 1) return candidates;
+
+  const articles = candidates.map((candidate) => ({
+    title: candidate.blocks.find((block) => block.lang === 'en')?.title ?? candidate.blocks[0]?.title,
+    blocks: candidate.blocks,
+  }));
+  const urls = articles.flatMap((article) => article.blocks.map((block) => block.url)).sort();
+  const batchId = createHash('sha256').update(urls.join('\n')).digest('hex').slice(0, 8);
+  const count = articles.length;
+
+  return [{
+    label: `[${count} 篇] 本次发布汇总`,
+    subject: `${count} new posts from Liyuk · ${batchId}`,
+    url: candidates[0].url,
+    articles,
+  }];
+}
+
+export function orderPublishBatch(candidates) {
+  const ordered = [...candidates];
+  const sameColumn = candidates.length > 0 && candidates.every(({ columnSlug }) =>
+    columnSlug && columnSlug === candidates[0].columnSlug,
+  );
+  const allHaveColumnOrder = candidates.every(({ columnOrder }) => Number.isFinite(columnOrder));
+
+  if (sameColumn && allHaveColumnOrder) {
+    return ordered.sort((a, b) => a.columnOrder - b.columnOrder);
+  }
+
+  return ordered.sort((a, b) => {
+    const byDate = String(a.publishedAt ?? '').localeCompare(String(b.publishedAt ?? ''));
+    if (byDate) return byDate;
+    const byTitle = String(a.blocks[0]?.title ?? '').localeCompare(String(b.blocks[0]?.title ?? ''));
+    if (byTitle) return byTitle;
+    return String(a.url ?? '').localeCompare(String(b.url ?? ''));
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -244,6 +323,33 @@ export function buildMeta(fm, body, locale) {
   parts.push(locale === 'zh-CN' ? `约 ${minutes} 分钟阅读` : `${minutes} min read`);
   if (date) parts.push(date);
   return parts.join(' · ');
+}
+
+function emailBlockFor(fm, body, filePath) {
+  const isEn = entryLocale(filePath) === 'en';
+  const locale = isEn ? 'en' : 'zh-CN';
+  return {
+    lang: isEn ? 'en' : 'zh',
+    title: fm.title,
+    summary: stripInlineMarkdown(fm.description || '').slice(0, 220),
+    url: entryUrl(filePath),
+    meta: buildMeta(fm, body, locale),
+  };
+}
+
+function languageSiblingPath(filePath) {
+  const basename = path.basename(filePath);
+  if (path.dirname(filePath).endsWith(`${path.sep}galleries`)) {
+    return path.join(path.dirname(filePath), basename.endsWith('.en.md') ? basename.replace(/\.en\.md$/, '.md') : basename.replace(/\.md$/, '.en.md'));
+  }
+  return path.join(path.dirname(filePath), basename === 'en.md' ? 'zh.md' : 'en.md');
+}
+
+export function mergePublishedLanguage(blocks, fm, body, filePath) {
+  if (!fm || fm.draft !== 'false') return blocks;
+  const block = emailBlockFor(fm, body, filePath);
+  if (blocks.some((existing) => existing.lang === block.lang)) return blocks;
+  return [...blocks, block].sort((a, b) => (a.lang === 'zh' ? 0 : 1) - (b.lang === 'zh' ? 0 : 1));
 }
 
 // Parse frontmatter of a content file. Returns data or null if unparseable.
@@ -439,10 +545,17 @@ async function main() {
       url: entryUrl(file),
       zh: null,
       en: null,
+      zhFile: null,
+      enFile: null,
     };
     bucket[localeId] = { fm, body: extractBody(raw) };
-    if (localeId === 'en') bucket.enUrl = entryUrl(file);
-    else bucket.zhUrl = entryUrl(file);
+    if (localeId === 'en') {
+      bucket.enUrl = entryUrl(file);
+      bucket.enFile = file;
+    } else {
+      bucket.zhUrl = entryUrl(file);
+      bucket.zhFile = file;
+    }
     byArticle.set(key, bucket);
   }
 
@@ -462,6 +575,9 @@ async function main() {
         label: `[中/EN] ${en.title}`,
         subject: en.title,
         url: zhUrl,
+        columnSlug: zh.column?.slug ?? en.column?.slug ?? null,
+        columnOrder: zh.column?.order ?? en.column?.order ?? null,
+        publishedAt: zh.publishedAt ?? en.publishedAt ?? null,
         blocks: [
           {
             lang: 'zh',
@@ -485,25 +601,35 @@ async function main() {
       const body = zh ? zhBody : enBody;
       const isEn = !zh && !!en;
       const url = isEn ? enUrl : zhUrl;
+      const sourceFile = isEn ? bucket.enFile : bucket.zhFile;
+      let blocks = [emailBlockFor(fm, body, sourceFile)];
+      const siblingFile = languageSiblingPath(sourceFile);
+      const siblingRaw = await readFile(siblingFile, 'utf8').catch(() => null);
+      if (siblingRaw) {
+        const siblingFm = parseFrontmatter(siblingRaw);
+        blocks = mergePublishedLanguage(blocks, siblingFm, extractBody(siblingRaw), siblingFile);
+      }
       candidates.push({
         label: `${isEn ? '[EN]' : '[中文]'} ${fm.title}`,
         subject: fm.title,
         url,
-        blocks: [
-          {
-            lang: isEn ? 'en' : 'zh',
-            title: fm.title,
-            summary: stripInlineMarkdown(fm.description || '').slice(0, 220),
-            url,
-            meta: buildMeta(fm, body, isEn ? 'en' : 'zh-CN'),
-          },
-        ],
+        columnSlug: fm.column?.slug ?? null,
+        columnOrder: fm.column?.order ?? null,
+        publishedAt: fm.publishedAt ?? null,
+        blocks,
       });
     }
   }
 
-  console.log(`  待处理已发布文章: ${candidates.length} 篇（合并中/英）`);
-  if (candidates.length === 0) {
+  // Same-column releases follow editorial order; mixed batches use date/title.
+  const orderedCandidates = orderPublishBatch(candidates);
+  const detectedArticleCount = orderedCandidates.length;
+  const emails = groupPublishBatch(orderedCandidates);
+
+  console.log(
+    `  检测到新发布文章: ${detectedArticleCount} 篇（中/英合并）；将发送 ${emails.length} 封邮件${detectedArticleCount > 1 ? '（本次文章合并为一封）' : ''}`,
+  );
+  if (emails.length === 0) {
     console.log('✔ 本次没有新发布的文章，无需发信。');
     return 0;
   }
@@ -513,9 +639,9 @@ async function main() {
   let skipped = 0;
   let failed = 0;
 
-  for (const cand of candidates) {
-    const { label, subject, url, blocks } = cand;
-    const primary = blocks[0]?.title ?? label;
+  for (const cand of emails) {
+    const { label, subject, url, blocks = [], articles = null } = cand;
+    const primary = articles?.length ? articles[0]?.title : blocks[0]?.title;
     if (!primary) {
       console.warn(`  ⚠ 跳过（无标题）: ${label}`);
       continue;
@@ -539,7 +665,7 @@ async function main() {
     }
 
     if (args.apply) {
-      const builtHtml = buildEmailHtml({ blocks });
+      const builtHtml = buildEmailHtml({ blocks, articles });
       const body = {
         subject,
         status: 'about_to_send',
@@ -569,17 +695,20 @@ async function main() {
     } else {
       // Dry-run preview
       console.log(`\n  · 将发送: ${label}`);
-      for (const b of blocks) {
-        console.log(`    [${b.title}]`);
-        console.log(`      URL   : ${SITE_ORIGIN}${b.url}`);
-        console.log(`      摘要  : ${b.summary}`);
+      for (const article of articles ?? [{ blocks }]) {
+        if (articles) console.log(`    ${article.title}`);
+        for (const b of article.blocks) {
+          console.log(`      [${b.lang === 'zh' ? '中文' : 'English'}] ${b.title}`);
+          console.log(`        URL  : ${SITE_ORIGIN}${b.url}`);
+          console.log(`        摘要 : ${b.summary}`);
+        }
       }
       skipped++; // dry-run counts as "not sent"; keep final tally simple
     }
   }
 
   if (!args.apply) {
-    console.log(`\n○ 预览完成：本次将发送 ${candidates.length} 封（内容如上）。`);
+    console.log(`\n○ 预览完成：${detectedArticleCount} 篇新文章将发送 ${emails.length} 封邮件（内容如上）。`);
     console.log(
       `  运行 \`BUTTONDOWN_API_KEY=... npm run notify:buttondown -- --apply\` 真实发送。`,
     );

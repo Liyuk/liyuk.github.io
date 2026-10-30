@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">Comment supply and demand feedback loop</title>
+  <desc id="desc">People move between reading and contributing. Platform choices shape both sides and the next round of supply.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #2d3142; }
+    .title { font-size: 25px; font-weight: 700; }
+    .head { font-size: 18px; font-weight: 700; }
+    .body { font-size: 15px; }
+    .small { font-size: 13px; fill: #4f5d75; }
+    .box { fill: #fff; stroke: #4f5d75; stroke-width: 2; rx: 14; }
+    .accent { fill: #fff5ef; stroke: #bf4520; stroke-width: 2; rx: 14; }
+    .line { fill: none; stroke: #4f5d75; stroke-width: 3; marker-end: url(#arrow); }
+    .line-accent { fill: none; stroke: #bf4520; stroke-width: 3; marker-end: url(#arrow-accent); }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#4f5d75"/></marker>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#bf4520"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="560" fill="#f5f5f5"/>
+  <text x="48" y="50" class="title">Comment supply and demand: people move between reading and contributing</text>
+
+  <rect x="54" y="105" width="260" height="110" class="box"/>
+  <text x="184" y="139" text-anchor="middle" class="head">Reader / demand</text>
+  <text x="184" y="170" text-anchor="middle" class="body">Find answers, compare, verify experience</text>
+  <text x="184" y="194" text-anchor="middle" class="small">Completing a task may reveal another information gap</text>
+
+  <rect x="650" y="105" width="260" height="110" class="box"/>
+  <text x="780" y="139" text-anchor="middle" class="head">Contributor / supply</text>
+  <text x="780" y="170" text-anchor="middle" class="body">Record, express, add detail, respond</text>
+  <text x="780" y="194" text-anchor="middle" class="small">Writing cost, feedback, and visibility shape whether they return</text>
+
+  <rect x="350" y="94" width="260" height="132" class="accent"/>
+  <text x="480" y="130" text-anchor="middle" class="head">Platform interventions</text>
+  <text x="480" y="160" text-anchor="middle" class="body">Retrieval · ranking · summaries · incentives</text>
+  <text x="480" y="184" text-anchor="middle" class="body">Moderation · feedback · contribution prompts</text>
+  <text x="480" y="207" text-anchor="middle" class="small">Each can affect both sides</text>
+
+  <path d="M314 157H344" class="line"/>
+  <path d="M610 157H644" class="line"/>
+  <path d="M780 222C780 279 184 279 184 222" class="line-accent"/>
+  <rect x="277" y="244" width="406" height="50" rx="12" fill="#f5f5f5" stroke="#bf4520" stroke-width="1.5"/>
+  <text x="480" y="276" text-anchor="middle" class="body">Feedback, specific gaps, and attention rewards can trigger the next contribution</text>
+
+  <text x="54" y="350" class="head">Identify the gap before choosing how to fill it</text>
+  <rect x="54" y="376" width="260" height="100" class="box"/>
+  <text x="184" y="411" text-anchor="middle" class="head">Object gap</text>
+  <text x="184" y="442" text-anchor="middle" class="body">New content, products, or places lack initial experience</text>
+  <rect x="350" y="376" width="260" height="100" class="box"/>
+  <text x="480" y="411" text-anchor="middle" class="head">Time gap</text>
+  <text x="480" y="442" text-anchor="middle" class="body">Many comments, little recent information</text>
+  <rect x="646" y="376" width="260" height="100" class="box"/>
+  <text x="776" y="411" text-anchor="middle" class="head">Scenario gap</text>
+  <text x="776" y="442" text-anchor="middle" class="body">Plenty of comments, but no answer to a specific question</text>
+
+  <text x="480" y="522" text-anchor="middle" class="small">Assess supply by its structure and task value, not by volume or summary fluency alone</text>
+</svg>
