@@ -2,7 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { onCommentsRequest, onLikesRequest } from '../functions/api/_shared/engagement.ts';
 
-function makeDb({ comments = [], commentTotal = comments.length, likes = 0, rateCount = 1, parent = null, commentLikes = 0 } = {}) {
+function makeDb({
+  comments = [],
+  commentTotal = comments.length,
+  likes = 0,
+  rateCount = 1,
+  parent = null,
+  commentLikes = 0,
+} = {}) {
   const calls = [];
   const db = {
     prepare(sql) {
@@ -86,6 +93,7 @@ test('GET /comments returns only comments for one canonical article path', async
   });
   assert.equal(calls.length, 3);
   assert.ok(calls.every((call) => !call.sql.includes('FROM likes')));
+  assert.ok(calls.every((call) => !call.sql.includes('notification_email')));
   assert.ok(calls[0].sql.includes("status = 'approved'"));
   assert.equal(calls[0].values[0], 'writing/example');
 });
@@ -153,9 +161,24 @@ test('GET /comments keeps replies to replies flat under their top-level comment'
 
 test('GET /comments reports the full approved count and a stable cursor for the next page', async () => {
   const comments = [
-    { id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc', nickname: 'C', body: 'Third', created_at: '2026-10-03' },
-    { id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', nickname: 'B', body: 'Second', created_at: '2026-10-02' },
-    { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', nickname: 'A', body: 'First', created_at: '2026-10-02' },
+    {
+      id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+      nickname: 'C',
+      body: 'Third',
+      created_at: '2026-10-03',
+    },
+    {
+      id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+      nickname: 'B',
+      body: 'Second',
+      created_at: '2026-10-02',
+    },
+    {
+      id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+      nickname: 'A',
+      body: 'First',
+      created_at: '2026-10-02',
+    },
   ];
   const { db, calls } = makeDb({ comments, commentTotal: 9 });
   const response = await onCommentsRequest({
@@ -176,11 +199,19 @@ test('GET /comments reports the full approved count and a stable cursor for the 
 
   const cursor = encodeURIComponent('2026-10-02');
   await onCommentsRequest({
-    request: request('GET', `/api/comments/writing/example/?limit=2&before=${cursor}&beforeId=${comments[1].id}`),
+    request: request(
+      'GET',
+      `/api/comments/writing/example/?limit=2&before=${cursor}&beforeId=${comments[1].id}`,
+    ),
     env: { ENGAGEMENT_DB: db },
   });
   assert.ok(calls[3].sql.includes('(c.created_at = ? AND c.id < ?)'));
-  assert.deepEqual(calls[3].values.slice(1, 5), ['2026-10-02', '2026-10-02', '2026-10-02', comments[1].id]);
+  assert.deepEqual(calls[3].values.slice(1, 5), [
+    '2026-10-02',
+    '2026-10-02',
+    '2026-10-02',
+    comments[1].id,
+  ]);
 });
 
 test('GET /likes returns article and comment counts separately from comment data', async () => {
@@ -215,6 +246,65 @@ test('POST accepts a bounded anonymous comment but keeps it pending moderation',
   assert.equal(insert.values[2], 'Reader');
   assert.equal(insert.values[3], 'A useful note.');
   assert.equal(insert.values[4], 'pending');
+  assert.equal(insert.values[7], null);
+  assert.equal(insert.values[8], 0);
+  assert.equal(insert.values[9], null);
+});
+
+test('POST stores an email only when the reader opts into reply notifications', async () => {
+  const { db, calls } = makeDb();
+  const response = await onCommentsRequest({
+    request: request('POST', undefined, {
+      nickname: '   ',
+      body: 'Let me know if someone replies.',
+      notifyOnReply: true,
+      email: 'Reader@Example.com',
+    }),
+    env: { ENGAGEMENT_DB: db, RATE_LIMIT_SALT: 'test salt' },
+  });
+
+  assert.equal(response.status, 201);
+  const insert = calls.find((call) => call.sql.includes('INSERT INTO comments'));
+  assert.equal(insert.values[7], 'reader@example.com');
+  assert.equal(insert.values[8], 1);
+  assert.match(insert.values[9], /^[a-f0-9]{32}$/i);
+  assert.equal(insert.values[10], 'zh-CN');
+  assert.match(insert.sql, /notification_email/);
+});
+
+test('POST ignores an email address when reply notifications are not selected', async () => {
+  const { db, calls } = makeDb();
+  const response = await onCommentsRequest({
+    request: request('POST', undefined, {
+      nickname: 'Reader',
+      body: 'No email notifications, please.',
+      notifyOnReply: false,
+      email: 'reader@example.com',
+    }),
+    env: { ENGAGEMENT_DB: db, RATE_LIMIT_SALT: 'test salt' },
+  });
+
+  assert.equal(response.status, 201);
+  const insert = calls.find((call) => call.sql.includes('INSERT INTO comments'));
+  assert.equal(insert.values[7], null);
+  assert.equal(insert.values[8], 0);
+  assert.equal(insert.values[9], null);
+});
+
+test('POST requires a valid email only when reply notifications are enabled', async () => {
+  const { db, calls } = makeDb();
+  const response = await onCommentsRequest({
+    request: request('POST', undefined, {
+      nickname: 'Reader',
+      body: 'No notification without a valid address.',
+      notifyOnReply: true,
+      email: 'not-an-email',
+    }),
+    env: { ENGAGEMENT_DB: db, RATE_LIMIT_SALT: 'test salt' },
+  });
+
+  assert.equal(response.status, 400);
+  assert.equal(calls.length, 0);
 });
 
 test('POST accepts an empty nickname and generates a locale-aware anonymous name', async () => {
@@ -269,7 +359,11 @@ test('POST accepts a reply to an approved reply but keeps it in the top-level th
   const insert = calls.find((call) => call.sql.includes('INSERT INTO comments'));
   assert.equal(insert.values[5], threadId);
   assert.equal(insert.values[6], replyToId);
-  assert.ok(calls.some((call) => call.sql.includes("target.status = 'approved'") && call.values[0] === replyToId));
+  assert.ok(
+    calls.some(
+      (call) => call.sql.includes("target.status = 'approved'") && call.values[0] === replyToId,
+    ),
+  );
 });
 
 test('POST rejects a reply when its target is not approved in this article', async () => {
@@ -337,7 +431,10 @@ test('PUT /likes records an idempotent article like and rejects an invalid visit
   assert.equal(insert.values[0], 'writing/example');
 
   const invalid = await onLikesRequest({
-    request: request('PUT', '/api/likes/writing/example/', { visitorToken: 'short', targetType: 'article' }),
+    request: request('PUT', '/api/likes/writing/example/', {
+      visitorToken: 'short',
+      targetType: 'article',
+    }),
     env: { ENGAGEMENT_DB: db, RATE_LIMIT_SALT: 'test salt' },
   });
   assert.equal(invalid.status, 400);

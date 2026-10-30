@@ -4,11 +4,16 @@ import { chromium } from 'playwright';
 const base = process.env.E2E_BASE ?? 'http://127.0.0.1:8788';
 const article = '/writing/2021/03/data-definitions-are-collaboration-interfaces/';
 const browser = await chromium.launch();
+let postedComment;
 
 try {
   const page = await browser.newPage();
   await page.route('**/api/comments/**', async (route) => {
     const url = new URL(route.request().url());
+    if (route.request().method() === 'POST') {
+      postedComment = route.request().postDataJSON();
+      return route.fulfill({ status: 201, json: { ok: true, status: 'pending' } });
+    }
     if (url.searchParams.has('before')) {
       return route.fulfill({
         json: {
@@ -40,7 +45,10 @@ try {
         ],
         commentCount: 22,
         hasMore: true,
-        nextCursor: { createdAt: '2026-10-29T12:00:00.000Z', id: '11111111-1111-4111-8111-111111111111' },
+        nextCursor: {
+          createdAt: '2026-10-29T12:00:00.000Z',
+          id: '11111111-1111-4111-8111-111111111111',
+        },
       },
     });
   });
@@ -58,6 +66,20 @@ try {
   await page.getByText('An older comment').waitFor();
   assert.match(await page.locator('[data-status]').textContent(), /22 条评论/);
   assert.equal(await page.getByRole('button', { name: '加载更多评论' }).isVisible(), false);
+
+  const emailToggle = page.locator('[data-notify-replies]');
+  const emailField = widget.locator('input[name="email"]');
+  assert.equal(await emailField.isVisible(), false);
+  await emailToggle.check();
+  assert.equal(await emailField.isVisible(), true);
+  assert.equal(await emailField.getAttribute('required'), '');
+  await emailField.fill('reader@example.com');
+  await page.locator('textarea[name="body"]').fill('My nickname stays optional.');
+  await page.getByRole('button', { name: '提交评论' }).click();
+  await page.getByRole('status').filter({ hasText: '谢谢留言' }).waitFor();
+  assert.equal(postedComment.nickname, '');
+  assert.equal(postedComment.notifyOnReply, true);
+  assert.equal(postedComment.email, 'reader@example.com');
 } finally {
   await browser.close();
 }

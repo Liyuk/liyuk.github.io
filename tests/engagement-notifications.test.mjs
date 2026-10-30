@@ -6,7 +6,10 @@ import { createNotifier } from '../workers/email-notifier/src/notifier.ts';
 const commentId = '33333333-3333-4333-8333-333333333333';
 const token = '0123456789abcdef0123456789abcdef';
 
-function setup({ likeChanges = 1, target = { id: commentId, parent_id: null, nickname: 'Avery', body: 'Original thought' } } = {}) {
+function setup({
+  likeChanges = 1,
+  target = { id: commentId, parent_id: null, nickname: 'Avery', body: 'Original thought' },
+} = {}) {
   const calls = [];
   const notifications = [];
   const pending = [];
@@ -20,17 +23,28 @@ function setup({ likeChanges = 1, target = { id: commentId, parent_id: null, nic
             async first() {
               calls.push(query);
               if (sql.includes('COUNT(*)')) return { count: 1 };
-              if (sql.includes('RETURNING comments AS count') || sql.includes('RETURNING likes AS count')) return { count: 1 };
-              if (sql.includes('INSERT INTO likes') || sql.includes('DELETE FROM likes')) return likeChanges ? { visitor_token: token } : null;
+              if (
+                sql.includes('RETURNING comments AS count') ||
+                sql.includes('RETURNING likes AS count')
+              )
+                return { count: 1 };
+              if (sql.includes('INSERT INTO likes') || sql.includes('DELETE FROM likes'))
+                return likeChanges ? { visitor_token: token } : null;
               if (sql.includes('SELECT target.id, target.parent_id')) return target;
               if (sql.includes('SELECT id, nickname, body FROM comments')) return target;
               return null;
             },
             async run() {
               calls.push(query);
-              return { success: true, meta: { changes: sql.includes('INSERT INTO likes') ? likeChanges : 1 } };
+              return {
+                success: true,
+                meta: { changes: sql.includes('INSERT INTO likes') ? likeChanges : 1 },
+              };
             },
-            async all() { calls.push(query); return { results: [] }; },
+            async all() {
+              calls.push(query);
+              return { results: [] };
+            },
           };
         },
       };
@@ -63,7 +77,10 @@ test('a submitted comment queues a moderation email without delaying or failing 
   const { context, notifications, pending } = setup();
   const response = await onCommentsRequest({
     ...context,
-    request: request('POST', '/api/comments/en/writing/2026/10/example/', { nickname: 'Reader', body: 'A useful note.' }),
+    request: request('POST', '/api/comments/en/writing/2026/10/example/', {
+      nickname: 'Reader',
+      body: 'A useful note.',
+    }),
   });
 
   assert.equal(response.status, 201);
@@ -86,7 +103,10 @@ test('new article, comment, and reply likes queue notifications; unlikes and dup
   const article = setup({ likeChanges: 1 });
   await onLikesRequest({
     ...article.context,
-    request: request('PUT', '/api/likes/writing/example/', { visitorToken: token, targetType: 'article' }),
+    request: request('PUT', '/api/likes/writing/example/', {
+      visitorToken: token,
+      targetType: 'article',
+    }),
   });
   await Promise.all(article.pending);
   assert.equal(article.notifications[0].body.targetType, 'article');
@@ -94,7 +114,11 @@ test('new article, comment, and reply likes queue notifications; unlikes and dup
   const comment = setup({ likeChanges: 1 });
   await onLikesRequest({
     ...comment.context,
-    request: request('PUT', '/api/likes/writing/example/', { visitorToken: token, targetType: 'comment', targetId: commentId }),
+    request: request('PUT', '/api/likes/writing/example/', {
+      visitorToken: token,
+      targetType: 'comment',
+      targetId: commentId,
+    }),
   });
   await Promise.all(comment.pending);
   assert.equal(comment.notifications[0].body.targetType, 'comment');
@@ -104,24 +128,35 @@ test('new article, comment, and reply likes queue notifications; unlikes and dup
   const duplicate = setup({ likeChanges: 0 });
   await onLikesRequest({
     ...duplicate.context,
-    request: request('PUT', '/api/likes/writing/example/', { visitorToken: token, targetType: 'article' }),
+    request: request('PUT', '/api/likes/writing/example/', {
+      visitorToken: token,
+      targetType: 'article',
+    }),
   });
   assert.equal(duplicate.pending.length, 0);
 
   const unlike = setup({ likeChanges: 1 });
   await onLikesRequest({
     ...unlike.context,
-    request: request('DELETE', '/api/likes/writing/example/', { visitorToken: token, targetType: 'article' }),
+    request: request('DELETE', '/api/likes/writing/example/', {
+      visitorToken: token,
+      targetType: 'article',
+    }),
   });
   assert.equal(unlike.pending.length, 0);
 });
 
 test('email delivery failures do not turn a stored comment or like into an API failure', async () => {
   const { context, pending } = setup();
-  context.env.NOTIFIER.fetch = async () => { throw new Error('email service unavailable'); };
+  context.env.NOTIFIER.fetch = async () => {
+    throw new Error('email service unavailable');
+  };
   const response = await onCommentsRequest({
     ...context,
-    request: request('POST', '/api/comments/writing/example/', { nickname: 'Reader', body: 'Still stored.' }),
+    request: request('POST', '/api/comments/writing/example/', {
+      nickname: 'Reader',
+      body: 'Still stored.',
+    }),
   });
   assert.equal(response.status, 201);
   await assert.doesNotReject(Promise.all(pending));
@@ -130,7 +165,9 @@ test('email delivery failures do not turn a stored comment or like into an API f
 test('the notifier sends validated notifications from the Aliyun mailbox to the configured owner inbox', async () => {
   const messages = [];
   const background = [];
-  const notifier = createNotifier(async (smtp, message) => { messages.push({ smtp, ...message }); });
+  const notifier = createNotifier(async (smtp, message) => {
+    messages.push({ smtp, ...message });
+  });
   const env = {
     SMTP_HOST: 'smtp.qiye.aliyun.com',
     SMTP_USERNAME: 'hello@liyuk.com',
@@ -144,7 +181,15 @@ test('the notifier sends validated notifications from the Aliyun mailbox to the 
     new Request('https://email-notifier.internal/notify', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ type: 'comment', commentId, articleKey: 'writing/example', locale: 'zh-CN', nickname: 'Reader', body: '<script>Hi</script>', replyToNickname: 'Avery' }),
+      body: JSON.stringify({
+        type: 'comment',
+        commentId,
+        articleKey: 'writing/example',
+        locale: 'zh-CN',
+        nickname: 'Reader',
+        body: '<script>Hi</script>',
+        replyToNickname: 'Avery',
+      }),
     }),
     env,
     { waitUntil: (promise) => background.push(promise) },
@@ -164,18 +209,29 @@ test('the notifier sends validated notifications from the Aliyun mailbox to the 
   assert.match(messages[0].text, /<script>Hi<\/script>/);
   assert.match(messages[0].text, /审核入口 · Cloudflare D1/);
   assert.match(messages[0].text, /D1 Studio 执行/);
-  assert.match(messages[0].text, /https:\/\/dash\.cloudflare\.com\/account\/workers\/d1\/databases\/database\/studio/);
+  assert.match(
+    messages[0].text,
+    /https:\/\/dash\.cloudflare\.com\/account\/workers\/d1\/databases\/database\/studio/,
+  );
   assert.match(messages[0].text, new RegExp(`WHERE id = '${commentId}'`));
   assert.match(messages[0].text, /UPDATE comments SET status = 'approved'/);
 });
 
 test('missing Aliyun SMTP credentials leave likes and comments intact but reject email delivery', async () => {
-  const notifier = createNotifier(async () => assert.fail('SMTP must not run without its password'));
+  const notifier = createNotifier(async () =>
+    assert.fail('SMTP must not run without its password'),
+  );
   const response = await notifier.fetch(
     new Request('https://email-notifier.internal/notify', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ type: 'like', articleKey: 'writing/example', locale: 'zh-CN', targetType: 'article', likes: 1 }),
+      body: JSON.stringify({
+        type: 'like',
+        articleKey: 'writing/example',
+        locale: 'zh-CN',
+        targetType: 'article',
+        likes: 1,
+      }),
     }),
     {
       SMTP_HOST: 'smtp.qiye.aliyun.com',
@@ -188,4 +244,76 @@ test('missing Aliyun SMTP credentials leave likes and comments intact but reject
     { waitUntil: () => assert.fail('SMTP must not be queued without its password') },
   );
   assert.equal(response.status, 503);
+});
+
+test('the scheduled notifier emails an opted-in commenter only after a reply is approved', async () => {
+  const messages = [];
+  const calls = [];
+  const pending = [];
+  const row = {
+    id: 1,
+    comment_id: '55555555-5555-4555-8555-555555555555',
+    target_comment_id: commentId,
+    recipient_email: 'reader@example.com',
+    notification_token: 'a'.repeat(32),
+    attempt_count: 1,
+  };
+  const database = {
+    prepare(sql) {
+      const query = { sql, values: [] };
+      return {
+        bind(...values) {
+          query.values = values;
+          return {
+            async all() {
+              calls.push(query);
+              return { results: sql.includes('RETURNING id, comment_id') ? [row] : [] };
+            },
+            async first() {
+              calls.push(query);
+              return sql.includes('FROM comment_reply_notifications')
+                ? {
+                    article_key: 'writing/example',
+                    locale: 'zh-CN',
+                    reply_nickname: 'Avery',
+                    reply_body: 'A reviewed reply.',
+                    recipient_nickname: 'Reader',
+                    notification_token: 'a'.repeat(32),
+                  }
+                : null;
+            },
+            async run() {
+              calls.push(query);
+              return { success: true };
+            },
+          };
+        },
+      };
+    },
+  };
+  const notifier = createNotifier(async (smtp, message) => messages.push({ smtp, ...message }));
+  notifier.scheduled(
+    { cron: '* * * * *', scheduledTime: Date.now() },
+    {
+      SMTP_HOST: 'smtp.qiye.aliyun.com',
+      SMTP_USERNAME: 'hello@liyuk.com',
+      SMTP_PASSWORD: 'test-client-password',
+      NOTIFY_TO: 'likun.liyuk@gmail.com',
+      NOTIFY_FROM: 'hello@liyuk.com',
+      SITE_ORIGIN: 'https://liyuk.com',
+      D1_STUDIO_URL: 'https://dash.cloudflare.com/account/workers/d1/databases/database/studio',
+      ENGAGEMENT_DB: database,
+    },
+    { waitUntil: (promise) => pending.push(promise) },
+  );
+  await Promise.all(pending);
+
+  assert.equal(messages.length, 1);
+  assert.equal(messages[0].from, 'hello@liyuk.com');
+  assert.equal(messages[0].to, 'reader@example.com');
+  assert.match(messages[0].subject, /有人回复了你的评论/);
+  assert.match(messages[0].text, /Avery/);
+  assert.match(messages[0].text, /A reviewed reply\./);
+  assert.match(messages[0].text, /https:\/\/liyuk\.com\/writing\/example\//);
+  assert.ok(calls.some((call) => call.sql.includes("SET status = 'sent'")));
 });

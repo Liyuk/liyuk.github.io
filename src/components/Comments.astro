@@ -47,6 +47,17 @@ const mapping = term ? 'specific' : comments.mapping;
         <input name="nickname" maxlength="40" autocomplete="nickname" />
         <small>{copy.anonymousHint}</small>
       </label>
+      <label class="reply-notify-option">
+        <input type="checkbox" data-notify-replies />
+        <span>{copy.notifyOnReply}</span>
+      </label>
+      <div class="reply-notification" data-notify-email hidden>
+        <label>
+          {copy.email}
+          <input name="email" type="email" maxlength="254" autocomplete="email" />
+          <small>{copy.notifyPrivacy}</small>
+        </label>
+      </div>
       <label>
         {copy.comment}
         <textarea name="body" maxlength="4000" rows="4" required></textarea>
@@ -82,6 +93,9 @@ const mapping = term ? 'specific' : comments.mapping;
     loading: string;
     loadingMore: string;
     loadMore: string;
+    notifyOnReply: string;
+    email: string;
+    notifyPrivacy: string;
     empty: string;
     pending: string;
     error: string;
@@ -96,15 +110,24 @@ const mapping = term ? 'specific' : comments.mapping;
     const loadMoreButton = widget.querySelector<HTMLButtonElement>('[data-load-more]');
     const status = widget.querySelector<HTMLElement>('[data-status]');
     const form = widget.querySelector<HTMLFormElement>('[data-form]');
+    const notifyToggle = widget.querySelector<HTMLInputElement>('[data-notify-replies]');
+    const notifyEmail = widget.querySelector<HTMLElement>('[data-notify-email]');
+    const emailInput = widget.querySelector<HTMLInputElement>('input[name="email"]');
     const replyToInput = widget.querySelector<HTMLInputElement>('[data-reply-to-id]');
     const replyContext = widget.querySelector<HTMLElement>('[data-reply-context]');
     const replyLabel = widget.querySelector<HTMLElement>('[data-reply-label]');
     const submitButton = widget.querySelector<HTMLButtonElement>('[data-submit]');
     const cancelReply = widget.querySelector<HTMLButtonElement>('[data-cancel-reply]');
-    if (!commentsApi || !likesApi || !list || !loadMoreButton || !status || !form || !replyToInput || !replyContext || !replyLabel || !submitButton || !cancelReply) return;
+    if (!commentsApi || !likesApi || !list || !loadMoreButton || !status || !form || !notifyToggle || !notifyEmail || !emailInput || !replyToInput || !replyContext || !replyLabel || !submitButton || !cancelReply) return;
 
     let copy: Copy;
     try { copy = JSON.parse(widget.dataset.copy ?? '{}') as Copy; } catch { return; }
+    const syncNotifyFields = () => {
+      notifyEmail.hidden = !notifyToggle.checked;
+      emailInput.required = notifyToggle.checked;
+      if (!notifyToggle.checked) emailInput.value = '';
+    };
+    notifyToggle.addEventListener('change', syncNotifyFields);
     const tokenKey = `site-like-token:${likesApi}`;
     const commentLikesKey = `site-comment-likes:${likesApi}`;
     const storageGet = (key: string) => { try { return localStorage.getItem(key); } catch { return null; } };
@@ -326,11 +349,14 @@ const mapping = term ? 'specific' : comments.mapping;
           body: JSON.stringify({
             nickname: data.get('nickname'),
             body: data.get('body'),
+            notifyOnReply: notifyToggle.checked,
+            ...(notifyToggle.checked ? { email: data.get('email') } : {}),
             ...(replyToInput.value ? { replyToId: replyToInput.value } : {}),
           }),
         });
         if (!response.ok) throw new Error('comment failed');
         form.reset();
+        syncNotifyFields();
         clearReply();
         status.textContent = copy.pending;
       } catch { status.textContent = copy.error; }
@@ -407,6 +433,10 @@ const mapping = term ? 'specific' : comments.mapping;
   .engagement-form label small { color: var(--muted); font-size: .78rem; font-weight: 400; }
   .engagement-form input:not([type="hidden"]), .engagement-form textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--line); border-radius: .35rem; padding: .7rem .75rem; background: var(--paper); color: var(--ink); font: inherit; font-weight: 400; line-height: 1.5; }
   .engagement-form textarea { min-height: 7rem; resize: vertical; }
+  .reply-notify-option { display: flex !important; align-items: center; gap: .55rem !important; font-weight: 400 !important; }
+  .reply-notify-option input { width: 1rem; height: 1rem; accent-color: var(--accent); }
+  .reply-notification { display: grid; gap: .4rem; }
+  .reply-notification[hidden] { display: none; }
   .engagement-form input:focus-visible, .engagement-form textarea:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
   .reply-context { display: flex; align-items: center; gap: .7rem; color: var(--muted); font-size: .84rem; }
   .reply-context[hidden] { display: none; }

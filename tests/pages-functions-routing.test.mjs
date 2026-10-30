@@ -9,7 +9,7 @@ test('Pages Functions run only for chat, comment, and like endpoints', async () 
 
   assert.deepEqual(routes, {
     version: 1,
-    include: ['/api/chat', '/api/comments/*', '/api/likes/*'],
+    include: ['/api/chat', '/api/comments/*', '/api/likes/*', '/api/comment-notifications/*'],
     exclude: [],
   });
 });

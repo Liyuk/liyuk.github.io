@@ -24,6 +24,8 @@ interface PagesContext {
 const MAX_BODY_LENGTH = 4000;
 const MAX_NICKNAME_LENGTH = 40;
 const MAX_REQUEST_BYTES = 8192;
+const MAX_EMAIL_LENGTH = 254;
+const EMAIL_ADDRESS = /^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/;
 const VISITOR_TOKEN = /^[a-f0-9]{32,64}$/i;
 const COMMENT_ID = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
 const COMMENTS_PER_HOUR = 5;
@@ -162,7 +164,10 @@ async function handleGet(
   const limit = Math.min(50, Math.max(1, Number(url.searchParams.get('limit')) || 20));
   const before = url.searchParams.get('before');
   const beforeId = url.searchParams.get('beforeId');
-  if ((before || beforeId) && (!before || !beforeId || !COMMENT_ID.test(beforeId) || !Number.isFinite(Date.parse(before)))) {
+  if (
+    (before || beforeId) &&
+    (!before || !beforeId || !COMMENT_ID.test(beforeId) || !Number.isFinite(Date.parse(before)))
+  ) {
     return json({ error: 'Invalid comment cursor.' }, 400);
   }
   const roots = await env.ENGAGEMENT_DB.prepare(
@@ -221,10 +226,7 @@ async function handleGet(
   });
 }
 
-async function handleGetLikes(
-  env: EngagementEnvironment,
-  key: string,
-): Promise<Response> {
+async function handleGetLikes(env: EngagementEnvironment, key: string): Promise<Response> {
   const result = await env.ENGAGEMENT_DB.prepare(
     `SELECT target_type, target_id, COUNT(*) AS count
      FROM likes WHERE article_key = ?
@@ -251,13 +253,21 @@ async function handleComment(
   const { request } = context;
   const requestedNickname = typeof input.nickname === 'string' ? input.nickname.trim() : '';
   const body = typeof input.body === 'string' ? input.body.trim() : '';
+  const notifyOnReply = input.notifyOnReply === true;
+  const suppliedEmail = typeof input.email === 'string' ? input.email.trim() : '';
+  const notificationEmail = notifyOnReply ? suppliedEmail.toLowerCase() : null;
   const replyToId = input.replyToId ?? input.parentId ?? null;
   if (
     (typeof replyToId !== 'string' && replyToId !== null) ||
     (typeof replyToId === 'string' && !COMMENT_ID.test(replyToId)) ||
     requestedNickname.length > MAX_NICKNAME_LENGTH ||
     !body ||
-    body.length > MAX_BODY_LENGTH
+    body.length > MAX_BODY_LENGTH ||
+    (input.notifyOnReply !== undefined && typeof input.notifyOnReply !== 'boolean') ||
+    (notifyOnReply &&
+      (!notificationEmail ||
+        notificationEmail.length > MAX_EMAIL_LENGTH ||
+        !EMAIL_ADDRESS.test(notificationEmail)))
   ) {
     return json({ error: 'Nickname or comment is invalid.' }, 400);
   }
@@ -292,11 +302,26 @@ async function handleComment(
     return json({ error: 'Too many comments. Try again later.' }, 429);
   }
   const commentId = crypto.randomUUID();
+  const notificationToken = notifyOnReply ? crypto.randomUUID().replaceAll('-', '') : null;
   await env.ENGAGEMENT_DB.prepare(
-    `INSERT INTO comments (id, article_key, nickname, body, status, parent_id, reply_to_id)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO comments
+       (id, article_key, nickname, body, status, parent_id, reply_to_id,
+        notification_email, notify_on_reply, notification_token, locale)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   )
-    .bind(commentId, key, nickname, body, 'pending', threadId, replyToId)
+    .bind(
+      commentId,
+      key,
+      nickname,
+      body,
+      'pending',
+      threadId,
+      replyToId,
+      notificationEmail,
+      notifyOnReply ? 1 : 0,
+      notificationToken,
+      locale,
+    )
     .run();
   notifyOwner(context, {
     type: 'comment',
@@ -329,7 +354,8 @@ async function handleLike(
   const commentId = input.targetId === undefined || input.targetId === null ? null : input.targetId;
   if (
     (input.targetType === 'article' && commentId !== null) ||
-    (input.targetType === 'comment' && (typeof commentId !== 'string' || !COMMENT_ID.test(commentId)))
+    (input.targetType === 'comment' &&
+      (typeof commentId !== 'string' || !COMMENT_ID.test(commentId)))
   ) {
     return json({ error: 'Invalid comment.' }, 400);
   }
@@ -388,10 +414,12 @@ async function handleLike(
       locale,
       targetType,
       likes: Number(total?.count ?? 0),
-      ...(targetComment ? {
-        targetNickname: targetComment.nickname,
-        targetExcerpt: targetComment.body.slice(0, 400),
-      } : {}),
+      ...(targetComment
+        ? {
+            targetNickname: targetComment.nickname,
+            targetExcerpt: targetComment.body.slice(0, 400),
+          }
+        : {}),
     };
     notifyOwner(context, notification);
   }
@@ -407,7 +435,9 @@ function generateAnonymousName(locale: 'zh-CN' | 'en'): string {
 function rejectCrossOrigin(request: Request): Response | null {
   const url = new URL(request.url);
   const origin = request.headers.get('origin');
-  return origin && origin !== url.origin ? json({ error: 'Cross-origin request denied.' }, 403) : null;
+  return origin && origin !== url.origin
+    ? json({ error: 'Cross-origin request denied.' }, 403)
+    : null;
 }
 
 export async function onCommentsRequest(context: PagesContext): Promise<Response> {
