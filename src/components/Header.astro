@@ -5,7 +5,7 @@ import { i18n } from '../i18n/index.mjs';
 import ThemeToggle from './ThemeToggle.astro';
 import Icon from './Icon.astro';
 import { searchUrl } from '../lib/content-paths.ts';
-const { currentPath = '/', locale = Astro.currentLocale ?? 'zh-CN' } = Astro.props;
+const { currentPath = '/', locale = Astro.currentLocale ?? 'zh-CN', showLanguageSwitch = true } = Astro.props;
 const ui = i18n(locale);
 const otherLocale = locale === 'en' ? 'zh-CN' : 'en';
 const rootPath = currentPath.replace(/^\/en(?=\/|$)/, '');
@@ -20,7 +20,7 @@ const alternateHref = getRelativeLocaleUrl(otherLocale, rootPath);
   <div class="utility-controls" aria-label={ui.accessibility.siteSettings}>
     <a class="search-link" href={searchUrl(locale)}>{ui.navigation.search}</a>
     <a class="tags-link" href={getRelativeLocaleUrl(locale, '/tags/')} aria-current={currentPath.startsWith(getRelativeLocaleUrl(locale, '/tags/')) ? 'page' : undefined}>{ui.navigation.tags}</a>
-    <a class="language-switch" href={alternateHref} lang="en"><b>{ui.language.current}</b><i>/</i><em>{ui.language.alternate}</em></a>
+    {showLanguageSwitch && <a class="language-switch" href={alternateHref} lang="en"><b>{ui.language.current}</b><i>/</i><em>{ui.language.alternate}</em></a>}
     <ThemeToggle labels={ui.theme} />
   </div>
   <nav id="site-nav" aria-label={ui.navigation.main}>

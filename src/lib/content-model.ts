@@ -44,3 +44,8 @@ export const previewable = (entry: PublishedEntry): boolean =>
 // column, and RSS pages to render only the current locale's content.
 export const publishedIn = (locale: string) => (entry: PublishedEntry): boolean =>
   !isTemplateEntry(entry) && !entry.data.draft && entry.data.locale === locale;
+
+// Column archives may include real drafts in local development previews, but
+// production builds must remain published-only. Templates are never visible.
+export const columnVisibleIn = (locale: string, isDev: boolean) => (entry: PublishedEntry): boolean =>
+  entry.data.locale === locale && isPreviewable(entry, isDev);

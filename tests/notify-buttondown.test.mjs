@@ -15,6 +15,10 @@ import {
   becamePublished,
   findEmailBySubject,
   formatDate,
+  groupPublishBatch,
+  gitShow,
+  mergePublishedLanguage,
+  orderPublishBatch,
   isLegacySubjectOnlyEmail,
   readingMinutes,
 } from '../scripts/notify-buttondown.mjs';
@@ -102,6 +106,18 @@ test('publish notifications only include new or newly published files', () => {
   assert.equal(becamePublished(published, draft), false);
 });
 
+test('missing files in the base ref are treated as new content without fatal stderr', () => {
+  const file = 'src/content/writing/2099/12/not-in-repository/zh.md';
+  assert.equal(gitShow('HEAD', file), null);
+  const result = spawnSync(
+    process.execPath,
+    ['--input-type=module', '-e', `import { gitShow } from ${JSON.stringify(new URL('../scripts/notify-buttondown.mjs', import.meta.url).href)}; gitShow('HEAD', ${JSON.stringify(`${process.cwd()}/${file}`)});`],
+    { encoding: 'utf8' },
+  );
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stderr, '');
+});
+
 test('Buttondown lookup errors fail closed', async () => {
   const result = await findEmailBySubject(
     'Same title',
@@ -184,6 +200,106 @@ test('buildEmailHtml makes relative article paths absolute for Buttondown', () =
   assert.match(html, /href="https:\/\/liyuk\.com\/en\/consulting\/2026\/08\/example\/"/);
   assert.doesNotMatch(html, /href="\/en\/consulting\/2026\/08\/example\/"/);
 });
+
+test('publish batches keep one entry as a single-post email', () => {
+  const article = {
+    label: 'One post',
+    subject: 'One post',
+    url: '/writing/2026/10/one/',
+    blocks: [{ lang: 'zh', title: 'One post', summary: 'Summary', url: '/writing/2026/10/one/' }],
+  };
+
+  assert.deepEqual(groupPublishBatch([article]), [article]);
+  assert.deepEqual(groupPublishBatch([]), []);
+});
+
+test('publish batches include every article and both available languages in one digest', () => {
+  const candidates = [
+    {
+      url: '/writing/2026/10/guide/',
+      blocks: [
+        { lang: 'zh', title: '专栏导读', summary: '中文摘要', url: '/writing/2026/10/guide/' },
+        { lang: 'en', title: 'Series Guide', summary: 'English summary', url: '/en/writing/2026/10/guide/' },
+      ],
+    },
+    {
+      url: '/writing/2026/10/article-two/',
+      blocks: [{ lang: 'zh', title: '第二篇', summary: '另一段摘要', url: '/writing/2026/10/article-two/' }],
+    },
+    {
+      url: '/writing/2026/10/article-three/',
+      blocks: [{ lang: 'en', title: 'Third Article', summary: 'More details', url: '/en/writing/2026/10/article-three/' }],
+    },
+  ];
+
+  const [digest] = groupPublishBatch(candidates);
+  assert.equal(groupPublishBatch(candidates).length, 1);
+  assert.match(digest.subject, /^3 new posts from Liyuk · [a-f0-9]{8}$/);
+  assert.equal(digest.articles.length, 3);
+  assert.deepEqual(digest.articles.map((article) => article.blocks.length), [2, 1, 1]);
+
+  const html = buildEmailHtml({ articles: digest.articles });
+  assert.match(html, /Series Guide/);
+  assert.match(html, /中文摘要/);
+  assert.match(html, /第二篇/);
+  assert.match(html, /Third Article/);
+  assert.match(html, /本次汇总了 3 篇新文章/);
+  assert.match(html, /href="https:\/\/liyuk\.com\/en\/writing\/2026\/10\/article-three\/"/);
+});
+
+test('a newly published article includes an already-published sibling language', () => {
+  const zh = {
+    lang: 'zh',
+    title: '中文标题',
+    summary: '中文摘要',
+    url: '/writing/2026/10/example/',
+  };
+  const enFile = 'src/content/writing/2026/10/example/en.md';
+  const englishFrontmatter = {
+    draft: 'false',
+    locale: 'en',
+    title: 'English title',
+    description: 'English summary',
+    publishedAt: '2026-10-30',
+  };
+
+  const merged = mergePublishedLanguage([zh], englishFrontmatter, 'Body text', enFile);
+  assert.deepEqual(merged.map((block) => block.lang), ['zh', 'en']);
+  assert.equal(merged[1].title, 'English title');
+  assert.equal(merged[1].url, '/en/writing/2026/10/example/');
+  assert.deepEqual(mergePublishedLanguage([zh], { ...englishFrontmatter, draft: 'true' }, '', enFile), [zh]);
+});
+
+test('publish batch idempotency key is stable for the same set of articles', () => {
+  const candidates = [
+    { url: '/writing/a/', blocks: [{ lang: 'en', title: 'A', url: '/writing/a/' }] },
+    { url: '/writing/b/', blocks: [{ lang: 'en', title: 'B', url: '/writing/b/' }] },
+  ];
+  const first = groupPublishBatch(candidates)[0].subject;
+  const reversed = groupPublishBatch([...candidates].reverse())[0].subject;
+  assert.equal(first, reversed);
+});
+
+test('publish batches follow column order, then date and title for mixed content', () => {
+  const article = (title, url, extra = {}) => ({
+    url,
+    blocks: [{ lang: 'en', title, url }],
+    ...extra,
+  });
+  const series = [
+    article('Part 3', '/writing/part-3/', { columnSlug: 'series', columnOrder: 3 }),
+    article('Guide', '/writing/guide/', { columnSlug: 'series', columnOrder: 1 }),
+    article('Part 2', '/writing/part-2/', { columnSlug: 'series', columnOrder: 2 }),
+  ];
+  assert.deepEqual(orderPublishBatch(series).map((item) => item.blocks[0].title), ['Guide', 'Part 2', 'Part 3']);
+
+  const mixed = [
+    article('Later', '/writing/later/', { publishedAt: '2026-10-30' }),
+    article('Earlier', '/writing/earlier/', { publishedAt: '2026-10-29' }),
+  ];
+  assert.deepEqual(orderPublishBatch(mixed).map((item) => item.blocks[0].title), ['Earlier', 'Later']);
+});
+
 test('email idempotency prefers canonical URL and remains compatible with legacy subject records', () => {
   const candidate = { subject: 'Same title', canonicalUrl: 'https://liyuk.com/writing/2026/08/a/' };
   assert.equal(

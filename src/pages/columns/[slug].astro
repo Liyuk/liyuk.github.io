@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const { writing, consulting, research, galleries } = await getColumnCollections(locale);
+const { writing, consulting, research, galleries } = await getColumnCollections(locale, import.meta.env.DEV);
 const entries = [...writing, ...consulting, ...research, ...galleries];
 const column = getColumn(slug, locale);
 const chapters = getColumnEntries(entries, slug);
@@ -35,6 +35,7 @@ const entryType = (entry: CollectionEntry<'writing'> | CollectionEntry<'consulti
 ---
 
 <BaseLayout
+  noindex={import.meta.env.DEV}
   title={copy.title(column?.label ?? '')}
   description={column?.description}
   pageKind="collection"

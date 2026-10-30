@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-import { hasValidPublishedTranslationStatus, isPreviewable, notDraft, previewable, publishedIn, translationStatusForLocale } from '../src/lib/content-model.ts';
+import { hasValidPublishedTranslationStatus, isPreviewable, notDraft, previewable, publishedIn, columnVisibleIn, translationStatusForLocale } from '../src/lib/content-model.ts';
 import { site } from '../src/data/site.mjs';
 import { i18n } from '../src/i18n/index.mjs';
 import { groupByYear, groupByYearMonth, getChronologicalNeighbors, sortByCreatedAt, sortByLastUpdatedAt } from '../src/lib/timeline.ts';
@@ -32,6 +32,19 @@ test('the published predicates select non-draft content for the right locale', (
   assert.equal(publishedIn('zh-CN')({ data: { draft: false, locale: 'zh-CN' } }), true);
   assert.equal(publishedIn('zh-CN')({ data: { draft: false, locale: 'en' } }), false);
   assert.equal(publishedIn('en')({ data: { draft: false, locale: 'en' } }), true);
+});
+
+test('column archives preview real drafts only in development', () => {
+  const draft = { id: '2026/10/example/zh', data: { draft: true, locale: 'zh-CN' } };
+  const published = { id: '2026/10/live/zh', data: { draft: false, locale: 'zh-CN' } };
+  const otherLocale = { id: '2026/10/example/en', data: { draft: false, locale: 'en' } };
+  const template = { id: '_template', data: { draft: true, locale: 'zh-CN' } };
+
+  assert.equal(columnVisibleIn('zh-CN', true)(draft), true);
+  assert.equal(columnVisibleIn('zh-CN', false)(draft), false);
+  assert.equal(columnVisibleIn('zh-CN', false)(published), true);
+  assert.equal(columnVisibleIn('zh-CN', true)(otherLocale), false);
+  assert.equal(columnVisibleIn('zh-CN', true)(template), false);
 });
 
 test('published translation status matches the page locale', () => {
@@ -229,8 +242,8 @@ test('column pages replace the legacy albums model', async () => {
 
   assert.match(columnIndex, /copy\.seriesLabel|copy\.count/);
   assert.doesNotMatch(columnIndex, /albumUrl|getAlbum/);
-  assert.match(writingPage, /entry\.data\.column/);
-  assert.doesNotMatch(writingPage, /entry\.data\.album/);
+  assert.match(writingPage, /pageEntry\.data\.column/);
+  assert.doesNotMatch(writingPage, /pageEntry\.data\.album/);
   assert.match(uiCopy, /seriesLabel/);
 });
 
