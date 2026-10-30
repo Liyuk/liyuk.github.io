@@ -245,6 +245,10 @@ test('publish batches include every article and both available languages in one 
   assert.match(html, /Third Article/);
   assert.match(html, /本次汇总了 3 篇新文章/);
   assert.match(html, /href="https:\/\/liyuk\.com\/en\/writing\/2026\/10\/article-three\/"/);
+  assert.equal(html.match(/<table role="presentation"/g)?.length, 4);
+  assert.match(html, /中文阅读 ↗/);
+  assert.match(html, /Read in English ↗/);
+  assert.match(html, /bgcolor="#35685d"/);
 });
 
 test('a newly published article includes an already-published sibling language', () => {
