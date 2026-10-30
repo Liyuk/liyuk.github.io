@@ -195,7 +195,7 @@ export function orderPublishBatch(candidates) {
 // ---------------------------------------------------------------------------
 
 function git(args, opts = {}) {
-  return execSync(`git ${args}`, { encoding: 'utf8', ...opts }).trim();
+  return execSync(`git ${args}`, { encoding: 'utf8', stdio: 'pipe', ...opts }).trim();
 }
 
 // Resolve the ref to diff against. Prefer --baseRef; fall back to the merge base
@@ -216,7 +216,7 @@ const EMPTY_TREE = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
 
 // Read the base version of a content file when it exists. A missing base file
 // means this is a newly added content entry.
-function gitShow(ref, filePath) {
+export function gitShow(ref, filePath) {
   const relative = path.relative(process.cwd(), filePath).split(path.sep).join('/');
   try {
     return git(`show ${ref}:${relative}`);

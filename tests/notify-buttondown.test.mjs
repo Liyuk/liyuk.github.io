@@ -16,6 +16,7 @@ import {
   findEmailBySubject,
   formatDate,
   groupPublishBatch,
+  gitShow,
   mergePublishedLanguage,
   orderPublishBatch,
   isLegacySubjectOnlyEmail,
@@ -103,6 +104,18 @@ test('publish notifications only include new or newly published files', () => {
     false,
   );
   assert.equal(becamePublished(published, draft), false);
+});
+
+test('missing files in the base ref are treated as new content without fatal stderr', () => {
+  const file = 'src/content/writing/2099/12/not-in-repository/zh.md';
+  assert.equal(gitShow('HEAD', file), null);
+  const result = spawnSync(
+    process.execPath,
+    ['--input-type=module', '-e', `import { gitShow } from ${JSON.stringify(new URL('../scripts/notify-buttondown.mjs', import.meta.url).href)}; gitShow('HEAD', ${JSON.stringify(`${process.cwd()}/${file}`)});`],
+    { encoding: 'utf8' },
+  );
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stderr, '');
 });
 
 test('Buttondown lookup errors fail closed', async () => {
