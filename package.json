@@ -39,7 +39,7 @@
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.3.2",
     "@astrojs/sitemap": "^3.7.4",
-    "@axe-core/playwright": "^4.13.0",
+    "@axe-core/playwright": "^4.14.0",
     "@types/qrcode": "^1.5.6",
     "astro": "^7.3.8",
     "katex": "^0.19.1",
