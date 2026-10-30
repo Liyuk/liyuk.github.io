@@ -47,16 +47,18 @@ const mapping = term ? 'specific' : comments.mapping;
         <input name="nickname" maxlength="40" autocomplete="nickname" />
         <small>{copy.anonymousHint}</small>
       </label>
-      <label class="reply-notify-option">
-        <input type="checkbox" data-notify-replies />
-        <span>{copy.notifyOnReply}</span>
-      </label>
-      <div class="reply-notification" data-notify-email hidden>
-        <label>
-          {copy.email}
-          <input name="email" type="email" maxlength="254" autocomplete="email" />
-          <small>{copy.notifyPrivacy}</small>
+      <div class="reply-notify">
+        <label class="reply-notify-option">
+          <input type="checkbox" data-notify-replies />
+          <span>{copy.notifyOnReply}</span>
         </label>
+        <div class="reply-notification" data-notify-email hidden>
+          <label>
+            {copy.email}
+            <input name="email" type="email" maxlength="254" autocomplete="email" />
+            <small>{copy.notifyPrivacy}</small>
+          </label>
+        </div>
       </div>
       <label>
         {copy.comment}
@@ -433,9 +435,10 @@ const mapping = term ? 'specific' : comments.mapping;
   .engagement-form label small { color: var(--muted); font-size: .78rem; font-weight: 400; }
   .engagement-form input:not([type="hidden"]), .engagement-form textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--line); border-radius: .35rem; padding: .7rem .75rem; background: var(--paper); color: var(--ink); font: inherit; font-weight: 400; line-height: 1.5; }
   .engagement-form textarea { min-height: 7rem; resize: vertical; }
-  .reply-notify-option { display: flex !important; align-items: center; gap: .55rem !important; font-weight: 400 !important; }
-  .reply-notify-option input { width: 1rem; height: 1rem; accent-color: var(--accent); }
-  .reply-notification { display: grid; gap: .4rem; }
+  .reply-notify { display: grid; justify-items: start; gap: .65rem; }
+  .reply-notify-option { display: flex !important; width: fit-content; max-width: 100%; align-items: center; gap: .55rem !important; font-weight: 400 !important; line-height: 1.45; cursor: pointer; }
+  .reply-notify-option input { flex: 0 0 1rem; width: 1rem !important; height: 1rem; margin: 0; padding: 0; border: 0; border-radius: .2rem; background: transparent; accent-color: var(--accent); }
+  .reply-notification { display: grid; width: 100%; max-width: 32rem; gap: .4rem; padding-left: 1.55rem; box-sizing: border-box; }
   .reply-notification[hidden] { display: none; }
   .engagement-form input:focus-visible, .engagement-form textarea:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
   .reply-context { display: flex; align-items: center; gap: .7rem; color: var(--muted); font-size: .84rem; }
