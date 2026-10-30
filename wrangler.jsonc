@@ -7,7 +7,28 @@
   "vectorize": [
     {
       "binding": "VECTOR_INDEX",
-      "index_name": "liyuk-bge-m3-eval-20261013"
-    }
-  ]
+      "index_name": "liyuk-bge-m3-eval-20261013",
+    },
+  ],
+  "services": [{ "binding": "NOTIFIER", "service": "liyuk-email-notifier" }],
+  "env": {
+    "preview": {
+      "ai": { "binding": "AI" },
+      "vectorize": [
+        {
+          "binding": "VECTOR_INDEX",
+          "index_name": "liyuk-bge-m3-eval-20261013",
+        },
+      ],
+      "services": [{ "binding": "NOTIFIER", "service": "liyuk-email-notifier" }],
+      "d1_databases": [
+        {
+          "binding": "ENGAGEMENT_DB",
+          "database_name": "liyuk-site-engagement-preview",
+          "database_id": "580e978a-2699-40ac-90b9-82a19eed7ef5",
+          "migrations_dir": "functions/migrations",
+        },
+      ],
+    },
+  },
 }

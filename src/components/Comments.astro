@@ -1,12 +1,6 @@
 ---
-// Giscus 评论区。未启用时（comments.enabled=false）不渲染任何东西。
-// 启用后：评论以 Discussion 存进 GitHub 仓库，可经 GraphQL API 导出。
-//
-// 两种模式：
-//   - 默认（不传 term）：pathname 映射，每篇文章/项目/影像一个独立讨论。
-//   - 传 term（留言板）：specific 映射，所有留言汇聚到标题含该 term 的同一条
-//     讨论（如 about 页「给作者留言」），中英文页共用同一条。
 import { comments } from '../data/comments.mjs';
+import { i18n } from '../i18n/index.mjs';
 
 interface Props {
   lang?: string;
@@ -14,22 +8,310 @@ interface Props {
 }
 
 const { lang = 'zh-CN', term } = Astro.props as Props;
+const enabled = import.meta.env.PUBLIC_ENGAGEMENT_ENABLED === 'true';
+const copy = i18n(lang).engagement;
+const title = term ? copy.guestbookTitle : copy.title;
+const pathname = Astro.url.pathname.replace(/^\/en(?=\/)/, '').replace(/\/$/, '') || '/';
+const pageKey = term ? 'guestbook' : pathname.slice(1);
+const commentsApiPath = `/api/comments/${pageKey}/`;
+const likesApiPath = `/api/likes/${pageKey}/`;
 const giscusLang = lang === 'en' ? 'en' : 'zh-CN';
 const mapping = term ? 'specific' : comments.mapping;
 ---
 
-{comments.enabled && (
-  <section class="comments" data-pagefind-ignore>
-    <div class="giscus"></div>
+{enabled ? (
+  <section
+    class="engagement"
+    data-engagement
+    data-comments-api={commentsApiPath}
+    data-likes-api={likesApiPath}
+    data-copy={JSON.stringify(copy)}
+    data-pagefind-ignore
+    aria-labelledby="engagement-title"
+  >
+    <header class="engagement-header">
+      <h2 id="engagement-title">{title}</h2>
+    </header>
+    <p class="engagement-status" data-status role="status">{copy.loading}</p>
+    <ol class="engagement-comments" data-comments aria-live="polite" aria-label={title}></ol>
+    <p class="engagement-privacy">{copy.privacy}</p>
+    <form class="engagement-form" data-form>
+      <input type="hidden" name="replyToId" data-reply-to-id value="" />
+      <div class="reply-context" data-reply-context hidden>
+        <span data-reply-label></span>
+        <button type="button" class="text-action" data-cancel-reply>{copy.cancelReply}</button>
+      </div>
+      <label>
+        {copy.nickname}
+        <input name="nickname" maxlength="40" autocomplete="nickname" />
+        <small>{copy.anonymousHint}</small>
+      </label>
+      <label>
+        {copy.comment}
+        <textarea name="body" maxlength="4000" rows="4" required></textarea>
+      </label>
+      <button class="submit-comment" type="submit" data-submit>{copy.submit}</button>
+    </form>
   </section>
+) : (
+  comments.enabled && <section class="comments" data-pagefind-ignore><div class="giscus"></div></section>
 )}
 
-<script define:vars={{ enabled: comments.enabled, repo: comments.repo, repoId: comments.repoId, category: comments.category, categoryId: comments.categoryId, mapping, term, lightTheme: comments.lightTheme, darkTheme: comments.darkTheme, giscusLang }}>
-  if (enabled) {
-    // 用运行时注入的方式加载 giscus，这样能动态决定主题（跟随 data-theme）。
-    const dark = document.documentElement.dataset.theme === 'dark';
-    const initialTheme = dark ? darkTheme : lightTheme;
+<script>
+  import { withLikeCounts } from '../lib/comment-likes.mjs';
 
+  type CommentItem = {
+    id: string;
+    nickname: string;
+    body: string;
+    created_at: string;
+    likes?: number;
+    reply_to_id?: string | null;
+    reply_to_nickname?: string | null;
+    replies: CommentItem[];
+  };
+  type Copy = {
+    commentLike: string;
+    commentLiked: string;
+    reply: string;
+    cancelReply: string;
+    replyingTo: string;
+    replies: string;
+    replyList: string;
+    loading: string;
+    empty: string;
+    pending: string;
+    error: string;
+    count: string;
+    submit: string;
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-engagement]').forEach((widget) => {
+    const commentsApi = widget.dataset.commentsApi;
+    const likesApi = widget.dataset.likesApi;
+    const list = widget.querySelector<HTMLOListElement>('[data-comments]');
+    const status = widget.querySelector<HTMLElement>('[data-status]');
+    const form = widget.querySelector<HTMLFormElement>('[data-form]');
+    const replyToInput = widget.querySelector<HTMLInputElement>('[data-reply-to-id]');
+    const replyContext = widget.querySelector<HTMLElement>('[data-reply-context]');
+    const replyLabel = widget.querySelector<HTMLElement>('[data-reply-label]');
+    const submitButton = widget.querySelector<HTMLButtonElement>('[data-submit]');
+    const cancelReply = widget.querySelector<HTMLButtonElement>('[data-cancel-reply]');
+    if (!commentsApi || !likesApi || !list || !status || !form || !replyToInput || !replyContext || !replyLabel || !submitButton || !cancelReply) return;
+
+    let copy: Copy;
+    try { copy = JSON.parse(widget.dataset.copy ?? '{}') as Copy; } catch { return; }
+    const tokenKey = `site-like-token:${likesApi}`;
+    const commentLikesKey = `site-comment-likes:${likesApi}`;
+    const storageGet = (key: string) => { try { return localStorage.getItem(key); } catch { return null; } };
+    const storageSet = (key: string, value: string) => { try { localStorage.setItem(key, value); } catch { /* Keep the choice available for this page view. */ } };
+    let token = storageGet(tokenKey);
+    if (!token) {
+      token = crypto.randomUUID().replaceAll('-', '');
+      storageSet(tokenKey, token);
+    }
+    let likedComments = new Set<string>();
+    try {
+      const saved = JSON.parse(storageGet(commentLikesKey) ?? '[]') as unknown;
+      if (Array.isArray(saved)) likedComments = new Set(saved.filter((id): id is string => typeof id === 'string'));
+    } catch { /* A malformed local preference only affects this browser. */ }
+
+    const heart = () => {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', 'currentColor');
+      svg.setAttribute('stroke-width', '1.6');
+      svg.setAttribute('stroke-linecap', 'round');
+      svg.setAttribute('stroke-linejoin', 'round');
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', 'M20.3 8.4c0 4.2-8.3 10-8.3 10s-8.3-5.8-8.3-10a4.1 4.1 0 0 1 7.4-2.4l.9 1.1.9-1.1a4.1 4.1 0 0 1 7.4 2.4Z');
+      svg.append(path);
+      return svg;
+    };
+    const toggleLike = async (
+      button: HTMLButtonElement,
+      count: HTMLElement,
+      current: () => boolean,
+      update: (next: boolean) => void,
+      commentId?: string,
+    ) => {
+      button.disabled = true;
+      const next = !current();
+      try {
+        const isLike = next;
+        const response = await fetch(likesApi, {
+          method: isLike ? 'PUT' : 'DELETE',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            visitorToken: token,
+            targetType: 'comment',
+            targetId: commentId,
+          }),
+        });
+        if (!response.ok) throw new Error('like failed');
+        const result = await response.json() as { likes: number };
+        update(next);
+        count.textContent = String(result.likes);
+      } catch { status.textContent = copy.error; }
+      finally { button.disabled = false; }
+    };
+    const makeCommentLike = (comment: CommentItem) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'comment-like';
+      button.setAttribute('aria-pressed', String(likedComments.has(comment.id)));
+      button.setAttribute('aria-label', likedComments.has(comment.id) ? copy.commentLiked : copy.commentLike);
+      if (likedComments.has(comment.id)) button.classList.add('is-liked');
+      button.append(heart());
+      const label = document.createElement('span');
+      label.textContent = likedComments.has(comment.id) ? copy.commentLiked : copy.commentLike;
+      const count = document.createElement('span');
+      count.className = 'comment-like-count';
+      count.textContent = String(comment.likes);
+      button.append(label, count);
+      button.addEventListener('click', () => void toggleLike(
+        button,
+        count,
+        () => likedComments.has(comment.id),
+        (next) => {
+          if (next) likedComments.add(comment.id);
+          else likedComments.delete(comment.id);
+          storageSet(commentLikesKey, JSON.stringify([...likedComments]));
+          button.setAttribute('aria-pressed', String(next));
+          button.setAttribute('aria-label', next ? copy.commentLiked : copy.commentLike);
+          button.classList.toggle('is-liked', next);
+          label.textContent = next ? copy.commentLiked : copy.commentLike;
+        },
+        comment.id,
+      ));
+      return button;
+    };
+    const makeReplyButton = (comment: CommentItem) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'text-action';
+      button.textContent = copy.reply;
+      button.addEventListener('click', () => {
+        replyToInput.value = comment.id;
+        replyLabel.textContent = copy.replyingTo.replace('{name}', comment.nickname);
+        replyContext.hidden = false;
+        submitButton.textContent = copy.reply;
+        form.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        form.querySelector<HTMLTextAreaElement>('textarea[name="body"]')?.focus();
+      });
+      return button;
+    };
+    const renderComment = (comment: CommentItem, isReply = false) => {
+      const item = document.createElement('li');
+      item.className = isReply ? 'comment-reply' : 'comment-thread';
+      const entry = document.createElement('article');
+      entry.className = 'comment-entry';
+      const meta = document.createElement('div');
+      meta.className = 'comment-meta';
+      const author = document.createElement('strong');
+      author.className = 'comment-author';
+      author.textContent = comment.nickname;
+      const time = document.createElement('time');
+      time.dateTime = comment.created_at;
+      time.textContent = new Intl.DateTimeFormat(document.documentElement.lang, { dateStyle: 'medium' }).format(new Date(comment.created_at));
+      meta.append(author, time);
+      const body = document.createElement('p');
+      body.className = 'comment-body';
+      if (isReply && comment.reply_to_nickname) {
+        const target = document.createElement('span');
+        target.className = 'comment-reply-to';
+        target.textContent = `@${comment.reply_to_nickname}`;
+        body.append(target, document.createTextNode(' '));
+      }
+      body.append(document.createTextNode(comment.body));
+      const actions = document.createElement('div');
+      actions.className = 'comment-actions';
+      actions.append(makeCommentLike(comment));
+      actions.append(makeReplyButton(comment));
+      if (!isReply && comment.replies.length) {
+        const replyCount = document.createElement('span');
+        replyCount.className = 'reply-count';
+        replyCount.textContent = copy.replies.replace('{n}', String(comment.replies.length));
+        actions.append(replyCount);
+      }
+      entry.append(meta, body, actions);
+      item.append(entry);
+      if (!isReply && comment.replies.length) {
+        const replies = document.createElement('ol');
+        replies.className = 'comment-replies';
+        replies.setAttribute('aria-label', copy.replyList);
+        for (const reply of comment.replies) replies.append(renderComment(reply, true));
+        item.append(replies);
+      }
+      return item;
+    };
+    const renderComments = (items: CommentItem[]) => {
+      list.replaceChildren();
+      if (!items.length) {
+        const empty = document.createElement('li');
+        empty.className = 'comment-empty';
+        empty.textContent = copy.empty;
+        list.append(empty);
+        return;
+      }
+      for (const comment of items) list.append(renderComment(comment));
+    };
+    const clearReply = () => {
+      replyToInput.value = '';
+      replyContext.hidden = true;
+      replyLabel.textContent = '';
+      submitButton.textContent = copy.submit;
+    };
+    cancelReply.addEventListener('click', clearReply);
+
+    const load = async () => {
+      try {
+        const [commentsResponse, likesResponse] = await Promise.all([fetch(commentsApi), fetch(likesApi)]);
+        if (!commentsResponse.ok || !likesResponse.ok) throw new Error('load failed');
+        const result = await commentsResponse.json() as { comments: CommentItem[]; commentCount: number };
+        const likes = await likesResponse.json() as { articleLikes: number; commentLikes: Record<string, number> };
+        renderComments(withLikeCounts(result.comments, likes.commentLikes));
+        status.textContent = copy.count.replace('{n}', String(result.commentCount));
+      } catch { status.textContent = copy.error; }
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        observer.disconnect();
+        void load();
+      }
+    });
+    observer.observe(widget);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      submitButton.disabled = true;
+      try {
+        const response = await fetch(commentsApi, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            nickname: data.get('nickname'),
+            body: data.get('body'),
+            ...(replyToInput.value ? { replyToId: replyToInput.value } : {}),
+          }),
+        });
+        if (!response.ok) throw new Error('comment failed');
+        form.reset();
+        clearReply();
+        status.textContent = copy.pending;
+      } catch { status.textContent = copy.error; }
+      finally { submitButton.disabled = false; }
+    });
+  });
+</script>
+
+<script define:vars={{ enabled, commentsEnabled: comments.enabled, repo: comments.repo, repoId: comments.repoId, category: comments.category, categoryId: comments.categoryId, mapping, term, lightTheme: comments.lightTheme, darkTheme: comments.darkTheme, giscusLang }}>
+  if (!enabled && commentsEnabled) {
+    const theme = document.documentElement.dataset.theme === 'dark' ? darkTheme : lightTheme;
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
     script.async = true;
@@ -44,20 +326,63 @@ const mapping = term ? 'specific' : comments.mapping;
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
     script.setAttribute('data-input-position', 'top');
-    script.setAttribute('data-theme', initialTheme);
+    script.setAttribute('data-theme', theme);
     script.setAttribute('data-lang', giscusLang);
     script.setAttribute('data-loading', 'lazy');
+    document.querySelector('.giscus')?.replaceChildren(script);
 
-    const mount = document.querySelector('.giscus');
-    mount?.replaceChildren(script);
-
-    // 主题切换时同步 giscus iframe。
-    const sendTheme = () => {
-      const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
-      if (!iframe?.contentWindow) return;
-      const nextDark = document.documentElement.dataset.theme === 'dark';
-      iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: nextDark ? darkTheme : lightTheme } } }, 'https://giscus.app');
-    };
-    new MutationObserver(sendTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    new MutationObserver(() => {
+      const iframe = document.querySelector('iframe.giscus-frame');
+      if (!(iframe instanceof HTMLIFrameElement) || !iframe.contentWindow) return;
+      const nextTheme = document.documentElement.dataset.theme === 'dark' ? darkTheme : lightTheme;
+      iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: nextTheme } } }, 'https://giscus.app');
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
 </script>
+
+<style>
+  .engagement { width: 100%; max-width: var(--prose-w); margin-block: 3.5rem 2rem; margin-inline: auto; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--ink); }
+  .engagement-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .engagement-header h2 { margin: 0; font-family: var(--serif); font-size: 1.4rem; font-weight: 600; }
+  .engagement-status { min-height: 1.4em; margin: .45rem 0 1.25rem; color: var(--muted); font-size: .88rem; }
+  .comment-like svg { width: 1.15rem; height: 1.15rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
+  .comment-like.is-liked { color: var(--accent); }
+  .comment-like.is-liked svg { fill: currentColor; }
+  :global(.engagement button:disabled) { opacity: .55; cursor: wait; }
+  .engagement button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+  .engagement-comments { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+  :global(.comment-thread) { padding-block: 1.1rem; border-top: 1px solid var(--line); }
+  :global(.comment-thread:first-child) { border-top: 0; }
+  :global(.comment-meta) { display: flex; align-items: baseline; gap: .65rem; flex-wrap: wrap; }
+  :global(.comment-author) { font-size: .93rem; font-weight: 600; }
+  :global(.comment-meta time) { color: var(--muted); font-size: .8rem; }
+  :global(.comment-body) { max-width: 68ch; margin: .45rem 0 .5rem; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
+  :global(.comment-reply-to) { color: var(--accent); font-weight: 600; }
+  :global(.comment-actions) { display: flex; align-items: center; gap: 1rem; min-height: 2rem; }
+  :global(.comment-like), :global(.text-action) { display: inline-flex; align-items: center; gap: .4rem; min-height: 2rem; padding: .2rem .15rem; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: .82rem; cursor: pointer; }
+  :global(.comment-like svg) { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  :global(.comment-like.is-liked) { color: var(--accent); }
+  :global(.comment-like.is-liked svg) { fill: currentColor; }
+  :global(.comment-like:hover), :global(.text-action:hover) { color: var(--accent); }
+  :global(.reply-count) { color: var(--muted); font-size: .8rem; }
+  :global(.comment-replies) { display: grid; gap: .2rem; margin: .8rem 0 0 .15rem; padding: .1rem 0 .1rem .95rem; border-left: 1px solid var(--line); list-style: none; }
+  :global(.comment-reply) { padding-block: .7rem; }
+  :global(.comment-empty) { padding-block: .75rem 1rem; color: var(--muted); font-size: .92rem; }
+  .engagement-privacy { max-width: 68ch; margin: 1.35rem 0 1.1rem; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+  .engagement-form { display: grid; gap: .9rem; max-width: 42rem; }
+  .engagement-form label { display: grid; gap: .4rem; font-size: .88rem; font-weight: 600; }
+  .engagement-form label small { color: var(--muted); font-size: .78rem; font-weight: 400; }
+  .engagement-form input:not([type="hidden"]), .engagement-form textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--line); border-radius: .35rem; padding: .7rem .75rem; background: var(--paper); color: var(--ink); font: inherit; font-weight: 400; line-height: 1.5; }
+  .engagement-form textarea { min-height: 7rem; resize: vertical; }
+  .engagement-form input:focus-visible, .engagement-form textarea:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .reply-context { display: flex; align-items: center; gap: .7rem; color: var(--muted); font-size: .84rem; }
+  .reply-context[hidden] { display: none; }
+  .submit-comment { justify-self: start; min-height: 2.6rem; padding: .55rem 1rem; border: 1px solid var(--accent); border-radius: .35rem; background: var(--accent); color: var(--paper); font: inherit; font-size: .88rem; cursor: pointer; }
+  .submit-comment:hover { filter: brightness(.94); }
+  @media (max-width: 36rem) {
+    .engagement { margin-block: 2.75rem 1.5rem; padding-top: 1.15rem; }
+    .engagement-header h2 { font-size: 1.25rem; }
+    :global(.comment-replies) { margin-left: 0; padding-left: .7rem; }
+    .engagement-form { gap: .75rem; }
+  }
+</style>

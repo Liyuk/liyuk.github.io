@@ -2,6 +2,7 @@
 **/node_modules/
 **/.astro/
 **/.wrangler/
+**/.dev.vars*
 **/dist/
 **/.DS_Store
 output/

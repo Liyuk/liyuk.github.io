@@ -704,7 +704,7 @@ h1, h2, h3, p { margin-top: 0; }
 .article { max-width: var(--article-w); padding-block: clamp(5rem, 11vw, 9rem); }
 /* 文章壳（宽居中）+ 壳内正文列（窄居中）：壳 860 居中、正文 720 在壳内再次水平居中，
    保持长文列宽的阅读舒适度（>= .prose 以下各级块统一 max-width + margin-inline:auto）。 */
-.article header { max-width: var(--prose-w); margin: 0 auto clamp(3rem, 7vw, 6rem); }
+.article > header { max-width: var(--prose-w); margin: 0 auto clamp(3rem, 7vw, 6rem); }
 .article h1 { margin: 0 0 1.75rem; font-family: var(--serif); font-size: clamp(3rem, 6vw, 5.7rem); font-weight: 500; letter-spacing: -.07em; line-height: .98; }
 .article-dek { max-width: var(--prose-w); margin-inline: auto; color: var(--muted); font-size: 1.2rem; line-height: 1.65; }
 .article-dates { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem 1rem; color: var(--muted); font-size: .82rem; }

@@ -88,6 +88,8 @@ jobs:
             chat-vector-manifest-${{ github.repository }}-
       - name: Sync published chat passages to Vectorize
         run: node scripts/sync-chat-vectors.mjs
+      - name: Deploy owner email notifier
+        run: npx --yes wrangler@4 deploy --config workers/email-notifier/wrangler.jsonc
       - name: Deploy verified build to Cloudflare Pages
         run: npx --yes wrangler@4 pages deploy dist --project-name "$CLOUDFLARE_PAGES_PROJECT" --branch master
 

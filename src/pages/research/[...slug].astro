@@ -8,6 +8,7 @@ import ShareRow from '../../components/ShareRow.astro';
 import RssSubscribe from '../../components/RssSubscribe.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Comments from '../../components/Comments.astro';
+import ArticleLike from '../../components/ArticleLike.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import RelatedEntries from '../../components/RelatedEntries.astro';
 import { contentSlug, researchUrl, columnUrl, columnEntryUrl } from '../../lib/content-paths.ts';
@@ -58,6 +59,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
   <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time>{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header>
   {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={columnMembers} />}
   <div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose"><Content /></div></div>
+  <ArticleLike lang={locale} />
   <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="research" />
   <RssSubscribe locale={locale} />
   {(previousResearch || nextResearch) && <nav class="post-pagination" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousResearch && <a class="prev" href={researchUrl(previousResearch.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousResearch.data.title}</span></a>}</div><div class="pagination-col">{nextResearch && <a class="next" href={researchUrl(nextResearch.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextResearch.data.title}</span></a>}</div></nav>}

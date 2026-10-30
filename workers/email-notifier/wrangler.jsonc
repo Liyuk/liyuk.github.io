@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "liyuk-email-notifier",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-30",
+  "workers_dev": false,
+  "vars": {
+    "SMTP_HOST": "smtp.qiye.aliyun.com",
+    "SMTP_USERNAME": "hello@liyuk.com",
+    "NOTIFY_TO": "likun.liyuk@gmail.com",
+    "NOTIFY_FROM": "hello@liyuk.com",
+    "SITE_ORIGIN": "https://liyuk.com",
+    "D1_STUDIO_URL": "https://dash.cloudflare.com/0b1d154227ab1748885e6a189b144e9b/workers/d1/databases/580e978a-2699-40ac-90b9-82a19eed7ef5/studio"
+  }
+}
