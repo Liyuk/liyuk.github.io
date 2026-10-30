@@ -84,9 +84,13 @@ function stripInlineMarkdown(text = '') {
 // added automatically by Buttondown, so this function only produces the
 // article content itself.
 export function buildEmailHtml({ blocks = null, articles = null }) {
+  const renderButton = (url, label) => {
+    const absoluteUrl = new URL(url, SITE_ORIGIN).href;
+    return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tbody><tr><td align="left" bgcolor="#35685d" style="padding:12px 20px;border-radius:4px;"><a href="${esc(absoluteUrl)}" style="display:block;border-radius:4px;background-color:#35685d;color:#fff;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none;">${esc(label)}</a></td></tr></tbody></table>`;
+  };
+
   const renderBlock = ({ lang, title, summary, url, meta }) => {
     const safeTitle = esc(title);
-    const absoluteUrl = new URL(url, SITE_ORIGIN).href;
     const langLabel = lang === 'zh' ? '中文 · Chinese' : 'English';
     const metaLine = meta
       ? `<p style="margin:0 0 18px;font-size:13px;line-height:1.5;color:#696a65;">${esc(meta)}</p>`
@@ -97,7 +101,7 @@ export function buildEmailHtml({ blocks = null, articles = null }) {
       `<h1 style="margin:0 0 14px;font-family:'Iowan Old Style','Baskerville','Noto Serif SC','Songti SC',Georgia,serif;font-size:28px;font-weight:500;letter-spacing:-.035em;line-height:1.15;color:#232522;">${safeTitle}</h1>`,
       metaLine,
       `<p style="max-width:520px;margin:0 0 22px;font-size:16px;line-height:1.7;color:#696a65;">${esc(summary)}</p>`,
-      `<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tbody><tr><td align="left" bgcolor="#35685d" style="padding:12px 20px;border-radius:4px;"><a href="${esc(absoluteUrl)}" style="display:block;border-radius:4px;background-color:#35685d;color:#fff;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none;">阅读全文 · Read more ↗</a></td></tr></tbody></table>`,
+      renderButton(url, '阅读全文 · Read more ↗'),
       `</div>`,
     ].join('');
   };
@@ -111,14 +115,13 @@ export function buildEmailHtml({ blocks = null, articles = null }) {
           const articleTitle = esc(title || languageBlocks[0]?.title || 'New article');
           const languageLinks = languageBlocks
             .map(({ lang, title: languageTitle, summary, url, meta }) => {
-              const absoluteUrl = new URL(url, SITE_ORIGIN).href;
-              const label = lang === 'zh' ? '中文阅读' : 'Read in English';
+              const label = lang === 'zh' ? '中文阅读 ↗' : 'Read in English ↗';
               return [
                 `<div style="margin:0 0 16px;">`,
                 `<p style="margin:0 0 6px;font-size:13px;line-height:1.5;color:#696a65;">${lang === 'zh' ? '中文' : 'English'} · ${esc(languageTitle)}</p>`,
                 `<p style="margin:0 0 6px;font-size:14px;line-height:1.6;color:#696a65;">${esc(summary)}</p>`,
                 meta ? `<p style="margin:0 0 8px;font-size:12px;line-height:1.5;color:#8a8b85;">${esc(meta)}</p>` : '',
-                `<a href="${esc(absoluteUrl)}" style="color:#35685d;font-size:14px;font-weight:700;text-decoration:none;">${label} ↗</a>`,
+                renderButton(url, label),
                 `</div>`,
               ].join('');
             })
