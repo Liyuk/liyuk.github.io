@@ -9,6 +9,7 @@ import ShareRow from '../../components/ShareRow.astro';
 import RssSubscribe from '../../components/RssSubscribe.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Comments from '../../components/Comments.astro';
+import ArticleLike from '../../components/ArticleLike.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import RelatedEntries from '../../components/RelatedEntries.astro';
 import { previewable } from '../../lib/content-model.ts';
@@ -76,6 +77,7 @@ const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2
       <div class="prose" data-pagefind-body><Content /></div>
     </div>
     <TipCard locale={locale} />
+    <ArticleLike lang={locale} />
     <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="writing" />
     <RssSubscribe locale={locale} />
     {(previousPost || nextPost) && <nav class="post-pagination" data-reading-nav="chronological" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousPost && <a class="prev" href={writingUrl(previousPost.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousPost.data.title}</span></a>}</div><div class="pagination-col">{nextPost && <a class="next" href={writingUrl(nextPost.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextPost.data.title}</span></a>}</div></nav>}

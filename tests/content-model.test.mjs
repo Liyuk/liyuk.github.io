@@ -59,6 +59,10 @@ test('system copy is available in Chinese and English', () => {
   assert.equal(i18n('zh-CN').chat.title, '问问本站内容');
   assert.equal(i18n('zh-CN').page.search.aiAction, '让 AI 根据本站文章回答');
   assert.equal(i18n('en').chat.launcher, 'Site AI assistant');
+  assert.equal(i18n('zh-CN').engagement.submit, '提交评论');
+  assert.equal(i18n('en').engagement.submit, 'Post comment');
+  assert.match(i18n('zh-CN').engagement.privacy, /加盐 IP 哈希/);
+  assert.match(i18n('en').engagement.privacy, /salted IP hash/i);
   assert.equal(i18n('en').page.search.aiAction, 'Ask AI using site articles');
   assert.match(i18n('en').chat.privacy, /Google Gemini/);
 });

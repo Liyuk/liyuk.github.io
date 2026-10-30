@@ -5,6 +5,7 @@ import TagList from '../../components/TagList.astro';
 import AuthorByline from '../../components/AuthorByline.astro';
 import ShareRow from '../../components/ShareRow.astro';
 import Comments from '../../components/Comments.astro';
+import ArticleLike from '../../components/ArticleLike.astro';
 import RelatedEntries from '../../components/RelatedEntries.astro';
 import { getGalleryCover } from '../../lib/gallery.ts';
 import { columnUrl, columnEntryUrl, galleryUrl } from '../../lib/content-paths.ts';
@@ -69,6 +70,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
     </section>
     {gallery.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(gallery.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug)}</a>{previousColumnEntry && <a href={columnEntryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a href={columnEntryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
     {(previousGallery || nextGallery) && <nav class="post-pagination" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousGallery && <a class="prev" href={galleryUrl(previousGallery.data.slug, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousGallery.data.title}</span></a>}</div><div class="pagination-col">{nextGallery && <a class="next" href={galleryUrl(nextGallery.data.slug, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextGallery.data.title}</span></a>}</div></nav>}
+    <ArticleLike lang={locale} />
     <ShareRow locale={locale} title={gallery.data.title} url={shareUrl} type="gallery" />
     <Comments lang={locale} />
     {relatedEntries.length > 0 && <RelatedEntries items={relatedEntries} locale={locale} />}

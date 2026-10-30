@@ -28,7 +28,13 @@ test('Cloudflare deployment runs only on master after successful verification', 
   assert.match(deploy, /needs:\s*verify/);
   assert.match(deploy, /needs\.verify\.result == 'success'/);
   assert.match(deploy, /github\.ref == 'refs\/heads\/master'/);
+  assert.match(deploy, /wrangler@4 deploy --config workers\/email-notifier\/wrangler\.jsonc/);
   assert.match(deploy, /wrangler@4 pages deploy dist/);
+  assert.ok(
+    deploy.indexOf('wrangler@4 deploy --config workers/email-notifier/wrangler.jsonc') <
+      deploy.indexOf('wrangler@4 pages deploy dist'),
+    'the email notifier must be available before Pages receives its service binding',
+  );
   assert.match(deploy, /CLOUDFLARE_API_TOKEN/);
   assert.match(deploy, /CLOUDFLARE_ACCOUNT_ID/);
   assert.match(deploy, /CLOUDFLARE_PAGES_PROJECT/);
