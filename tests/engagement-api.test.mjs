@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { onCommentsRequest, onLikesRequest } from '../functions/api/_shared/engagement.ts';
 
-function makeDb({ comments = [], likes = 0, rateCount = 1, parent = null, commentLikes = 0 } = {}) {
+function makeDb({ comments = [], commentTotal = comments.length, likes = 0, rateCount = 1, parent = null, commentLikes = 0 } = {}) {
   const calls = [];
   const db = {
     prepare(sql) {
@@ -31,6 +31,7 @@ function makeDb({ comments = [], likes = 0, rateCount = 1, parent = null, commen
             },
             async first() {
               calls.push(query);
+              if (sql.includes('COUNT(*) AS count FROM comments')) return { count: commentTotal };
               return sql.includes('COUNT')
                 ? { count: query.values[1] === 'comment' ? commentLikes : likes }
                 : sql.includes('RETURNING')
@@ -80,8 +81,10 @@ test('GET /comments returns only comments for one canonical article path', async
       },
     ],
     commentCount: 1,
+    hasMore: false,
+    nextCursor: null,
   });
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
   assert.ok(calls.every((call) => !call.sql.includes('FROM likes')));
   assert.ok(calls[0].sql.includes("status = 'approved'"));
   assert.equal(calls[0].values[0], 'writing/example');
@@ -143,7 +146,41 @@ test('GET /comments keeps replies to replies flat under their top-level comment'
       },
     ],
     commentCount: 3,
+    hasMore: false,
+    nextCursor: null,
   });
+});
+
+test('GET /comments reports the full approved count and a stable cursor for the next page', async () => {
+  const comments = [
+    { id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc', nickname: 'C', body: 'Third', created_at: '2026-10-03' },
+    { id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', nickname: 'B', body: 'Second', created_at: '2026-10-02' },
+    { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', nickname: 'A', body: 'First', created_at: '2026-10-02' },
+  ];
+  const { db, calls } = makeDb({ comments, commentTotal: 9 });
+  const response = await onCommentsRequest({
+    request: request('GET', '/api/comments/writing/example/?limit=2'),
+    env: { ENGAGEMENT_DB: db },
+  });
+
+  assert.deepEqual(await response.json(), {
+    comments: [
+      { ...comments[0], replies: [] },
+      { ...comments[1], replies: [] },
+    ],
+    commentCount: 9,
+    hasMore: true,
+    nextCursor: { createdAt: '2026-10-02', id: comments[1].id },
+  });
+  assert.ok(calls.some((call) => call.sql.includes('COUNT(*) AS count FROM comments')));
+
+  const cursor = encodeURIComponent('2026-10-02');
+  await onCommentsRequest({
+    request: request('GET', `/api/comments/writing/example/?limit=2&before=${cursor}&beforeId=${comments[1].id}`),
+    env: { ENGAGEMENT_DB: db },
+  });
+  assert.ok(calls[3].sql.includes('(c.created_at = ? AND c.id < ?)'));
+  assert.deepEqual(calls[3].values.slice(1, 5), ['2026-10-02', '2026-10-02', '2026-10-02', comments[1].id]);
 });
 
 test('GET /likes returns article and comment counts separately from comment data', async () => {

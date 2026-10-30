@@ -161,16 +161,23 @@ async function handleGet(
   const url = new URL(request.url);
   const limit = Math.min(50, Math.max(1, Number(url.searchParams.get('limit')) || 20));
   const before = url.searchParams.get('before');
+  const beforeId = url.searchParams.get('beforeId');
+  if ((before || beforeId) && (!before || !beforeId || !COMMENT_ID.test(beforeId) || !Number.isFinite(Date.parse(before)))) {
+    return json({ error: 'Invalid comment cursor.' }, 400);
+  }
   const roots = await env.ENGAGEMENT_DB.prepare(
     `SELECT c.id, c.nickname, c.body, c.created_at,
        c.parent_id
      FROM comments c
      WHERE c.article_key = ? AND c.status = 'approved' AND c.parent_id IS NULL
-       AND (? IS NULL OR c.created_at < ?)
-     ORDER BY c.created_at DESC LIMIT ?`,
+       AND (? IS NULL OR c.created_at < ? OR (c.created_at = ? AND c.id < ?))
+     ORDER BY c.created_at DESC, c.id DESC LIMIT ?`,
   )
-    .bind(key, before, before, limit)
+    .bind(key, before, before, before, beforeId, limit + 1)
     .all<PublicComment>();
+  const pageRoots = roots.results.slice(0, limit);
+  const hasMore = roots.results.length > limit;
+  const lastRoot = pageRoots.at(-1);
   const replies = await env.ENGAGEMENT_DB.prepare(
     `SELECT c.id, c.parent_id, c.reply_to_id, c.nickname, c.body, c.created_at,
        target.nickname AS reply_to_nickname
@@ -183,11 +190,12 @@ async function handleGet(
        AND c.parent_id IN (
          SELECT id FROM comments
          WHERE article_key = ? AND status = 'approved' AND parent_id IS NULL
-         ORDER BY created_at DESC LIMIT ?
+           AND (? IS NULL OR created_at < ? OR (created_at = ? AND id < ?))
+         ORDER BY created_at DESC, id DESC LIMIT ?
        )
      ORDER BY c.created_at ASC`,
   )
-    .bind(key, key, limit)
+    .bind(key, key, before, before, before, beforeId, limit)
     .all<PublicComment>();
   const repliesByParent = new Map<string, PublicComment[]>();
   for (const reply of replies.results) {
@@ -196,13 +204,20 @@ async function handleGet(
     thread.push(reply);
     repliesByParent.set(reply.parent_id, thread);
   }
-  const comments = roots.results.map((comment) => ({
+  const comments = pageRoots.map((comment) => ({
     ...comment,
     replies: repliesByParent.get(comment.id) ?? [],
   }));
+  const count = await env.ENGAGEMENT_DB.prepare(
+    "SELECT COUNT(*) AS count FROM comments WHERE article_key = ? AND status = 'approved'",
+  )
+    .bind(key)
+    .first<{ count: number }>();
   return json({
     comments,
-    commentCount: comments.reduce((count, comment) => count + 1 + comment.replies.length, 0),
+    commentCount: Number(count?.count ?? 0),
+    hasMore,
+    nextCursor: hasMore && lastRoot ? { createdAt: lastRoot.created_at, id: lastRoot.id } : null,
   });
 }
 

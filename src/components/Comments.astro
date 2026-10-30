@@ -34,6 +34,7 @@ const mapping = term ? 'specific' : comments.mapping;
     </header>
     <p class="engagement-status" data-status role="status">{copy.loading}</p>
     <ol class="engagement-comments" data-comments aria-live="polite" aria-label={title}></ol>
+    <button class="load-comments" data-load-more type="button" hidden>{copy.loadMore}</button>
     <p class="engagement-privacy">{copy.privacy}</p>
     <form class="engagement-form" data-form>
       <input type="hidden" name="replyToId" data-reply-to-id value="" />
@@ -79,6 +80,8 @@ const mapping = term ? 'specific' : comments.mapping;
     replies: string;
     replyList: string;
     loading: string;
+    loadingMore: string;
+    loadMore: string;
     empty: string;
     pending: string;
     error: string;
@@ -90,6 +93,7 @@ const mapping = term ? 'specific' : comments.mapping;
     const commentsApi = widget.dataset.commentsApi;
     const likesApi = widget.dataset.likesApi;
     const list = widget.querySelector<HTMLOListElement>('[data-comments]');
+    const loadMoreButton = widget.querySelector<HTMLButtonElement>('[data-load-more]');
     const status = widget.querySelector<HTMLElement>('[data-status]');
     const form = widget.querySelector<HTMLFormElement>('[data-form]');
     const replyToInput = widget.querySelector<HTMLInputElement>('[data-reply-to-id]');
@@ -97,7 +101,7 @@ const mapping = term ? 'specific' : comments.mapping;
     const replyLabel = widget.querySelector<HTMLElement>('[data-reply-label]');
     const submitButton = widget.querySelector<HTMLButtonElement>('[data-submit]');
     const cancelReply = widget.querySelector<HTMLButtonElement>('[data-cancel-reply]');
-    if (!commentsApi || !likesApi || !list || !status || !form || !replyToInput || !replyContext || !replyLabel || !submitButton || !cancelReply) return;
+    if (!commentsApi || !likesApi || !list || !loadMoreButton || !status || !form || !replyToInput || !replyContext || !replyLabel || !submitButton || !cancelReply) return;
 
     let copy: Copy;
     try { copy = JSON.parse(widget.dataset.copy ?? '{}') as Copy; } catch { return; }
@@ -111,6 +115,8 @@ const mapping = term ? 'specific' : comments.mapping;
       storageSet(tokenKey, token);
     }
     let likedComments = new Set<string>();
+    let loadedComments: CommentItem[] = [];
+    let nextCursor: { createdAt: string; id: string } | null = null;
     try {
       const saved = JSON.parse(storageGet(commentLikesKey) ?? '[]') as unknown;
       if (Array.isArray(saved)) likedComments = new Set(saved.filter((id): id is string => typeof id === 'string'));
@@ -266,16 +272,40 @@ const mapping = term ? 'specific' : comments.mapping;
     };
     cancelReply.addEventListener('click', clearReply);
 
-    const load = async () => {
+    const load = async (append = false) => {
+      loadMoreButton.disabled = true;
+      loadMoreButton.textContent = copy.loadingMore;
       try {
-        const [commentsResponse, likesResponse] = await Promise.all([fetch(commentsApi), fetch(likesApi)]);
+        const commentsUrl = new URL(commentsApi, window.location.origin);
+        commentsUrl.searchParams.set('limit', '20');
+        if (append && nextCursor) {
+          commentsUrl.searchParams.set('before', nextCursor.createdAt);
+          commentsUrl.searchParams.set('beforeId', nextCursor.id);
+        }
+        const [commentsResponse, likesResponse] = await Promise.all([fetch(commentsUrl), fetch(likesApi)]);
         if (!commentsResponse.ok || !likesResponse.ok) throw new Error('load failed');
-        const result = await commentsResponse.json() as { comments: CommentItem[]; commentCount: number };
+        const result = await commentsResponse.json() as {
+          comments: CommentItem[];
+          commentCount: number;
+          hasMore: boolean;
+          nextCursor: { createdAt: string; id: string } | null;
+        };
         const likes = await likesResponse.json() as { articleLikes: number; commentLikes: Record<string, number> };
-        renderComments(withLikeCounts(result.comments, likes.commentLikes));
+        const knownIds = new Set(loadedComments.map((comment) => comment.id));
+        const newComments = result.comments.filter((comment) => !knownIds.has(comment.id));
+        loadedComments = append ? [...loadedComments, ...newComments] : result.comments;
+        renderComments(withLikeCounts(loadedComments, likes.commentLikes));
         status.textContent = copy.count.replace('{n}', String(result.commentCount));
-      } catch { status.textContent = copy.error; }
+        nextCursor = result.nextCursor;
+        loadMoreButton.hidden = !result.hasMore;
+        loadMoreButton.textContent = copy.loadMore;
+      } catch {
+        status.textContent = copy.error;
+        loadMoreButton.hidden = !append;
+        loadMoreButton.textContent = copy.loadMore;
+      } finally { loadMoreButton.disabled = false; }
     };
+    loadMoreButton.addEventListener('click', () => void load(true));
 
     const observer = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting)) {
@@ -368,6 +398,9 @@ const mapping = term ? 'specific' : comments.mapping;
   :global(.comment-replies) { display: grid; gap: .2rem; margin: .8rem 0 0 .15rem; padding: .1rem 0 .1rem .95rem; border-left: 1px solid var(--line); list-style: none; }
   :global(.comment-reply) { padding-block: .7rem; }
   :global(.comment-empty) { padding-block: .75rem 1rem; color: var(--muted); font-size: .92rem; }
+  .load-comments { margin-top: 1rem; padding: .45rem .8rem; border: 1px solid var(--line); border-radius: .35rem; background: transparent; color: var(--accent); font: inherit; font-size: .85rem; cursor: pointer; }
+  .load-comments:hover { border-color: var(--accent); }
+  .load-comments[hidden] { display: none; }
   .engagement-privacy { max-width: 68ch; margin: 1.35rem 0 1.1rem; color: var(--muted); font-size: .8rem; line-height: 1.55; }
   .engagement-form { display: grid; gap: .9rem; max-width: 42rem; }
   .engagement-form label { display: grid; gap: .4rem; font-size: .88rem; font-weight: 600; }

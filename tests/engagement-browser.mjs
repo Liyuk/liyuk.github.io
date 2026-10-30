@@ -108,6 +108,7 @@ try {
   const threadedPage = await browser.newPage({ viewport: { width: 900, height: 700 } });
   const rootId = '11111111-1111-4111-8111-111111111111';
   const replyId = '22222222-2222-4222-8222-222222222222';
+  const olderRootId = '33333333-3333-4333-8333-333333333333';
   let replyLikes = 1;
   let postedReply;
   const threadedErrors = [];
@@ -116,6 +117,16 @@ try {
     if (route.request().method() === 'POST') {
       postedReply = route.request().postDataJSON();
       return route.fulfill({ status: 201, json: { ok: true, status: 'pending' } });
+    }
+    if (new URL(route.request().url()).searchParams.has('before')) {
+      return route.fulfill({
+        json: {
+          comments: [{ id: olderRootId, nickname: 'Older reader', body: 'An older comment', created_at: '2026-10-28T12:00:00.000Z', replies: [] }],
+          commentCount: 22,
+          hasMore: false,
+          nextCursor: null,
+        },
+      });
     }
     return route.fulfill({
       json: {
@@ -138,7 +149,9 @@ try {
             ],
           },
         ],
-        commentCount: 2,
+        commentCount: 22,
+        hasMore: true,
+        nextCursor: { createdAt: '2026-10-29T12:00:00.000Z', id: rootId },
       },
     });
   });
@@ -152,7 +165,7 @@ try {
   await threadedPage.goto(new URL(article, base).href);
   await threadedPage.locator('[data-engagement]').scrollIntoViewIfNeeded();
   await threadedPage.waitForFunction(
-    () => document.querySelector('[data-status]')?.textContent?.includes('2 条评论'),
+    () => document.querySelector('[data-status]')?.textContent?.includes('22 条评论'),
     undefined,
     { timeout: 3_000 },
   );
@@ -165,6 +178,10 @@ try {
     document.querySelector('.comment-reply .comment-like')?.getAttribute('aria-pressed') === 'true',
   );
   assert.equal(await replyLike.locator('.comment-like-count').textContent(), '2');
+  const loadMore = threadedPage.getByRole('button', { name: '加载更多评论' });
+  await loadMore.click();
+  await threadedPage.getByText('An older comment').waitFor();
+  assert.equal(await loadMore.isVisible(), false);
   const replyItem = threadedPage.locator('.comment-reply').first();
   await replyItem.getByRole('button', { name: /回复|Reply/ }).click();
   assert.equal(await threadedPage.locator('[data-reply-label]').textContent(), '正在回复：Author');
