@@ -1,6 +1,6 @@
 ---
 title: "China Housing Price Analysis: From Data Definitions to Testable Forecasts"
-description: "A project that builds a 70-city housing price index panel from public NBS releases, maintains macro and district data, and uses rolling backtests to limit forecast horizons while showing what the data can and cannot say."
+description: "A 70-city housing price index panel built from public NBS releases, connected to macro and district data, rolling backtests, and an interactive dashboard."
 locale: en
 translationStatus: draft
 translationKey: 2026/11/china-housing-price-analysis
@@ -22,9 +22,9 @@ This project began by collecting and organizing 70-city housing indexes. It has 
 
 ## Where the data come from
 
-In the **November 5, 2026** snapshot, the second-hand housing index panel covers 249 months, from January 2006 through September 2026. From February 2011 onward, it primarily uses directly collected NBS releases. Earlier months and some missing official pages use a third-party mirror, with provenance labels retained. All 13,580 cells that could be compared matched the official pages. That comparison supports the overlapping portion; it cannot establish the accuracy of earlier data for which official pages were unavailable.
+In the **November 5, 2026** snapshot, the second-hand housing index panel covers 249 months, from January 2006 through September 2026. From February 2011 onward, it primarily uses directly collected NBS releases. Earlier months and some missing official pages use a third-party mirror, with provenance labels retained. All 13,580 cells that could be compared matched the official pages. This check covers overlapping cells; early months without official pages have no contemporaneous comparison.
 
-The project checks internal consistency by comparing the product of 12 monthly changes with the year-over-year index. Data for 2006–2007 failed that check; they remain in the download with a warning, while dashboard history starts in 2008. A change in statistical methodology around 2011 is marked on the charts, and models use data after the break. The new-home index also has gaps, documented on the data page.
+The project checks internal consistency by comparing the product of 12 monthly changes with the year-over-year index. Data for 2006–2007 failed that check; they remain in the download with a warning, while dashboard history starts in 2008. A change in statistical methodology around 2011 is marked on the charts, and models use data after the break. Gaps in the new-home index are listed on the data page.
 
 The project also collects national real-estate development and sales data from the NBS, loan prime rates (LPR) from the People's Bank of China, third-party district listing and rental data, and Beijing housing authority transaction data. Their coverage and frequency differ: macro indicators are generally cumulative from the beginning of the year, district rankings contain only selected areas each month, and official Beijing district transactions are currently a single-month snapshot. They provide context and cannot substitute for one another.
 
@@ -50,11 +50,11 @@ On the [dashboard](https://liyuk.github.io/cn-housing-price-training/), start wi
 
 ![City ranking with trend strength, changes, and forecast intervals for 70 cities](/images/projects/china-housing-price-analysis/cities.webp)
 
-**Statistics** shows the broader distribution: the number of cities with monthly increases, a year-over-year heatmap, new versus second-hand indexes, macro indicators, and LPR rates. When comparing rental yields, remember that city rankings may include different numbers of districts. The Beijing transaction chart shows counts.
+**Statistics** shows the broader distribution: the number of cities with monthly increases, a year-over-year heatmap, new versus second-hand indexes, macro indicators, and LPR rates. City rental-yield rankings may include different numbers of districts. The Beijing transaction chart shows counts.
 
 Overview and city pages offer line and candlestick views. The candlesticks are synthesized from monthly indexes: monthly candles have no intraday high or low, and quarterly and annual wicks represent extremes among their constituent months. They offer another view of the same series, without adding daily transaction data. An index measures relative change and cannot be read directly as a transaction price per square meter.
 
-**Forecast logic** presents errors, interval coverage, and the forecast ledger. **Data and methods** lists sources, coverage, gaps, definitions, and downloads. The site also links to papers being revised separately in the project repository; readers should check which paper version and dashboard model they are comparing.
+**Forecast logic** presents errors, interval coverage, and the forecast ledger. **Data and methods** lists sources, coverage, gaps, definitions, and downloads. The site also links to papers revised separately in the project repository; paper and dashboard model versions may differ.
 
 ## Forecasting method
 
@@ -66,11 +66,11 @@ For the first 12 months, the two models with the lowest realized historical erro
 
 ## Backtest results
 
-The project compares methods including no change, recent averages, AR(1), damped trends, and a cross-city model, with an optional time-series foundation model. Forecast combinations and intervals use rolling historical errors: at each backtest origin, the forecast uses only prior data and is compared with subsequent observations. This shows performance across time more effectively than a single split, though it does not eliminate bias from model selection.
+The project compares methods including no change, recent averages, AR(1), damped trends, and a cross-city model, with an optional time-series foundation model. Forecast combinations and intervals use rolling historical errors: at each backtest origin, the forecast uses only prior data and is compared with subsequent observations. Rolling backtests show performance across origins; the role of these same results in model selection is described below.
 
-In the November 2026 acceptance record, the average 12-month forecast error across the 70-city backtest was 38% lower than the no-change baseline. The nominal 80% interval had observed coverage of 77%–82% at horizons from 1 to 24 months. Errors at 48 and 60 months were respectively 12% and 33% higher than the no-change baseline, so the dashboard labels those longer horizons as scenarios. The damped-trend rule for months 13–24 was chosen after examining backtest results, so its reported performance may be optimistic. These figures summarize a historical sample; they do not promise the same results for every city or period.
+In the November 2026 acceptance record, the average 12-month forecast error across the 70-city backtest was 38% lower than the no-change baseline. The nominal 80% interval had observed coverage of 77%–82% at horizons from 1 to 24 months. Errors at 48 and 60 months were respectively 12% and 33% higher than the no-change baseline, so the dashboard labels those longer horizons as scenarios. The damped-trend rule for months 13–24 was selected using the same backtests. These figures summarize a historical sample, with results varying across cities and periods.
 
-To accumulate prospective evidence, the project freezes forecasts monthly and scores them when new data arrive. **As of this snapshot, the ledger contains only its first entry, for September 2026**, too little to assess long-term prospective performance. Historical replays help identify problems, but model choices made after outcomes became known are not prospective forecasts.
+The project freezes forecasts monthly and scores them when new data arrive. **As of this snapshot, the ledger contains only one entry, for September 2026**, so it does not yet provide a long-term prospective evaluation. Retrospectively selected rules are described above.
 
 ## Project value
 
@@ -82,12 +82,12 @@ To accumulate prospective evidence, the project freezes forecasts monthly and sc
 
 ## Remaining problems
 
-**Data representation.** The 70 cities do not cover every city in China; early mirror data lack contemporaneous official pages for comparison, and district listing rankings are incomplete. Further work should locate original sources and explain district sample selection more precisely.
+**Data representation.** The 70-city scope and early mirror comparison are described under “Where the data come from”; district listing rankings cover only selected areas. Further work includes locating original sources and analyzing district sample selection.
 
-**Forecast evidence.** Backtests support the horizon labels, but some rules were selected after looking at results and the prospective ledger has only just begun. Preserving each frozen forecast and reporting errors and coverage by city and horizon will show whether aggregate scores conceal local weaknesses.
+**Forecast evidence.** Some rules were selected from historical backtests, and the ledger has one entry. Reporting frozen-forecast errors and coverage by city and horizon over time will show whether aggregate scores conceal local weaknesses.
 
 **Explanation and decisions.** The model mainly uses price history and cannot explain turning points caused by policy or shifts in supply and demand. The forecast is also an index rather than an actual transaction price. Longer fundamental data and comparisons across market regimes are worthwhile next steps.
 
-The project supports exploration of historical index movements, understanding data definitions, and inspecting forecasting methods and errors. It does not provide neighborhood-level transaction prices, and its forecasts do not fully incorporate external factors such as policy, income, and supply and demand. Forecast intervals estimate uncertainty from historical errors; they cannot encompass every future policy or market change.
+The project covers public data preparation, index checks, backtest methods, and city-level index results. Forecast intervals are constructed from historical errors.
 
 The project remains under maintenance. Dashboard data, models, and evaluations will change with updates; the coverage and results described here refer to the November 2026 snapshot.
