@@ -11,7 +11,7 @@ status: maintained
 draft: false
 repositoryUrl: https://github.com/Liyuk/dsh-quota-router
 paperUrl: https://github.com/Liyuk/dsh-quota-router/blob/main/docs/blog-quota-router-engineering.md
-tags: [agent, routing, algorithms, reliability, observability, typescript]
+tags: [ai-gateway, agent, routing, algorithms, reliability, observability, typescript]
 ---
 
 The hard part of multi-model, multi-provider routing is not merely switching models. It is preserving the answers to a set of operational questions:

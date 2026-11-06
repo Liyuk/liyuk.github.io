@@ -17,7 +17,7 @@ test('every indexable global page has localized SEO description and keywords', (
 });
 
 test('article keywords are localized from the article tag slugs', () => {
-  assert.deepEqual(contentKeywords(['ai', 'developer-productivity', 'strategy'], 'zh-CN'), ['AI', '开发者生产力', 'Strategy']);
+  assert.deepEqual(contentKeywords(['ai', 'developer-productivity', 'strategy'], 'zh-CN'), ['AI', '开发者生产力', '战略']);
   assert.deepEqual(contentKeywords(['ai', 'developer-productivity', 'strategy'], 'en'), ['AI', 'Developer Productivity', 'Strategy']);
 });
 

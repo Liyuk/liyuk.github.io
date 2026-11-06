@@ -35,6 +35,14 @@ test('Cloudflare deployment runs only on master after successful verification', 
   assert.match(deploy, /download-artifact/);
 });
 
+test('IndexNow ping is best-effort and runs after the Pages deploy step', () => {
+  const deploy = jobBlock('deploy');
+  const pages = deploy.indexOf('wrangler@4 pages deploy');
+  const ping = deploy.indexOf('scripts/indexnow.mjs');
+  assert.ok(pages !== -1 && ping > pages);
+  assert.match(deploy.slice(pages), /continue-on-error:\s*true\s*\n\s*run: node scripts\/indexnow\.mjs/);
+});
+
 test('Buttondown notification waits for a successful Cloudflare deployment', () => {
   const notify = jobBlock('notify');
   assert.match(notify, /needs:\s*deploy/);

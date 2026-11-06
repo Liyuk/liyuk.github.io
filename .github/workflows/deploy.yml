@@ -90,6 +90,10 @@ jobs:
         run: node scripts/sync-chat-vectors.mjs
       - name: Deploy verified build to Cloudflare Pages
         run: npx --yes wrangler@4 pages deploy dist --project-name "$CLOUDFLARE_PAGES_PROJECT" --branch master
+      # Best-effort: a failed ping must never fail a completed deployment.
+      - name: Notify IndexNow of recently changed URLs
+        continue-on-error: true
+        run: node scripts/indexnow.mjs
 
   notify:
     name: Notify Buttondown subscribers

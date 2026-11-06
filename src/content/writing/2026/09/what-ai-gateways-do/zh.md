@@ -6,7 +6,7 @@ createdAt: 2026-09-03
 publishedAt: 2026-09-03
 draft: false
 type: essay
-tags: [ai, architecture, systems-design, routing, reliability, capacity-planning, observability, interview, learning, technology]
+tags: [ai-gateway, ai, architecture, systems-design, routing, reliability, capacity-planning, observability, interview, learning, technology]
 column: { slug: technical-systems, order: 9 }
 translationStatus: original
 translationKey: 2026/09/what-ai-gateways-do

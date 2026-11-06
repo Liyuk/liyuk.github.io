@@ -4,6 +4,7 @@
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-10-12",
   "ai": { "binding": "AI" },
+  "analytics_engine_datasets": [{ "binding": "SEARCH_LOG", "dataset": "liyuk_site_search" }],
   "vectorize": [
     {
       "binding": "VECTOR_INDEX",

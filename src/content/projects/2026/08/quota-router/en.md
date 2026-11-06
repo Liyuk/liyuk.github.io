@@ -15,7 +15,7 @@ hero:
   src: /images/projects/quota-router/architecture.en.svg
   alt: "Quota Router inside DSH: a user turn enters the policy layer, passes through source priority, task-model mapping, and guardrails, then returns to the native DSH layer."
   caption: "Quota Router's architectural boundary: explainable model selection and fallback, without owning providers, credentials, or the model catalog."
-tags: [agent, routing, algorithms, explainability, reliability, observability, typescript]
+tags: [ai-gateway, agent, routing, algorithms, explainability, reliability, observability, typescript]
 ---
 
 [View Quota Router on GitHub ↗](https://github.com/Liyuk/dsh-quota-router) · [View the published package on npm ↗](https://www.npmjs.com/package/@liyuk/dsh-quota-router)

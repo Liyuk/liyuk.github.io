@@ -11,7 +11,7 @@ status: maintained
 draft: false
 repositoryUrl: https://github.com/Liyuk/dsh-quota-router
 paperUrl: https://github.com/Liyuk/dsh-quota-router/blob/main/docs/blog-quota-router-engineering.md
-tags: [agent, routing, algorithms, reliability, observability, typescript]
+tags: [ai-gateway, agent, routing, algorithms, reliability, observability, typescript]
 ---
 
 多模型、多 provider 的真正难点，通常不是“能不能切换模型”，而是切换之后是否仍然知道：
