@@ -2,19 +2,19 @@
 title: "China Housing Price Analysis: From Data Definitions to Testable Forecasts"
 description: "A 70-city housing price index panel built from public NBS releases, connected to macro and district data, rolling backtests, and an interactive dashboard."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/11/china-housing-price-analysis
 createdAt: 2026-08-08
 updatedAt: 2026-11-05
 status: active
-draft: true
+draft: false
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [data, machine-learning, housing, forecasting, time-series, explainability, reproducibility, china]
 ---
 
 [View the repository ↗](https://github.com/Liyuk/cn-housing-price-training) · [Open the 70-city dashboard ↗](https://liyuk.github.io/cn-housing-price-training/)
 
-## What the project asks
+## What this project addresses
 
 Understanding China's housing market starts with a measurement problem. The National Bureau of Statistics publishes price indexes; third-party platforms often report average listing prices; local housing authorities may release transaction counts and area without prices. Each describes a different aspect of the market. They cannot simply be joined into one transaction-price series.
 
@@ -82,7 +82,7 @@ The project freezes forecasts monthly and scores them when new data arrive. **As
 
 ## Remaining problems
 
-**Data representation.** The 70-city scope and early mirror comparison are described under “Where the data come from”; district listing rankings cover only selected areas. Further work includes locating original sources and analyzing district sample selection.
+**Data coverage and representativeness.** The 70-city scope and early mirror comparison are described under “Where the data come from”; district listing rankings cover only selected areas. Further work includes locating original sources and analyzing district sample selection.
 
 **Forecast evidence.** Some rules were selected from historical backtests, and the ledger has one entry. Reporting frozen-forecast errors and coverage by city and horizon over time will show whether aggregate scores conceal local weaknesses.
 

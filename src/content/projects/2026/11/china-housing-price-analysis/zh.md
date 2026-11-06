@@ -1,10 +1,11 @@
 ---
+translationStatus: original
 title: 中国房价分析：从数据口径到可检验的预测看板
 description: 基于国家统计局公开月报构建 70 城房价指数面板，连接宏观与区级数据、滚动回测和交互看板。
 createdAt: 2026-08-08
 updatedAt: 2026-11-05
 status: active
-draft: true
+draft: false
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [data, machine-learning, housing, forecasting, time-series, explainability, reproducibility, china]
 ---

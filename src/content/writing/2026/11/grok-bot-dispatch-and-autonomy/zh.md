@@ -1,10 +1,10 @@
 ---
-title: 自循环的 Agent 工作流：以 Grok Bot 为例
-description: Grok Bot 如何调度多 Agent、VPS 与 OpenMausBot 能降低哪些成本，以及长期多任务自执行的收益该如何衡量。
+title: Grok Bot 调度 Agent 团队：从长任务到多任务自循环
+description: 从 OpenMausBot 的单项工作流到 30 个有依赖的任务，讨论 Grok Bot 如何调度外部 Harness，并用持久状态、并发控制和交付验收推动多任务自循环。
 locale: zh-CN
 translationStatus: original
 createdAt: 2026-11-05
-draft: true
+draft: false
 type: case-study
 tags: [technology, agent-systems, developer-productivity]
 citationUrls:
@@ -58,7 +58,9 @@ citationUrls:
   - https://github.com/asgeirtj/system_prompts_leaks/blob/1b6f936124b4eceb6e697a69da07519bea67feab/xAI/grok-bot/grok-bot.md
 ---
 
-我想要的不是一个更会回答的机器人。我想把一个目标交出去，少量人工干预，让它理解我要的结果，自己判断要找谁、分几步、怎么验收；如果某一段做完了，下一段能接着开始。期间我还可以补信息、纠正目标，机器人之间也能互相校对，最后把证据和结果一起交回来。
+我实际用下来：OpenMausBot 的定时任务适合固定工作，单项工作流也能调度得不错；难点出现在长期多任务队列。比如同时有 30 个 task：A 的结果先等人决策，B 等 A 的决定，C、D 可以并行，其他任务还要根据反馈重排。调度器此时要维护并发上限、优先级、依赖顺序和决策时点。OpenMausBot 把模型和执行环境接起来；持续调度这批跨依赖任务，需要队列管理和目标状态层继续补齐。
+
+我想把一个目标交给机器人，只在关键处补信息或修正方向。它需要理解我要的结果，判断该找谁、拆成几步、怎样验收；一段完成后，下一段能接着开始，机器人之间也能互相校对，最后把证据和交付物一起交回来。
 
 ![多任务自执行循环：目标和状态持久化，任务经过并行执行、双路验收后回写并进入下一轮](/images/writing/grok-bot-autonomy-loop.svg)
 
@@ -96,12 +98,6 @@ Cursor 的长任务 Harness 会先提出计划并等待确认，再让多个 Age
 
 连续执行更值得看的证据是 Harness 是否能把失败一轮轮接住。LongHorizon-Harness 预印本报告，同一 Harness 能提升多个模型和任务上的结果；在它测的 OSWorld 2.0 子集里，Claude Opus 4.7 从 20.0% 升到 34.3%。这仍然离可靠完成有距离，但说明外部状态、独立审计和分轮执行不是装饰，它们可能比只换更强模型更直接地改善跨轮推进。[LongHorizon-Harness](https://arxiv.org/abs/2608.01964)
 
-重度 Agent 项目的公开案例里，工程覆盖面和速度都很可观。OpenAI 报告称，他们用 Codex 从空仓库做一个内部产品，五个月约 100 万行代码、约 1,500 个合并 PR，最初由三位工程师带着 Agent 开发；团队估计比人工手写快约十倍，产品已有内部日常用户。Anthropic 的研究项目用 16 个 Agent、两周和约 2 万美元 API 费用，做出 10 万行 Rust C 编译器，能够编译 Linux 6.9 和多个大型项目。Cursor 报告数百个并发 Agent 用近一周写出百万行、千个文件的浏览器原型，也指出它仍是距离成熟软件较远的原型。这些案例用的是厂商自报指标，项目成熟度和评估口径不同；它们展示了多 Agent 快速铺开工程面的能力，LOC 还得结合可用功能、测试和后续质量来读。[OpenAI 的 Codex 项目](https://openai.com/index/harness-engineering/) · [Anthropic 的 C 编译器实验](https://www.anthropic.com/research/building-c-compiler) · [Cursor 的浏览器 Agent 群](https://cursor.com/blog/scaling-agents)
-
-我觉得更有参考价值的是 Cursor 后来做的同任务 Harness 对比：新旧 Agent swarm 使用同一个 SQLite 实现任务、同一批模型和同样时间预算。新 swarm 用 Grok 4.5 四小时跑到保留测试集的 80%；旧 swarm 两小时不到就因为失控被停下。旧系统那两小时做出了 6.8 万个 commit、累积超过 7 万个冲突。提交量很高，实际却在打架。Cursor 报告新的多种配置后来都跑过完整测试集。单看这次直接对照，新系统四小时跑到 80%，旧系统两小时内没有收敛。这种对照很像我关心的自执行问题：人给目标和预算后，队列、任务拆分、共享设计记录、冲突处理和独立验收决定了 Agent 的并行能不能转化成有效进度。[Cursor 的 SQLite swarm 实验](https://cursor.com/blog/agent-swarm-model-economics)
-
-速度也不是用了 AI 就自然出现。METR 对 16 位资深开源开发者、246 个熟悉代码库中的 issue 做随机实验。测试使用 2025 年初的 AI 工具，开发者完成任务平均慢了 19%，主观上却觉得快了 20%。这项结果说的是单人处理熟悉仓库 issue 的场景。和并行 Agent 项目放在一起看，它提醒我同时记录主观速度、任务吞吐和验收后的净进度。[METR 的随机实验](https://metr.org/Early_2025_AI_Experienced_OS_Devs_Study-paper.pdf)
-
 ## 2. Grok Bot：适合担任调度中枢
 
 Grok Bot 的产品介绍把长期存在的 Bot、持久工作环境、工具和 Bot 间协作放在一起。每个 Bot 有自己的角色与上下文；Bot 可以并行工作、互相发消息、转交任务；一次任务跑顺后，还可以把步骤保存成 Skill，再由 Routine 按时间或事件触发。官方也建议先让 Bot 做一次具体任务，确认过程稳定，再把它变成 Skill 或 Routine。[产品介绍](https://docs.x.ai/grok-bot/overview) · [Skills 和 Routines](https://docs.x.ai/grok-bot/skills-routines-and-automations)
@@ -134,19 +130,9 @@ Grok Bot 有群聊、Bot 间消息和任务交接能力。官方建议在请求�
 
 我的组织方式会更像一个小型部门：每个 department 有一个 chief，负责目标、队列、优先级和交付验收；开发、研究、测试等执行者各自接任务卡。跨部门工作由 chief 交接，只有共同决策、接口争议或审查分歧需要临时讨论。一个 chief 和一两个执行角色就能起步，工作扩大后再拆。公开的 Root Agent 框架也采用入口协调者与下级负责人分工。[Root Agent 框架](https://github.com/MrBekoX/root-agent-skill-framework)
 
-chief 负责本部门的任务池和验收，跨部门讨论只在确实需要共同决策时触发。
+chief 负责本部门的任务池和验收，跨部门讨论只在确实需要共同决策时触发。图里把人、Grok 总入口和两个 department 的职责分开；执行者属于各自部门，跨部门群聊只在共同决策时临时开启。
 
-```mermaid
-flowchart TD
-    accTitle: Department coordination
-    accDescr: A human sets goals for department chiefs, who delegate to workers and consult other departments when needed.
-    Human["Human: goals and decisions"] --> Engineering["Engineering chief"]
-    Human --> Research["Research chief"]
-    Engineering --> Dev["Implementation agents"]
-    Engineering --> Review["Review agents"]
-    Research --> Experiment["Experiment agents"]
-    Research --> Audit["Research review agents"]
-```
+![建议的部门组织：人设定目标，Grok 总 chief 协调工程与量化研究 chief，各部门管理自己的任务队列](/images/writing/grok-bot-department-org.svg)
 
 任务按层级拆开：人提出目标，chief 定义可验收的阶段；阶段再拆成带依赖的工单；执行者只领取自己有权限、有输入、能独立完成的一张卡。比如自动化 DevOps 要增加一项功能，chief 先拆成接口方案、后端实现、前端实现和端到端验收。方案未定时，接口相关实现等待；不依赖接口的现状调研、测试环境准备可以先跑。任务卡要写明目标版本、负责人、输入、依赖、修改范围、验收命令、交付物和阻塞升级条件。执行者交回变更、验证结果与未完成事项；chief 复核后更新状态，解锁下一张卡。
 
@@ -173,8 +159,6 @@ OpenMausBot 是一个开源、local-first 的桌面 Agent 工作区。按它的[
 这也让我重新问：省下 VPS 费用之后，OpenMausBot 的收益是什么？只把它当长任务执行器，价值是少量人工接续一个较长工作链；这有用，但还不足以支撑一个复杂的 Agent 团队。更有吸引力的收益应来自组合层：把十几项工作排进队列，自动找到可并行的部分；一项等待决策时继续做无依赖任务；交付后自动验证、回写状态并解锁后续工作；只有目标冲突、风险或证据不足时才叫人。它最终要减少的是整批工作从开始到验收的时间，以及人被迫来回切换和催办的次数。
 
 要判断 VPS 方案值不值得继续，我会跑一个小型、可计量的试验：连续运行一周，挑选一批有真实依赖的任务，记录已验收任务数、端到端周期、并发利用率、等待人时长、重复执行和返工次数、人工决策/审查时间、VPS 与模型总成本。再与相同任务由人工或现有单项工作流处理的基线对照。若省下的机器费用换来更多人工盯盘，或者任务只是在队列里积压，成本下降就没有形成业务收益；若相同注意力能稳定交付更多已验收成果，VPS 才成为自执行系统的经济底座。
-
-我实际用下来：OpenMausBot 的定时任务适合固定工作，单项工作流也能调度得不错；难点出现在长期多任务队列。比如同时有 30 个 task：A 的结果先等人决策，B 等 A 的决定，C、D 可以并行，其他任务还要根据反馈重排。调度器此时要维护并发上限、优先级、依赖顺序和决策时点。OpenMausBot 把模型和执行环境接起来；持续调度这批跨依赖任务，需要队列管理和目标状态层继续补齐。
 
 我换过不同模型，也让 chief bot 注入默认主动性提示词，要求它判断、推进。实际效果仍难稳定达到自主决策、交付判断和循环迭代的要求。任务一多，系统就会停在等人确认、等子任务回报、等条件完全明确的状态，队列整体不再前进。我的观察是，模型倾向于把“不要越权、不要猜错”落实为保守等待；一句“你必须主动”不足以让它在几十个决策点上持续权衡并推进。
 
@@ -216,7 +200,17 @@ Mem0 提供一种可落地的长期记忆模式：从交互中抽取显著信息
 
 ## 4. 把调度落到可执行的 GitHub 工作流
 
-我现在会把连续执行放在 GitHub 上管理，因为讨论、决策、需求、代码和验收结果都能留下可追踪记录。外部触发器可以是 Discussion 里有人提出需求：先讨论并由人确认决策，再让协调 Bot 把决策链接到 Feature 或 Bug Issue。Issue 里写目标、范围、验收级别、风险、依赖和不能做的事；进入 Ready 后由一个 Agent 认领，标记状态和负责人，避免两个执行者同时改同一块。
+我现在会把连续执行放在 GitHub 上管理，因为讨论、决策、需求、代码和验收结果都能留下可追踪记录。先看建议架构，再看从 Discussion 到 PR 的工单链路。架构图描述的是我计划搭建的外围系统，不是 Grok Bot 的内部实现。
+
+### 4.1 调度架构：Grok 负责任务流转，外部 Harness 负责执行
+
+![建议的 Grok Bot 调度架构：Grok 分派任务卡到各部门与外部 Harness，在隔离工作区执行，经双路验收后更新 GitHub 状态](/images/writing/grok-bot-harness-architecture.svg)
+
+### 4.2 GitHub 触发器：从 Discussion 到可认领的 Issue
+
+外部触发器可以是 Discussion 里有人提出需求：先讨论并由人确认决策，再让协调 Bot 把决策链接到 Feature 或 Bug Issue。Issue 里写目标、范围、验收级别、风险、依赖和不能做的事；进入 Ready 后由一个 Agent 认领，标记状态和负责人，避免两个执行者同时改同一块。
+
+### 4.3 并行执行与交付验收
 
 ```mermaid
 flowchart TD
@@ -244,11 +238,15 @@ flowchart TD
 
 Grok 与外部执行器共享任务卡和已验证结果：Grok 负责拆解、调度与验收，GPT、Claude 或其他 Harness 在独立 workspace 执行，审查者检查产物和测试证据。接口适配、沙盒和状态服务需要另外实现，能并发多少任务取决于实际设备、额度和依赖关系。
 
+### 4.4 模型分档、双路验收与权限边界
+
 模型成本也按任务阶段分档。低价模型处理边界清楚的代码改动、格式修复和常规测试；中档模型做诊断、技术方案和第一次审查；强推理模型处理反复失败、多个审查意见冲突、跨模块设计和目标语义变化。相同错误连续出现、几轮没有可验证进展、测试结果与执行者报告冲突时，自动升级模型，而不是让原模型无限重试。升级之后仍失败，就缩小任务或请人判断。问题解决后，后续普通任务回到低成本档。
 
 验收至少分两路：一条由机器验证可重复的事实，如测试、类型检查、构建、静态扫描和 E2E；另一条由不同上下文或不同模型按原始 Issue 判断目标是否实现、有没有漏掉约束和未声明风险。双模型意见不一致时进入更强审查或人工决策。两个模型都说通过不等于事实正确，所以机器证据和运行环境状态要单独保存。
 
 决策权限也要写进任务卡。可逆、低风险、在 sandbox 内的实现和修复可以自动继续；低风险 PR 在机器检查和独立审查通过后可自动合并；影响产品行为或接口的变更升级审查；目标不清、优先级冲突、财务/安全/隐私风险、外部通知、生产部署和不可逆变更交给人。人补充信息或修改目标时，创建新的 Goal Revision，已执行任务保留当时依据，未开始任务按新版本重新评估。
+
+### 4.5 让每轮结果推动下一轮
 
 这套流程对应我说的“7×24 小时狂蹬”：目标和待办保存在仓库里，由事件触发下一轮，执行器每次接一张可验收的任务卡。每个 PR、失败原因和审查反馈都能回流成新的任务；把反复出现的失败加进回归用例，再修改提示词或 Harness，先在代表性任务上验证后才推广。自迭代要改工作机制，但不能让 Bot 自己静默改权限和验收规则。
 
@@ -273,6 +271,12 @@ Grok 在这条链路上适合做“鞭子”：工单卡住时判断影响范围
 ## 6. 怎样衡量速度，以及我想验证的自循环
 
 我想把人工介入降到很少，因为人的注意力和决策带宽无法随 Agent 并行数线性增长。人会被打断，也要睡觉；Agent 可以并行运行，等待人工逐项确认就会放大成系统级阻塞。Harness 应接手已知的低风险判断、队列调度和任务接续，把人的注意力留给目标变化、因子或方案选择、冲突和高风险决策。
+
+重度 Agent 项目的公开案例里，工程覆盖面和速度都很可观。OpenAI 报告称，他们用 Codex 从空仓库做一个内部产品，五个月约 100 万行代码、约 1,500 个合并 PR，最初由三位工程师带着 Agent 开发；团队估计比人工手写快约十倍，产品已有内部日常用户。Anthropic 的研究项目用 16 个 Agent、两周和约 2 万美元 API 费用，做出 10 万行 Rust C 编译器，能够编译 Linux 6.9 和多个大型项目。Cursor 报告数百个并发 Agent 用近一周写出百万行、千个文件的浏览器原型，也指出它仍是距离成熟软件较远的原型。这些案例用的是厂商自报指标，项目成熟度和评估口径不同；它们展示了多 Agent 快速铺开工程面的能力，LOC 还得结合可用功能、测试和后续质量来读。[OpenAI 的 Codex 项目](https://openai.com/index/harness-engineering/) · [Anthropic 的 C 编译器实验](https://www.anthropic.com/research/building-c-compiler) · [Cursor 的浏览器 Agent 群](https://cursor.com/blog/scaling-agents)
+
+我觉得更有参考价值的是 Cursor 后来做的同任务 Harness 对比：新旧 Agent swarm 使用同一个 SQLite 实现任务、同一批模型和同样时间预算。新 swarm 用 Grok 4.5 四小时跑到保留测试集的 80%；旧 swarm 两小时不到就因为失控被停下。旧系统那两小时做出了 6.8 万个 commit、累积超过 7 万个冲突。提交量很高，实际却在打架。Cursor 报告新的多种配置后来都跑过完整测试集。单看这次直接对照，新系统四小时跑到 80%，旧系统两小时内没有收敛。这种对照很像我关心的自执行问题：人给目标和预算后，队列、任务拆分、共享设计记录、冲突处理和独立验收决定了 Agent 的并行能不能转化成有效进度。[Cursor 的 SQLite swarm 实验](https://cursor.com/blog/agent-swarm-model-economics)
+
+速度也不是用了 AI 就自然出现。METR 对 16 位资深开源开发者、246 个熟悉代码库中的 issue 做随机实验。测试使用 2025 年初的 AI 工具，开发者完成任务平均慢了 19%，主观上却觉得快了 20%。这项结果说的是单人处理熟悉仓库 issue 的场景。和并行 Agent 项目放在一起看，它提醒我同时记录主观速度、任务吞吐和验收后的净进度。[METR 的随机实验](https://metr.org/Early_2025_AI_Experienced_OS_Devs_Study-paper.pdf)
 
 一个交易自动化项目提供了速度样本：两个人加一批 Agent，在约 10 小时内交付了覆盖用户流程、计费与支付、后台管理和部署运维的 MVP。项目使用了参考应用中的若干现成模块，因此交付范围不能直接等同于净新增工作量。按覆盖的产品面估算，接近十人团队一周的范围；这是交付广度，不是等量人周的生产力结论。Cursor 的 swarm 对照也显示，提交量和有效进度可能相差很大。
 

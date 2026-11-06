@@ -1,11 +1,11 @@
 ---
-title: "Self-Running Agent Workflows: A Case Study of Grok Bot"
-description: "How Grok Bot coordinates multiple agents, what a VPS changes for OpenMausBot, and how to measure the value of long-running, multi-task execution."
+title: "How Grok Bot Coordinates an Agent Team: From Long Tasks to Multi-Task Loops"
+description: "From OpenMausBot’s single workflows to a queue of 30 dependent tasks: how Grok Bot can coordinate external harnesses, persistent state, parallel work, and delivery checks."
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/11/grok-bot-dispatch-and-autonomy
 createdAt: 2026-11-05
-draft: true
+draft: false
 type: case-study
 tags: [technology, agent-systems, developer-productivity]
 citationUrls:
@@ -59,7 +59,9 @@ citationUrls:
   - https://github.com/asgeirtj/system_prompts_leaks/blob/1b6f936124b4eceb6e697a69da07519bea67feab/xAI/grok-bot/grok-bot.md
 ---
 
-I do not want a bot that is simply better at answering. I want to hand it a goal, give it a little human guidance, and have it work out what result I mean, who to involve, how to break the work down, and how to check it. Once one part is done, the next should be able to start. I should still be able to add information or correct the goal along the way, while the bots check one another and return both evidence and the finished work.
+In my actual use, OpenMausBot’s scheduled jobs work well for fixed routines, and it can coordinate an individual workflow. The difficulty starts with a long queue. Imagine 30 open tasks: A is waiting for a human decision, B depends on A, C and D can proceed in parallel, and other tasks need reprioritization as feedback arrives. The scheduler has to manage concurrency limits, priority, dependencies, and decision points. OpenMausBot connects models to execution environments; managing this cross-dependent queue over time still needs a queue manager and a goal-state layer.
+
+I want to hand a bot a goal and step in only when it needs information or a change of direction. It should understand the outcome, decide who to involve, break the work into stages, and define how to check each one. When a stage is done, the next should be able to start. The bots can review one another and return the evidence with the work.
 
 ![A multi-task execution loop: goals and task state persist across parallel execution, two-track review, and the next iteration](/images/writing/grok-bot-autonomy-loop.en.svg)
 
@@ -97,12 +99,6 @@ On this evidence, I would try Claude Opus 5.5 first for long, single-goal coding
 
 For continuous execution, the more useful question is whether the harness can recover from failure across rounds. The LongHorizon-Harness preprint reports gains across several models and tasks. On its OSWorld 2.0 subset, Claude Opus 4.7 rose from 20.0% to 34.3%. That is still far from reliable completion, but it suggests external state, independent audits, and round-based execution can improve progress across turns more directly than simply swapping in a stronger model. [LongHorizon-Harness](https://arxiv.org/abs/2608.01964)
 
-Public reports of heavy agent use show impressive engineering throughput. OpenAI says it built an internal product from an empty repository with Codex over five months, producing about one million lines of code and 1,500 merged PRs. Three engineers initially worked with the agents, and the team estimated it was about ten times faster than writing the code by hand. The product now has internal daily users. Anthropic’s research team used 16 agents for two weeks and about $20,000 in API costs to build a 100,000-line Rust C compiler that can compile Linux 6.9 and several large projects. Cursor says hundreds of parallel agents built a million-line, thousand-file browser prototype in about a week, while noting that the result remained far from mature software. These are vendor-reported figures from projects at different levels of maturity. Lines of code still need to be read alongside usable features, tests, and later quality. [OpenAI’s Codex project](https://openai.com/index/harness-engineering/) · [Anthropic’s C compiler experiment](https://www.anthropic.com/research/building-c-compiler) · [Cursor’s agent-built browser](https://cursor.com/blog/scaling-agents)
-
-Cursor’s later comparison of two harnesses on the same task is more useful to me. Both agent swarms implemented the same SQLite task, used the same models, and had the same time budget. The new swarm, using Grok 4.5, reached 80% on the held-out test set in four hours. The old swarm was stopped in under two hours after losing control. In that time it produced 68,000 commits and accumulated more than 70,000 conflicts. There was a lot of activity, but the agents were fighting one another. Cursor says several later configurations of the new swarm passed the full test suite. In this direct comparison, the new system reached 80% in four hours; the old one had not converged after two. It gets at the problem I care about: with a human goal and a time budget, the queue, task decomposition, shared design notes, conflict handling, and independent acceptance determine whether parallel agents make useful progress. [Cursor’s SQLite swarm experiment](https://cursor.com/blog/agent-swarm-model-economics)
-
-AI does not automatically make work faster. METR ran a randomized study with 16 experienced open-source developers and 246 issues in codebases they knew well. Using AI tools available in early 2025, the developers took 19% longer on average, though they expected to be 20% faster. The study covered one person working on issues in a familiar repository. Alongside parallel-agent projects, it is a reason to track perceived speed, throughput, and accepted net progress separately. [METR’s randomized study](https://metr.org/Early_2025_AI_Experienced_OS_Devs_Study-paper.pdf)
-
 ## 2. Grok Bot works best as the coordination hub
 
 Grok Bot’s product overview brings together persistent bots, persistent workspaces, tools, and bot-to-bot collaboration. Each bot has its own role and context. Bots can work in parallel, message one another, and hand off tasks. Once a task works reliably, its steps can be saved as a Skill and triggered by a Routine on a schedule or event. The official guidance is to test a bot on a concrete task before turning the process into a Skill or Routine. [Product overview](https://docs.x.ai/grok-bot/overview) · [Skills and Routines](https://docs.x.ai/grok-bot/skills-routines-and-automations)
@@ -137,17 +133,7 @@ I would organize the bots more like departments. Each department has a chief res
 
 The diagram shows the reporting structure: a human sets goals and handles decisions; each department chief owns a task pool and delegates to its agents.
 
-```mermaid
-flowchart TD
-    accTitle: Department coordination
-    accDescr: A human sets goals for department chiefs, who delegate to workers and consult other departments when needed.
-    Human["Human: goals and decisions"] --> Engineering["Engineering chief"]
-    Human --> Research["Research chief"]
-    Engineering --> Dev["Implementation agents"]
-    Engineering --> Review["Review agents"]
-    Research --> Experiment["Experiment agents"]
-    Research --> Audit["Research review agents"]
-```
+![Proposed department structure: a human sets goals, Grok coordinates engineering and quantitative-research chiefs, and each department owns its queue](/images/writing/grok-bot-department-org.svg)
 
 Tasks move through several levels. A person sets the goal; the chief defines stages with acceptance criteria; each stage becomes tickets with dependencies; an executor takes one task it has the inputs and permissions to finish independently. For example, a DevOps feature might break down into an interface proposal, backend implementation, frontend implementation, and end-to-end acceptance. If the interface is undecided, dependent work waits. Research into the existing system and test-environment setup can proceed. Each card should include the goal version, owner, inputs, dependencies, change scope, test commands, deliverables, and blocker-escalation rules. The worker returns the change, test results, and anything left unfinished. The chief reviews the evidence, updates the state, and unlocks the next task.
 
@@ -174,8 +160,6 @@ I later connected OpenMausBot to a VPS I rent, which brought the running cost do
 That leaves a question: what does OpenMausBot give me after the VPS bill comes down? As a long-task executor, it can reduce the amount of human effort needed to resume one extended chain of work. That is useful, but it is not enough to justify a complex agent team. The bigger payoff would come from coordinating a portfolio: queue a dozen tasks, find the independent work, keep those tasks moving while another waits on a decision, then verify delivery, update state, and unlock what comes next. Call a person only when goals conflict, risk is high, or evidence is missing. The value would be less time from the start of the whole batch to acceptance, and fewer interruptions for people to switch context or chase work.
 
 To decide whether the VPS setup is worth keeping, I would run a measurable one-week trial on tasks with real dependencies. Compare accepted tasks, end-to-end cycle time, parallel-slot use, time waiting on people, duplicate runs, rework, human decision and review time, and total VPS plus model cost against the same tasks handled by people or the current single-task workflow. If the machine savings require more human babysitting, or tasks just accumulate in the queue, lower infrastructure cost has not created business value. If the same human attention reliably delivers more accepted work, the VPS becomes an economical base for a self-running system.
-
-In my actual use, OpenMausBot’s scheduled jobs work well for fixed routines, and it can coordinate an individual workflow. The difficulty starts with a long queue of tasks. Imagine 30 open tasks: A is waiting for a human decision, B depends on A’s decision, C and D can proceed in parallel, and other tasks need reprioritization as feedback arrives. The scheduler has to manage concurrency limits, priority, dependencies, and decision points. OpenMausBot connects the models to their execution environments; managing this cross-dependent queue over time still needs a queue manager and a goal-state layer.
 
 I have tried different models and injected default “be proactive” instructions through a chief bot. The results still fall short on stable decision-making, delivery judgment, and iterative progress. As the queue grows, the system waits for a human, a subtask result, or complete certainty, and the whole queue stops moving. My observation is that models interpret “don’t overstep” and “don’t get it wrong” as reasons to wait. “You must be proactive” does not make them balance and advance dozens of decisions reliably.
 
@@ -217,7 +201,17 @@ Memory also needs safe write controls. Web pages, email, Issues, and code commen
 
 ## 4. An executable GitHub workflow for agent delivery
 
-I would manage continuous execution in GitHub because discussions, decisions, requirements, code, and acceptance evidence can all remain traceable. An external trigger could be a proposal in Discussions. People discuss and decide; the coordinator bot then links that decision to a Feature or Bug Issue. The Issue records the goal, scope, acceptance level, risk, dependencies, and things the agent must not do. Once it is Ready, one agent claims it and records its status and owner, so two workers do not change the same area at once.
+I manage continuous execution in GitHub because discussions, decisions, requirements, code, and acceptance evidence can remain traceable. The proposed dispatch architecture comes first, followed by the delivery path from Discussion to PR. It describes the surrounding workflow, not Grok Bot internals.
+
+### 4.1 Dispatch architecture: Grok routes work; external harnesses execute it
+
+![Proposed Grok Bot dispatch architecture: Grok routes task cards through departments and external harnesses into isolated workspaces, then updates GitHub after two-track acceptance](/images/writing/grok-bot-harness-architecture.svg)
+
+### 4.2 GitHub triggers: from Discussion to a claimable Issue
+
+An external trigger could be a proposal in Discussions. People discuss and decide; the coordinator bot links that decision to a Feature or Bug Issue. The Issue records the goal, scope, acceptance level, risk, dependencies, and things the agent must not do. Once it is Ready, one agent claims it and records its status and owner, so two workers do not change the same area at once.
+
+### 4.3 Parallel execution and delivery acceptance
 
 ```mermaid
 flowchart TD
@@ -245,11 +239,15 @@ Cloud computers or CI runners provide parallel capacity, but each write task bel
 
 Grok and the external executors share task cards and verified results. Grok decomposes, schedules, and accepts the work; GPT, Claude, or another harness executes in an isolated workspace; reviewers check artifacts and test evidence. The adapters, sandbox, and state service need to be implemented separately. The number of concurrent tasks depends on the machines, quotas, and dependencies available.
 
+### 4.4 Model tiers, two-track acceptance, and permissions
+
 Model cost should also vary by task stage. Lower-cost models can handle bounded code changes, formatting, and routine tests. Mid-tier models can diagnose issues, review proposals, and do the first review. Reserve stronger reasoning for repeated failures, conflicting reviews, cross-module design, and changes to the meaning of the goal. Escalate automatically when the same error recurs, several rounds produce no verifiable progress, or test results conflict with the executor’s report. Do not let the same model retry forever. If escalation fails, narrow the task or ask a person to decide. Return ordinary tasks to the lower-cost tier afterward.
 
 Acceptance needs two tracks. Machines verify repeatable facts through tests, type checks, builds, static scans, and end-to-end tests. A reviewer with a different context or model checks the original Issue: did the change meet the goal, miss a constraint, or introduce an undeclared risk? If the two models disagree, escalate to stronger review or a person. Two models agreeing is not proof; preserve the machine evidence and the state of the actual environment separately.
 
 Decision rights belong in the task card too. Reversible, low-risk changes inside a sandbox can proceed automatically. A low-risk PR can merge automatically after machine checks and independent review pass. Changes to product behavior or interfaces get more scrutiny. Unclear goals, priority conflicts, financial, security, or privacy risks, external notifications, production deployments, and irreversible actions go to a person. When a person adds information or changes the goal, create a new Goal Revision. Keep completed work tied to the version it followed; reassess unstarted tasks against the new version.
+
+### 4.5 Let each round move the next one forward
 
 This is what I mean by “working around the clock”: the goal and backlog stay in the repository, events trigger the next round, and each executor picks up one task with testable acceptance criteria. PRs, failure causes, and review feedback can feed new work. Add recurring failures to regression tests, then revise the prompt or harness and validate the change on representative tasks before rolling it out. The system can improve its workflow, but it should not silently change its permissions or acceptance rules.
 
@@ -274,6 +272,12 @@ Both workflows follow the same skeleton: goal, decomposition, execution, indepen
 ## 6. Measuring delivery speed and testing a self-running system
 
 I want to keep human intervention low because people’s attention and decision capacity do not scale with the number of parallel agents. People get interrupted and need sleep. Agents can run in parallel, so waiting for a person to confirm every step turns human attention into a system-wide bottleneck. A harness should take on known low-risk decisions, queue management, and handoffs. People should focus on goal changes, factor or solution choices, conflicts, and high-risk decisions.
+
+Public reports of heavy agent use show impressive engineering throughput. OpenAI says it built an internal product from an empty repository with Codex over five months, producing about one million lines of code and 1,500 merged PRs. Three engineers initially worked with the agents, and the team estimated it was about ten times faster than writing the code by hand. The product now has internal daily users. Anthropic’s research team used 16 agents for two weeks and about $20,000 in API costs to build a 100,000-line Rust C compiler that can compile Linux 6.9 and several large projects. Cursor says hundreds of parallel agents built a million-line, thousand-file browser prototype in about a week, while noting that the result remained far from mature software. These are vendor-reported figures from projects at different levels of maturity. Lines of code still need to be read alongside usable features, tests, and later quality. [OpenAI’s Codex project](https://openai.com/index/harness-engineering/) · [Anthropic’s C compiler experiment](https://www.anthropic.com/research/building-c-compiler) · [Cursor’s agent-built browser](https://cursor.com/blog/scaling-agents)
+
+Cursor’s later comparison of two harnesses on the same task is more useful to me. Both agent swarms implemented the same SQLite task, used the same models, and had the same time budget. The new swarm, using Grok 4.5, reached 80% on the held-out test set in four hours. The old swarm was stopped in under two hours after losing control. In that time it produced 68,000 commits and accumulated more than 70,000 conflicts. There was a lot of activity, but the agents were fighting one another. Cursor says several later configurations of the new swarm passed the full test suite. In this direct comparison, the new system reached 80% in four hours; the old one had not converged after two. It gets at the problem I care about: with a human goal and a time budget, the queue, task decomposition, shared design notes, conflict handling, and independent acceptance determine whether parallel agents make useful progress. [Cursor’s SQLite swarm experiment](https://cursor.com/blog/agent-swarm-model-economics)
+
+AI does not automatically make work faster. METR ran a randomized study with 16 experienced open-source developers and 246 issues in codebases they knew well. Using AI tools available in early 2025, the developers took 19% longer on average, though they expected to be 20% faster. The study covered one person working on issues in a familiar repository. Alongside parallel-agent projects, it is a reason to track perceived speed, throughput, and accepted net progress separately. [METR’s randomized study](https://metr.org/Early_2025_AI_Experienced_OS_Devs_Study-paper.pdf)
 
 A trading-automation project gives me one speed sample. Two people and a group of agents delivered an MVP covering user workflows, billing and payments, administration, and deployment operations in about 10 hours. The project reused several modules from a reference application, so the delivery scope is not the same as net-new work. By product breadth, it looks close to what a ten-person team might cover in a week. That is a rough estimate of scope, not a claim of equivalent person-weeks of productivity. Cursor’s swarm comparison is another reminder that commit volume and useful progress can diverge.
 
