@@ -2,6 +2,7 @@
 title: "Probabilistic Forecasts of Existing-Home Prices in 70 Chinese Cities: Rolling Backtests and the Limits of Forecast Horizons"
 description: "Using existing-home price indices for 70 cities from 2011 to 2026, this study compares forecasts across horizons with an unchanged-price baseline, evaluates interval coverage, and examines the limits of retrospective model selection and long-range forecasting."
 createdAt: 2026-11-05
+updatedAt: 2026-11-06
 version: '0.3'
 status: preprint
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
@@ -35,7 +36,7 @@ citationUrls:
 
 For how long can a model forecast urban home prices in China, and how often do its prediction intervals contain the realized outcomes? Using the National Bureau of Statistics' existing-home price indices for 70 cities, this paper constructs forecasts for horizons of 1 to 60 months and evaluates them in rolling backtests against an unchanged-price baseline. The modeling data cover February 2011 through September 2026; origins from 2019 onward are scored, and earlier origins are used for learning.
 
-In the city-level backtest, the 12-month forecast has 38% lower mean absolute error than the unchanged-price baseline, and its nominal 80% interval covers 80% of realized outcomes. At 24 months, the corresponding figures are 28% lower error and 82% coverage. At 48 and 60 months, errors are 12% and 33% higher, while coverage of the 80% interval falls to 64% and 59%. The global model's multi-horizon labels have been corrected, and 210 cells in the 2021 new-home index inferred from future year-on-year values have been masked. Interpretation is limited by horizon-specific, overlapping origins; retrospective model selection; unavailable historical data snapshots; and an unverified Chronos-2 pretraining boundary. The first saved ledger records the pre-correction model (§6.1).
+In the city-level backtest, forecast errors at 1, 3, 6, and 12 months are respectively 46%, 43%, 40%, and 38% lower than the unchanged-price baseline; realized coverage of nominal 80% intervals is 80%, 78%, 76%, and 80%. At 24 months, error is 28% lower and coverage is 82%. At 48 and 60 months, errors are 12% and 33% higher, while coverage of the 80% interval falls to 64% and 59%. The global model's multi-horizon labels have been corrected, and 210 cells in the 2021 new-home index inferred from future year-on-year values have been masked. Interpretation is limited by horizon-specific, overlapping origins; retrospective model selection; unavailable historical data snapshots; and an unverified Chronos-2 pretraining boundary. The first saved ledger records the pre-correction model (§6.1).
 
 This paper also finds an implementation error in the mean-reversion component of the author's earlier v0.2 method, whose weight-selection objective differs from the five-year cumulative outcome reported. At matched origins, errors for Beijing fall by approximately 19% and 28% at 12 and 24 months, respectively; model-selection boundaries are summarized in §6.1.
 

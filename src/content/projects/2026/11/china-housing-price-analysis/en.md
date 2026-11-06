@@ -5,7 +5,7 @@ locale: en
 translationStatus: reviewed
 translationKey: 2026/11/china-housing-price-analysis
 createdAt: 2026-08-08
-updatedAt: 2026-11-05
+updatedAt: 2026-11-06
 status: active
 draft: false
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
@@ -44,7 +44,7 @@ flowchart LR
 
 ![Historical national second-hand housing index and forecast range](/images/projects/china-housing-price-analysis/overview.webp)
 
-*Local dashboard screenshots show the Chinese-language interface; data through September 2026.*
+*Screenshots from the live dashboard as built on November 6, 2026; data through September 2026.*
 
 On the [dashboard](https://liyuk.github.io/cn-housing-price-training/), start with **Overview** for the national second-hand index and forecast range. The **City ranking** compares all 70 cities by trend strength, monthly and yearly changes, and forecast summaries. Select a city for details or switch cities from its page. Some cities also offer district search, listing prices, rents, and rental yields. District data come from third-party rankings; the pages state which areas and months are covered.
 
@@ -68,7 +68,7 @@ For the first 12 months, the two models with the lowest realized historical erro
 
 The project compares methods including no change, recent averages, AR(1), damped trends, and a cross-city model, with an optional time-series foundation model. Forecast combinations and intervals use rolling historical errors: at each backtest origin, the forecast uses only prior data and is compared with subsequent observations. Rolling backtests show performance across origins; the role of these same results in model selection is described below.
 
-In the November 2026 acceptance record, the average 12-month forecast error across the 70-city backtest was 38% lower than the no-change baseline. The nominal 80% interval had observed coverage of 77%–82% at horizons from 1 to 24 months. Errors at 48 and 60 months were respectively 12% and 33% higher than the no-change baseline, so the dashboard labels those longer horizons as scenarios. The damped-trend rule for months 13–24 was selected using the same backtests. These figures summarize a historical sample, with results varying across cities and periods.
+In the backtest revised on November 6, 2026, the average forecast errors across 70 cities at 1, 3, 6, and 12 months were respectively 46%, 43%, 40%, and 38% lower than the unchanged-price baseline. The corresponding realized coverage of nominal 80% intervals was 80%, 78%, 76%, and 80%. At 24 months, error improvement was 28% and coverage was 82%. Errors at 48 and 60 months were respectively 12% and 33% higher than the baseline, so the dashboard labels those longer horizons as scenarios. The damped-trend rule for months 13–24 was selected using the same backtests. These figures summarize a historical sample, with results varying across cities and periods.
 
 The project freezes forecasts monthly and scores them when new data arrive. **As of this snapshot, the ledger contains only one entry, for September 2026**, so it does not yet provide a long-term prospective evaluation. Retrospectively selected rules are described above.
 
@@ -90,4 +90,4 @@ The project freezes forecasts monthly and scores them when new data arrive. **As
 
 The project covers public data preparation, index checks, backtest methods, and city-level index results. Forecast intervals are constructed from historical errors.
 
-The project remains under maintenance. Dashboard data, models, and evaluations will change with updates; the coverage and results described here refer to the November 2026 snapshot.
+The project remains under maintenance. Dashboard data, models, and evaluations will change with updates; data coverage refers to the November 5, 2026 snapshot, and backtest results to the v0.3 paper revised on November 6.
