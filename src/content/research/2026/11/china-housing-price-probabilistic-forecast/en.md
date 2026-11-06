@@ -7,9 +7,9 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-probabilistic-housing-price-forecast.md
 locale: en
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/11/china-housing-price-probabilistic-forecast
-draft: true
+draft: false
 tags: [housing, forecasting, time-series, china]
 citationUrls:
   - https://arxiv.org/abs/2510.15821
@@ -35,7 +35,7 @@ citationUrls:
 
 For how long can a model forecast urban home prices in China, and how often do its prediction intervals contain the realized outcomes? Using the National Bureau of Statistics' existing-home price indices for 70 cities, this paper constructs forecasts for horizons of 1 to 60 months and evaluates them in rolling backtests against an unchanged-price baseline. The modeling data cover February 2011 through September 2026; origins from 2019 onward are scored, and earlier origins are used for learning.
 
-In the city-level backtest, the 12-month forecast has 38% lower mean absolute error than the unchanged-price baseline, and its nominal 80% interval covers 80% of realized outcomes. At 24 months, the corresponding figures are 28% lower error and 82% coverage. At 48 and 60 months, errors are 12% and 33% higher, while coverage of the 80% interval falls to 64% and 59%. The number of scoreable origins differs by horizon, and cities and origins are correlated, so these coverage rates describe the backtest sample. The global model has misaligned multi-horizon training labels, so some backtests may use future information. The model and some parameters were also selected using the same backtests, making results potentially optimistic. The June 2026 origin is also a retrospective replay. The first saved forecast ledger awaits scoring against subsequent observations and does not yet establish prospective validation.
+In the city-level backtest, the 12-month forecast has 38% lower mean absolute error than the unchanged-price baseline, and its nominal 80% interval covers 80% of realized outcomes. At 24 months, the corresponding figures are 28% lower error and 82% coverage. At 48 and 60 months, errors are 12% and 33% higher, while coverage of the 80% interval falls to 64% and 59%. The number of scoreable origins differs by horizon, and cities and origins are correlated, so these coverage rates describe the backtest sample. The original global model’s multi-horizon labels have been corrected, and 210 cells in the 2021 new-home index that were inferred using future year-on-year values have been masked. However, data-version snapshots for each historical origin are unavailable, and the temporal boundary of Chronos-2 pretraining data has not been verified. The model and some parameters were selected using the same backtests, so results may be optimistic. The June 2026 origin is also a retrospective replay. The first saved forecast ledger uses the pre-correction model and cannot prospectively validate the corrected model.
 
 This paper also finds an implementation error in the mean-reversion component of the author's earlier v0.2 method, whose weight-selection objective differs from the five-year cumulative outcome reported. At matched origins, errors for Beijing fall by approximately 19% and 28% at 12 and 24 months, respectively. This comparison is also affected by retrospective model selection.
 
@@ -45,7 +45,7 @@ This paper also finds an implementation error in the mean-reversion component of
 
 Households and researchers care about future house prices, but a single long-range number does not show how large forecast errors may be. This paper asks whether forecasts constructed from historical price indices improve on the simple unchanged-price baseline at different horizons, and how their prediction intervals have covered historical outcomes. The outcome is the cumulative change in city existing-home price indices, not transaction prices per square meter. The paper does not estimate the effects of changes in policy, interest rates, or population.
 
-The paper combines several base models and builds intervals from realized historical errors. The global model also uses recent changes in the new-home price index as a feature. Error, direction, and coverage are reported separately by horizon. Model selection and interval learning restrict when historical outcomes are available, but the global model has misaligned multi-horizon training labels. The overall method was also designed after examining the backtests, so backtest performance cannot be equated with independent prospective forecasting ability. The author's previous five-year forecast paper provides an additional comparison. This paper presents the data, method, and results first, then examines the earlier implementation error and differences between the methods.
+The paper combines several base models and builds intervals from realized historical errors. The global model also uses recent changes in the new-home price index as a feature. Error, direction, and coverage are reported separately by horizon. Model selection and interval learning restrict when historical outcomes are available. The overall method was designed after examining the backtests, so backtest performance cannot be equated with independent prospective forecasting ability. The author's previous five-year forecast paper provides an additional comparison. This paper presents the data, method, and results first, then examines the earlier implementation error and differences between the methods.
 
 ## 2. Related Work
 
@@ -108,7 +108,7 @@ Let $I_{c,t}$ be the month-on-month index for city c in month t. Monthly log cha
 | global | Gradient boosting pooled across 70 cities (direct multi-horizon, trained through 36 months) |
 | chronos2 | Zero-shot foundation model (forecasts through 12 months only) |
 
-The global model uses the city's own lagged values, rolling means and volatility, 70-city aggregate features, city tier, and the three-month mean for new homes. It fits targets separately at 1, 2, 3, 6, 9, 12, 18, 24, and 36 months and interpolates other horizons. Training selection is cut off by target maturity; fewer than 1,500 observations means that model does not provide a forecast. Review found that the code misaligns an h-month label as the cumulative change from t+h through t+2h−1, while the selection condition still requires only t+h to be no later than the forecast origin. For h≥2, training may therefore use outcomes up to h−1 months after that origin. The h=1 label does not have this misalignment.
+The global model uses the city's own lagged values, rolling means and volatility, 70-city aggregate features, city tier, and the three-month mean for new homes. It fits targets separately at 1, 2, 3, 6, 9, 12, 18, 24, and 36 months and interpolates other horizons. Training selection is cut off by target maturity; fewer than 1,500 observations means that model does not provide a forecast. City tiers use the fixed list in the code and are not reconstructed for each historical year. Previously, training labels at h≥2 were misaligned and could introduce data after the forecast origin; the labels have now been corrected and the model retrained and backtested. The 210 cells in the 2021 new-home index bridged using future year-on-year values have been masked and are no longer used as model features. Because historical data-version snapshots are unavailable, this still does not establish that every input was available at the time. Forecasts for an origin month are assumed to be made after that month's statistics are released.
 
 ### 3.4 Combination
 
@@ -121,7 +121,7 @@ Each backtest proceeds in this order:
 
 ```text
 for each origin o and horizon h:
-    generate base forecasts for o; the global model has the label defect described above
+    generate each base forecast using the corrected labels and data through o
     select historical origins u whose h-month outcomes are available by o
     if h <= 12 and at least 3 such origins are available:
         rank available models by pooled city-and-origin MSE; average the best 2
@@ -150,11 +150,11 @@ This construction replaces the v0.2 band based on the magnitude of historical fi
 ### 3.6 Evaluation Protocol
 
 - **Origins:** Every three months from 2016-01, 43 in total. Scoring starts in 2019-01 (31 origins); earlier origins are used only for learning.
-- **Information boundary for model selection and intervals:** Origin o enters horizon h weight and quantile learning only when o + h ≤ the decision origin. Unit tests protect this rule, but they did not cover the misalignment of the global model’s training labels.
+- **Information boundary for model selection and intervals:** Origin o enters horizon h weight and quantile learning only when o + h ≤ the decision origin. Regression tests protect the corrected target windows and feature information boundaries.
 - **Metrics:** MAE improvement relative to “unchanged price” (skill), direction hit rate, and realized coverage of 80% and 95% intervals. The unchanged-price baseline predicts zero cumulative change.
 - **Repeat runs:** The original project reports point-by-point identical pipeline results for the same input; its complete environment and data snapshot still need independent verification.
 
-The following illustrates the information boundary for a forecast origin o and a 12-month horizon. The 12-month outcome from a historical origin u must be realized by o to enter model selection and interval calculation. Under the selection and interval rules, outcomes after o do not enter those two steps; the global model’s training labels have the exception described above.
+The following illustrates the information boundary for a forecast origin o and a 12-month horizon. The 12-month outcome from a historical origin u must be realized by o to enter model selection and interval calculation. Under the selection and interval rules, outcomes after o do not enter those two steps.
 
 ```mermaid
 flowchart LR
@@ -166,11 +166,11 @@ flowchart LR
     D --> E["Score after outcome is observed"]
     F["Model design after reviewing backtests"] -.-> C
 ```
-**Figure 2:** Information boundary used in model selection and interval learning; the global model’s multi-horizon training labels violate this boundary. The dotted line indicates that the overall method was determined after examining backtests; that design step was not part of the decision made at each historical origin.
+**Figure 2:** Information boundary used in model selection and interval learning. The dotted line indicates that the overall method was determined after examining backtests; that design step was not part of the decision made at each historical origin.
 
 ### 3.7 Forecast Ledger
 
-Each update saves all current forecasts to a file for automatic scoring after the next data release. The repository contains the first ledger, with origin 2026-09. As of the data cutoff in this paper, no subsequent scoring was available, and the file's creation time and immutability have not been verified here; it cannot yet be treated as a completed prospective test.
+Each update saves all current forecasts to a file for automatic scoring after the next data release. The repository’s first ledger, with origin 2026-09, used the pre-correction model. Its creation time and immutable record have not been verified; it cannot serve as a prospective forecast or validation of the corrected model.
 
 ## 4. Results
 
@@ -178,11 +178,11 @@ Each update saves all current forecasts to a file for automatic scoring after th
 
 ![Two panels compare forecast-combination and unchanged-price errors across eight horizons and coverage of 80% and 95% city intervals; the horizontal axis places horizons at their actual months.](/images/research/housing-forecast/backtest.webp)
 
-**Figure 3:** Errors and city interval coverage of the original combination including global at the eight reported horizons; the global model’s multi-horizon training labels are misaligned. Dotted lines indicate nominal coverage. Horizons are positioned at their actual month values on the horizontal axis; each point is one evaluated horizon, and intervening months were not tested individually.
+**Figure 3:** Errors and city interval coverage of the corrected combination at the eight reported horizons. Dotted lines indicate nominal coverage. Horizons are positioned at their actual month values on the horizontal axis; each point is one evaluated horizon, and intervening months were not tested individually.
 
-**Table 1. Original rolling backtest (70 cities, realized scoring origins from 2019-01; mean absolute error of cumulative log change × 100)**
+**Table 1. Corrected rolling backtest (70 cities, realized scoring origins from 2019-01; mean absolute error of cumulative log change × 100)**
 
-The global model’s results at h≥2 are affected by misaligned training labels; the combination may also be affected. See the comparison excluding the global model below.
+The global model’s labels have been corrected, and results recalculated using the corrected model. These backtests remain subject to retrospective selection and data-version limitations.
 
 | Model | +1 | +3 | +6 | +12 | +24 | +36 | +48 | +60 |
 |---|---|---|---|---|---|---|---|---|
@@ -192,9 +192,10 @@ The global model’s results at h≥2 are affected by misaligned training labels
 | ar1 | 0.29 | 0.89 | 1.99 | 4.62 | 11.53 | 20.23 | 29.09 | 38.05 |
 | damped | 0.30 | 0.80 | 1.63 | 3.20 | 6.95 | 12.16 | 17.10 | 22.60 |
 | damped_shrunk | 0.30 | 0.79 | 1.58 | 3.03 | 6.73 | 11.94 | 16.85 | 22.46 |
-| global (through 36) | 0.27 | 1.07 | 2.78 | 8.00 | 15.44 | 19.95 | — | — |
+| global (through 36) | 0.27 | 0.91 | 2.44 | 6.27 | 16.18 | 23.65 | — | — |
 | Chronos-2 (through 12) | 0.27 | 0.76 | 1.62 | 3.36 | — | — | — | — |
-| **Combination** | **0.27** | **0.76** | **1.52** | **3.07** | **6.73** | **11.94** | **16.85** | **22.46** |
+| **Combination** | **0.27** | **0.79** | **1.58** | **3.07** | **6.73** | **11.94** | **16.85** | **22.46** |
+
 From +13 months, the combination equals damped_shrunk, so their values are identical. Global and Chronos-2 are not reported beyond the horizons for which they were trained.
 
 Each horizon includes only outcomes realized by 2026-09; 31 is the total number of scoring origins, not the number in each column. In the order shown, the scoreable origins number 31, 30, 29, 27, 23, 19, 15, and 11. Cities and adjacent origins are not independent, and statistical uncertainty is not estimated in the table. The log errors in Table 1 cannot be compared directly with the errors in ordinary cumulative percentage change in Table 3.
@@ -203,12 +204,12 @@ Each horizon includes only outcomes realized by 2026-09; 31 is the total number 
 
 | Horizon | +1 | +3 | +6 | +12 | +24 | +36 | +48 | +60 |
 |---|---|---|---|---|---|---|---|---|
-| Improvement over unchanged price | 46% | 45% | 42% | 38% | 28% | 6% | −12% | −33% |
-| Direction hit rate | 83% | 84% | 84% | 81% | 76% | 65% | 50% | 26% |
-| Realized 80% interval coverage | 80% | 78% | 77% | 80% | 82% | 71% | 64% | 59% |
-| Realized 95% interval coverage | 95% | 94% | 95% | 96% | 96% | 91% | 86% | 85% |
+| Improvement over unchanged price | 46% | 43% | 40% | 38% | 28% | 6% | −12% | −33% |
+| Direction hit rate | 83% | 84% | 83% | 81% | 76% | 65% | 50% | 26% |
+| Realized 80% interval coverage | 80% | 78% | 76% | 80% | 82% | 71% | 64% | 59% |
+| Realized 95% interval coverage | 95% | 94% | 94% | 96% | 95% | 91% | 86% | 85% |
 
-**Reading the results.** (1) At the reported +1, +3, +6, and +12 months, improvement is 38% to 46%, 80% interval coverage is 77% to 80%, and 95% interval coverage is 94% to 96%, close to nominal values. (2) At +24 months, improvement is 28% and coverage is 82%, but the rule was selected in the backtest and is optimistic. (3) By +36 months the improvement has nearly disappeared; it becomes negative at +48 and +60 months, with coverage also below nominal. Direction accuracy is only 26% at +60 months: momentum at the scoring origins was upward, while 90% of cities fell cumulatively over the following 60 months.
+**Reading the results.** (1) At the reported +1, +3, +6, and +12 months, improvement is 38% to 46%, 80% interval coverage is 76% to 80%, and 95% interval coverage is 94% to 96%, close to nominal values. (2) At +24 months, improvement is 28% and coverage is 82%, but the rule was selected in the backtest and is optimistic. (3) By +36 months the improvement has nearly disappeared; it becomes negative at +48 and +60 months, with coverage also below nominal. Direction accuracy is only 26% at +60 months: momentum at the scoring origins was upward, while 90% of cities fell cumulatively over the following 60 months.
 
 ![Dot distributions of the forecast combination’s error advantage averaged across origins for each of 70 cities at 12, 24, and 60 months; the first two groups lie above zero, while most at 60 months lie below zero.](/images/research/housing-forecast/city-distribution.webp)
 
@@ -220,16 +221,14 @@ Each horizon includes only outcomes realized by 2026-09; 31 is the total number 
 
 Both figures recalculate combination weights and errors for each origin from the saved backtest cache. The same cache is first used to recalculate Tables 1 and 2 and verify agreement with the original report, then the results are aggregated by city or origin. Cache and algorithm versions are listed in the evidence index below.
 
-**Sensitivity excluding the global model and Chronos-2.** Base-model caches are used to reselect models and calculate intervals, first removing the global model alone and then removing both the global model and Chronos-2. In the latter case, combination errors at 1, 3, 6, and 12 months are 0.281, 0.819, 1.597, and 3.086, respectively; removing only the global model produces 0.278, 0.754, 1.519, and 3.073. For the reported origins in the original combination, global was selected at all 31 origins at +1 month, where the label does not have the misalignment described above; it was selected at one of 30 origins at +3 months, and at none at +6 or +12 months. At horizons not shown in Table 1, global was also selected at all 31 origins at +2 months and at two of 28 origins at +11 months. Because interval quantiles are adjusted across horizons, removing a model may also affect intervals at other horizons. This test reused the cache without retraining base models.
-
 **Excluding Chronos-2 alone.** The Chronos-2 paper appeared in 2025, whereas backtest origins start in 2019. The full time boundary of its pretraining data and any overlap with the target series have not been verified, so early results cannot be treated as prospective forecasts using a model that was actually available then. Using saved base-model backtest records, the original report is first recalculated; Chronos-2 is then removed and both the combination and interval calibration are reselected:
 
 | Horizon | Original combination MAE × 100 | Without Chronos-2 | Improvement over unchanged price without Chronos-2 | 80% coverage without Chronos-2 |
 |---|---:|---:|---:|---:|
 | +1 | 0.267 | 0.275 | 43.9% | 79.5% |
-| +3 | 0.763 | 0.824 | 40.1% | 79.4% |
-| +6 | 1.519 | 1.597 | 39.1% | 78.3% |
-| +12 | 3.073 | 3.086 | 38.0% | 80.2% |
+| +3 | 0.789 | 0.814 | 40.8% | 79.0% |
+| +6 | 1.584 | 1.722 | 34.3% | 76.6% |
+| +12 | 3.073 | 3.086 | 38.0% | 80.4% |
 
 From +13 months, the shrunk damped trend is fixed; removing Chronos-2 does not change its point forecasts. This comparison reused saved base-model records and did not recollect data or retrain every base model. Recalculation from the cache matched the original report's backtest metrics.
 
@@ -245,7 +244,7 @@ Using the eight evaluated horizons of 1, 3, 6, 12, 24, 36, 48, and 60 months, th
 
 ### 4.3 Replay from the June 2026 Origin
 
-Using 2026-06 as origin and learning weights and quantiles only from that month and earlier, the model is compared with the next three months of published data. The national cumulative index (origin month = 100) was 99.71, 99.40, and 99.14; model point forecasts were 99.67, 99.33, and 98.97; and the 80% intervals were [99.54, 99.82], [99.04, 99.92], and [98.53, 99.77]. All three actual values fell within the intervals. Across 70 cities, MAE in the +3-month cumulative log change × 100 was 0.35 (unchanged price: 0.94). For v0.2 over the same period, Beijing was above its interval's upper bound in all three months, while the national value was close to the upper bound. The model was finalized after those three months were published, so this is a replay.
+Using 2026-06 as origin and learning weights and quantiles only from that month and earlier, the model is compared with the next three months of published data. The national cumulative index (origin month = 100) was 99.71, 99.40, and 99.14; model point forecasts were 99.66, 99.29, and 98.96; and the 80% intervals were [99.53, 99.82], [99.00, 99.85], and [98.37, 99.97]. All three actual values fell within the intervals. Across 70 cities, MAE in the +3-month cumulative log change × 100 was 0.35 (unchanged price: 0.94). For v0.2 over the same period, Beijing was above its interval's upper bound in all three months, while the national value was close to the upper bound. The model was finalized after those three months were published, so this is a replay.
 
 ### 4.4 Side-by-Side Comparison with v0.2 at Matched Origins
 
@@ -255,8 +254,8 @@ Using 2026-06 as origin and learning weights and quantiles only from that month 
 |---|---|---|---|---|---|
 | National | +12 | 27 | 4.13 | **2.09** | 4.24 |
 | | +24 | 23 | 9.43 | **4.93** | 7.75 |
-| | +36 | 19 | 15.75 | 10.05 | 9.93 |
-| | +60 | 11 | 28.69 | 20.72 | 14.22 |
+| | +36 | 19 | 15.75 | 10.04 | 9.93 |
+| | +60 | 11 | 28.69 | 20.71 | 14.22 |
 | Beijing | +12 | 27 | 5.32 | **4.30** | 5.05 |
 | | +24 | 23 | 10.96 | **7.89** | 9.82 |
 | | +36 | 19 | 18.09 | 13.80 | 12.36 |
@@ -264,13 +263,13 @@ Using 2026-06 as origin and learning weights and quantiles only from that month 
 
 At +12 and +24 months, this model's national error is about half that of v0.2; Beijing's is 19% to 28% lower. **From +36 months, neither model beats “unchanged price.”** Origins start only after 2019 because this model needs realized history for learning.
 
-### 4.5 Current Forecast
+### 4.5 Historical Scenario from the Pre-Correction Ledger
 
 ![Historical path of the equal-weighted 70-city index and the model point forecast and 80% interval from September 2026, with a wide long-range interval.](/images/research/housing-forecast/scenario.webp)
 
-**Figure 6:** Historical equal-weighted 70-city index and model output from origin 2026-09, with the origin set to 100. The shading is the model's 80% interval; long-horizon city intervals undercovered in backtests, and national interval backtest coverage has not been reported separately.
+**Figure 6:** Historical equal-weighted 70-city index and pre-correction model ledger output from origin 2026-09, with the origin set to 100. The shading is the model's 80% interval; long-horizon city intervals undercovered in backtests, and national interval backtest coverage has not been reported separately.
 
-National (origin 2026-09, point forecasts and 80% intervals for cumulative index change):
+The following is the saved pre-correction model ledger (origin 2026-09, point forecasts and 80% intervals for cumulative index change). These figures and Figure 6 are preserved as a historical record, not forecasts from the corrected model; the ledger creation time has not been verified. The bands in the table use the corrected city backtest only as a rough reference and do not validate the pre-correction national interval:
 
 | Horizon | Point forecast | 80% interval | Band |
 |---|---|---|---|
@@ -279,7 +278,7 @@ National (origin 2026-09, point forecasts and 80% intervals for cumulative index
 | +36 months (2029-09) | −5.5% | −17.1% ~ +0.7% | Scenario only |
 | +60 months (2031-09) | −6.5% | −24.3% ~ +3.5% | Scenario only |
 
-The v0.2 five-year baseline of −22.1% lies near the lower end of this paper's five-year interval (−24.3% to +3.5%). **The interval is wide and five-year skill has not been demonstrated.** This paper therefore treats −6.5% as a scenario center under damped momentum extrapolation with mean reversion omitted, not as a five-year forecast.
+The v0.2 five-year baseline of −22.1% lies near the lower end of the pre-correction ledger’s five-year interval (−24.3% to +3.5%). **The interval is wide and five-year skill has not been demonstrated.** The pre-correction ledger’s −6.5% should be treated as a scenario center under damped momentum extrapolation with mean reversion omitted, not as a five-year forecast.
 
 ## 5. Comparison with and Corrections to the Earlier Method
 
@@ -326,11 +325,11 @@ The v0.2 references were checked against their original abstracts. Its descripti
 
 ## 6. Discussion and Limitations
 
-The global model’s misaligned multi-horizon training labels are an implementation defect in this version of the backtest. The global row in Table 1 should not be used as a model comparison free of look-ahead; sensitivity results for the combination are in §4.1. The complete pipeline can be verified only after correcting the labels, retraining, generating forecasts, and repeating the backtest.
+This backtest corrects the global model’s misaligned multi-horizon training labels and masks 210 bridged new-home index cells that depended on future year-on-year figures. The backtest uses the current data panel rather than historical point-in-time snapshots. Even with training labels cut off by time, it cannot rule out effects from revisions or other information unavailable historically. The time boundary of Chronos-2 pretraining remains unverified.
 
 ### 6.1 Retrospective Design
 
-Retrospective design enters in four main places: (1) the model was finalized after the most recent three months were published, so §4.3 is a replay; (2) the long-horizon damped rule was chosen after it appeared as the best long-horizon single model in the same backtest; (3) k in top-2 and the shrinkage strength of 0.6 were selected in that backtest (k=1 was better at +12 months, but winner-take-all was less stable, so 2 was selected; restricting origins to 2023 onward also improves results, but uses the same data); and (4) backtest origins overlap heavily, with only 15 and 11 origins at +48 and +60 months, respectively, and fewer effectively independent observations. Results at all horizons may be optimistic; the long-range results are particularly affected by rule selection and limited effective sample size. The 2026-09 forecast ledger has been saved, but its creation time and immutability remain to be verified.
+Retrospective design enters in four main places: (1) the model was finalized after the most recent three months were published, so §4.3 is a replay; (2) the long-horizon damped rule was chosen after it appeared as the best long-horizon single model in the same backtest; (3) k in top-2 and the shrinkage strength of 0.6 were selected in that backtest (k=1 was better at +12 months, but winner-take-all was less stable, so 2 was selected; restricting origins to 2023 onward also improves results, but uses the same data); and (4) backtest origins overlap heavily, with only 15 and 11 origins at +48 and +60 months, respectively, and fewer effectively independent observations. Results at all horizons may be optimistic; the long-range results are particularly affected by rule selection and limited effective sample size. The 2026-09 forecast ledger is from the pre-correction model; its creation time and immutability remain to be verified, and it cannot validate the corrected model.
 
 ### 6.2 Regime Bias in the Backtest
 
@@ -350,35 +349,35 @@ This paper treats the equal-weighted average of the National Bureau of Statistic
 
 ### 6.5 Implications for v0.2
 
-The v0.2 qualitative conclusion that “Beijing is a mean-reverting market” rested on a 0.1% selection difference and an implementation error; it no longer holds here. The v0.2 characterization of the national market as a “downward-trending market” remains consistent with this paper at +12 months (a −2.8% national point forecast). This paper neither disproves nor confirms v0.2's discussion of a market bottom: it does not produce an endogenous turning-point probability.
+The v0.2 qualitative conclusion that “Beijing is a mean-reverting market” rested on a 0.1% selection difference and an implementation error; it no longer holds here. The v0.2 characterization of the national market as a “downward-trending market” remains consistent with this paper at +12 months (a −2.8% national point forecast in the pre-correction ledger). This paper neither disproves nor confirms v0.2's discussion of a market bottom: it does not produce an endogenous turning-point probability.
 
 ## 7. Conclusion
 
-In this 70-city backtest, 12-month results beat the unchanged-price baseline, and interval coverage is close to nominal. The 24-month result is also favorable but affected by retrospective selection. Five-year results have not shown an advantage over the baseline, so the output can serve only as a model scenario. The v0.2 five-year baseline of −22.1% relies on momentum extrapolation and does not outperform “unchanged price” in the backtest; its Beijing figure is also affected by an implementation error. The methodological implications are: (1) report performance relative to “unchanged price” first and separately by horizon; (2) interval width should include trend instability and be calibrated using realized errors; (3) learning long-horizon weights requires enough realized historical outcomes, and this paper's fixed rule also needs independent validation; and (4) use a forecast ledger to separate retrospective design from prospective testing.
+In this 70-city backtest after correcting labels and masking future-bridged cells, 12-month results beat the unchanged-price baseline, and interval coverage is close to nominal. The 24-month result is also favorable but affected by retrospective selection. Five-year results have not shown an advantage over the baseline, so the output can serve only as a model scenario. The v0.2 five-year baseline of −22.1% relies on momentum extrapolation and does not outperform “unchanged price” in the backtest; its Beijing figure is also affected by an implementation error. The methodological implications are: (1) report performance relative to “unchanged price” first and separately by horizon; (2) interval width should include trend instability and be calibrated using realized errors; (3) learning long-horizon weights requires enough realized historical outcomes, and this paper's fixed rule also needs independent validation; and (4) use a forecast ledger to separate retrospective design from prospective testing.
 
 ## Reproduction
 
 ```bash
-python scripts/paper_algorithm_audit.py            # §5：复现 v0.2、选择诊断、滚动检验、与本文模型并排
-python -m src.probabilistic_forecast               # §3、§4：不含 Chronos-2 的回测与预测
-python scripts/acceptance.py --full                # 验收：数据、模型、站点；--full 另查逐值可复现
+python -m src.probabilistic_forecast --tsfm data/processed/chronos2_paths.json
+python scripts/paper_algorithm_audit.py --cache-tsfm data/processed/chronos2_paths.json
+python scripts/acceptance.py --full
 ```
-Table 1 includes Chronos-2. Reproducing it also requires running `src.tsfm_baseline` to generate a forecast JSON and passing it with `--tsfm <JSON 路径>`. The default command excludes that model. Model dependencies, caches, and the exact commit have not been independently verified here, so these commands are entry points to reproduction rather than a guarantee of completed replication. Backtest results are in `reports/probabilistic_forecast_backtest.json`, and the forecast ledger is in `reports/forecast_ledger/`. The “Forecast Logic” page at <https://liyuk.github.io/cn-housing-price-training/> shows the items in Tables 1 to 3.
+Table 1 includes Chronos-2. Reproducing it requires first running `src.tsfm_baseline` to generate the forecast JSON used above. Omitting `--tsfm` excludes that model. The input snapshot and Chronos-2 model version have not been fixed, so these commands are entry points to reproduction rather than a guarantee of completed replication. Corrected summary results are in the evidence index below. The original repository site and forecast ledger may still show pre-correction results and should not be treated as copies of the corrected results in this paper.
 
 ### Evidence Index and Version
 
-The table pins the repository commit checked here, [`dab16046e5f7ed3955167cbef17d826d45bffef4`](https://github.com/Liyuk/cn-housing-price-training/tree/dab16046e5f7ed3955167cbef17d826d45bffef4). The processed panel and model cache are not included in that commit; hashes identify the local files used here and do not imply that public readers can already obtain the same snapshots.
+The table records the corrected backtest and historical ledger. The source-code correction is in commit [`ebbc0b2e2fa983d9bc3f18322d545bce5477173e`](https://github.com/Liyuk/cn-housing-price-training/commit/ebbc0b2e2fa983d9bc3f18322d545bce5477173e), on the model-fix branch awaiting merge. The processed panel and model cache are not included in that commit; hashes identify the local files used here and do not imply that public readers can already obtain the same snapshots.
 
 | Stage | File or result | Relationship to this paper |
 |---|---|---|
 | Collection and definitions | `data/source_registry.csv`, `src/panel.py` | Source records, data validation, and definition of monthly log change |
 | Cleaned panel | `data/processed/housing_indices_clean_v4.csv` | Modeling input from 2011-02 through 2026-09; SHA-256: `47f85bb3c57978dcbbfd5676cf8c486da0fbe14204965a7434c6d7bc3a1465a8`; untracked file |
 | Backtest algorithm | `src/probabilistic_forecast.py`, `src/tsfm_baseline.py` | Base models, model selection, intervals, and scoring; base-model weights and caches must be obtained separately |
-| Results | `reports/probabilistic_forecast_backtest.json` | Figure 3 and Tables 1–2; SHA-256: `d6bdcf6fe324534043044448376e49cfe56692712471057e003fbd74e929e039` |
-| Forecast ledger | `reports/forecast_ledger/2026-09.csv` | Figure 6 point forecasts and intervals; SHA-256: `7a691f3c8159cc6d2cf03ab5990cb904e2b3af1b273a51689e702a33acaec1c5` |
+| Corrected results | [Backtest results](/data/research/housing-forecast/corrected-backtest.json), [comparison results](/data/research/housing-forecast/corrected-analysis.json) | The former supports Figure 3 and Tables 1–2, SHA-256: `7ce82dc3b9b3d8ebc3d891974a329c09b3674d3cdcb753ee06f615d25ba09beb`; the latter contains Table 3 and the comparison excluding Chronos-2, SHA-256: `27a3434130542e5ed99a598823b82906c39934bb1a757850a93b655eaeeee487` |
+| Pre-correction forecast ledger | `reports/forecast_ledger/2026-09.csv` | Figure 6 historical point forecasts and intervals; SHA-256: `7a691f3c8159cc6d2cf03ab5990cb904e2b3af1b273a51689e702a33acaec1c5` |
 | Earlier-model comparison | `scripts/paper_algorithm_audit.py`, `reports/paper_algorithm_audit.json` | Tables 3–4 and review of the v0.2 algorithm |
 
-Figure 3 uses the eight reported horizons directly from the results file. Figures 4 and 5 call the same model-selection and combination functions at each origin using the backtest cache described below, and then average by origin or city respectively. The historical line in Figure 6 is constructed by equal-weighting the cleaned panel's 70 monthly city indices, chaining them, and setting 2026-09 to 100; the forecast line and intervals come from corresponding ledger columns. The table excluding Chronos-2 uses the local backtest cache: the original report is checked first, then that model's paths are removed and the same scoring function is called. The cache is not pinned as a public snapshot; its SHA-256 is `58498c59b44c5687f04291175c5925a2a01511d4bdd958b9e5e3a32f5e55dc5a`. This cache calculation used Python 3.9.6, NumPy 2.0.2, pandas 2.3.3, and scikit-learn 1.6.1. Full replication will require publication or reconstruction of matching-hash data and caches, plus fixed execution environment and Chronos-2 model version.
+Figure 3 uses the eight reported horizons directly from the corrected results file. Figures 4 and 5 call the same model-selection and combination functions at each origin using the backtest cache described below, and then average by origin or city respectively. The historical line in Figure 6 is constructed by equal-weighting the cleaned panel's 70 monthly city indices, chaining them, and setting 2026-09 to 100; the forecast line and intervals come from corresponding ledger columns. The table excluding Chronos-2 uses the local backtest cache: the original report is checked first, then that model's paths are removed and the same scoring function is called. The corrected cache is not pinned as a public snapshot; its SHA-256 is `da2378a1505270c9518a696554e871381f81980611a8a17fb5102793a98ebe18`. Two runs from empty caches produced byte-identical summary reports. This calculation used Python 3.9.6, NumPy 2.0.2, pandas 2.3.3, and scikit-learn 1.6.1. Full replication will require publication or reconstruction of matching-hash data and caches, plus fixed execution environment and Chronos-2 model version.
 
 ## References
 
@@ -422,4 +421,4 @@ Figure 3 uses the eight reported horizons directly from the results file. Figure
 
 **Data and code availability:** Collection, cleaning, modeling, backtesting, and acceptance code is in the GitHub repository; reproduction still requires verification of the exact commit, dependencies, and model resources ([cn-housing-price-training](https://github.com/Liyuk/cn-housing-price-training)). Processed data and forecast quantiles can be downloaded from the site's “Data and Methods” page.
 
-**About the writing:** Backtest figures come from the repository's result files (`reports/probabilistic_forecast_backtest.json`, `reports/paper_algorithm_audit.json`). The paper and code were produced by the author with AI assistance; the author is responsible for their contents.
+**About the writing:** Backtest figures come from the corrected results published below and the v0.2 audit results in the original repository. The paper and code were produced by the author with AI assistance; the author is responsible for their contents.
