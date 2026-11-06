@@ -74,6 +74,7 @@ around the whole value). Do **not** quote slugs, tags, dates, URLs, enums,
    - `hero.src`, image `src`, image `id`, image `width` / `height`
    - gallery `slug`, `cover`, and each image `id`
    - `episode` (consulting)
+   - `searchIntent` (the intent classification is shared across locales)
 6. **Translate** these human-facing strings:
    - `hero.alt`, `hero.caption`
    - `work.penName` → keep the romanized/English form used on the About page
@@ -83,6 +84,7 @@ around the whole value). Do **not** quote slugs, tags, dates, URLs, enums,
    - `guest` (consulting — a role/description, not a real name; see
      `agent/category-guides/consulting.md` for de-identification rules)
    - gallery `title`, `description`, and each image `alt` and `caption`
+   - `primaryQuery` and every `relatedQueries` item: write the natural query an English-speaking reader would actually use for the same need, not a literal translation. Keep the same intent and answerable scope as the Chinese source.
 
 7. **Strict schema (`writing` and `consulting` only).** Both collections use
    `.strict()`, so the `en.md` frontmatter must contain **only** the keys

@@ -27,7 +27,7 @@ const hub = resolveHub(slug, locale === 'en' ? 'en' : 'zh-CN', [...writing, ...c
 const hubCopy = pageCopy.tags.hub;
 ---
 
-<BaseLayout title={hub ? `${hub.title} — ${ui.brand}` : pageCopy.tags.detailTitle(tag.label, ui.brand)} description={hub ? hub.description : description} pageKind={hub ? 'collection' : 'website'} section={hub ? 'tags' : undefined} itemList={hub?.groups.flatMap((group) => group.items.map((item) => ({ name: item.title, url: item.url })))}>
+<BaseLayout title={hub ? `${hub.title} — ${ui.name}` : pageCopy.tags.detailTitle(tag.label, ui.name)} description={hub ? hub.description : description} keywords={hub?.searchTerms ?? [tag.label]} pageKind={hub ? 'collection' : 'website'} section={hub ? 'tags' : undefined} itemList={hub?.groups.flatMap((group) => group.items.map((item) => ({ name: item.title, url: item.url })))}>
   <section class="page-heading shell"><p class="eyebrow">{pageCopy.tags.eyebrow}</p><h1>{hub ? hub.title : `#${tag.label}`}</h1><p>{hub ? hub.intro : description}</p></section>
   {hub && (
     <section class="shell topic-hub" aria-labelledby="hub-reading-path">

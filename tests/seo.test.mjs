@@ -24,3 +24,7 @@ test('article keywords are localized from the article tag slugs', () => {
 test('unknown article tags remain available as stable keyword values', () => {
   assert.deepEqual(contentKeywords(['new-topic'], 'en'), ['new-topic']);
 });
+
+test('declared search queries join localized article keywords without duplicates', () => {
+  assert.deepEqual(contentKeywords(['ai', 'strategy'], 'en', ['AI gateway guide', 'Gateway guide']), ['AI gateway guide', 'Gateway guide', 'AI', 'Strategy']);
+});

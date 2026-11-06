@@ -295,7 +295,7 @@ export function classifyKeywords(keywords, { weeksBack = 4 } = {}) {
 
 // ------------------------------------------------------------- matching
 
-const WEIGHTS = { evidence: 0.4, semantic: 0.3, lexical: 0.2, opportunity: 0.1 };
+const WEIGHTS = { evidence: 0.4, relevance: 0.3, lexical: 0.2, opportunity: 0.1 };
 
 function opportunityScore(position) {
   if (!position) return 0.2;
@@ -309,7 +309,7 @@ function bestExcerpt(core, doc) {
   let best = { text: '', score: 0 };
   for (const excerpt of doc.excerpts ?? []) {
     for (const paragraph of excerpt.split(/\n{2,}/u)) {
-      const score = diceSimilarity(core, paragraph.slice(0, 400));
+      const score = coverage(core, paragraph.slice(0, 400));
       if (score > best.score) best = { text: paragraph.slice(0, 120), score };
     }
   }
@@ -324,6 +324,7 @@ function lexicalScore(core, doc) {
     [1, doc.title],
     [0.8, headings.join(' ')],
     [0.6, `${doc.description ?? ''} ${lead}`],
+    [0.7, (doc.keywords ?? []).join(' ')],
     [0.3, body],
   ];
   return Math.max(...fields.map(([weight, text]) => weight * coverage(core, text)));
@@ -346,12 +347,20 @@ export function matchKeywords(keywords, documents) {
       const observed = keyword.pages.find((page) => fullUrl(page.page) === doc.url);
       const evidence = observed ? Math.log1p(observed.impressions) / Math.log1p(maxImpressions) : 0;
       const excerpt = bestExcerpt(keyword.core, doc);
-      const semantic = Math.min(1, Math.max(0, (Math.max(excerpt.score, diceSimilarity(keyword.core, `${doc.title} ${doc.description ?? ''}`)) - 0.1) / 0.5));
       const lexical = lexicalScore(keyword.core, doc);
-      const answerable = semantic >= 0.4 || lexical >= 0.6 || evidence > 0;
+      const titleHit = coverage(keyword.core, doc.title) >= 0.8;
+      const keywordHit = coverage(keyword.core, (doc.keywords ?? []).join(' ')) >= 0.8;
+      const headings = (doc.excerpts ?? []).flatMap((excerpt) => excerpt.split('\n').filter((line) => /^#{1,3}\s/u.test(line))).join(' ');
+      const headingHit = coverage(keyword.core, headings) >= 0.8;
+      // Metadata is an editorial target, not proof that the rendered page
+      // answers the query. This matters because Google ignores meta keywords
+      // for indexing and ranking. Require GSC page evidence or visible content
+      // in the title, a heading, or a relevant passage.
+      const answerable = evidence > 0 || titleHit || headingHit || (!doc.isStaticPage && excerpt.score >= 0.8);
       if (!answerable) continue;
-      const score = WEIGHTS.evidence * evidence + WEIGHTS.semantic * semantic + WEIGHTS.lexical * lexical + WEIGHTS.opportunity * opportunityScore(keyword.position);
-      candidates.push({ url: doc.url, title: doc.title, score, evidence, semantic, lexical, passage: excerpt.text, titleHit: coverage(keyword.core, doc.title) >= 0.8 });
+      const relevance = Math.max(titleHit ? 1 : 0, headingHit ? 0.85 : 0, excerpt.score);
+      const score = WEIGHTS.evidence * evidence + WEIGHTS.relevance * relevance + WEIGHTS.lexical * lexical + WEIGHTS.opportunity * opportunityScore(keyword.position);
+      candidates.push({ url: doc.url, title: doc.title, score, evidence, relevance, lexical, passage: excerpt.text, titleHit, keywordHit });
     }
     candidates.sort((a, b) => b.score - a.score);
     const [primary, second] = candidates;
@@ -379,6 +388,6 @@ export function linkOpportunities(match, documents, links = {}) {
   return documents
     .filter((doc) => doc.locale === match.locale && doc.url !== match.primary.url)
     .filter((doc) => coverage(match.core, (doc.excerpts ?? []).join('\n')) >= 1)
-    .filter((doc) => !(links[doc.url] ?? []).includes(match.primary.url))
+    .filter((doc) => !(doc.links ?? links[doc.url] ?? []).includes(match.primary.url))
     .map((doc) => doc.url);
 }

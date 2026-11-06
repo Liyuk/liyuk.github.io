@@ -7,6 +7,9 @@ createdAt: 2023-02-15
 publishedAt: 2023-02-15
 type: essay
 tags: [growth, judgment, learning, self-reflection, work-leadership]
+primaryQuery: "assessing potential"
+searchIntent: essay
+relatedQueries: [assess potential, assessing employee potential]
 column: { slug: growth-self-assessment, order: 1 }
 translationKey: 2023/02/evaluating-potential-with-care
 ---

@@ -3,12 +3,13 @@
 //
 //   npm run seo:match [-- --dist dist] [--entry /writing/2026/09/what-ai-gateways-do/]
 //
-// Reads artifacts/seo/keywords.json and the built chat index (published
-// entries only). Writes artifacts/seo/reports/<week>.md. It never edits
+// Reads artifacts/seo/keywords.json, the published chat index, and indexable
+// rendered routes from the current build. Writes artifacts/seo/reports/<week>.md. It never edits
 // content: the report is a set of suggestions for an editor.
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { SEO_DIR } from './seo-signals.mjs';
+import { staticSeoPages } from './lib/seo-pages.mjs';
 import { isoWeek, linkOpportunities, matchKeywords } from './lib/seo-keywords.mjs';
 
 function arg(name) {
@@ -26,7 +27,7 @@ export function renderReport(matches, documents, week) {
     items.length ? items.map((m) => `${line(m)}${extra(m)}`).join('\n') : '_无_',
     '',
   ].join('\n');
-  const target = (m) => (m.primary ? `\n  - 主承接：${m.primary.url}（score ${m.primary.score.toFixed(2)}${m.primary.titleHit ? '' : '，标题未含该词'}）\n  - 段落：${m.primary.passage.replace(/\n/gu, ' ')}` : '\n  - 无可承接页面');
+  const target = (m) => (m.primary ? `\n  - 主承接：${m.primary.url}（score ${m.primary.score.toFixed(2)}${m.primary.titleHit ? '，标题命中' : '，标题未命中'}${m.primary.keywordHit ? '，已登记为目标/相关查询' : ''}）\n  - 段落：${m.primary.passage.replace(/\n/gu, ' ')}` : '\n  - 无可承接页面');
   const gaps = matches.filter((m) => m.gap).sort((a, b) => b.impressions - a.impressions).slice(0, 10);
   const links = matches
     .map((m) => ({ m, from: linkOpportunities(m, documents) }))
@@ -52,6 +53,15 @@ async function main() {
   for (const locale of ['zh-CN', 'en']) {
     const index = JSON.parse(await readFile(path.join(dist, 'chat-index', `${locale}.json`), 'utf8'));
     documents.push(...index.documents);
+  }
+  const byUrl = new Map(documents.map((document) => [document.url, document]));
+  for (const page of await staticSeoPages(dist)) {
+    const existing = byUrl.get(page.url);
+    if (existing) existing.links = page.links;
+    else {
+      documents.push(page);
+      byUrl.set(page.url, page);
+    }
   }
   const only = arg('entry');
   let matches = matchKeywords(keywords, documents);

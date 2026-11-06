@@ -1,12 +1,13 @@
 // Interactive content creator for writing / research / consulting / project entries.
 // Run: npm run new:post
 // Uses Node built-ins only. Pure functions are exported for tests.
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { tags, columns } from '../src/lib/taxonomy.ts';
+import { SEARCH_INTENTS, validateSearchMetadata } from '../src/lib/search-intent.ts';
 import { buildFrontmatter, buildSlug, createPrompter, todayStr, validateDate, validateSlug } from './lib/cli.mjs';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'src/content');
@@ -19,6 +20,17 @@ const TYPE_CHOICES = [
 const STATUS_CHOICES = ['preprint', 'published', 'in-progress'];
 const CONSULTING_FORMAT_CHOICES = ['career-case', 'interview', 'mock-interview', 'management-case'];
 const ARTICLE_TYPE_CHOICES = ['essay', 'note', 'case-study'];
+const SEARCH_INTENT_LABELS = {
+  definition: '解释/定义',
+  howto: '方法/教程',
+  troubleshoot: '故障/排错',
+  compare: '比较/选择',
+  data: '数据/研究',
+  service: '咨询/服务',
+  project: '项目/工具',
+  visual: '图像/地点',
+  essay: '观点/经验',
+};
 
 // --- pure helpers (exported for tests) ---
 
@@ -27,6 +39,36 @@ export function parseTags(raw) {
     .split(/[,，\s]+/)
     .map((tag) => tag.trim())
     .filter(Boolean);
+}
+
+export function parseRelatedQueries(raw) {
+  return raw.split(/[,，\n]+/u).map((query) => query.trim()).filter(Boolean);
+}
+
+export function rankSearchSuggestions(keywords, locale = 'zh-CN', limit = 8) {
+  const priority = ['sprint', 'low-ctr', 'new', 'declining', 'cannibalization'];
+  return keywords
+    .filter((keyword) => keyword.locale === locale && typeof keyword.query === 'string' && keyword.query.trim())
+    .sort((a, b) => {
+      const rank = (item) => Math.min(...(item.flags ?? []).map((flag) => priority.indexOf(flag)).filter((value) => value >= 0), priority.length);
+      return rank(a) - rank(b) || (b.impressions ?? 0) - (a.impressions ?? 0) || a.query.localeCompare(b.query);
+    })
+    .slice(0, limit);
+}
+
+export function resolveQueryChoice(answer, suggestions = []) {
+  const value = answer.trim();
+  if (/^\d+$/u.test(value)) return suggestions[Number(value) - 1]?.query ?? value;
+  return value;
+}
+
+async function localSearchSuggestions(locale) {
+  try {
+    const snapshot = JSON.parse(await readFile(path.join(process.cwd(), 'artifacts/seo/keywords.json'), 'utf8'));
+    return rankSearchSuggestions(snapshot.keywords ?? [], locale);
+  } catch {
+    return [];
+  }
 }
 
 export function pickSlug(title, asked) {
@@ -41,6 +83,9 @@ export function buildPostFrontmatter(type, answers) {
     createdAt: answers.createdAt,
     draft: answers.draft,
     tags: answers.tags,
+    primaryQuery: answers.primaryQuery,
+    searchIntent: answers.searchIntent,
+    ...(answers.relatedQueries?.length ? { relatedQueries: answers.relatedQueries } : {}),
   };
   if (type === 'article') {
     return {
@@ -133,6 +178,31 @@ async function main() {
       validate: (v) => (v ? null : '描述不能为空'),
     });
 
+    console.log('搜索意图（按读者来站里要解决的事选择，不追无关热词）：');
+    SEARCH_INTENTS.forEach((intent, index) => console.log(`  ${index + 1}) ${SEARCH_INTENT_LABELS[intent]} (${intent})`));
+    const searchIntentAnswer = await rl.ask(`选择意图（1-${SEARCH_INTENTS.length}）: `, {
+      validate: (value) => {
+        const intent = SEARCH_INTENTS[Number(value) - 1] ?? value;
+        return SEARCH_INTENTS.includes(intent) ? null : `请选择 1-${SEARCH_INTENTS.length} 或输入有效 intent`;
+      },
+    });
+    const searchIntent = SEARCH_INTENTS[Number(searchIntentAnswer) - 1] ?? searchIntentAnswer;
+    const suggestions = await localSearchSuggestions('zh-CN');
+    if (suggestions.length) {
+      console.log('近期 Search Console 查询候选（按站点机会排序；选题仍需符合正文和读者需要）：');
+      suggestions.forEach((item, index) => console.log(`  ${index + 1}) ${item.query} — ${item.impressions} 曝光 · 第 ${Number(item.position ?? 0).toFixed(1)} 位 · ${(item.flags ?? []).join(', ') || '站点查询'}`));
+    } else {
+      console.log('本地没有 Search Console 查询快照；请填写正文能回答的读者查询。');
+    }
+    const primaryAnswer = await rl.ask(`主查询（输入查询文字${suggestions.length ? '，或输入候选编号' : ''}）: `, {
+      validate: (value) => validateSearchMetadata({ primaryQuery: resolveQueryChoice(value, suggestions), searchIntent }),
+    });
+    const primaryQuery = resolveQueryChoice(primaryAnswer, suggestions);
+    const relatedAnswer = await rl.ask('相关说法/拓词（可选，逗号分隔，最多 5 个）: ', {
+      validate: (value) => validateSearchMetadata({ primaryQuery, searchIntent, relatedQueries: parseRelatedQueries(value) }),
+    });
+    const relatedQueries = parseRelatedQueries(relatedAnswer);
+
     // 6. tags
     const allTags = Object.keys(tags);
     let tagsList = [];
@@ -156,7 +226,7 @@ async function main() {
     const draftAnswer = (await rl.ask('标记为草稿？', { default: 'y' })).toLowerCase();
     const draft = draftAnswer !== 'n' && draftAnswer !== 'no';
 
-    const answers = { title, description, createdAt, draft, tags: tagsList, slug };
+    const answers = { title, description, createdAt, draft, tags: tagsList, slug, primaryQuery, searchIntent, relatedQueries };
 
     // 8. type-specific fields
     if (type === 'article') {

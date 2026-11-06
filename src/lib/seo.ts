@@ -48,7 +48,7 @@ const seo: LocalizedSeo = {
     },
     consulting: {
       description: '面向学生、工程师和管理者的职业发展、面试辅导、技术管理、AI 工程与 FDE 咨询。',
-      keywords: ['职业发展咨询', '面试辅导', '技术管理咨询', 'AI 工程咨询', 'FDE', '晋升与转管理'],
+      keywords: ['职业发展咨询', '求职咨询', '面试辅导', '技术管理咨询', 'AI 工程咨询', 'FDE', '晋升与转管理'],
     },
     links: {
       description: 'Liyuk 常读并愿意推荐的独立博客、技术站点和持续写作的个人空间。',
@@ -94,7 +94,7 @@ const seo: LocalizedSeo = {
     },
     consulting: {
       description: 'Career development, interview coaching, technical management, AI engineering, and FDE consulting for students, engineers, and managers.',
-      keywords: ['career consulting', 'interview coaching', 'technical management consulting', 'AI engineering consulting', 'FDE', 'promotion and management transition'],
+      keywords: ['career consulting', 'job search consulting', 'interview coaching', 'technical management consulting', 'AI engineering consulting', 'FDE', 'promotion and management transition'],
     },
     links: {
       description: 'Independent blogs, technical sites, and personal spaces that Liyuk reads regularly and recommends.',
@@ -121,12 +121,12 @@ export function getPageSeo(locale: string, page: SeoPage): PageSeo {
   return { description: value.description, keywords: [...value.keywords] };
 }
 
-export function contentKeywords(tags: string[], locale: string): string[] {
-  return [...new Set(tags.map((tag) => {
+export function contentKeywords(tags: string[], locale: string, queries: string[] = []): string[] {
+  return [...new Set([...queries, ...tags.map((tag) => {
     try {
       return getTag(tag, locale).label;
     } catch {
       return tag;
     }
-  }))];
+  })].map((value) => value.trim()).filter(Boolean))];
 }

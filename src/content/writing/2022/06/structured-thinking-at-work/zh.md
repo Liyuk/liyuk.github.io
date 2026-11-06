@@ -6,6 +6,9 @@ publishedAt: 2022-06-18
 type: essay
 featured: true
 tags: [thinking, decision-making, communication, work-leadership]
+primaryQuery: 结构化思维怎么训练
+searchIntent: howto
+relatedQueries: [职场结构化表达, 结构化工作]
 column: { slug: one-on-one-conversations, order: 7 }
 ---
 

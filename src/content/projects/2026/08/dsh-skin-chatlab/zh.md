@@ -12,6 +12,9 @@ hero:
   caption: 实际运行截图：飞书皮肤下的会话列表与聊天窗口。
 draft: false
 tags: [technology, agent-systems, developer-productivity]
+primaryQuery: DSH 聊天皮肤
+searchIntent: project
+relatedQueries: [DSH skin, DSH Web 聊天界面]
 ---
 
 [在 GitHub 查看项目与安装说明 ↗](https://github.com/Liyuk/dsh-skin-chatlab)

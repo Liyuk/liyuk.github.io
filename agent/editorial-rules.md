@@ -2,6 +2,14 @@
 
 Cross-cutting rules for authoring and reviewing content in `src/content/`. These bind AI collaborators the same way `AGENTS.md`'s engineering rules do — they're not suggestions to weigh against convenience.
 
+## Search intent and useful coverage
+
+Every new entry records a `primaryQuery`, a `searchIntent`, and up to five `relatedQueries` in frontmatter. These describe a real reader need the entry answers; they are editorial planning and coverage signals, not a promise of ranking. Select terms from Search Console queries for this site first, then use Google Trends or other sources to discover candidates. Adopt a trend only when it fits the site's expertise and the entry can add a specific, useful answer. Do not chase unrelated viral terms, invent volume, or repeat variants to fill the list.
+
+The primary query should be stated naturally in the title or opening where it fits; related queries should correspond to questions the body actually answers. The `searchIntent` enum is one of `definition`, `howto`, `troubleshoot`, `compare`, `data`, `service`, `project`, `visual`, or `essay`. Localize query phrases for each language rather than translating them word for word. During content review, check that the title, description, opening, body, and internal links serve the declared intent without keyword stuffing. Metadata alone is not evidence of usefulness or search visibility.
+
+After publication, use `npm run seo:signals` to refresh the local Search Console query table and `npm run seo:match` to map queries to published pages, highlight content gaps, and identify internal-link or cannibalization opportunities. Treat the generated report as editorial evidence to review; it must not automatically create or publish content. Keep exported data and reports in ignored `artifacts/seo/`.
+
 ## Diagrams, flowcharts, and formulas: English labels, even in Chinese articles
 
 Mermaid diagrams and math formulas use English node labels and variable names, in both `zh.md` and `en.md` — this is already how every existing diagram and formula on the site is written (verified: zero Chinese characters inside any `mermaid` block or KaTeX expression across the content tree). Keep it that way:

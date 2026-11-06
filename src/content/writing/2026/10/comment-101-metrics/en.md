@@ -9,6 +9,9 @@ publishedAt: 2026-10-30
 draft: false
 type: case-study
 tags: [product, technology, algorithms, data, metrics, governance]
+primaryQuery: "data metrics for comment systems"
+searchIntent: data
+relatedQueries: [comment system metrics, metrics tree for comment systems]
 column: { slug: comment-systems-guide, order: 2 }
 citationUrls:
   - https://arxiv.org/abs/2311.11922

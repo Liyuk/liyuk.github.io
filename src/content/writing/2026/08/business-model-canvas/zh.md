@@ -6,9 +6,14 @@ publishedAt: 2026-08-15
 type: note
 draft: false
 tags: [strategy, product-thinking, decision-making, learning]
+primaryQuery: 商业模式九宫格
+searchIntent: definition
+relatedQueries: [商业模式画布, 商业模式画布九个格子, 商業模式圖]
+citationUrls:
+  - https://www.strategyzer.com/library/the-business-model-canvas
 ---
 
-企业投资课上讲了一个图：商业模式画布（Business Model Canvas）。它就是一张画布，九个格子各放一个要素。老师反复强调的那句话是——**九个格子不是九个可选项，而是同一台机器的九个部件；只有都转起来、互相咬合，这个项目才立得住。** 更准的说法是：**九个格子必须能互相解释、自圆其说；薄不等于缺（有些格子本就该轻，比如自助式 SaaS 把客户关系做轻是优点不是漏洞），但说不通的地方一定会漏。**（这是成熟期的终局状态；中途未必九格都齐，见下文"按阶段看"。）
+企业投资课上讲了一个图：商业模式画布（Business Model Canvas），中文也常叫“商业模式九宫格”。它是一张画布，九个格子各放一个要素（[官方画布](https://www.strategyzer.com/library/the-business-model-canvas)）。老师反复强调的那句话是——**九个格子不是九个可选项，而是同一台机器的九个部件；只有都转起来、互相咬合，这个项目才立得住。** 更准的说法是：**九个格子必须能互相解释、自圆其说；薄不等于缺（有些格子本就该轻，比如自助式 SaaS 把客户关系做轻是优点不是漏洞），但说不通的地方一定会漏。**（这是成熟期的终局状态；中途未必九格都齐，见下文"按阶段看"。）
 
 先把九个格子记下来，留个底。每个格子附上它要回答的那个问题，和一句我自己的理解。
 

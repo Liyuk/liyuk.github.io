@@ -5,6 +5,9 @@ createdAt: 2023-02-15
 publishedAt: 2023-02-15
 type: essay
 tags: [growth, judgment, learning, self-reflection, work-leadership]
+primaryQuery: 评估潜力时该看什么
+searchIntent: essay
+relatedQueries: [如何评估一个人的潜力, 潜力评估]
 column: { slug: growth-self-assessment, order: 1 }
 ---
 

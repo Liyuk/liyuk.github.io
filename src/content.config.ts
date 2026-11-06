@@ -1,8 +1,14 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { parseContentDate } from './lib/content-date.ts';
+import { SEARCH_INTENTS } from './lib/search-intent.ts';
 
 const contentDate = z.preprocess(parseContentDate, z.date());
+const searchMetadata = {
+  primaryQuery: z.string().trim().min(2).max(120).optional(),
+  searchIntent: z.enum(SEARCH_INTENTS).optional(),
+  relatedQueries: z.array(z.string().trim().min(2).max(120)).max(5).optional(),
+};
 
 const writing = defineCollection({
   loader: glob({ base: './src/content/writing', pattern: '**/*.{md,mdx}' }),
@@ -23,6 +29,7 @@ const writing = defineCollection({
     citationUrls: z.array(z.string().url()).default([]),
     column: z.object({ slug: z.string(), order: z.number().int().positive() }).optional(),
     translationKey: z.string().optional(),
+    ...searchMetadata,
   }).strict(),
 });
 
@@ -45,6 +52,7 @@ const consulting = defineCollection({
     citationUrls: z.array(z.string().url()).default([]),
     column: z.object({ slug: z.string(), order: z.number().int().positive() }).optional(),
     translationKey: z.string().optional(),
+    ...searchMetadata,
   }).strict(),
 });
 
@@ -79,6 +87,7 @@ const project = defineCollection({
     }).optional(),
     tags: z.array(z.string()).default([]),
     translationKey: z.string().optional(),
+    ...searchMetadata,
   }),
 });
 
@@ -101,6 +110,7 @@ const research = defineCollection({
     citationUrls: z.array(z.string().url()).default([]),
     column: z.object({ slug: z.string(), order: z.number().int().positive() }).optional(),
     translationKey: z.string().optional(),
+    ...searchMetadata,
   }).refine((data) => data.repositoryUrl || data.paperUrl, {
     message: 'research 至少需要 repositoryUrl 或 paperUrl 中的一个。',
     path: ['repositoryUrl'],
@@ -143,6 +153,7 @@ const gallery = defineCollection({
     column: z.object({ slug: z.string(), order: z.number().int().positive() }).optional(),
     cover: z.string().regex(/^[a-z0-9-]+$/),
     images: z.array(galleryImage).min(1),
+    ...searchMetadata,
   }).refine((data) => data.images.some((image) => image.id === data.cover), {
     message: 'Gallery cover must reference an image id.',
     path: ['cover'],

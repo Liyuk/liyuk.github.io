@@ -6,6 +6,9 @@ publishedAt: 2026-08-17
 draft: false
 type: essay
 tags: [leadership, management, mentoring, team, decision-making, organization, work-leadership]
+primaryQuery: 管理者如何管理多个团队
+searchIntent: howto
+relatedQueries: [管理管理者, 多团队管理]
 column: { slug: multi-team-management, order: 3 }
 ---
 

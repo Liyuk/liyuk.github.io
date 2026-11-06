@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  aggregateKeywords, classifyKeywords, matchKeywords, normalizeQuery, parseGscCsv, queryCore, isoWeek,
+  aggregateKeywords, classifyKeywords, linkOpportunities, matchKeywords, normalizeQuery, parseGscCsv, queryCore, isoWeek,
 } from '../scripts/lib/seo-keywords.mjs';
 
 test('normalizeQuery folds case, width, whitespace, and traditional characters', () => {
@@ -49,4 +49,78 @@ test('matching respects locale and reports gaps instead of weak matches', () => 
   const [gap] = matchKeywords(keywords, [docs[1]]);
   assert.equal(gap.primary, undefined);
   assert.equal(gap.gap, true);
+});
+
+test('keyword matcher reports declared query aliases when visible content supports the query', () => {
+  const keyword = classifyKeywords(aggregateKeywords([
+    { query: 'LLM gateway fallback', page: '', date: '2026-10-01', impressions: 0, clicks: 0, position: 0 },
+  ]))[0];
+  const [match] = matchKeywords([keyword], [{
+    url: '/projects/router/',
+    locale: 'en',
+    title: 'Resilient model routing',
+    description: 'A project description.',
+    keywords: ['LLM gateway fallback'],
+    excerpts: ['## LLM gateway fallback'],
+  }]);
+  assert.equal(match.primary?.url, '/projects/router/');
+  assert.equal(match.primary?.keywordHit, true);
+});
+
+test('declared query metadata alone does not count as visible query coverage', () => {
+  const keyword = classifyKeywords(aggregateKeywords([
+    { query: '求职咨询', page: '', date: '2026-10-01', impressions: 6, clicks: 0, position: 71 },
+  ]))[0];
+  const [match] = matchKeywords([keyword], [{
+    url: '/consulting/', locale: 'zh-CN', title: '职业发展与职场咨询 — Liyuk',
+    description: '面向学生、工程师和管理者的职业发展、面试与工作决策。',
+    keywords: ['求职咨询'], excerpts: ['## 职业路径与晋升'], isStaticPage: true,
+  }]);
+  assert.equal(match.primary, undefined);
+  assert.equal(match.gap, true);
+});
+
+test('declared query targets outrank archive pages with only loose body overlap', () => {
+  const keyword = classifyKeywords(aggregateKeywords([
+    { query: 'Veylumi', page: '', date: '2026-10-01', impressions: 56, clicks: 0, position: 8 },
+  ]))[0];
+  const [match] = matchKeywords([keyword], [
+    { url: '/en/projects/veylumi/', locale: 'en', title: 'Veylumi', description: 'AI beauty decision product.', keywords: ['Veylumi'], excerpts: ['Veylumi is a project.'] },
+    { url: '/en/projects/2026/', locale: 'en', title: '2026 Projects', description: 'Recent projects.', keywords: [], excerpts: ['## Veylumi'], isStaticPage: true },
+  ]);
+  assert.equal(match.primary?.url, '/en/projects/veylumi/');
+  assert.equal(match.primary?.keywordHit, true);
+});
+
+test('generic archive body overlap alone is not enough to claim a query is covered', () => {
+  const keyword = classifyKeywords(aggregateKeywords([
+    { query: 'frontline manager retention tools', page: '', date: '2026-10-01', impressions: 10, clicks: 0, position: 14 },
+  ]))[0];
+  const [match] = matchKeywords([keyword], [{
+    url: '/en/writing/2023/', locale: 'en', title: '2023 Writing', description: 'Writing published in 2023.', keywords: [],
+    excerpts: ['Frontline manager retention tools'], isStaticPage: true,
+  }]);
+  assert.equal(match.primary, undefined);
+  assert.equal(match.gap, true);
+});
+
+test('static service pages match declared service wording without borrowing archive content', () => {
+  const keyword = classifyKeywords(aggregateKeywords([
+    { query: '求职咨询', page: '', date: '2026-10-01', impressions: 6, clicks: 0, position: 14 },
+  ]))[0];
+  const [match] = matchKeywords([keyword], [{
+    url: '/consulting/', locale: 'zh-CN', title: '职业发展与职场咨询 — Liyuk', description: '面试与求职准备。',
+    keywords: ['求职咨询', '面试辅导'], excerpts: ['## 求职咨询与面试辅导'], isStaticPage: true,
+  }]);
+  assert.equal(match.primary?.url, '/consulting/');
+  assert.equal(match.primary?.keywordHit, true);
+});
+
+test('internal-link opportunities exclude pages that already link to the target', () => {
+  const match = { core: 'ai gateway', locale: 'en', primary: { url: '/writing/ai-gateway/' } };
+  const docs = [
+    { url: '/writing/source-one/', locale: 'en', excerpts: ['AI Gateway'] , links: ['/writing/ai-gateway/'] },
+    { url: '/writing/source-two/', locale: 'en', excerpts: ['AI Gateway'], links: [] },
+  ];
+  assert.deepEqual(linkOpportunities(match, docs), ['/writing/source-two/']);
 });

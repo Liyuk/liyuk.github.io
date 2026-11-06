@@ -11,6 +11,8 @@ type DiscoveryEntry = {
   data: {
     title: string;
     description: string;
+    primaryQuery?: string;
+    relatedQueries?: string[];
     tags?: string[];
     column?: { slug: string };
   };
@@ -28,6 +30,8 @@ export function createContentDiscoveryDocument(
     .map((tag) => tags[tag]?.[localeIndex])
     .filter((label): label is string => Boolean(label));
   const keywords = [
+    entry.data.primaryQuery,
+    ...(entry.data.relatedQueries ?? []),
     ...features.tags.flatMap((tag) => {
       const aliases = tagSearchAliases[tag]?.[localeIndex] ?? [];
       return [...(tags[tag] ? [tags[tag][localeIndex]] : []), ...aliases];
@@ -43,7 +47,7 @@ export function createContentDiscoveryDocument(
     title: entry.data.title,
     description: entry.data.description,
     tagLabels,
-    keywords,
+    keywords: [...new Set(keywords.filter((keyword): keyword is string => Boolean(keyword?.trim())))],
     body: entry.body ?? '',
     url: contentUrl(collection, entry.id, locale),
     locale,

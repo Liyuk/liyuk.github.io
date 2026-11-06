@@ -157,5 +157,12 @@ export function resolveHub(slug: string, locale: HubLocale, entries: PublishedLi
     const resolved = link(faq.key);
     return resolved ? [{ q: faq.q[locale], a: faq.a[locale], url: resolved.url, title: resolved.entry.data.title }] : [];
   });
-  return { title: hub.title[locale], description: hub.description[locale], intro: hub.intro[locale], groups, faqs };
+  return {
+    title: hub.title[locale],
+    description: hub.description[locale],
+    intro: hub.intro[locale],
+    searchTerms: hub.searchTerms[locale],
+    groups,
+    faqs,
+  };
 }
