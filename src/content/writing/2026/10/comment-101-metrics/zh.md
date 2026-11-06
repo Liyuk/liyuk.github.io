@@ -8,6 +8,9 @@ publishedAt: 2026-10-30
 draft: false
 type: case-study
 tags: [product, technology, algorithms, data, metrics, governance]
+primaryQuery: 评论系统指标怎么设计
+searchIntent: data
+relatedQueries: [评论系统数据度量, 评论系统北极星指标]
 column: { slug: comment-systems-guide, order: 2 }
 citationUrls:
   - https://arxiv.org/abs/2311.11922

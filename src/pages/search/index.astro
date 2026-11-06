@@ -1,9 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { i18n } from '../../i18n/index.mjs';
+import { topicHubs } from '../../lib/topic-hubs.ts';
+import { tagUrl } from '../../lib/content-paths.ts';
 
 const locale = Astro.currentLocale ?? 'zh-CN';
 const copy = i18n(locale).page.search;
+const hubLocale = locale === 'en' ? 'en' : 'zh-CN';
+// Reader wording -> curated topic page. Terms are public editorial vocabulary.
+const topics = Object.entries(topicHubs).map(([slug, hub]) => ({ url: tagUrl(slug, locale), title: hub.title[hubLocale], terms: hub.searchTerms[hubLocale] }));
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription} noindex>
@@ -16,11 +21,13 @@ const copy = i18n(locale).page.search;
       <p>{copy.aiHint}</p>
       <button type="button" data-search-ask-ai>{copy.aiAction}</button>
     </aside>
+    <aside class="search-topic-card" data-search-topic hidden></aside>
+    <p class="search-log-notice">{copy.logNotice}</p>
     <ol id="search-results" class="search-results"></ol>
   </section>
 </BaseLayout>
 
-<script define:vars={{ statusTemplate: copy.statusTemplate, siteHostname: Astro.site?.hostname ?? 'liyuk.com' }}>
+<script define:vars={{ statusTemplate: copy.statusTemplate, siteHostname: Astro.site?.hostname ?? 'liyuk.com', topics, topicLabel: copy.topicLabel, pageLocale: locale }}>
   const MAX_RESULTS = 20;
   const DEBOUNCE_MS = 180;
   const input = document.querySelector('#site-search');
@@ -66,15 +73,80 @@ const copy = i18n(locale).page.search;
     }));
   };
 
+  const topicCard = document.querySelector('[data-search-topic]');
+  const norm = (value) => value.normalize('NFKC').toLowerCase().replace(/\s+/g, ' ').trim();
+  const findTopic = (query) => {
+    const q = norm(query);
+    if (Array.from(q).length < 2) return undefined;
+    return topics.find((topic) => topic.terms.some((term) => term === q || term.includes(q) || (Array.from(term).length >= 4 && q.includes(term))));
+  };
+  const renderTopic = (topic) => {
+    if (!(topicCard instanceof HTMLElement)) return;
+    topicCard.hidden = !topic;
+    if (!topic) { topicCard.replaceChildren(); return; }
+    const label = document.createElement('p');
+    label.className = 'eyebrow';
+    label.textContent = topicLabel;
+    const link = document.createElement('a');
+    link.href = topic.url;
+    link.textContent = topic.title;
+    topicCard.replaceChildren(label, link);
+  };
+
+  const sendLog = (payload) => {
+    try {
+      const body = JSON.stringify({ ...payload, locale: pageLocale === 'en' ? 'en' : 'zh-CN' });
+      if (!(navigator.sendBeacon && navigator.sendBeacon('/api/search-log', new Blob([body], { type: 'application/json' })))) {
+        fetch('/api/search-log', { method: 'POST', body, keepalive: true }).catch(() => {});
+      }
+    } catch { /* telemetry must never break search */ }
+  };
+  let loggedQuery = '';
+  let logTimer;
+  const scheduleLog = (query, results) => {
+    window.clearTimeout(logTimer);
+    // Log the settled query once, not every keystroke.
+    logTimer = window.setTimeout(() => {
+      if (query === loggedQuery) return;
+      loggedQuery = query;
+      sendLog({ q: query, kind: 'search', results });
+    }, 1200);
+  };
+
   const search = async (query) => {
-    if (!(status instanceof HTMLElement) || !query) { render([]); if (status instanceof HTMLElement) status.textContent = ''; return; }
+    if (!(status instanceof HTMLElement) || !query) { render([]); renderTopic(undefined); if (status instanceof HTMLElement) status.textContent = ''; return; }
     pagefind ??= await import(/* @vite-ignore */ pagefindModule);
     await pagefind.options({ excerptLength: 45 });
-    const response = await pagefind.search(query);
-    const items = await Promise.all(response.results.slice(0, MAX_RESULTS).map((result) => result.data()));
+    const topic = findTopic(query);
+    renderTopic(topic);
+    // A recognised topic also searches its sibling wording, so "ai 网关" finds
+    // pages that only say "AI Gateway".
+    const queries = [query, ...(topic ? topic.terms.filter((term) => norm(term) !== norm(query)).slice(0, 3) : [])];
+    const responses = await Promise.all(queries.map((term) => pagefind.search(term)));
+    const seen = new Set();
+    const ranked = [];
+    for (const response of responses) {
+      for (const result of response.results) {
+        if (!seen.has(result.id)) { seen.add(result.id); ranked.push(result); }
+      }
+    }
+    const items = await Promise.all(ranked.slice(0, MAX_RESULTS).map((result) => result.data()));
     render(items);
-    status.textContent = statusTemplate.replace('{{n}}', String(response.results.length));
+    status.textContent = statusTemplate.replace('{{n}}', String(ranked.length));
+    const url = new URL(window.location.href);
+    url.searchParams.set('q', query);
+    window.history.replaceState(null, '', url);
+    scheduleLog(norm(query), ranked.length);
   };
+
+  if (results instanceof HTMLOListElement) {
+    results.addEventListener('click', (event) => {
+      const anchor = event.target instanceof Element ? event.target.closest('a.search-result-title') : null;
+      if (!anchor) return;
+      const rank = Array.from(results.children).indexOf(anchor.closest('li')) + 1;
+      sendLog({ q: norm(input instanceof HTMLInputElement ? input.value : ''), kind: 'click', rank });
+    });
+  }
 
   if (input instanceof HTMLInputElement) input.addEventListener('input', () => {
     const query = input.value.trim();
@@ -89,5 +161,13 @@ const copy = i18n(locale).page.search;
       if (!question) return;
       window.dispatchEvent(new CustomEvent('site-chat:ask', { detail: { question } }));
     });
+  }
+
+  // Deep link: /search/?q=term runs the search on load.
+  const initial = new URLSearchParams(window.location.search).get('q');
+  if (initial && input instanceof HTMLInputElement) {
+    input.value = initial.slice(0, 600);
+    if (aiCard instanceof HTMLElement) aiCard.hidden = false;
+    search(initial.trim());
   }
 </script>

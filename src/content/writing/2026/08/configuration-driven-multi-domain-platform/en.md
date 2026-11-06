@@ -7,6 +7,9 @@ createdAt: 2026-08-29
 draft: false
 type: essay
 tags: [architecture, systems-design, technical-planning, technology, operations]
+primaryQuery: "multi-domain platform architecture"
+searchIntent: howto
+relatedQueries: [multi-business platform architecture, configuration-driven platform design]
 column: { slug: technical-systems, order: 8 }
 citationUrls:
   - https://shopify.dev/docs/apps/build/markets

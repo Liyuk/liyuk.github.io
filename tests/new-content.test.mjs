@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { buildSlug, buildFrontmatter, isValidDate, validateSlug, validateTags } from '../scripts/lib/cli.mjs';
-import { buildPostFrontmatter, parseTags, postPath, pickSlug } from '../scripts/new-post.mjs';
+import { buildPostFrontmatter, parseTags, parseRelatedQueries, postPath, pickSlug, rankSearchSuggestions, resolveQueryChoice } from '../scripts/new-post.mjs';
 import { askGalleryColumn, buildGalleryFrontmatter, galleryFilePath, imageIdFromName, scanImageFiles } from '../scripts/new-gallery.mjs';
-import { publishFrontmatter, findEntriesBySlug, requiresEditorialConfirmation } from '../scripts/publish.mjs';
+import { publishFrontmatter, findEntriesBySlug, requiresEditorialConfirmation, searchMetadataError } from '../scripts/publish.mjs';
+import { validateSearchMetadata } from '../src/lib/search-intent.ts';
 
 test('buildSlug turns English titles into kebab-case', () => {
   assert.equal(buildSlug('Hello World'), 'hello-world');
@@ -47,6 +48,22 @@ test('parseTags splits on commas and spaces', () => {
   assert.deepEqual(parseTags(''), []);
 });
 
+test('parseRelatedQueries preserves phrases and splits comma separated variants', () => {
+  assert.deepEqual(parseRelatedQueries('AI gateway fallback, LLM 网关，429 重试'), ['AI gateway fallback', 'LLM 网关', '429 重试']);
+  assert.deepEqual(parseRelatedQueries(''), []);
+});
+
+test('new-post query ideas prioritize site demand and accept a selected suggestion', () => {
+  const ideas = rankSearchSuggestions([
+    { query: 'old query', locale: 'zh-CN', impressions: 80, flags: [] },
+    { query: 'sprint query', locale: 'zh-CN', impressions: 12, flags: ['sprint'] },
+    { query: 'English query', locale: 'en', impressions: 100, flags: ['sprint'] },
+  ], 'zh-CN', 2);
+  assert.deepEqual(ideas.map((item) => item.query), ['sprint query', 'old query']);
+  assert.equal(resolveQueryChoice('1', ideas), 'sprint query');
+  assert.equal(resolveQueryChoice('a new query', ideas), 'a new query');
+});
+
 test('pickSlug uses the asked slug, else auto-derives', () => {
   assert.equal(pickSlug('Whatever', 'custom-slug'), 'custom-slug');
   assert.equal(pickSlug('Hello World', null), 'hello-world');
@@ -65,13 +82,19 @@ test('buildPostFrontmatter produces legal consulting (strict) frontmatter', () =
     episode: 3,
     guest: 'K',
     column: { slug: 'technical-systems', order: 4 },
+    searchIntent: 'service',
+    primaryQuery: '工程师转管理咨询',
+    relatedQueries: ['技术管理咨询', '工程师转管理如何准备'],
   });
   assert.equal(fm.format, 'interview');
   assert.equal(fm.episode, 3);
   assert.deepEqual(fm.column, { slug: 'technical-systems', order: 4 });
   // strict schema: no keys beyond what consulting allows
-  const allowed = new Set(['title', 'description', 'createdAt', 'draft', 'tags', 'publishedAt', 'format', 'episode', 'guest', 'column']);
+  const allowed = new Set(['title', 'description', 'createdAt', 'draft', 'tags', 'publishedAt', 'format', 'episode', 'guest', 'column', 'searchIntent', 'primaryQuery', 'relatedQueries']);
   for (const key of Object.keys(fm)) assert.ok(allowed.has(key), `unexpected key: ${key}`);
+  assert.equal(fm.primaryQuery, '工程师转管理咨询');
+  assert.equal(fm.searchIntent, 'service');
+  assert.deepEqual(fm.relatedQueries, ['技术管理咨询', '工程师转管理如何准备']);
 });
 
 test('consulting entries land in the consulting collection directory', () => {
@@ -92,6 +115,7 @@ test('buildPostFrontmatter produces legal writing (strict) frontmatter', () => {
   const fm = buildPostFrontmatter('article', {
     title: '测试', description: '描述', createdAt: '2026-08-15', draft: true, tags: ['technology'],
     publishedAt: '2026-08-15', type: 'note', column: { slug: 'technical-systems', order: 2 },
+    searchIntent: 'howto', primaryQuery: '怎样建立技术知识库', relatedQueries: ['技术知识库入口页'],
   });
   assert.equal(fm.title, '测试');
   assert.equal(fm.publishedAt, '2026-08-15');
@@ -99,8 +123,9 @@ test('buildPostFrontmatter produces legal writing (strict) frontmatter', () => {
   assert.deepEqual(fm.column, { slug: 'technical-systems', order: 2 });
   // strict schema: no keys beyond what writing allows
   assert.equal(fm.reading, undefined);
-  const allowed = new Set(['title', 'description', 'createdAt', 'draft', 'tags', 'publishedAt', 'type', 'column']);
+  const allowed = new Set(['title', 'description', 'createdAt', 'draft', 'tags', 'publishedAt', 'type', 'column', 'searchIntent', 'primaryQuery', 'relatedQueries']);
   for (const key of Object.keys(fm)) assert.ok(allowed.has(key), `unexpected key: ${key}`);
+  assert.equal(fm.primaryQuery, '怎样建立技术知识库');
 });
 
 test('buildPostFrontmatter emits research required fields', () => {
@@ -157,9 +182,12 @@ test('gallery helpers build ids, paths and frontmatter', () => {
   const fm = buildGalleryFrontmatter({
     title: 'T', description: 'D', slug: 'maomao', createdAt: '2026-08-15', cover: 'maomao-1',
     images: [{ id: 'maomao-1', src: '/x.webp', width: 100, height: 200 }],
+    primaryQuery: '猫咪窗边摄影', relatedQueries: ['猫咪日常照片'],
   });
   assert.equal(fm.cover, 'maomao-1');
   assert.equal(fm.images[0].width, 100);
+  assert.equal(fm.searchIntent, 'visual');
+  assert.equal(fm.primaryQuery, '猫咪窗边摄影');
 });
 
 test('scanImageFiles filters non-images and dotfiles', async () => {
@@ -215,6 +243,19 @@ test('publishing requires explicit editorial confirmation while any sibling is a
   assert.equal(requiresEditorialConfirmation([
     { content: '---\ndraft: false\n---\nbody' },
   ]), false);
+});
+
+test('search metadata requires a reader query and a supported intent', () => {
+  assert.equal(validateSearchMetadata({ primaryQuery: 'AI Gateway 是什么', searchIntent: 'definition' }), null);
+  assert.match(validateSearchMetadata({ primaryQuery: '', searchIntent: 'definition' }), /primaryQuery/);
+  assert.match(validateSearchMetadata({ primaryQuery: '工程师面试', searchIntent: 'trending' }), /searchIntent/);
+  assert.match(validateSearchMetadata({ primaryQuery: '工作', searchIntent: 'essay', relatedQueries: ['工作', '管理'] }), /重复/);
+});
+
+test('publish preflight requires search metadata on drafts in each locale', () => {
+  assert.equal(searchMetadataError('---\nprimaryQuery: AI Gateway 是什么\nsearchIntent: definition\nrelatedQueries: [AI 网关, LLM gateway]\n---\n正文'), null);
+  assert.match(searchMetadataError('---\ntitle: 缺少 SEO 意图\n---\n正文'), /primaryQuery/);
+  assert.match(searchMetadataError('---\nprimaryQuery: 工程师面试\nsearchIntent: trending\n---\n正文'), /searchIntent/);
 });
 
 

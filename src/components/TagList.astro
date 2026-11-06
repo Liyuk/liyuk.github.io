@@ -4,6 +4,7 @@
 // every detail page so the link-vs-plain decision stays in one place.
 import { tagUrl } from '../lib/content-paths.ts';
 import { getTag } from '../lib/taxonomy.ts';
+import { hubTagSlugs } from '../lib/topic-hubs.ts';
 import { i18n } from '../i18n/index.mjs';
 
 interface Props {
@@ -24,7 +25,10 @@ const {
   pagefindFilter = false,
 } = Astro.props as Props;
 
-const shown = max ? tags.slice(0, max) : tags;
+// Curated hub tags lead the row so topic pages collect the strongest internal links.
+const hubs = hubTagSlugs();
+const ordered = [...tags.filter((slug) => hubs.includes(slug)), ...tags.filter((slug) => !hubs.includes(slug))];
+const shown = max ? ordered.slice(0, max) : ordered;
 ---
 {shown.length > 0 && (
   <ul class:list={['tag-list', extraClass]} aria-label={i18n(locale).entry.tagsAria}>

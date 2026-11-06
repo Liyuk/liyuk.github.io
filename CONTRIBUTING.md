@@ -32,6 +32,8 @@ Draft preview is deliberately limited to real detail entries in development. Dra
 
 Use `npm run new:post` for writing, research, consulting, or projects and `npm run new:gallery` for galleries. New entries start as `draft: true`. Before drafting, read the relevant `agent/category-guides/*.md` and the matching `write-*` skill in `.claude/skills/`; every coding agent uses the same project-local skill procedure.
 
+The creator asks for each entry's primary reader query, intent, and up to five related queries. Use actual site queries from Search Console where relevant; trends are candidate signals and must fit the site's expertise and a useful answer. Localize these phrases naturally in `en.md`. The publish command blocks a draft that lacks valid primary query and intent. During review, verify the content answers them without stuffing terms. After publication, `npm run seo:signals` refreshes local GSC data and `npm run seo:match` produces a page/query coverage report under ignored `artifacts/seo/`.
+
 | Kind                                      | Source convention                                            | Public route                                            |
 | ----------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------- |
 | Writing / research / project / consulting | `src/content/<collection>/YYYY/MM/<slug>/zh.md` plus `en.md` | `/writing/`, `/research/`, `/projects/`, `/consulting/` |

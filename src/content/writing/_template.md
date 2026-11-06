@@ -8,6 +8,9 @@ draft: true
 # type 可选：essay | note | case-study（默认 essay）
 type: essay
 tags: [technology]
+primaryQuery: "读者会搜索的具体问题"
+searchIntent: essay
+relatedQueries: []
 # column: { slug: example-column, order: 1 }   # 属于专栏时填（可选）
 ---
 

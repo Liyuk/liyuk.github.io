@@ -5,6 +5,9 @@ createdAt: 2026-08-17
 publishedAt: 2026-08-17
 draft: false
 tags: [leadership, management, mentoring, team, decision-making, organization, work-leadership]
+primaryQuery: "managing managers"
+searchIntent: howto
+relatedQueries: [manager of managers, managing multiple teams]
 column: { slug: multi-team-management, order: 3 }
 locale: en
 translationStatus: reviewed

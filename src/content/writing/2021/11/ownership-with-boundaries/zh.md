@@ -5,6 +5,9 @@ createdAt: 2021-11-05
 publishedAt: 2021-11-05
 type: essay
 tags: [ownership, leadership, collaboration, communication, work-leadership]
+primaryQuery: Owner 意识与责任边界
+searchIntent: essay
+relatedQueries: [主人翁意识, 职场责任边界]
 column: { slug: one-on-one-conversations, order: 5 }
 ---
 

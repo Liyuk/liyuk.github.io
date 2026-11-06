@@ -12,6 +12,9 @@ hero:
   alt: 面部观察图卡、配色卡、彩妆盒与抽象手机界面共同组成的美妆决策概念静物。
   caption: 概念示意：从观察、建议到产品选择的决策链；并非真实产品界面或诊断结果。
 tags: [product, ai, computer-vision, privacy, beauty]
+primaryQuery: Veylumi
+searchIntent: project
+relatedQueries: [AI 美妆决策产品]
 ---
 
 [在 GitHub 查看项目 ↗](https://github.com/Liyuk/veylumi)　·　[在线体验纯静态演示 ↗](https://liyuk.github.io/veylumi/)

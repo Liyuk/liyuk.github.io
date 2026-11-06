@@ -1,12 +1,15 @@
 ---
-title: "AI Gateway: From Backend Scheduling to Cost Governance"
-description: "Using multi-backend model access as the setting, this article explains how an AI Gateway handles resource scheduling, capacity control, failure switching, distributed state, usage accounting, and enterprise cost governance."
+title: "What Is an AI Gateway? From Backend Scheduling to Cost Governance"
+description: "What is an AI Gateway? This article explains model routing, capacity controls, failure switching, distributed state, usage accounting, and cost governance across multiple model backends."
 locale: en
 createdAt: 2026-09-03
 publishedAt: 2026-09-03
 draft: false
 type: essay
-tags: [ai, architecture, systems-design, routing, reliability, capacity-planning, observability, interview, learning, technology]
+tags: [ai-gateway, ai, architecture, systems-design, routing, reliability, capacity-planning, observability, interview, learning, technology]
+primaryQuery: "what is an AI gateway"
+searchIntent: definition
+relatedQueries: [LLM gateway, model routing, AI gateway rate limits]
 column: { slug: technical-systems, order: 9 }
 translationStatus: reviewed
 translationKey: 2026/09/what-ai-gateways-do
@@ -29,7 +32,7 @@ That answer stops being enough once the models and resources multiply.
 
 Which deployment should receive the request? If one credential resource is rate-limited, can another candidate resource take over? Does the backup model support the original request's tool calls and context length? Once streaming has started, can the request be sent again? If the upstream has already executed the request but the response timed out on the way back, will a retry execute the action twice?
 
-Taken together, these questions turn an AI Gateway into more than a “unified entry point.” It chooses between callers and model resources, and it must leave behind records that make those choices explainable.
+Taken together, these questions make an AI Gateway more than a “unified entry point.” It is a control layer between callers and model resources: it chooses a backend and leaves an explainable record of decisions about rate limits, retries, fallback, and usage.
 
 ```mermaid
 flowchart LR

@@ -319,6 +319,8 @@ test('content discovery builds one localized record for the static retrieval cor
     data: {
       title: 'Discovery example',
       description: 'An article description.',
+      primaryQuery: '技术知识库入口页',
+      relatedQueries: ['如何建立技术知识库', '知识管理入口'],
       tags: ['technology'],
       column: { slug: 'data-metrics-guide', order: 2 },
     },
@@ -329,7 +331,7 @@ test('content discovery builds one localized record for the static retrieval cor
     title: 'Discovery example',
     description: 'An article description.',
     tagLabels: ['技术'],
-    keywords: ['技术', '数据度量工作指南', '从数据口径到周期复盘，建立一套能支持协作与决策的度量系统。'],
+    keywords: ['技术知识库入口页', '如何建立技术知识库', '知识管理入口', '技术', '数据度量工作指南', '从数据口径到周期复盘，建立一套能支持协作与决策的度量系统。'],
     body: 'Published article body.',
     url: '/writing/2026/10/discovery-example/',
     locale: 'zh-CN',

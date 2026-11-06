@@ -7,6 +7,9 @@ createdAt: 2021-11-05
 publishedAt: 2021-11-05
 type: essay
 tags: [ownership, leadership, collaboration, communication, work-leadership]
+primaryQuery: "ownership and responsibility at work"
+searchIntent: essay
+relatedQueries: [responsibility boundaries, initiative at work]
 column: { slug: one-on-one-conversations, order: 5 }
 translationKey: 2021/11/ownership-with-boundaries
 ---

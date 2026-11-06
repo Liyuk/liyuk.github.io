@@ -13,6 +13,9 @@ hero:
   caption: "Screenshot of the running skin: the session list and chat window under the Feishu skin."
 draft: false
 tags: [technology, agent-systems, developer-productivity]
+primaryQuery: "DSH skin"
+searchIntent: project
+relatedQueries: [DSH Web chat skin, Feishu-style chat skin]
 translationKey: 2026/08/dsh-skin-chatlab
 ---
 

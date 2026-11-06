@@ -6,12 +6,17 @@ publishedAt: 2026-08-15
 type: note
 draft: false
 tags: [strategy, product-thinking, decision-making, learning]
+primaryQuery: "business model canvas"
+searchIntent: definition
+relatedQueries: [business model canvas nine boxes, business model canvas questions, 9 block business model]
+citationUrls:
+  - https://www.strategyzer.com/library/the-business-model-canvas
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/business-model-canvas
 ---
 
-In the enterprise investment class, a diagram was introduced: the Business Model Canvas. It is simply a canvas, with each of its nine boxes holding one element. The line the teacher kept emphasizing was — **the nine boxes are not nine optional items, but nine parts of the same machine; only when all of them turn and mesh with each other does the project hold up.** A more precise way to put it: **the nine boxes must be able to explain each other and be internally consistent; being thin is not the same as being missing (some boxes are naturally meant to be light — for example, a self-serve SaaS keeping customer relationships light is an advantage, not a hole), but anything that cannot be explained will definitely leak.** (This is the end-state of the mature stage; not all nine boxes are necessarily complete mid-journey — see "Viewed by stage" below.)
+In the enterprise investment class, we learned the Business Model Canvas, a nine-box map of how a business works. Each box holds one element ([official canvas](https://www.strategyzer.com/library/the-business-model-canvas)). The line the teacher kept emphasizing was — **the nine boxes are not nine optional items, but nine parts of the same machine; only when all of them turn and mesh with each other does the project hold up.** A more precise way to put it: **the nine boxes must be able to explain each other and be internally consistent; being thin is not the same as being missing (some boxes are naturally meant to be light — for example, a self-serve SaaS keeping customer relationships light is an advantage, not a hole), but anything that cannot be explained will definitely leak.** (This is the end-state of the mature stage; not all nine boxes are necessarily complete mid-journey — see "Viewed by stage" below.)
 
 First, let me write down the nine boxes as a record. Each box is accompanied by the question it must answer and one line of my own understanding.
 

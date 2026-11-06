@@ -11,6 +11,7 @@ import { spawnSync } from 'node:child_process';
 
 import { buildFrontmatter, createPrompter, todayStr, validateSlug, validateDate } from './lib/cli.mjs';
 import { columns } from '../src/lib/taxonomy.ts';
+import { validateSearchMetadata } from '../src/lib/search-intent.ts';
 
 const GALLERY_CONTENT_DIR = path.join(process.cwd(), 'src/content/galleries');
 const GALLERY_PUBLIC_DIR = path.join(process.cwd(), 'public/images/galleries');
@@ -43,13 +44,16 @@ export function galleryPublicDir(slug) {
 
 // Build the gallery frontmatter object (mirrors src/content.config.ts schema).
 // New galleries default to draft so they don't publish until edited.
-export function buildGalleryFrontmatter({ title, description, slug, createdAt, cover, images, column, draft = true }) {
+export function buildGalleryFrontmatter({ title, description, slug, createdAt, cover, images, column, primaryQuery, relatedQueries = [], draft = true }) {
   return {
     title,
     description,
     slug,
     createdAt,
     draft,
+    searchIntent: 'visual',
+    primaryQuery,
+    ...(relatedQueries.length ? { relatedQueries } : {}),
     ...(column ? { column } : {}),
     cover,
     images,
@@ -174,6 +178,17 @@ async function main() {
 
     const title = await rl.ask('图集标题（必填）: ', { validate: (v) => (v ? null : '标题不能为空') });
     const description = await rl.ask('图集描述（一句话）: ');
+    const primaryQuery = await rl.ask('读者会用什么地点/主题/对象来找这组照片？（2–120 字）: ', {
+      validate: (value) => validateSearchMetadata({ primaryQuery: value, searchIntent: 'visual' }),
+    });
+    const relatedAnswer = await rl.ask('相关地点/主题说法（可选，逗号分隔，最多 5 个）: ', {
+      validate: (value) => validateSearchMetadata({
+        primaryQuery,
+        searchIntent: 'visual',
+        relatedQueries: value.split(/[,，\n]+/u).map((query) => query.trim()).filter(Boolean),
+      }),
+    });
+    const relatedQueries = relatedAnswer.split(/[,，\n]+/u).map((query) => query.trim()).filter(Boolean);
     const createdAt = await rl.ask('图集日期（YYYY-MM-DD）', { default: todayStr(), validate: validateDate });
 
     // image source path
@@ -209,7 +224,7 @@ async function main() {
     }
 
     const column = await askGalleryColumn(rl);
-    const frontmatter = buildFrontmatter(buildGalleryFrontmatter({ title, description, slug, createdAt, cover, images, column }));
+    const frontmatter = buildFrontmatter(buildGalleryFrontmatter({ title, description, slug, createdAt, cover, images, column, primaryQuery, relatedQueries }));
     const filePath = galleryFilePath(slug);
     const body = `${frontmatter}\n`;
 

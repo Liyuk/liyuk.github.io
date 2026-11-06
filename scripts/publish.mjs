@@ -6,6 +6,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'node:fs/promises';
+import { validateSearchMetadata } from '../src/lib/search-intent.ts';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'src/content');
 
@@ -61,6 +62,33 @@ export function publishFrontmatter(content, locale) {
 
 export const unDraft = (content, locale = 'en') => publishFrontmatter(content, locale);
 
+function frontmatterValue(frontmatter, key) {
+  const raw = frontmatter.match(new RegExp(`^${key}:\\s*(.*)$`, 'm'))?.[1]?.trim();
+  if (!raw) return undefined;
+  if (raw.startsWith('[') && raw.endsWith(']')) {
+    return raw.slice(1, -1).split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/u).map((value) => unquoteYaml(value.trim()));
+  }
+  return unquoteYaml(raw);
+}
+
+function unquoteYaml(value) {
+  if (value?.startsWith('"') && value.endsWith('"')) {
+    try { return JSON.parse(value); } catch { return value.slice(1, -1); }
+  }
+  if (value?.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replace(/''/gu, "'");
+  return value;
+}
+
+export function searchMetadataError(content) {
+  const frontmatter = content.match(/^---\n([\s\S]*?)\n---/u)?.[1];
+  if (!frontmatter) return '缺少 YAML frontmatter。';
+  return validateSearchMetadata({
+    primaryQuery: frontmatterValue(frontmatter, 'primaryQuery'),
+    searchIntent: frontmatterValue(frontmatter, 'searchIntent'),
+    relatedQueries: frontmatterValue(frontmatter, 'relatedQueries'),
+  });
+}
+
 function localeForFile(file) {
   return file.endsWith('/en.md') || file.endsWith('.en.md') ? 'en' : 'zh-CN';
 }
@@ -106,6 +134,16 @@ async function main() {
     ...entry,
     content: await readFile(entry.file, 'utf8'),
   })));
+  const seoErrors = entriesWithContent
+    .filter((entry) => /^draft:\s*true\s*$/mu.test(entry.content.match(/^---\n([\s\S]*?)\n---/u)?.[1] ?? ''))
+    .map((entry) => ({ entry, error: searchMetadataError(entry.content) }))
+    .filter(({ error }) => error);
+  if (seoErrors.length) {
+    console.error('拒绝发布：每个待发布语言版本都需要一个主查询和搜索意图。');
+    for (const { entry, error } of seoErrors) console.error(`  ✘ ${path.relative(process.cwd(), entry.file)}: ${error}`);
+    console.error('请先补 primaryQuery、searchIntent（可选 relatedQueries），再完成编辑审核。');
+    process.exit(2);
+  }
   if (requiresEditorialConfirmation(entriesWithContent) && !editorialConfirmed) {
     console.error('拒绝发布：请先完成匹配的写作 skill 与 content-review 的 AI 味、作者 voice、次元墙、读者价值、独特性、风险审核，并取得 GO。');
     console.error('确认完成后运行：npm run publish <slug> -- --confirm-editorial-review');

@@ -7,6 +7,9 @@ createdAt: 2026-08-29
 draft: false
 type: essay
 tags: [architecture, systems-design, technical-planning, technology, operations]
+primaryQuery: 多业务域平台架构设计
+searchIntent: howto
+relatedQueries: [多业务平台, 多国家多场景系统架构]
 column: { slug: technical-systems, order: 8 }
 citationUrls:
   - https://shopify.dev/docs/apps/build/markets

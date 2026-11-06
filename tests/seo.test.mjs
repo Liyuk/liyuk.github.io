@@ -17,10 +17,14 @@ test('every indexable global page has localized SEO description and keywords', (
 });
 
 test('article keywords are localized from the article tag slugs', () => {
-  assert.deepEqual(contentKeywords(['ai', 'developer-productivity', 'strategy'], 'zh-CN'), ['AI', '开发者生产力', 'Strategy']);
+  assert.deepEqual(contentKeywords(['ai', 'developer-productivity', 'strategy'], 'zh-CN'), ['AI', '开发者生产力', '战略']);
   assert.deepEqual(contentKeywords(['ai', 'developer-productivity', 'strategy'], 'en'), ['AI', 'Developer Productivity', 'Strategy']);
 });
 
 test('unknown article tags remain available as stable keyword values', () => {
   assert.deepEqual(contentKeywords(['new-topic'], 'en'), ['new-topic']);
+});
+
+test('declared search queries join localized article keywords without duplicates', () => {
+  assert.deepEqual(contentKeywords(['ai', 'strategy'], 'en', ['AI gateway guide', 'Gateway guide']), ['AI gateway guide', 'Gateway guide', 'AI', 'Strategy']);
 });

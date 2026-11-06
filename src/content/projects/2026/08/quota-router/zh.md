@@ -12,7 +12,7 @@ hero:
   src: /images/projects/quota-router/architecture.svg
   alt: Quota Router 在 DSH 中的位置：用户回合进入纯策略层，经过来源优先级、任务模型映射与保障机制后回到 DSH 原生层。
   caption: Quota Router 的架构边界：只负责可解释的模型选择与 fallback，不拥有 provider、凭据或模型目录。
-tags: [agent, routing, algorithms, explainability, reliability, observability, typescript]
+tags: [ai-gateway, agent, routing, algorithms, explainability, reliability, observability, typescript]
 ---
 
 [在 GitHub 查看 Quota Router ↗](https://github.com/Liyuk/dsh-quota-router)　·　[在 npm 查看已发布的包 ↗](https://www.npmjs.com/package/@liyuk/dsh-quota-router)

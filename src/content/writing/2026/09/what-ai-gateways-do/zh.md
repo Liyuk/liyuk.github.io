@@ -1,12 +1,15 @@
 ---
-title: AI Gateway：从后端调度到成本治理
-description: 通过多后端模型访问场景，理解 AI Gateway 如何处理资源调度、容量控制、故障切换、分布式状态、用量统计和企业成本治理。
+title: AI Gateway 是什么：从后端调度到成本治理
+description: AI Gateway（AI 网关）是什么？本文从多后端模型访问出发，解释模型资源调度、容量控制、故障切换、分布式状态、用量统计与成本治理。
 locale: zh-CN
 createdAt: 2026-09-03
 publishedAt: 2026-09-03
 draft: false
 type: essay
-tags: [ai, architecture, systems-design, routing, reliability, capacity-planning, observability, interview, learning, technology]
+tags: [ai-gateway, ai, architecture, systems-design, routing, reliability, capacity-planning, observability, interview, learning, technology]
+primaryQuery: AI Gateway 是什么
+searchIntent: definition
+relatedQueries: [AI 网关, LLM 网关, 模型路由]
 column: { slug: technical-systems, order: 9 }
 translationStatus: original
 translationKey: 2026/09/what-ai-gateways-do
@@ -29,7 +32,7 @@ citationUrls:
 
 请求应该发给哪个 deployment？一个凭证资源被限流之后，能不能换另一个候选资源？备用模型是否支持原请求里的工具调用和上下文长度？响应已经开始流式输出以后，还能不能再发一次？如果上游已经执行了请求，只是响应在路上超时了，重试会不会把动作执行两遍？
 
-这些问题叠在一起，AI 网关就不再只是一个“统一入口”。它在调用方和模型资源之间做选择，也要为这些选择留下可以解释的记录。
+这些问题叠在一起，AI Gateway（AI 网关）就不只是一个“统一入口”，而是应用与模型资源之间的控制层：它选择后端资源，并让限流、重试、故障切换和用量记录都有可解释的依据。
 
 ```mermaid
 flowchart LR

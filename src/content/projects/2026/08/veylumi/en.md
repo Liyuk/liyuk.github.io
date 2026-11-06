@@ -15,6 +15,9 @@ hero:
   alt: "A beauty-decision concept still life composed of a facial observation chart, color palette cards, a makeup palette, and an abstract phone interface."
   caption: "Concept illustration: the decision chain from observation, to suggestion, to product selection; not a real product interface or diagnostic result."
 tags: [product, ai, computer-vision, privacy, beauty]
+primaryQuery: Veylumi
+searchIntent: project
+relatedQueries: [AI beauty decision product]
 ---
 
 [View the project on GitHub ↗](https://github.com/Liyuk/veylumi) · [Try the static demo online ↗](https://liyuk.github.io/veylumi/)

@@ -14,7 +14,7 @@ Apply `agent/editorial-rules.md`'s revision contract and `agent/README.md`'s wor
 ## Producing a new `en.md`
 
 1. Confirm the `zh.md` is actually final (see the relevant `agent/category-guides/*.md` for that collection's drafting order) and select the matching source-state branch in `agent/translation-spec.md`.
-2. Follow `agent/translation-spec.md` exactly for frontmatter: which fields translate, which copy verbatim, which need YAML quoting, and the `.strict()` key allowlist for `writing` and `consulting`.
+2. Follow `agent/translation-spec.md` exactly for frontmatter: which fields translate, which copy verbatim, which need YAML quoting, and the `.strict()` key allowlist for `writing` and `consulting`. Localize `primaryQuery` and `relatedQueries` as natural English search phrases for the same reader need; preserve `searchIntent` unchanged. Confirm the English body actually answers those localized queries.
 3. Translate the body per `agent/translation-spec.md`'s body rules (code fences and math verbatim, links/images keep their target and translate only visible text, Mermaid keeps English labels already).
 4. Run `.claude/skills/humanizer/SKILL.md` as an English prose pass. Keep the Chinese argument, claims, certainty, citations, proper nouns, and required Markdown structure fixed; use Humanizer to remove English AI tells without adding personal detail or making the translation artificially casual.
 5. For an unpublished entry, set `translationStatus: draft`. A first-pass translation remains draft until it completes the full 信达雅 review and the site owner accepts `reviewed`; a published Chinese source follows the candidate path in `agent/translation-spec.md` instead.
