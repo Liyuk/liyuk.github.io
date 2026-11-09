@@ -5,6 +5,7 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readImageFileSize } from '../src/lib/image-size.mjs';
 
 const SITE_ORIGIN = 'https://liyuk.com';
 
@@ -187,8 +188,24 @@ async function auditSeo({ distDir = path.join(process.cwd(), 'dist') } = {}) {
     const ogImage = metaContent(html, 'property', 'og:image');
     if (ogImage.startsWith(`${SITE_ORIGIN}/`)) {
       const imagePath = decodeURIComponent(new URL(ogImage).pathname);
-      if (!(await isFile(path.join(distDir, imagePath))))
+      const imageFile = path.join(distDir, imagePath);
+      if (!(await isFile(imageFile))) {
         errors.push(`${route}: og:image 未对应构建文件：${ogImage}。`);
+      } else {
+        // Generated cards and the brand card are advertised as 1200x630; a
+        // truncated or mis-sized file would make that claim false.
+        const declaredWidth = Number(metaContent(html, 'property', 'og:image:width'));
+        const declaredHeight = Number(metaContent(html, 'property', 'og:image:height'));
+        const actual = readImageFileSize(imageFile);
+        if (declaredWidth && declaredHeight) {
+          if (!actual || actual.width !== declaredWidth || actual.height !== declaredHeight)
+            errors.push(
+              `${route}: og:image 实际尺寸 ${actual ? `${actual.width}x${actual.height}` : '不可读'} 与声明的 ${declaredWidth}x${declaredHeight} 不一致。`,
+            );
+        } else if (!actual && !imagePath.endsWith('.svg')) {
+          errors.push(`${route}: og:image 文件不可读：${ogImage}。`);
+        }
+      }
     }
 
     const nodes = graphNodes(html);

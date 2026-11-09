@@ -1,7 +1,7 @@
 ---
 title: "Developer Productivity Is Not a Tool Catalog, but a Feedback System"
 seoTitle: "Developer Productivity Is a Feedback System, Not Tools"
-description: "Engineering productivity as a shrinking loop of proposing a change, getting trustworthy feedback, and correcting safely, with metrics and a pilot protocol."
+description: "A review and position paper: productivity as a shrinking loop of proposing a change, getting trustworthy feedback, and correcting safely, with a pilot protocol."
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/developer-productivity-feedback-loops

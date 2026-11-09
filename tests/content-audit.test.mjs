@@ -138,3 +138,16 @@ test('content audit rejects a seoTitle identical to the title', async () => {
   const { errors } = await auditContent({ contentRoot: root });
   assert.ok(errors.some((error) => error.includes('seoTitle 与 title 相同')));
 });
+
+test('content audit measures double-quoted titles after unescaping', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'liyuk-content-audit-'));
+  // 60 columns once `\"` is unescaped; 62 if escapes were counted.
+  const title = `"${'a'.repeat(28)}\\"No\\"${'b'.repeat(28)}"`;
+  await fixture(
+    root,
+    `research/2026/08/escaped/zh.md`,
+    shared.replace('title: Example', `title: ${title}`),
+  );
+  const { errors } = await auditContent({ contentRoot: root });
+  assert.ok(!errors.some((error) => error.includes('宽度')), errors.join('\n'));
+});

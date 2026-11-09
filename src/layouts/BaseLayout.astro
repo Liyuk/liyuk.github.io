@@ -94,6 +94,7 @@ const canonicalUrl = new URL(isEnglish ? enUrl : zhUrl, Astro.site).href;
 // project hero / gallery cover.
 // Indexable articles without their own image get a per-route title card that
 // scripts/generate-og-cards.mjs renders into dist/ after `astro build`.
+// In `npm run dev` these URLs 404 because the cards only exist in builds.
 const ogCardPath = type === 'article' && !image && !noindex ? ogCardUrl(Astro.url.pathname) : undefined;
 const ogImage = new URL(image ?? ogCardPath ?? '/images/og-default.png', Astro.site).href;
 // Dimensions are only advertised when they are known to be true: the default

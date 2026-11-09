@@ -8,7 +8,8 @@
 // under node_modules/.cache/og-cards keyed by their inputs, so unchanged pages
 // are copied rather than re-rendered.
 import { createHash } from 'node:crypto';
-import { copyFile, mkdir, readFile, readdir, stat } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, rename, rm } from 'node:fs/promises';
+import { readImageFileSize } from '../src/lib/image-size.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site } from '../src/data/site.mjs';
@@ -121,19 +122,26 @@ footer strong{color:#232522;font-weight:600}
 </body></html>`;
 }
 
+// The platform is part of the key because available CJK fonts differ between
+// macOS and Linux CI, so a card rendered on one must not be reused on the other.
 function cacheKey(spec) {
   return createHash('sha256')
-    .update(JSON.stringify({ v: TEMPLATE_VERSION, spec: { ...spec, output: undefined } }))
+    .update(
+      JSON.stringify({
+        v: TEMPLATE_VERSION,
+        platform: process.platform,
+        spec: { ...spec, output: undefined },
+      }),
+    )
     .digest('hex')
     .slice(0, 24);
 }
 
-async function exists(file) {
-  try {
-    return (await stat(file)).isFile();
-  } catch {
-    return false;
-  }
+// A cached card counts only if it decodes to the expected size; anything else
+// (missing, truncated, corrupt) is re-rendered.
+function isValidCard(file) {
+  const size = readImageFileSize(file);
+  return size?.width === WIDTH && size?.height === HEIGHT;
 }
 
 export async function generateOgCards({
@@ -154,7 +162,7 @@ export async function generateOgCards({
     const cacheFile = path.join(cacheDir, `${cacheKey(spec)}.png`);
     const target = path.join(distDir, spec.output);
     await mkdir(path.dirname(target), { recursive: true });
-    if (await exists(cacheFile)) {
+    if (isValidCard(cacheFile)) {
       await copyFile(cacheFile, target);
       cached++;
     } else {
@@ -168,10 +176,19 @@ export async function generateOgCards({
     try {
       const page = await browser.newPage({ viewport: { width: WIDTH, height: HEIGHT } });
       for (const { spec, cacheFile, target } of pending) {
-        await page.setContent(cardHtml(spec), { waitUntil: 'load' });
-        await page.evaluate(() => document.fonts.ready);
-        await page.screenshot({ path: cacheFile, type: 'png' });
-        await copyFile(cacheFile, target);
+        // Render to a temp file and rename on success so an interrupted run
+        // never leaves a truncated card in the cache.
+        const tempFile = `${cacheFile}.${process.pid}.tmp`;
+        try {
+          await page.setContent(cardHtml(spec), { waitUntil: 'load' });
+          await page.evaluate(() => document.fonts.ready);
+          await page.screenshot({ path: tempFile, type: 'png' });
+          await rename(tempFile, cacheFile);
+          await copyFile(cacheFile, target);
+        } catch (error) {
+          await rm(tempFile, { force: true });
+          throw new Error(`OG 分享卡渲染失败：${spec.output}（${error.message}）`, { cause: error });
+        }
       }
     } finally {
       await browser.close();

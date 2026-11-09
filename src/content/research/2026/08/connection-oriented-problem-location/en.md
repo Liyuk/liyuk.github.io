@@ -1,6 +1,6 @@
 ---
 title: "The Five Lenses: Connection-Oriented Problem Location"
-description: "A four-stage problem-location method (structure, surface connections, infer the root, find a solution) built on five lenses, with a testable training protocol."
+description: "A framework paper: a four-stage problem-location method (structure, connections, root problem, solution) built on five lenses, with a testable training protocol."
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.1'

@@ -1,6 +1,6 @@
 ---
 title: "Let the Agent Execute: Emotional Adaptation, Trust Calibration, and Human Relief from Execution Pressure"
-seoTitle: "Agent HCI: Trust Calibration and Delegated Execution"
+seoTitle: "Agent HCI: Emotional Adaptation and Trust in Delegation"
 description: "How an Agent can adapt state, evidence, and action feedback to uncertainty, waiting, and failure, and how delegating execution shifts human pressure and trust."
 createdAt: 2026-08-17
 publishedAt: 2026-08-19

@@ -1,7 +1,7 @@
 ---
 title: "Defining the Boundaries Before Bringing AI Capability into an Engineering Organization"
 seoTitle: "AI in Engineering Organizations: Define the Boundaries"
-description: "Drawn from driving AI pilots in a real engineering org: four boundaries (context, responsibility, authorization, measurement) and a falsifiable pilot protocol."
+description: "A position paper from driving AI pilots in a real engineering org: four boundaries (context, responsibility, authorization, measurement) and a pilot protocol."
 locale: en
 translationStatus: reviewed
 createdAt: 2026-08-14

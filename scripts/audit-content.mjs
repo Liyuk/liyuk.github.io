@@ -60,7 +60,11 @@ function valueOf(frontmatter, key) {
 }
 
 function unquote(value) {
-  return value?.replace(/^(['"])(.*)\1$/, '$2') ?? value;
+  if (value == null) return value;
+  const match = value.match(/^(['"])(.*)\1$/);
+  if (!match) return value;
+  // Double-quoted YAML escapes `\"` and `\\`; single-quoted doubles `''`.
+  return match[1] === '"' ? match[2].replace(/\\(["\\])/g, '$1') : match[2].replace(/''/g, "'");
 }
 
 function boolOf(frontmatter, key, fallback = false) {

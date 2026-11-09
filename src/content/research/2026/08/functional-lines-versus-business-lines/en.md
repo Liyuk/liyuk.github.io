@@ -1,7 +1,7 @@
 ---
 title: "When AI Lowers Workflow Barriers: How to Redivide Functional Lines and Business Lines"
 seoTitle: "Functional vs. Business Lines When AI Lowers Barriers"
-description: "Once tools lower skill barriers, organizations should be built around end-to-end business capability: mechanism, org-form spectrum, signals, and a pilot protocol."
+description: "A position paper: once tools lower skill barriers, organize around end-to-end business capability. Mechanism, org-form spectrum, signals, and a pilot protocol."
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'

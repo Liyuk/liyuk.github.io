@@ -1,7 +1,7 @@
 ---
 title: "From Prompt to Narrative Production: CanonLoom 0.2.0's Auditable Human-AI Collaboration Architecture for Long-Form Fiction"
 seoTitle: "CanonLoom: Auditable Human-AI Long-Form Fiction Writing"
-description: "Long-form fiction collaboration modeled as recoverable, auditable, author-approved state transitions, evaluated without mistaking scores for literary value."
+description: "A system design paper: long-form fiction collaboration as recoverable, auditable, author-approved state transitions, without mistaking scores for literary value."
 createdAt: 2026-08-03
 publishedAt: 2026-08-03
 version: CanonLoom 0.2.0
