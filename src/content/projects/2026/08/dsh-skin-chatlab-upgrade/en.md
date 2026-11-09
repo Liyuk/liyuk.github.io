@@ -1,5 +1,6 @@
 ---
 title: "dsh-skin-chatlab 2.x: A Switchable Chat Workbench for DSH Web"
+seoTitle: "dsh-skin-chatlab 2.x: A Switchable Chat UI for DSH Web"
 description: Six independently published skins, aggregate bundle loading, avatar identity convergence, partial-install fallback, and a clean uninstall boundary for DSH Web.
 locale: en
 translationStatus: reviewed

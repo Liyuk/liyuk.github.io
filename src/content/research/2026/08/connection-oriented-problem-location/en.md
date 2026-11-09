@@ -13,6 +13,9 @@ column: { slug: engineering-ai-judgment, order: 1 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/connection-oriented-problem-location
+primaryQuery: "how to find the root problem"
+searchIntent: howto
+relatedQueries: ["problem framing method", "structured problem solving framework", "root cause thinking lenses"]
 ---
 
 **Version:** 0.1 (preprint)

@@ -1,5 +1,6 @@
 ---
 title: 'The Technical SEO System: URLs, Rendering, Migrations, and Performance'
+seoTitle: "Technical SEO: URLs, Rendering, Migrations, Performance"
 description: 'A page contract for identity, crawl boundaries, rendering, migrations, and Core Web Vitals.'
 locale: en
 translationStatus: reviewed
@@ -10,6 +11,9 @@ type: case-study
 draft: false
 tags: [seo, engineering, systems, reliability]
 column: { slug: search-engine-growth, order: 3 }
+primaryQuery: "technical SEO checklist"
+searchIntent: howto
+relatedQueries: ["canonical tags", "site migration SEO", "Core Web Vitals", "JavaScript rendering SEO"]
 ---
 
 The failures were concrete: one piece of content had multiple URLs, canonical pointed to the wrong version, an old domain had incomplete mappings, and robots blocked paths that mattered. The server returned HTML, but not the same useful semantics to users and search systems. Performance work was often reduced to “add a preload.”

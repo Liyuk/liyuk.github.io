@@ -1,5 +1,6 @@
 ---
 title: "How Managers of Managers Find, Develop, and Hand Off Leaders: HRBP, TA, and Technical Leadership"
+seoTitle: "Managers of Managers: Finding and Developing Leaders"
 description: Hiring is not a request handed to HR or TA. Managers of managers, HRBPs, TAs, and hiring managers build a shared system for defining problems, hiring, developing, and handing off leadership responsibility.
 createdAt: 2026-08-20
 publishedAt: 2026-08-20

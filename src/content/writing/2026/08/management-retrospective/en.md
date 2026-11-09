@@ -1,5 +1,6 @@
 ---
 title: "Management Retrospective: Eight Judgments from Execution to System"
+seoTitle: "Management Retrospective: Eight Judgments"
 description: "A practical management framework built from eight recurring judgments: problem definition, boundaries, alignment, context, closed loops, resources, teams, and retrospectives."
 locale: en
 translationStatus: reviewed
@@ -9,6 +10,9 @@ type: essay
 featured: true
 tags: [management, leadership, decision-making, work-leadership]
 translationKey: 2026/08/management-retrospective
+primaryQuery: "management retrospective"
+searchIntent: essay
+relatedQueries: ["management principles", "how to run a retrospective", "manager decision making"]
 ---
 
 Over the years I've written quite a few articles about management, collaboration, and decision-making. Looking back, they actually all come from the same long retrospective: the pitfalls I repeatedly stepped into and the judgments I repeatedly confirmed while leading teams were split into many articles, each focused on a single angle.

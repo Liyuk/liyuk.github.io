@@ -1,5 +1,6 @@
 ---
 title: "Developer Productivity Is Not a Tool Catalog, but a Feedback System"
+seoTitle: "Developer Productivity Is a Feedback System, Not Tools"
 description: "Engineering productivity as a shrinking loop of proposing a change, getting trustworthy feedback, and correcting safely, with metrics and a pilot protocol."
 locale: en
 translationStatus: reviewed
@@ -12,6 +13,9 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [developer-productivity, platform-engineering, feedback-loops, software-engineering, technology]
 column: { slug: engineering-ai-judgment, order: 3 }
+primaryQuery: "developer productivity metrics"
+searchIntent: essay
+relatedQueries: ["engineering feedback loops", "developer experience", "AI and developer productivity", "DORA metrics"]
 ---
 
 **Version:** 0.1 (preprint)

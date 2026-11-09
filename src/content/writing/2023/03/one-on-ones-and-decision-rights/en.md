@@ -1,5 +1,6 @@
 ---
 title: "1-on-1s Aren't Routine Meetings: Aligning Information, Expectations, and Decision Rights"
+seoTitle: "1-on-1s: Aligning Expectations and Decision Rights"
 description: "The core of a 1-on-1 is helping managers and reports understand each other's goals and needs; authorization must follow information and role boundaries rather than mistaking context for transferred decision rights."
 locale: en
 translationStatus: reviewed

@@ -1,5 +1,6 @@
 ---
 title: "Ownership and Responsibility: Framing 'Initiative' with Clear Boundaries"
+seoTitle: "Ownership and Responsibility at Work, with Boundaries"
 description: "Responsibility isn't mindless overtime or mindlessly taking on work. This set of questions makes clear 'who decides, who executes, when to escalate, and where accountability ends.'"
 locale: en
 translationStatus: reviewed

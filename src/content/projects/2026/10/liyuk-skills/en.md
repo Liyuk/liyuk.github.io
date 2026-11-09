@@ -1,5 +1,6 @@
 ---
 title: "Liyuk Skills: Engineering and Management Methods You Can Call on Demand"
+seoTitle: "Liyuk Skills: Engineering and Management Methods for AI"
 description: "A Chinese-first, open-source AI skills library. Ask Liyuk helps you choose among 20 standalone skills for proposal reviews, metric decisions, retrospectives, communication, and management questions."
 createdAt: 2026-10-14
 locale: en

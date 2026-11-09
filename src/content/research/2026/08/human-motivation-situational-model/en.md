@@ -1,5 +1,6 @@
 ---
 title: "The Laws of Human Motivation: The Situational Motivation Model"
+seoTitle: "The Situational Motivation Model: Laws of Motivation"
 description: "A situational model of motivation (does drive form, turn into action, and last?) with six workplace levers, life-cycle effects, and nine falsifiable laws."
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
@@ -12,6 +13,9 @@ column: { slug: engineering-ai-judgment, order: 9 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/human-motivation-situational-model
+primaryQuery: "employee motivation theory"
+searchIntent: essay
+relatedQueries: ["how to motivate employees", "self-determination theory at work", "situational motivation model"]
 ---
 
 **Version:** 0.1 (preprint)

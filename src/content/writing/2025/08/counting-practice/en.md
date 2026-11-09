@@ -1,5 +1,6 @@
 ---
 title: "Thinking Training (2): The Counting Game — How to Turn Vague Expressions into Clear Questions"
+seoTitle: "Thinking Training (2): Turning Vague Words into Questions"
 description: "Starting from saying 1, 2, 3 clearly, practice listening, restating, answering, and self-review, so that messy information gains an actionable structure."
 locale: en
 translationStatus: reviewed

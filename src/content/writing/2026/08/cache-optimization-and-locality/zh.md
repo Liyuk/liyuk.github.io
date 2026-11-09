@@ -10,6 +10,9 @@ tags: [performance, systems-design, algorithms, reliability, observability, rout
 column: { slug: technical-systems, order: 7 }
 translationStatus: original
 translationKey: 2026/08/cache-optimization-and-locality
+primaryQuery: "缓存优化"
+searchIntent: howto
+relatedQueries: ["缓存局部性", "多级缓存 设计", "缓存失效", "粘性路由"]
 ---
 
 缓存优化很容易从一个数字开始：命中率是多少？如果命中率不够，就延长 TTL、加一层 Redis、把更多请求粘到同一台机器。这个顺序经常让人忙很久，却没有真正回答问题。

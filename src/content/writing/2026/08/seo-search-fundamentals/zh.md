@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, engineering, learning, systems-thinking, metrics]
 column: { slug: search-engine-growth, order: 1 }
+primaryQuery: "SEO 入门"
+searchIntent: definition
+relatedQueries: ["SEO 是什么", "搜索引擎 抓取 索引", "SEO 基础知识"]
 ---
 
 刚开始做 SEO 的时候，很多人会从标题和关键词开始。这并没有错，只是经常开始得太早：页面可能根本没有被搜索引擎发现，或者被抓取了却因为 `noindex` 没进索引。标题写得再好，也解决不了这些问题。

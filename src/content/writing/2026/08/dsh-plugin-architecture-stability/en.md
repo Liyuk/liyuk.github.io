@@ -1,5 +1,6 @@
 ---
 title: "From “It Runs” to Maintainable: Architecture and Stability Lessons from Building DSH Plugins"
+seoTitle: "DSH Plugin Architecture and Stability Lessons"
 description: "A practical account of developing and debugging ChatLab, Agent Suite, and Quota Router, covering DSH plugin mechanics, common preview-version stability problems, and the boundaries that are easiest to get wrong when building plugins yourself."
 locale: en
 translationStatus: reviewed

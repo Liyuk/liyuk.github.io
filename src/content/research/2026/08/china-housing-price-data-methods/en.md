@@ -1,5 +1,6 @@
 ---
 title: "China Housing Price Data: A Source- and Methodology-Aware Approach"
+seoTitle: "China Housing Price Data: Sources and Methodology"
 description: "Building reproducible China housing price data from 70-city indexes, Beijing district listings, LPR, and transactions without mixing incompatible measures."
 createdAt: 2026-08-08
 publishedAt: 2026-08-08
@@ -11,6 +12,9 @@ tags: [data, machine-learning, housing, reproducibility, provenance]
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/china-housing-price-data-methods
+primaryQuery: "China housing price data"
+searchIntent: data
+relatedQueries: ["70-city home price index", "Beijing district home prices", "China property price statistics methodology"]
 ---
 
 **Version:** 0.4 (preprint)

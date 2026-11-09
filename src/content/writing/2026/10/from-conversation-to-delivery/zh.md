@@ -34,6 +34,9 @@ citationUrls:
   - https://arxiv.org/abs/2606.29537
   - https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/
   - https://www.microsoft.com/en-us/research/publication/the-impact-of-ai-on-developer-productivity-evidence-from-github-copilot/
+primaryQuery: "Personal Agent"
+searchIntent: essay
+relatedQueries: ["AI Agent 长任务", "Agent 交付验收", "个人 AI 助理"]
 ---
 
 ## 那次跑量化

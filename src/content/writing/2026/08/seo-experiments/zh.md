@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, growth, engineering, metrics]
 column: { slug: search-engine-growth, order: 8 }
+primaryQuery: "SEO 实验设计"
+searchIntent: troubleshoot
+relatedQueries: ["SEO 流量异常排查", "CUPED", "搜索算法更新 误判"]
 ---
 
 一次推荐模块实验里，Web 点击当天就涨了，搜索曝光却没有变化。几天后，一个热点页面把实验组平均值推高，群里已经有人准备写“实验成功”。我们把分组、页面版本、抓取状态和历史流量放到同一条时间线上，才发现分流开始、搜索看到版本、用户行为变化根本不是同一个时刻。

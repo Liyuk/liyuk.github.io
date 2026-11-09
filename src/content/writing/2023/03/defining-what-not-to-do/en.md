@@ -1,5 +1,6 @@
 ---
 title: "Saying \"No\" Isn't Laziness: Setting Boundaries on Commitments"
+seoTitle: "Saying No Isn't Laziness: Boundaries on Commitments"
 description: "Time management isn't about packing your calendar full; it's about clarifying your commitments—and what you won't do right now—based on role, value, and opportunity cost."
 locale: en
 translationStatus: reviewed

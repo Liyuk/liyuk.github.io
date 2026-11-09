@@ -1,5 +1,6 @@
 ---
 title: "What a Reusable Engineering Retrospective Should Leave Behind"
+seoTitle: "What a Reusable Engineering Retrospective Leaves Behind"
 description: "The value of an engineering retrospective is not in retelling what happened or blaming individuals, but in turning an experience into improvements that can be verified, maintained, and reused."
 locale: en
 translationStatus: reviewed

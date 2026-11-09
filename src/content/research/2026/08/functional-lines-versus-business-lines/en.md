@@ -1,5 +1,6 @@
 ---
 title: "When AI Lowers Workflow Barriers: How to Redivide Functional Lines and Business Lines"
+seoTitle: "Functional vs. Business Lines When AI Lowers Barriers"
 description: "Once tools lower skill barriers, organizations should be built around end-to-end business capability: mechanism, org-form spectrum, signals, and a pilot protocol."
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
@@ -12,6 +13,9 @@ column: { slug: engineering-ai-judgment, order: 5 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/functional-lines-versus-business-lines
+primaryQuery: "organizational structure in the AI era"
+searchIntent: essay
+relatedQueries: ["functional vs business unit structure", "AI impact on team structure", "cross-functional product teams"]
 ---
 
 **Version:** 0.1 (preprint)

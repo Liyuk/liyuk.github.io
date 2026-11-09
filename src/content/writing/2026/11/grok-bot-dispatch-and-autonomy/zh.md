@@ -56,6 +56,9 @@ citationUrls:
   - https://www.anthropic.com/research/effective-harnesses-for-long-running-agents
   - https://github.com/karpathy/autoresearch/blob/master/program.md
   - https://github.com/asgeirtj/system_prompts_leaks/blob/1b6f936124b4eceb6e697a69da07519bea67feab/xAI/grok-bot/grok-bot.md
+primaryQuery: "多 Agent 调度"
+searchIntent: project
+relatedQueries: ["Agent 团队协作", "Grok Bot", "Agent 多任务 自循环", "Agent 并发控制"]
 ---
 
 我实际用下来：OpenMausBot 的定时任务适合固定工作，单项工作流也能调度得不错；难点出现在长期多任务队列。比如同时有 30 个 task：A 的结果先等人决策，B 等 A 的决定，C、D 可以并行，其他任务还要根据反馈重排。调度器此时要维护并发上限、优先级、依赖顺序和决策时点。OpenMausBot 把模型和执行环境接起来；持续调度这批跨依赖任务，需要队列管理和目标状态层继续补齐。

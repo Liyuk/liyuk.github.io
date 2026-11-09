@@ -1,5 +1,6 @@
 ---
 title: "Themed One-on-Ones: From “Not Knowing What to Talk About” to a Topic Map"
+seoTitle: "What to Talk About in One-on-Ones: A Topic Map"
 description: "Solve one problem per conversation, with each theme lasting 30 to 60 minutes. How to use this series, an overview of its topics, and the three closing principles."
 locale: en
 translationStatus: reviewed

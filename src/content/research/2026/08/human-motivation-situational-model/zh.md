@@ -9,6 +9,9 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [psychology, motivation, behavior, work-leadership, management]
 column: { slug: engineering-ai-judgment, order: 9 }
+primaryQuery: "员工激励理论"
+searchIntent: essay
+relatedQueries: ["如何激励员工", "自我决定理论", "情景激励模型", "员工动力不足"]
 ---
 
 **版本：** 0.1（preprint）

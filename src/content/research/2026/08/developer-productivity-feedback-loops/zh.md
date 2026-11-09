@@ -9,6 +9,9 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [developer-productivity, platform-engineering, feedback-loops, software-engineering, technology]
 column: { slug: engineering-ai-judgment, order: 3 }
+primaryQuery: "研发效能 度量"
+searchIntent: essay
+relatedQueries: ["开发者生产力", "工程效能 反馈回路", "AI 编程 研发效率", "DORA 指标"]
 ---
 
 **版本：** 0.1（preprint）

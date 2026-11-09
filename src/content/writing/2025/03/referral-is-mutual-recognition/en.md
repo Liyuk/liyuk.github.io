@@ -1,5 +1,6 @@
 ---
 title: "Recruiting and Professional Relationships (II): A Referral Is Not Forwarding a Job Posting"
+seoTitle: "Job Referrals: More Than Forwarding a Posting"
 description: "A responsible referral is not about prompting an application, but about helping both sides gain enough truthful information to judge whether it is worth getting closer."
 locale: en
 translationStatus: reviewed

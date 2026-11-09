@@ -1,5 +1,6 @@
 ---
 title: "Team Growth Is Not Expansion: Efficiency, Succession, and Continuity"
+seoTitle: "Team Growth Is Not Expansion: Efficiency and Succession"
 description: "A team is not simply the sum of its headcount and abilities. Real growth means forming, over time, more reliable collaboration, transferable experience, and the capacity to keep solving problems when circumstances change."
 locale: en
 translationStatus: reviewed

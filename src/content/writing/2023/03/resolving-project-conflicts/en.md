@@ -1,5 +1,6 @@
 ---
 title: "When Project Collaboration Hits Conflict: Which Three Things to Align On First"
+seoTitle: "Resolving Project Conflicts: Three Things to Align First"
 description: "Most project conflicts are not about someone failing to cooperate, but about goals, facts, or decision authority never being made explicit. Only by clarifying these three things first can disagreements return to something solvable."
 locale: en
 translationStatus: reviewed

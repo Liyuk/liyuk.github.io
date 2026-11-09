@@ -1,5 +1,6 @@
 ---
 title: "Quota Router: An Explainable Multi-Source Fallback Chain for DSH"
+seoTitle: "Quota Router: Explainable Multi-Source LLM Fallback"
 description: "A policy-only DeepSeek Harness plugin that builds ordered, explainable, auditable model candidate chains per task and advances along them within bounded failure rules."
 locale: en
 translationStatus: reviewed

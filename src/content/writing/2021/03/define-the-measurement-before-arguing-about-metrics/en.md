@@ -1,5 +1,6 @@
 ---
 title: "Data Measurement Guide (Part 2): Define What You're Measuring Before Arguing About Metrics"
+seoTitle: "Data Measurement Guide (2): Define Before Metrics"
 description: "A publicly reusable metric dictionary: from requests and users to tasks, explaining how availability, error, latency, performance, and feedback data should be defined, combined, and interpreted."
 locale: en
 translationStatus: reviewed

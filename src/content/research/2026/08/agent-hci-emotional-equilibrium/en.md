@@ -1,5 +1,6 @@
 ---
 title: "Let the Agent Execute: Emotional Adaptation, Trust Calibration, and Human Relief from Execution Pressure"
+seoTitle: "Agent HCI: Trust Calibration and Delegated Execution"
 description: "How an Agent can adapt state, evidence, and action feedback to uncertainty, waiting, and failure, and how delegating execution shifts human pressure and trust."
 createdAt: 2026-08-17
 publishedAt: 2026-08-19
@@ -12,6 +13,9 @@ translationKey: 2026/08/agent-hci-emotional-equilibrium
 draft: false
 tags: [hci, agent, agency, emotion, trust-calibration, cognitive-offloading, deskilling, observability]
 column: { slug: engineering-ai-judgment, order: 8 }
+primaryQuery: "AI agent trust calibration"
+searchIntent: essay
+relatedQueries: ["agent HCI emotional adaptation", "delegating tasks to AI agents", "human-AI trust and workload", "AI emotional value sweet trap"]
 ---
 
 > **Version: 0.3 (preprint).** This is a project-driven conceptual framework and design study. The material comes from related theory, my Agent use records, and existing design materials; it reports design principles and implementable experimental protocols, not user-experiment data or results.

@@ -1,5 +1,6 @@
 ---
 title: "Adding an AI assistant to a blog: choosing retrieval under resource constraints"
+seoTitle: "Adding an AI Assistant to a Blog: Choosing RAG Retrieval"
 description: "Compare static keywords, vectors, and hybrid retrieval on the same site questions, then weigh quality, deployment costs, and a zero budget."
 createdAt: 2026-10-11
 type: case-study
@@ -55,6 +56,9 @@ citationUrls:
   - https://gitbook.com/docs/developers/gitbook-api/api-reference/docs-sites/site-ai-ask
   - https://docs.readme.com/main/docs/ask-ai
   - https://docs.readme.com/main/changelog/ask-ai-v2
+primaryQuery: "AI assistant for a blog"
+searchIntent: compare
+relatedQueries: ["RAG retrieval comparison", "vector vs keyword search", "hybrid search RAG"]
 ---
 
 This blog has accumulated quite a few articles. Having them on the site does not necessarily make them easy to use. A friend once collected the content, organized it for a model, and asked it questions. That made information scattered across many articles easier to find. But someone had to download and organize the site first, then connect it to a model. An ordinary visitor may never do that. Could the site offer its own way to ask "What has been written here?" without first having to work out how to search?

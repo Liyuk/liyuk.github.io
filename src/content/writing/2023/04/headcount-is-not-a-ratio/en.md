@@ -1,5 +1,6 @@
 ---
 title: "Headcount Planning Is Not a Ratio Game: Align When Resources Appear"
+seoTitle: "Headcount Planning Is Not a Ratio Game"
 description: "Headcount ratios are only a dynamic concept. What matters more is aligning goals, markets, and resource constraints in time when expanding, contracting, or changing plans."
 locale: en
 translationStatus: reviewed

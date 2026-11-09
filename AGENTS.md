@@ -73,6 +73,7 @@ A skill operationalizes a rule `agent/` already states. Where a skill and `agent
 ### Taxonomy, chronology, and assets
 
 - Register every published tag and column in `src/lib/taxonomy.ts` before use. Creator-script warnings are not a substitute for `audit:content`.
+- The search title (`seoTitle`, falling back to `title`) must fit the 60-column budget enforced by `audit:content`; `title` remains the h1. Follow "Search titles" in `agent/editorial-rules.md`.
 - New entries record `primaryQuery`, `searchIntent`, and up to five `relatedQueries`; they describe real, answerable reader needs. Localize query phrases naturally for English and preserve the intent enum. Do not chase unrelated trends or stuff keywords; see `agent/editorial-rules.md` and `.claude/skills/content-review/SKILL.md`.
 - Columns are available to `writing`, `consulting`, `research`, and `gallery`; `project` entries do not use them. A column's source-locale `order` is positive and unique; taxonomy columns must be represented exactly once in `startGroups`.
 - Public chronology and archives use `publishedAt` (falling back to `createdAt`); `updatedAt` is for last-updated ordering and display. Do not change date fields merely to reorder cards.

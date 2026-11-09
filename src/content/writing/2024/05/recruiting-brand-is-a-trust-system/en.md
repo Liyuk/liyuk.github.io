@@ -1,5 +1,6 @@
 ---
 title: "Recruiting Branding: Building the Shared Belief That \"We Can Make It Happen Together\""
+seoTitle: "Recruiting Brand as a Trust System"
 description: "Recruiting branding is not about polishing a job posting; it is about making the right people believe: the work is worth doing, the team has a chance to make it happen, and they can push it into reality together with their peers."
 locale: en
 translationStatus: reviewed

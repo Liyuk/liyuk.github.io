@@ -1,5 +1,6 @@
 ---
 title: "China's Second-Hand Home Prices over the Next Five Years: An Interpretable Combination Forecasting Method and Bottoming Analysis (2026–2030)"
+seoTitle: "China Home Price Forecast 2026–2030: Is There a Bottom?"
 description: "An interpretable three-part forecast (trend, mean reversion, seasonality) on 70-city second-hand home price indices, with five-year outlooks for China and Beijing."
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
@@ -11,6 +12,9 @@ tags: [housing, forecasting, time-series, explainability, china]
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/housing-price-five-year-forecast
+primaryQuery: "China home price forecast"
+searchIntent: data
+relatedQueries: ["China housing market outlook 2030", "will China home prices bottom", "Beijing home price forecast"]
 ---
 
 **Version:** 0.2 (preprint)

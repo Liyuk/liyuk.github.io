@@ -1,5 +1,6 @@
 ---
 title: "Why Organizations Still Slow Down When Resources Are Abundant"
+seoTitle: "Why Organizations Slow Down When Resources Are Abundant"
 description: "The resource curse isn't having too much money or too many people; it's resources making goals more granular, structure heavier, and low-quality decisions more common, until the organization loses the ability to find and solve high-ROI problems."
 locale: en
 translationStatus: reviewed

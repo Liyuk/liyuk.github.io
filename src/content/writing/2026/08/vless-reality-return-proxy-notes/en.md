@@ -1,5 +1,6 @@
 ---
 title: "Building a Return-to-China Proxy from Scratch: VLESS + Reality Pitfall Notes"
+seoTitle: "VLESS + Reality Return-to-China Proxy: Setup Notes"
 description: From a temporary SSH direct connection, to accommodating phones and family, and finally converging on sing-box as a maintainable return-to-China network setup.
 locale: en
 translationStatus: reviewed
@@ -8,6 +9,9 @@ publishedAt: 2026-08-14
 type: case-study
 tags: [sing-box, vless, reality, network, operations, technology]
 translationKey: 2026/08/vless-reality-return-proxy-notes
+primaryQuery: "return to China proxy"
+searchIntent: howto
+relatedQueries: ["VLESS Reality setup", "sing-box config", "access Chinese sites from abroad"]
 ---
 
 > Scenario: you are overseas and occasionally need to access services that are only available to mainland China IPs, or whose direct connection is unstable. This is a personal network troubleshooting log, not a general-purpose tutorial. Cloud providers, local laws, and terms of service each have their own boundaries; server addresses, keys, UUIDs, and subscription links should never appear in a public article.

@@ -9,6 +9,9 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [ai, software-engineering, agent-systems, developer-productivity, governance, technology]
 column: { slug: engineering-ai-judgment, order: 4 }
+primaryQuery: "AI 落地工程团队"
+searchIntent: howto
+relatedQueries: ["AI 试点怎么做", "AI 编程 责任边界", "AI 度量 研发效能", "企业 AI 治理 授权"]
 ---
 
 **版本：** 0.3（preprint）

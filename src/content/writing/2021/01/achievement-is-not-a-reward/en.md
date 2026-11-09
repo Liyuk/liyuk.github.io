@@ -1,5 +1,6 @@
 ---
 title: "Achievement Is Not a Reward: On Pressure, Delivery, and Self-Recognition"
+seoTitle: "Achievement Is Not a Reward: Pressure and Self-Recognition"
 description: "A sense of achievement comes not only from results or praise from others; it also comes from keeping commitments, identifying with your profession, helping others, and believing that what you do matters."
 locale: en
 translationStatus: reviewed

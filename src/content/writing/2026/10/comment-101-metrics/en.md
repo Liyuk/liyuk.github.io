@@ -1,5 +1,6 @@
 ---
 title: "Comment Systems 101 (2): Metrics, North Stars, and Experiments"
+seoTitle: "Comment Systems 101 (2): Metrics and Experiments"
 description: "What should a comment system measure? From a North Star and metric tree to LTV and experiments, this article asks whether engagement signals translate into user value."
 locale: en
 translationStatus: reviewed

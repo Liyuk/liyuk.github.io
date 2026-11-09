@@ -9,6 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tags as tagRegistry } from '../src/lib/taxonomy.ts';
 import { translationStatusForLocale } from '../src/lib/content-model.ts';
+import { TITLE_WIDTH_BUDGET, visualWidth } from '../src/lib/seo.ts';
 
 export const TRANSLATION_POLICY = {
   writing: 'required',
@@ -113,6 +114,28 @@ function entryDescriptor(contentRoot, file) {
     localeFromName: filename.startsWith('en.') ? 'en' : 'zh-CN',
     relativePath: rel,
   };
+}
+
+// The search-result title is `seoTitle` when present, otherwise `title`. It
+// must fit the width budget (CJK counts double) so Google does not truncate or
+// rewrite it; the full `title` still renders as the page h1. See the
+// "Search titles" rule in agent/editorial-rules.md.
+function validateSearchTitle(entry, errors) {
+  const title = unquote(valueOf(entry.frontmatter, 'title')) ?? '';
+  const seoTitle = unquote(valueOf(entry.frontmatter, 'seoTitle'));
+  if (seoTitle != null) {
+    if (visualWidth(seoTitle) > TITLE_WIDTH_BUDGET)
+      errors.push(
+        `${entry.relativePath}: seoTitle 宽度 ${visualWidth(seoTitle)} 超过 ${TITLE_WIDTH_BUDGET}（中文按 2 计）。`,
+      );
+    if (seoTitle === title)
+      errors.push(`${entry.relativePath}: seoTitle 与 title 相同；标题已够短时删除 seoTitle。`);
+    return;
+  }
+  if (visualWidth(title) > TITLE_WIDTH_BUDGET)
+    errors.push(
+      `${entry.relativePath}: title 宽度 ${visualWidth(title)} 超过 ${TITLE_WIDTH_BUDGET}（中文按 2 计），请补一个关键词前置的 seoTitle。`,
+    );
 }
 
 function reportSafetySignals(raw, relativePath, warnings) {
@@ -229,6 +252,7 @@ export async function auditContent({ contentRoot = path.join(process.cwd(), 'src
       for (const tag of tagsOf(frontmatter)) {
         if (!(tag in tagRegistry)) errors.push(`${descriptor.relativePath}: 未注册标签 "${tag}"。`);
       }
+      if (!isDraft) validateSearchTitle(entry, errors);
       validateUrls(entry, errors);
       reportSafetySignals(raw, descriptor.relativePath, warnings);
 

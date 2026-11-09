@@ -1,5 +1,6 @@
 ---
 title: "Keeping Differences at the Configuration Layer: Architecture for a Multi-Domain Platform"
+seoTitle: "Multi-Domain Platform Architecture: Config Over Code"
 description: "Content, search, commerce, and growth systems repeatedly face the same challenge across multiple countries, industries, and scenarios: how to reuse stable capabilities while keeping business expressions distinct. How should boundaries be drawn between configuration, protocols, components, and orchestration?"
 locale: en
 translationStatus: reviewed

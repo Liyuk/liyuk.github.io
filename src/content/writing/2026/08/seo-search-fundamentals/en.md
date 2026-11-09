@@ -10,6 +10,9 @@ type: case-study
 draft: false
 tags: [seo, engineering, learning, systems-thinking, metrics]
 column: { slug: search-engine-growth, order: 1 }
+primaryQuery: "SEO basics"
+searchIntent: definition
+relatedQueries: ["how search engines work", "crawling and indexing", "SEO for beginners"]
 ---
 
 When I started working on SEO systems, I made the common mistake of treating “the page opens” as proof that the search path worked. Once we split a shared-content return path into visits, reading, downloads, first opens, and retention, every stage had a different failure mode. SEO is not a button; it is an observable system.

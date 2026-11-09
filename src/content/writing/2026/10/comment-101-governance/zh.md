@@ -28,6 +28,9 @@ citationUrls:
   - https://rules-center.meituan.com/m/detail/guize/255?activeRule=1
   - https://rules-center.meituan.com/m/detail/guize/901
   - https://www.samr.gov.cn/zfjcj/tzgg/art/2023/art_d337c3291e8b40459ca03dea54395856.html
+primaryQuery: "评论审核"
+searchIntent: howto
+relatedQueries: ["评论排序算法", "内容审核 申诉", "评论风控"]
 ---
 
 评论区同时决定哪些声音能被看见、哪些内容可以留下。排序和审核不是两套互不相干的功能：审核状态决定是否有展示资格，排序则分配有限的注意力。沿用系列中的餐饮 POI 评论，这一篇看它如何进入排序、接受举报与复核，以及过期或纠错后如何从下游撤回。

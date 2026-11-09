@@ -1,5 +1,6 @@
 ---
 title: "Data Measurement as Organizational Protocol: Definitions, Measurement, Tiering, and Retrospectives"
+seoTitle: "Data Measurement as an Organizational Protocol"
 description: "Data measurement as a collaboration protocol, not a dashboard: minimal mechanisms for definitions, units, metric tiers, dictionaries, and retrospectives."
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
@@ -12,6 +13,9 @@ column: { slug: engineering-ai-judgment, order: 2 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/data-measurement-organizational-protocol
+primaryQuery: "how to build a metrics framework"
+searchIntent: howto
+relatedQueries: ["metric definitions", "metric tiering", "metrics dictionary", "data-driven retrospectives"]
 ---
 
 **Version:** 0.1 (preprint)

@@ -10,6 +10,9 @@ type: case-study
 draft: false
 tags: [seo, writing, ai, governance]
 column: { slug: search-engine-growth, order: 5 }
+primaryQuery: "keyword expansion strategy"
+searchIntent: howto
+relatedQueries: ["content retirement", "content pruning", "AI-generated content SEO"]
 ---
 
 I have seen keyword expansion become a supply race: the list grew, pages shipped, and useful pages did not grow with it. The problem was not a lack of candidates. Candidates were not being filtered for intent, independent value, locale, links, and exit conditions.

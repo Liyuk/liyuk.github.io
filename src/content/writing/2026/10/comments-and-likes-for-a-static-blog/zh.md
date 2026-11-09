@@ -19,6 +19,9 @@ citationUrls:
   - https://developers.cloudflare.com/d1/platform/pricing/
   - https://developers.cloudflare.com/d1/platform/limits/
   - https://developers.cloudflare.com/pages/functions/pricing/
+primaryQuery: "静态博客 评论系统"
+searchIntent: howto
+relatedQueries: ["Giscus 替代", "博客 匿名评论", "博客 点赞功能", "AI 写代码 MVP"]
 ---
 
 

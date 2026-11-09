@@ -90,3 +90,51 @@ test('required collections fail published content without an English sibling', a
   const result = await auditContent({ contentRoot: root });
   assert.ok(result.errors.some((error) => error.includes('策略为 required')));
 });
+
+test('content audit requires a seoTitle when a published title exceeds the search budget', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'liyuk-content-audit-'));
+  const longTitle = '这是一个非常非常长的中文标题，长到搜索结果页面一定会把它截断掉';
+  await fixture(
+    root,
+    `research/2026/08/long/zh.md`,
+    shared.replace('title: Example', `title: ${longTitle}`),
+  );
+  await fixture(
+    root,
+    `research/2026/08/short/zh.md`,
+    shared.replace('title: Example', `title: ${longTitle}\nseoTitle: "关键词前置的短标题"`),
+  );
+  await fixture(
+    root,
+    `research/2026/08/still-long/zh.md`,
+    shared.replace('title: Example', `title: ${longTitle}\nseoTitle: "${longTitle}再长一点"`),
+  );
+  await fixture(
+    root,
+    `research/2026/08/draft/zh.md`,
+    shared.replace('title: Example', `title: ${longTitle}`).replace('draft: false', 'draft: true'),
+  );
+
+  const { errors } = await auditContent({ contentRoot: root });
+  assert.ok(
+    errors.some(
+      (error) => error.includes('long/zh.md') && error.includes('请补一个关键词前置的 seoTitle'),
+    ),
+  );
+  assert.ok(
+    errors.some((error) => error.includes('still-long/zh.md') && error.includes('seoTitle 宽度')),
+  );
+  assert.ok(!errors.some((error) => error.includes('/short/zh.md') && error.includes('宽度')));
+  assert.ok(!errors.some((error) => error.includes('/draft/zh.md') && error.includes('宽度')));
+});
+
+test('content audit rejects a seoTitle identical to the title', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'liyuk-content-audit-'));
+  await fixture(
+    root,
+    `research/2026/08/same/zh.md`,
+    shared.replace('title: Example', 'title: Example\nseoTitle: Example'),
+  );
+  const { errors } = await auditContent({ contentRoot: root });
+  assert.ok(errors.some((error) => error.includes('seoTitle 与 title 相同')));
+});
