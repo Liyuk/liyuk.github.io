@@ -7,7 +7,7 @@ import Footer from '../components/Footer.astro';
 import SiteChat from '../components/SiteChat.astro';
 import { site } from '../data/site.mjs';
 import { i18n } from '../i18n/index.mjs';
-import { getPageSeo, type SeoPage } from '../lib/seo.ts';
+import { getPageSeo, ogCardUrl, type SeoPage } from '../lib/seo.ts';
 import { buildStructuredData, type PageKind, type StructuredDataImage } from '../lib/structured-data.ts';
 
 const {
@@ -25,6 +25,9 @@ const {
   // and fall back to the site defaults below.
   type = 'website',
   image,
+  imageWidth,
+  imageHeight,
+  imageAlt,
   publishedAt,
   updatedAt,
   articleTitle,
@@ -40,6 +43,8 @@ const {
   galleryImages = [],
   // Ordered members of a curated list page (currently a column's chapters).
   itemList = [],
+  // Appended to the page-registry description (paginated list pages).
+  descriptionSuffix = '',
 } = Astro.props as {
   title?: string;
   description?: string;
@@ -50,6 +55,9 @@ const {
   seoPage?: SeoPage;
   type?: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageAlt?: string;
   publishedAt?: string;
   updatedAt?: string;
   articleTitle?: string;
@@ -64,6 +72,7 @@ const {
   isWork?: boolean;
   galleryImages?: StructuredDataImage[];
   itemList?: { name: string; url: string }[];
+  descriptionSuffix?: string;
 };
 const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
@@ -72,7 +81,7 @@ const pageSeo = seoPage ? getPageSeo(locale, seoPage) : undefined;
 // Locale-aware fallbacks so a page that omits its own title/description never
 // leaks the Chinese site defaults onto an English route.
 const title = titleProp ?? (isEnglish ? site.titleEn : site.title);
-const description = pageSeo?.description ?? descriptionProp ?? (isEnglish ? site.descriptionEn : site.description);
+const description = (pageSeo?.description ?? descriptionProp ?? (isEnglish ? site.descriptionEn : site.description)) + descriptionSuffix;
 const resolvedKeywords = keywords.length > 0 ? keywords : pageSeo?.keywords ?? [];
 const rootPath = Astro.url.pathname.replace(/^\/en(?=\/|$)/, '');
 const zhUrl = new URL(getRelativeLocaleUrl('zh-CN', rootPath), Astro.site);
@@ -83,16 +92,30 @@ const defaultUrl = zhUrl;
 const canonicalUrl = new URL(isEnglish ? enUrl : zhUrl, Astro.site).href;
 // og:image falls back to the brand card; detail pages may override with a
 // project hero / gallery cover.
-const ogImage = image ? new URL(image, Astro.site).href : new URL('/images/og-default.png', Astro.site).href;
+// Indexable articles without their own image get a per-route title card that
+// scripts/generate-og-cards.mjs renders into dist/ after `astro build`.
+const ogCardPath = type === 'article' && !image && !noindex ? ogCardUrl(Astro.url.pathname) : undefined;
+const ogImage = new URL(image ?? ogCardPath ?? '/images/og-default.png', Astro.site).href;
+// Dimensions are only advertised when they are known to be true: the default
+// brand card and generated title cards are 1200x630; any other image must
+// pass its real size.
+const ogImageSize = image
+  ? imageWidth && imageHeight ? { width: imageWidth, height: imageHeight } : undefined
+  : { width: 1200, height: 630 };
+const ogImageAlt = imageAlt ?? (ogCardPath ? articleTitle ?? title : title);
 const ogType = type;
+const isArticle = type === 'article';
+const sectionLabel = section && section in ui.navigation ? (ui.navigation as Record<string, string>)[section] : section;
+const articleTags = resolvedKeywords.slice(0, 6);
 const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
+const ogLocaleAlternate = isEnglish ? 'zh_CN' : 'en_US';
 ---
 
 <!doctype html>
 <html lang={locale} class:list={[isEnglish ? 'locale-en' : 'locale-zh']}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     {publishedAt && <meta data-pagefind-meta="publishedAt[content]" content={publishedAt} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
@@ -122,10 +145,16 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    {ogImageSize && <meta property="og:image:width" content={String(ogImageSize.width)} />}
+    {ogImageSize && <meta property="og:image:height" content={String(ogImageSize.height)} />}
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content={ogLocale} />
+    {!noindex && <meta property="og:locale:alternate" content={ogLocaleAlternate} />}
+    {isArticle && publishedAt && <meta property="article:published_time" content={publishedAt} />}
+    {isArticle && updatedAt && <meta property="article:modified_time" content={updatedAt} />}
+    {isArticle && sectionLabel && <meta property="article:section" content={sectionLabel} />}
+    {isArticle && articleTags.map((tag) => <meta property="article:tag" content={tag} />)}
     <meta property="og:site_name" content={isEnglish ? site.brandEn : site.brand} />
     {resolvedKeywords.length > 0 && <meta name="keywords" content={resolvedKeywords.join(', ')} />}
     <!-- Twitter / X -->
@@ -133,6 +162,7 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
     <!-- Structured data graph: stable site entities plus the page's typed content node. -->
     {!noindex && <script type="application/ld+json" is:inline set:html={JSON.stringify(buildStructuredData({
       origin: Astro.site?.origin ?? 'https://liyuk.com',

@@ -97,6 +97,10 @@ function graphNodes(html) {
   );
 }
 
+function countH1(html) {
+  return (html.match(/<h1[\s>]/gi) ?? []).length;
+}
+
 function absoluteLinks(text) {
   return [...text.matchAll(/https?:\/\/[^\s)]+/g)].map(([value]) => value.replace(/[.,;]+$/, ''));
 }
@@ -180,6 +184,12 @@ async function auditSeo({ distDir = path.join(process.cwd(), 'dist') } = {}) {
     if (metaContent(html, 'property', 'og:url') !== canonical) {
       errors.push(`${route}: og:url 应与 canonical 一致。`);
     }
+    const ogImage = metaContent(html, 'property', 'og:image');
+    if (ogImage.startsWith(`${SITE_ORIGIN}/`)) {
+      const imagePath = decodeURIComponent(new URL(ogImage).pathname);
+      if (!(await isFile(path.join(distDir, imagePath))))
+        errors.push(`${route}: og:image 未对应构建文件：${ogImage}。`);
+    }
 
     const nodes = graphNodes(html);
     const website = nodes.find((data) => data['@type'] === 'WebSite');
@@ -195,7 +205,9 @@ async function auditSeo({ distDir = path.join(process.cwd(), 'dist') } = {}) {
         errors.push(`${route}: JSON-LD WebPage 与 canonical 不一致。`);
       if (page?.inLanguage !== lang)
         errors.push(`${route}: JSON-LD WebPage inLanguage 与 html lang 不一致。`);
-      if (!textContent(html, 'h1')) errors.push(`${route}: 缺少可见 h1。`);
+      const h1Count = countH1(html);
+      if (h1Count !== 1) errors.push(`${route}: 应恰好有一个 h1，实际 ${h1Count} 个。`);
+      else if (!textContent(html, 'h1')) errors.push(`${route}: 缺少可见 h1。`);
     }
 
     const ogType = metaContent(html, 'property', 'og:type');
@@ -338,4 +350,4 @@ async function main() {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) await main();
 
-export { auditSeo, expectedAlternates, normalizePath };
+export { auditSeo, countH1, expectedAlternates, normalizePath };

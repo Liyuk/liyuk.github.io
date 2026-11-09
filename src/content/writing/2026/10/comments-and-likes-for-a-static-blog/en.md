@@ -23,7 +23,6 @@ citationUrls:
   - https://developers.cloudflare.com/pages/functions/pricing/
 ---
 
-# Building an Anonymous Comments MVP with AI: Think It Through, Then Build It
 
 My site used Giscus, with discussions stored in GitHub Discussions. It was convenient to manage, but readers had to authorize through GitHub OAuth before commenting. I started thinking about a change because I wasn't sure every reader wanted to sign in to GitHub just to leave a quick comment.
 

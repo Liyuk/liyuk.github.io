@@ -1,6 +1,6 @@
 ---
 title: "Data Measurement as Organizational Protocol: Definitions, Measurement, Tiering, and Retrospectives"
-description: "A research-design and protocol paper: reframing data measurement from what belongs on the dashboard into a recomputable, reviewable, decision-supporting collaboration protocol, with minimal mechanisms for definitions, measurement units, metric tiering, dictionaries, and retrospectives."
+description: "Data measurement as a collaboration protocol, not a dashboard: minimal mechanisms for definitions, units, metric tiers, dictionaries, and retrospectives."
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'

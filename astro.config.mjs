@@ -6,6 +6,7 @@ import rehypeMermaid from 'rehype-mermaid';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { rehypeScrollWrap } from './src/lib/rehype-scroll-wrap.mjs';
+import { rehypeImageAttrs } from './src/lib/rehype-image-attrs.mjs';
 
 const routeDateIndex = new Map();
 for await (const file of glob('src/content/**/*.{md,mdx}')) {
@@ -63,6 +64,8 @@ export default defineConfig({
         [rehypeKatex, { throwOnError: false, strict: 'ignore' }],
         // Wrap wide tables/mermaid SVGs in a scroll container for narrow screens.
         rehypeScrollWrap,
+        // Intrinsic width/height + lazy loading for content images under public/.
+        rehypeImageAttrs,
       ],
     }),
     // Skip Shiki for `mermaid` blocks so rehype-mermaid can render them to SVG.

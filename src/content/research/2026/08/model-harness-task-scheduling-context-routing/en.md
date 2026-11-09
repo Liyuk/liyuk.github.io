@@ -1,6 +1,6 @@
 ---
 title: 'Decompose First, Then Schedule: A Review of Multi-Model Task Decomposition, Capability Switching, and Subtask Routing'
-description: 'This paper examines task decomposition, subtask capability classification, model selection, and bounded execution-time fallback, while reducing the broader Agent scheduling problem to an engineering slice of dsh-quota-router.'
+description: "Task decomposition, subtask capability classification, model selection, and bounded fallback: the Agent scheduling problem reduced to dsh-quota-router."
 createdAt: 2026-08-19
 publishedAt: 2026-08-19
 version: '0.6'

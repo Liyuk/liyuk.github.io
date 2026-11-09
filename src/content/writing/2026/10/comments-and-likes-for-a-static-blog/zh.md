@@ -21,7 +21,6 @@ citationUrls:
   - https://developers.cloudflare.com/pages/functions/pricing/
 ---
 
-# 用 AI 做匿名评论 MVP：先想清楚，再让它实现
 
 站点之前用的是 Giscus，讨论存放在 GitHub Discussions。管理方式挺顺手，但读者留言前需要通过 GitHub OAuth 授权。我开始想换方案，原因很简单：我不确定每个读者都愿意为了文章下的一句话登录 GitHub。
 

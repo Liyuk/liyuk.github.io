@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { contentKeywords, getPageSeo } from '../src/lib/seo.ts';
+import { contentKeywords, fitSampleTitles, getPageSeo, pageTitle, visualWidth } from '../src/lib/seo.ts';
 
 test('every indexable global page has localized SEO description and keywords', () => {
   const pages = ['home', 'writing', 'projects', 'research', 'photos', 'about', 'consulting', 'links', 'start', 'columns', 'tags'];
@@ -27,4 +27,19 @@ test('unknown article tags remain available as stable keyword values', () => {
 
 test('declared search queries join localized article keywords without duplicates', () => {
   assert.deepEqual(contentKeywords(['ai', 'strategy'], 'en', ['AI gateway guide', 'Gateway guide']), ['AI gateway guide', 'Gateway guide', 'AI', 'Strategy']);
+});
+
+test('pageTitle keeps the brand only while the title fits the width budget', () => {
+  assert.equal(visualWidth('abc中文'), 7);
+  assert.equal(pageTitle('Short title', 'Brand'), 'Short title — Brand');
+  const long = '一个相当长的中文标题，已经接近页面标题的宽度预算上限';
+  assert.equal(pageTitle(long, '沉默土豆的烹饪指南'), long);
+});
+
+test('fitSampleTitles drops sample titles until the description fits the budget', () => {
+  const build = (titles) => `3 posts${titles.length ? `: ${titles.join('; ')}` : ''}.`;
+  assert.equal(fitSampleTitles(build, ['A', 'B', 'C']), '3 posts: A; B; C.');
+  assert.equal(fitSampleTitles(build, ['x'.repeat(100), 'y'.repeat(100)]), `3 posts: ${'x'.repeat(100)}.`);
+  assert.equal(fitSampleTitles(build, ['x'.repeat(200)]), '3 posts.');
+  assert.ok(visualWidth(fitSampleTitles(build, ['长'.repeat(60), '短'])) <= 160);
 });

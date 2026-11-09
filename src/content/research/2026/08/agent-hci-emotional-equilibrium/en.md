@@ -1,6 +1,6 @@
 ---
 title: "Let the Agent Execute: Emotional Adaptation, Trust Calibration, and Human Relief from Execution Pressure"
-description: "Based on long-task use, this paper examines how an Agent can adapt state, evidence, and action feedback to uncertainty, waiting, failure, and takeover needs, while documenting how delegated execution changes human pressure, trust, and capability boundaries."
+description: "How an Agent can adapt state, evidence, and action feedback to uncertainty, waiting, and failure, and how delegating execution shifts human pressure and trust."
 createdAt: 2026-08-17
 publishedAt: 2026-08-19
 version: '0.3'

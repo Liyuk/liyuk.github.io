@@ -1,6 +1,6 @@
 ---
 title: "Making an Agent a Collaborable Object: State, Feedback, and Result Confirmation"
-description: "Based on ChatLab design work, this paper records how presence, response, waiting, and delivery patterns from human collaboration can make Agent runtime states easier to understand; it is an HCI design observation about feedback, evidence, intervention, and result confirmation."
+description: "From ChatLab design work: borrowing presence, response, waiting, and delivery cues from human collaboration to make Agent runtime states easier to read."
 createdAt: 2026-08-18
 publishedAt: 2026-08-19
 version: '0.2'
