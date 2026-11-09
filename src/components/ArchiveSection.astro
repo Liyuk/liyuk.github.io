@@ -5,6 +5,7 @@
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentEntryCard from './ContentEntryCard.astro';
+import { fitSampleTitles } from '../lib/seo.ts';
 import { i18n } from '../i18n/index.mjs';
 
 interface Props {
@@ -36,9 +37,9 @@ const ui = i18n(locale);
 const pageCopy = i18n(locale).page;
 const archiveCopy = collection === 'projects' ? pageCopy.projectArchive : pageCopy.researchArchive;
 const title = kind === 'month' ? archiveCopy.titleMonth(year, month) : archiveCopy.title(year);
-const metaTitle = archiveCopy.metaTitle(year, ui.brand);
+const metaTitle = kind === 'month' ? archiveCopy.metaTitleMonth(year, month, ui.brand) : archiveCopy.metaTitle(year, ui.brand);
 const resolvedEyebrow = eyebrow ?? archiveCopy.eyebrow;
-const resolvedDescription = description ?? archiveCopy.description;
+const resolvedDescription = description ?? fitSampleTitles((titles) => archiveCopy.metaDescription(year, kind === 'month' ? month : undefined, entries.length, titles), entries.map((entry) => entry.data.title));
 ---
 
 <BaseLayout title={metaTitle} description={resolvedDescription}>

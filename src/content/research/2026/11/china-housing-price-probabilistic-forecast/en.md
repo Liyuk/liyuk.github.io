@@ -1,6 +1,7 @@
 ---
 title: "Probabilistic Forecasts of Existing-Home Prices in 70 Chinese Cities: Rolling Backtests and the Limits of Forecast Horizons"
-description: "Using existing-home price indices for 70 cities from 2011 to 2026, this study compares forecasts across horizons with an unchanged-price baseline, evaluates interval coverage, and examines the limits of retrospective model selection and long-range forecasting."
+seoTitle: "Probabilistic Home Price Forecasts for 70 Chinese Cities"
+description: "Rolling backtests on 70-city existing-home price indices (2011–2026) compare forecast horizons against a no-change baseline and test interval coverage."
 createdAt: 2026-11-05
 updatedAt: 2026-11-06
 version: '0.3'
@@ -26,6 +27,9 @@ citationUrls:
   - https://doi.org/10.1016/j.ijforecast.2009.01.009
   - https://doi.org/10.1016/S1574-0706(05)01004-9
   - https://doi.org/10.1007/s11146-013-9416-1
+primaryQuery: "China home price forecast accuracy"
+searchIntent: data
+relatedQueries: ["70-city home price forecast", "probabilistic house price forecasting", "house price forecast backtest"]
 ---
 
 **Version:** 0.3 (preprint)

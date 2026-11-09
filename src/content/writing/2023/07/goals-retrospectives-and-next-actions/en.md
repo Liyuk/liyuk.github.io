@@ -1,5 +1,6 @@
 ---
 title: "Goals, Planning, and Retrospective: Turning 'Handing in Homework' into Your Own Growth"
+seoTitle: "Goals, Planning, and Retrospectives for Your Own Growth"
 description: "Planning and retrospective are not about completing tasks. From the difficulty of setting goals, to methods for retrospective, and on to orienting around your own growth — a complete list of topics."
 locale: en
 translationStatus: reviewed

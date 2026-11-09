@@ -21,7 +21,7 @@ import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate } from '../../lib/timeline.ts';
 import { readingMinutes } from '../../lib/reading-time.ts';
-import { contentKeywords } from '../../lib/seo.ts';
+import { contentKeywords, pageTitle } from '../../lib/seo.ts';
 
 export async function getStaticPaths() {
   const writing = await getCollection('writing', previewable);
@@ -70,7 +70,7 @@ const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2
 <script is:inline>
   document.documentElement.dataset.readingContext = new URLSearchParams(window.location.search).get('context') === 'column' ? 'column' : 'chronological';
 </script>
-<BaseLayout noindex={missingTranslation || pageEntry.data.draft} showLanguageSwitch={hasAlternateLocale} title={missingTranslation ? (locale === 'en' ? 'Translation unavailable' : '暂无此语言版本') : `${pageEntry.data.title} — ${ui.name}`} description={missingTranslation ? '' : pageEntry.data.description} type="article" pageKind="writing" section="writing" articleTitle={missingTranslation ? undefined : pageEntry.data.title} keywords={missingTranslation ? [] : contentKeywords(pageEntry.data.tags, locale, [pageEntry.data.primaryQuery, ...(pageEntry.data.relatedQueries ?? [])].filter((value): value is string => Boolean(value)))} citations={missingTranslation ? [] : pageEntry.data.citationUrls} publishedAt={missingTranslation ? undefined : isoDate(publishedDate(pageEntry))} updatedAt={!missingTranslation && pageEntry.data.updatedAt ? isoDate(pageEntry.data.updatedAt) : undefined}>
+<BaseLayout noindex={missingTranslation || pageEntry.data.draft} showLanguageSwitch={hasAlternateLocale} title={missingTranslation ? (locale === 'en' ? 'Translation unavailable' : '暂无此语言版本') : pageTitle(pageEntry.data.seoTitle ?? pageEntry.data.title, ui.name)} description={missingTranslation ? '' : pageEntry.data.description} type="article" pageKind="writing" section="writing" articleTitle={missingTranslation ? undefined : pageEntry.data.title} keywords={missingTranslation ? [] : contentKeywords(pageEntry.data.tags, locale, [pageEntry.data.primaryQuery, ...(pageEntry.data.relatedQueries ?? [])].filter((value): value is string => Boolean(value)))} citations={missingTranslation ? [] : pageEntry.data.citationUrls} publishedAt={missingTranslation ? undefined : isoDate(publishedDate(pageEntry))} updatedAt={!missingTranslation && pageEntry.data.updatedAt ? isoDate(pageEntry.data.updatedAt) : undefined}>
   <ReadingProgress />
   {missingTranslation ? (
     <article class="article shell">

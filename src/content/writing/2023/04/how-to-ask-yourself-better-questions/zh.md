@@ -6,6 +6,9 @@ publishedAt: 2023-04-12
 type: essay
 tags: [thinking, learning, reflection, problem-solving, work-leadership]
 column: { slug: thinking-training, order: 3 }
+primaryQuery: "如何提出好问题"
+searchIntent: howto
+relatedQueries: ["好问题", "提问能力 训练", "批判性思维 练习"]
 ---
 
 很多人以为，成长靠的是更快地找到答案。但在实际工作里，更稀缺的能力常常是：在答案还没有出现以前，先看见值得追问的地方。我反复在复盘里发现，自己最没价值的产出，往往不是"答错了"，而是"根本没问对问题"——一个模糊的问题会把整段讨论带进没意义的方向。

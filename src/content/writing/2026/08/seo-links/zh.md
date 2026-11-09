@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, backlinks, growth, trust]
 column: { slug: search-engine-growth, order: 7 }
+primaryQuery: "外链建设"
+searchIntent: howto
+relatedQueries: ["SEO 外链", "DR DA 有用吗", "高质量外链"]
 ---
 
 一次外链盘点里，报表上的链接数一直在涨，真实引荐却几乎没动。我们把来源页面逐条打开，才发现很多链接来自低相关目录、模板文章或互换页面。它们在工具里算一条链接，但没有读者会顺着它来，也没有编辑语境可以解释为什么要引用。

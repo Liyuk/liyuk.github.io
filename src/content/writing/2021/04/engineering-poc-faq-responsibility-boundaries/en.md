@@ -1,5 +1,6 @@
 ---
 title: "Engineering POC in Practice FAQ: Scheduling, Sync, Risk, and Delivery"
+seoTitle: "Engineering POC FAQ: Scheduling, Sync, Risk, Delivery"
 description: "Facing cross-functional requirements, how should an engineering POC divide work, surface risks, handle changes, and manage their own workload? A public FAQ for real-world collaboration."
 locale: en
 translationStatus: reviewed

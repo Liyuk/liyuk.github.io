@@ -1,5 +1,6 @@
 ---
 title: 'Indexing, Submission, and Recovery: Reliable Search Operations'
+seoTitle: "SEO Indexing, Submission, and Recovery"
 description: 'A recoverable URL state machine and an incident workflow for separating submission, crawling, indexing, and algorithm context.'
 locale: en
 translationStatus: reviewed
@@ -10,6 +11,9 @@ type: case-study
 draft: false
 tags: [seo, engineering, reliability, observability]
 column: { slug: search-engine-growth, order: 4 }
+primaryQuery: "pages not indexed by Google"
+searchIntent: troubleshoot
+relatedQueries: ["SEO traffic drop recovery", "crawling vs indexing vs ranking", "URL submission indexing"]
 ---
 
 A successful submission creates a dangerous illusion: the task was sent, but the page may not be crawled; a crawl may not become an index record; a traffic decline may not be an algorithm update. A reliable system keeps these states separate.

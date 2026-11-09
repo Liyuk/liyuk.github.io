@@ -1,6 +1,6 @@
 ---
 title: 人的激励法则：情景激励模型
-description: 一篇理论综述、概念模型与应用框架：把激励从"有没有动力"重新定义为"动机是否生成、能否转化为行为、能否维持"的情境化过程，综合自我决定理论、期望-价值、目标设定、自我效能与行为模型，引入成长心理学、企业管理与组织员工心理学的视角，提出一个带"成长轴"的三层"情景激励模型"，并在职场中具象化为任务、目标、激励、反馈、发展通道与领导关系六个组件，落到投入、承诺、绩效、倦怠与离职等可测量结果上，并引入企业生命周期作为企业级调节变量，最终给出九条可证伪的激励法则。
+description: 把激励重新定义为"动机能否生成、转化为行为并维持"的情境过程：综合主流动机理论，提出带成长轴的三层情景激励模型、六个职场组件与九条可证伪的激励法则。
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.1'
@@ -9,6 +9,9 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [psychology, motivation, behavior, work-leadership, management]
 column: { slug: engineering-ai-judgment, order: 9 }
+primaryQuery: "员工激励理论"
+searchIntent: essay
+relatedQueries: ["如何激励员工", "自我决定理论", "情景激励模型", "员工动力不足"]
 ---
 
 **版本：** 0.1（preprint）

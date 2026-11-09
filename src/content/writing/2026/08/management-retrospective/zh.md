@@ -6,6 +6,9 @@ publishedAt: 2026-08-15
 type: essay
 featured: true
 tags: [management, leadership, decision-making, work-leadership]
+primaryQuery: "管理复盘"
+searchIntent: essay
+relatedQueries: ["复盘怎么做", "管理者 判断力", "团队管理 方法论", "复盘文化建设"]
 ---
 
 这些年写了不少关于管理、协作和决策的文章。回头看，它们其实来自同一段很长的复盘：带团队的过程中反复踩到的坑、反复确认的判断，被拆成了很多篇，每篇只讲一个切口。

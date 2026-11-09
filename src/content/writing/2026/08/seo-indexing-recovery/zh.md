@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, engineering, reliability, observability]
 column: { slug: search-engine-growth, order: 4 }
+primaryQuery: "网站不被收录怎么办"
+searchIntent: troubleshoot
+relatedQueries: ["Google 收录", "SEO 流量下降 排查", "抓取 索引 排名 区别"]
 ---
 
 提交接口很容易让人误以为事情已经完成。接口返回成功，只说明请求被接收；页面可能还没被抓取，抓取后也可能因为重复、质量或技术设置没有进入索引。流量突然下降时，先找算法更新也很诱人，但一次错误部署、一个 noindex，或者一批 canonical 改错，往往更值得先查。

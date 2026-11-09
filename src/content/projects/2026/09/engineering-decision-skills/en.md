@@ -1,5 +1,6 @@
 ---
 title: "Engineering Decision Skills: What I Want AI to Do in Reviews, Planning, and Retrospectives"
+seoTitle: "Engineering Decision Skills: AI for Reviews and Planning"
 description: "A proposal is due for review, three projects do not fit the next planning cycle, and another delivery is late. Five independent skills, each with an input and a concrete output you can take into a discussion."
 locale: en
 translationStatus: reviewed

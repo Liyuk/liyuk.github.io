@@ -1,5 +1,6 @@
 ---
 title: "Building an Anonymous Comments MVP with AI: Think It Through, Then Build It"
+seoTitle: "Building an Anonymous Comments MVP with AI"
 description: "Starting from the friction of GitHub login, this case study shows how to define a blog's core interaction needs, scope an MVP, avoid overbuilding, and make technical trade-offs clear before asking AI to implement them."
 createdAt: 2026-10-30
 draft: false
@@ -21,9 +22,11 @@ citationUrls:
   - https://developers.cloudflare.com/d1/platform/pricing/
   - https://developers.cloudflare.com/d1/platform/limits/
   - https://developers.cloudflare.com/pages/functions/pricing/
+primaryQuery: "comments for a static blog"
+searchIntent: howto
+relatedQueries: ["Giscus alternative", "anonymous blog comments", "blog like button"]
 ---
 
-# Building an Anonymous Comments MVP with AI: Think It Through, Then Build It
 
 My site used Giscus, with discussions stored in GitHub Discussions. It was convenient to manage, but readers had to authorize through GitHub OAuth before commenting. I started thinking about a change because I wasn't sure every reader wanted to sign in to GitHub just to leave a quick comment.
 

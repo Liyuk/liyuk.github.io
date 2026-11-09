@@ -10,6 +10,9 @@ column: { slug: multi-team-management, order: 5 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/sustaining-frontline-managers
+primaryQuery: "frontline manager retention"
+searchIntent: howto
+relatedQueries: ["manager succession planning", "replacing a manager", "frontline manager retention tools"]
 ---
 
 People move, roles change, and a position should not exist only to retain one person. What the organization needs to preserve is the ability to carry goals, relationships, decisions, and results through change.

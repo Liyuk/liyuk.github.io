@@ -1,5 +1,6 @@
 ---
 title: "China Housing Price Analysis: From Data Definitions to Testable Forecasts"
+seoTitle: "China Housing Price Analysis: Data to Testable Forecasts"
 description: "A 70-city housing price index panel built from public NBS releases, connected to macro and district data, rolling backtests, and an interactive dashboard."
 locale: en
 translationStatus: reviewed

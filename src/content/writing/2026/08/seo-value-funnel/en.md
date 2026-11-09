@@ -10,6 +10,9 @@ type: case-study
 draft: false
 tags: [seo, growth, engineering, metrics]
 column: { slug: search-engine-growth, order: 2 }
+primaryQuery: "measuring SEO ROI"
+searchIntent: howto
+relatedQueries: ["SEO conversion funnel", "SEO traffic not converting", "web to app SEO"]
 ---
 
 The easiest way to sell SEO is a traffic curve. It is also the easiest way to mislead a team. In one project, impressions, clicks, and Web UV all grew while first App opens did not. The missing piece was that users could not return to the original content after crossing platforms.

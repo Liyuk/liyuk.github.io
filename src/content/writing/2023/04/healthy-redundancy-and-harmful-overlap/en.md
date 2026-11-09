@@ -1,5 +1,6 @@
 ---
 title: "Collaboration Overlap Is Not Busyness: How to Tell Healthy Redundancy from Harmful Overlap"
+seoTitle: "Healthy Redundancy vs. Harmful Overlap in Teams"
 description: "Disaster recovery and review are healthy redundancy; the horse race caused by grabbing resources, grabbing projects, and unclear authority pushes an organization into zero-sum exhaustion."
 locale: en
 translationStatus: reviewed

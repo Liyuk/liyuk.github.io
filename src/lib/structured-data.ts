@@ -1,4 +1,5 @@
 import { site } from '../data/site.mjs';
+import { i18n } from '../i18n/index.mjs';
 
 export type PageKind = 'website' | 'collection' | 'writing' | 'consulting' | 'research' | 'project' | 'gallery';
 
@@ -147,14 +148,18 @@ export function buildStructuredData(input: StructuredDataInput) {
     });
   }
   if (pageKind !== 'website') {
+    const sectionNav = i18n(locale).navigation as Record<string, string>;
+    const sectionUrl = section ? absolute(origin, locale === 'en' ? `/en/${section}/` : `/${section}/`) : undefined;
+    // On a section index the middle crumb would be the page itself; drop it.
+    const crumbs = [
+      { name: site.name, item: origin },
+      ...(section && sectionUrl && sectionUrl !== canonicalUrl ? [{ name: sectionNav[section] ?? section, item: sectionUrl }] : []),
+      { name: title, item: canonicalUrl },
+    ];
     graph.push({
       '@type': 'BreadcrumbList',
       '@id': `${canonicalUrl}#breadcrumb`,
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: site.name, item: origin },
-        ...(section ? [{ '@type': 'ListItem', position: 2, name: section, item: absolute(origin, locale === 'en' ? `/en/${section}/` : `/${section}/`) }] : []),
-        { '@type': 'ListItem', position: section ? 3 : 2, name: title, item: canonicalUrl },
-      ],
+      itemListElement: crumbs.map((crumb, index) => ({ '@type': 'ListItem', position: index + 1, ...crumb })),
     });
   }
 

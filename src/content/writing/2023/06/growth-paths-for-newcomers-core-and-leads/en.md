@@ -1,5 +1,6 @@
 ---
 title: "How to Design Three Growth Paths: Newcomers, Core Members, and Leads"
+seoTitle: "Team Growth Paths for Newcomers, Core Members, and Leads"
 description: "Growth paths are not job-level checklists but three expanding responsibilities: completing tasks, owning problems, and enabling others to do important work."
 createdAt: 2023-06-01
 publishedAt: 2023-06-01

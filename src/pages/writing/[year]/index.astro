@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { notDraft } from '../../../lib/content-model.ts';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import EntryCard from '../../../components/EntryCard.astro';
+import { fitSampleTitles } from '../../../lib/seo.ts';
 import { i18n } from '../../../i18n/index.mjs';
 import { groupByYear } from '../../../lib/timeline.ts';
 
@@ -16,8 +17,9 @@ const locale = Astro.currentLocale ?? 'zh-CN';
 const localEntries = entries.filter((entry) => entry.data.locale === locale);
 const archive = i18n(locale).page.writingArchive;
 const ui = i18n(locale);
+const description = fitSampleTitles((titles) => archive.metaDescription(year, undefined, localEntries.length, titles), localEntries.map((entry) => entry.data.title));
 ---
-<BaseLayout title={archive.metaTitle(year, archive.yearSuffix, ui.brand)} description={archive.description}>
-  <section class="page-heading shell"><p class="eyebrow">{archive.eyebrow}</p><h1>{archive.title(year, archive.yearSuffix)}</h1><p>{archive.description}</p></section>
+<BaseLayout title={archive.metaTitle(year, archive.yearSuffix, ui.brand)} description={description}>
+  <section class="page-heading shell"><p class="eyebrow">{archive.eyebrow}</p><h1>{archive.title(year, archive.yearSuffix)}</h1><p>{description}</p></section>
   <section class="shell entry-list archive-list">{localEntries.map((entry) => <EntryCard entry={entry} locale={locale} />)}</section>
 </BaseLayout>

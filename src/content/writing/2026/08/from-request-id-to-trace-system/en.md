@@ -1,5 +1,6 @@
 ---
 title: "Starting with One Request ID: A Lightweight Observability and Reliability System for a Small Project"
+seoTitle: "Lightweight Observability for a Small Project: Request IDs"
 description: "Starting from the observability problems of a small API service, this article distills the minimum implementation of request IDs, distributed Traces, service discovery, health monitoring, log queries, reliability, and infrastructure governance."
 createdAt: 2026-08-25
 publishedAt: 2026-08-25
@@ -24,6 +25,9 @@ citationUrls:
   - https://docs.datadoghq.com/tracing/trace_pipeline/ingestion_controls/
   - https://grafana.com/docs/tempo/latest/set-up-for-tracing/instrument-send/set-up-collector/tail-sampling/
   - https://www.sentry.help/en/articles/13965104-how-does-transaction-sampling-work
+primaryQuery: "observability for small projects"
+searchIntent: howto
+relatedQueries: ["request ID tracing", "distributed tracing basics", "lightweight monitoring"]
 ---
 
 Recently I was organizing engineering experience from a few small tools and came across a class of small API services whose basic features were already in place, while observability and failure governance remained rough. They expose a unified API entry point for forwarding requests and coordinating external capabilities: requests first pass through an edge access layer, then enter several backend services that access a database, object storage, and other external dependencies.

@@ -10,6 +10,9 @@ column: { slug: multi-team-management, order: 1 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/managing-managers-and-leader-profile
+primaryQuery: "managing managers"
+searchIntent: essay
+relatedQueries: ["manager of managers role", "second-line manager", "skip-level manager responsibilities"]
 ---
 
 A manager of managers is needed when the original organization can no longer connect several teams’ local work into one result. The issue is not simply headcount or weak frontline leaders. It is that goals, resources, collaboration responsibilities, and external commitments now require a shared choice.

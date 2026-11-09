@@ -5,6 +5,9 @@ createdAt: 2026-08-14
 publishedAt: 2026-08-14
 type: case-study
 tags: [sing-box, vless, reality, network, operations, technology]
+primaryQuery: "回国代理 搭建"
+searchIntent: howto
+relatedQueries: ["VLESS Reality 教程", "sing-box 配置", "海外 访问 国内 网站"]
 ---
 
 > 场景：人在境外，偶尔需要访问仅对国内 IP 开放、或直连不稳定的服务。这是一次个人网络排障记录，不是通用教程。云厂商、当地法律与服务条款都有自己的边界；服务器地址、密钥、UUID 和订阅链接都不应出现在公开文章里。

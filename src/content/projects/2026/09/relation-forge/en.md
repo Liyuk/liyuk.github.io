@@ -1,5 +1,6 @@
 ---
 title: "RelationForge: Make Sense of an Interaction Before You Respond"
+seoTitle: "RelationForge: Understand an Interaction Before Replying"
 description: "Some relationships leave you uneasy, but you cannot quite say why. RelationForge can help you make sense of what happened, including your part in it."
 createdAt: 2026-09-28
 publishedAt: 2026-09-28

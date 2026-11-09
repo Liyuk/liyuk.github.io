@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, growth, engineering, metrics]
 column: { slug: search-engine-growth, order: 2 }
+primaryQuery: "SEO 效果评估"
+searchIntent: howto
+relatedQueries: ["SEO 转化率", "SEO 流量 不转化", "SEO 业务漏斗"]
 ---
 
 最容易向别人解释 SEO 的方式是放一张流量曲线。问题是，曲线通常只解释了“有多少人来”，没有解释“他们来干什么”。一次项目里，曝光、点击和 Web UV 都在涨，App 首次打开却没有动。最后查到的不是 SEO 失效，而是跨端跳转把用户送到了 App 首页，原来搜索的内容丢了。

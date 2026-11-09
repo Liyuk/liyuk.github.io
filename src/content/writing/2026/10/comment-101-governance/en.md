@@ -29,6 +29,9 @@ citationUrls:
   - https://rules-center.meituan.com/m/detail/guize/255?activeRule=1
   - https://rules-center.meituan.com/m/detail/guize/901
   - https://www.samr.gov.cn/zfjcj/tzgg/art/2023/art_d337c3291e8b40459ca03dea54395856.html
+primaryQuery: "comment moderation"
+searchIntent: howto
+relatedQueries: ["comment ranking algorithm", "content moderation appeals", "comment spam control"]
 ---
 A comment section determines both which voices are seen and which content remains. Ranking and moderation are connected: moderation status determines eligibility to appear, while ranking allocates limited attention. The restaurant place listing (point of interest, or POI) from the series shows how comments enter ranking and review, then get withdrawn downstream after corrections or staleness.
 

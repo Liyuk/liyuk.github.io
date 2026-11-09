@@ -1,5 +1,6 @@
 ---
 title: "Data Measurement Guide (Part 3): Metric Tiers, Let Data Serve the Most Important Decisions First"
+seoTitle: "Data Measurement Guide (3): Metric Tiers"
 description: "Don't lay metrics flat on the dashboard: prioritize them by task relevance, scope of impact, actionability, and data trustworthiness, and choose what to watch at each stage."
 locale: en
 translationStatus: reviewed

@@ -1,5 +1,6 @@
 ---
 title: "Beyond Model Switching: Engineering Design and Routing Algorithms in DSH Quota Router"
+seoTitle: "DSH Quota Router: Engineering Design and Routing Algorithms"
 description: How candidate chains, failure classification, per-turn identity, and cost formulas make multi-source model routing controllable and auditable.
 locale: en
 translationStatus: reviewed

@@ -1,5 +1,6 @@
 ---
 title: "Quality Is Not One Team's Job: Shared Accountability for the Outcome"
+seoTitle: "Quality Is Shared Accountability, Not One Team's Job"
 description: "Every role owns its own delivery, and everyone shares accountability for production outcomes. A quality loop depends on monitoring, fast containment, precise fixes, and retrospectives."
 locale: en
 translationStatus: reviewed

@@ -7,6 +7,9 @@ draft: false
 type: essay
 tags: [leadership, management, growth, team, work-leadership]
 column: { slug: multi-team-management, order: 5 }
+primaryQuery: "管理者 接班"
+searchIntent: howto
+relatedQueries: ["一线管理者 留人", "继任计划", "管理者 离职 交接"]
 ---
 
 举例来说：一位带了三年核心团队的一线负责人提出要走，理由只是"想换个方向"。组织当天做的第一件事，是把职级往上提一级、把加薪方案摆到桌上——两天后他还是走了，交接材料只有半页纸，团队花了小半年才把他脑子里那些没写下来的判断补齐。

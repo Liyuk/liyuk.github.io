@@ -25,6 +25,9 @@ citationUrls:
   - https://doi.org/10.1016/j.ijforecast.2009.01.009
   - https://doi.org/10.1016/S1574-0706(05)01004-9
   - https://doi.org/10.1007/s11146-013-9416-1
+primaryQuery: "房价预测准不准"
+searchIntent: data
+relatedQueries: ["70 城房价 预测", "二手房价格 概率预测", "房价预测 回测", "房价 长期预测"]
 ---
 
 **版本：** 0.3（预印本）

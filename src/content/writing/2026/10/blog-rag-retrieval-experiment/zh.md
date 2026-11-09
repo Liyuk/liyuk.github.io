@@ -53,6 +53,9 @@ citationUrls:
   - https://gitbook.com/docs/developers/gitbook-api/api-reference/docs-sites/site-ai-ask
   - https://docs.readme.com/main/docs/ask-ai
   - https://docs.readme.com/main/changelog/ask-ai-v2
+primaryQuery: "博客 AI 助手"
+searchIntent: compare
+relatedQueries: ["RAG 检索方案", "向量检索 关键词检索 对比", "混合检索", "个人网站 AI 问答"]
 ---
 
 这个博客积累了不少文章，但内容在站里，不等于读者容易用起来。之前有朋友把站点内容整理给模型，再和它对话，能从一堆文章里问出东西。这种用法有个前提：有人愿意先把网站抓下来、整理，再接到模型上。普通读者来博客时未必会做这一步。站点能不能自己提供一个入口，让人直接问“这里写过什么”，而不是先学会怎么搜索？

@@ -12,6 +12,9 @@ translationKey: 2026/08/model-harness-task-scheduling-context-routing
 draft: false
 tags: [ai, agent-systems, engineering, architecture, planning, observability, measurement, systems]
 column: { slug: engineering-ai-judgment, order: 6 }
+primaryQuery: "多模型路由"
+searchIntent: essay
+relatedQueries: ["Agent 任务拆解", "大模型 子任务调度", "LLM fallback", "模型能力切换"]
 ---
 
 > **版本：preprint v0.6。** 这是一篇面向工程设计的研究综述，不报告新的受控用户实验。本文讨论完整的 Agent 调度问题，但明确区分“理论上的完整调度系统”和 `dsh-quota-router` 的工程边界：Planner 负责拆解，quota-router 负责为已拆分的 subtask 选择模型并执行有界 fallback，上层负责上下文回归、验收和 replan。上下文压缩只作为相关边界，完整方法另行展开。

@@ -1,5 +1,6 @@
 ---
 title: "How Grok Bot Coordinates an Agent Team: From Long Tasks to Multi-Task Loops"
+seoTitle: "How Grok Bot Coordinates an Agent Team"
 description: "From OpenMausBot’s single workflows to a queue of 30 dependent tasks: how Grok Bot can coordinate external harnesses, persistent state, parallel work, and delivery checks."
 locale: en
 translationStatus: reviewed
@@ -57,6 +58,9 @@ citationUrls:
   - https://www.anthropic.com/research/effective-harnesses-for-long-running-agents
   - https://github.com/karpathy/autoresearch/blob/master/program.md
   - https://github.com/asgeirtj/system_prompts_leaks/blob/1b6f936124b4eceb6e697a69da07519bea67feab/xAI/grok-bot/grok-bot.md
+primaryQuery: "multi-agent orchestration"
+searchIntent: project
+relatedQueries: ["agent team coordination", "Grok Bot", "autonomous agent task loop"]
 ---
 
 In my actual use, OpenMausBot’s scheduled jobs work well for fixed routines, and it can coordinate an individual workflow. The difficulty starts with a long queue. Imagine 30 open tasks: A is waiting for a human decision, B depends on A, C and D can proceed in parallel, and other tasks need reprioritization as feedback arrives. The scheduler has to manage concurrency limits, priority, dependencies, and decision points. OpenMausBot connects models to execution environments; managing this cross-dependent queue over time still needs a queue manager and a goal-state layer.

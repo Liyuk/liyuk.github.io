@@ -44,6 +44,7 @@ Check the entry against its collection's guide (`agent/category-guides/writing.m
 - Does it have the comparative/prior-art grounding that collection expects (required for `research`, expected for `project`, situational for `writing`, situational for `consulting`)?
 - Does every diagram answer a question the prose does not, and do `zh.md` and `en.md` share the same nodes and relationships (`agent/editorial-rules.md`)?
 - Are collection-specific frontmatter requirements satisfied (`research`'s `version`/`status`/URL requirement, `project`'s subtype-appropriate fields, `consulting`'s de-identified `guest`, `gallery`'s `alt` describing what's actually visible rather than restating `caption`)?
+- Is the search title (`seoTitle`, else `title`) within budget, with the reader's search wording up front, and a faithful compression of `title` rather than a new promise? See "Search titles" in `agent/editorial-rules.md`.
 - Does `primaryQuery` describe the actual reader need answered by the entry, and does `searchIntent` fit that need? Do related queries name real variants the body answers? Check the title, description, opening, body, and internal links for a natural match. Reject irrelevant trend chasing, keyword stuffing, or metadata that overstates the content. Search metadata is a planning aid, not proof of ranking or reader value.
 
 ### 6. Translation quality (if an `en.md` exists or is being published alongside)

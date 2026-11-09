@@ -1,5 +1,6 @@
 ---
 title: "A Data Center Is Not a Report: From Data Production to Business Judgment"
+seoTitle: "A Data Center Is Not a Report: Data to Business Judgment"
 description: "Starting from the different questions asked by analysis, operations, and engineering, this article organizes how a data center for a multi-source business platform should divide Tabs, define metrics, structure read and write paths, and handle billing, reconciliation, growth, and cost."
 locale: en
 translationStatus: reviewed

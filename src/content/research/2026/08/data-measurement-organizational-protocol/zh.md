@@ -9,6 +9,9 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [data, metrics, measurement, collaboration, reproducibility, technology]
 column: { slug: engineering-ai-judgment, order: 2 }
+primaryQuery: "指标体系怎么建"
+searchIntent: howto
+relatedQueries: ["数据口径定义", "指标分级", "指标字典", "数据复盘"]
 ---
 
 **版本：** 0.1（preprint）

@@ -1,5 +1,6 @@
 ---
 title: 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）
+seoTitle: "中国房价数据怎么构建：来源与口径（北京区级案例）"
 description: 基于一套已补全的中国房价数据资产（70 城官方指数面板、全国宏观面板与 LPR 序列、北京区级挂牌均价月度序列、官方区级网签与年度交易），提出来源—口径感知的数据构建框架，并给出跨口径实证。
 createdAt: 2026-08-08
 publishedAt: 2026-08-08
@@ -8,6 +9,9 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [data, machine-learning, housing, reproducibility, provenance]
+primaryQuery: "中国房价数据"
+searchIntent: data
+relatedQueries: ["70 城房价指数", "北京房价 区级数据", "房价数据 口径", "LPR 房价"]
 ---
 
 **版本：** 0.4（preprint）

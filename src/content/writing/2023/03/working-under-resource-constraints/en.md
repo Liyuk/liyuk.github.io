@@ -1,5 +1,6 @@
 ---
 title: "When Resources Are Tight, How to Keep the Team From Running on Burnout"
+seoTitle: "Leading a Team Under Tight Resources Without Burnout"
 description: "Resource pressure is not something a call to \"try harder\" can fix. The team needs to reduce commitments, risks, and complaints back to facts, and make trade-offs openly."
 createdAt: 2023-03-23
 publishedAt: 2023-03-23

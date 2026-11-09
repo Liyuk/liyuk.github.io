@@ -1,5 +1,6 @@
 ---
 title: 从一个 Request ID 开始：我给小项目做了一套简配的可观测与稳定性系统
+seoTitle: "从 Request ID 开始：小项目的轻量可观测性"
 description: 从一个小型 API 服务的观测问题出发，借鉴成熟可观测平台的经验，整理 Request ID、分布式 Trace、服务发现、健康监测、日志查询、稳定性和基础设施治理的最小实现。
 createdAt: 2026-08-25
 publishedAt: 2026-08-25
@@ -21,6 +22,9 @@ citationUrls:
   - https://docs.datadoghq.com/tracing/trace_pipeline/ingestion_controls/
   - https://grafana.com/docs/tempo/latest/set-up-for-tracing/instrument-send/set-up-collector/tail-sampling/
   - https://www.sentry.help/en/articles/13965104-how-does-transaction-sampling-work
+primaryQuery: "小项目 可观测性"
+searchIntent: howto
+relatedQueries: ["Request ID", "分布式追踪 入门", "服务健康监测", "日志查询"]
 ---
 
 最近我在整理一些小工具的工程经验，其中有一类小型 API 服务已经具备基本功能，但观测和故障治理仍然比较粗糙。它对外提供统一的 API 入口，负责请求转发和外部能力调度：请求先经过边缘接入层，再进入若干后端服务；服务会访问数据库、对象存储，也会调用其他外部依赖。

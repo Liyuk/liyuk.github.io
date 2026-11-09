@@ -1,5 +1,6 @@
 ---
 title: "Engineering Decision Skills：评审、排期、复盘时，我想让 AI 多做一步"
+seoTitle: "Engineering Decision Skills：评审排期复盘的 AI 技能"
 description: "方案明天要评审，三件事排不进一个双月，项目又延期了：五个独立 Skill，各给一份具体输入和可直接拿去讨论的产出。"
 locale: zh-CN
 translationStatus: original

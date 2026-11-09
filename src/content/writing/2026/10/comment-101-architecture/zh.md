@@ -21,6 +21,9 @@ citationUrls:
   - https://research.google/pubs/improving-user-topic-interest-profiles-by-behavior-factorization/
   - https://research.google/pubs/transparent-scrutable-and-explainable-user-models-for-personalized-recommendation/
   - https://arxiv.org/abs/2605.24245
+primaryQuery: "评论系统 数据模型"
+searchIntent: howto
+relatedQueries: ["评论系统 架构设计", "评论数据清洗", "评论 推荐 搜索"]
 ---
 
 评论既是用户可见的内容，也是不断变化的数据对象。以系列中的餐饮 POI 为例，系统要能把一条具体经验和地点、体验时间、作者及曝光上下文关联起来；算法再区分消费兴趣、表达行为与内容证据，不能把互动计数直接当作偏好。

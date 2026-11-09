@@ -1,6 +1,7 @@
 ---
 title: "Interpersonal Risk Analysis Protocol: From Relationship Material to Facts, Hypotheses, and Actions"
-description: "A research-design and protocol paper: it proposes a material-organization and risk-annotation protocol aimed at safety actions, covering intimate and general interpersonal relationships, and defines AI's role as a structured co-pilot."
+seoTitle: "Interpersonal Risk Analysis Protocol: Facts to Actions"
+description: "A protocol paper for organizing relationship material and flagging risk toward safe action, across intimate and everyday ties, with AI as a structured co-pilot."
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/relationship-material-analysis-m1-m5
@@ -11,6 +12,9 @@ status: preprint
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [relationships, interpersonal-analysis, anti-scam, psychology, human-ai-collaboration, work-leadership]
+primaryQuery: "relationship risk analysis"
+searchIntent: howto
+relatedQueries: ["relationship risk assessment", "using AI to analyze a relationship", "separating facts from assumptions in relationships"]
 ---
 
 **Version:** 0.1 (preprint)

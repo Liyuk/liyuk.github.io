@@ -1,6 +1,7 @@
 ---
 title: "The Laws of Human Motivation: The Situational Motivation Model"
-description: "A theoretical synthesis, conceptual model, and application framework: it redefines motivation from \"whether someone has drive\" into a situated process of \"whether motivation is generated, whether it can be converted into behavior, and whether it can be sustained,\" integrating self-determination theory, expectancy-value, goal setting, self-efficacy, and behavior models; bringing in perspectives from developmental psychology, business management, and organizational and occupational psychology to propose a three-layer \"Situational Motivation Model\" with a \"growth axis,\" which it concretizes in the workplace into six components — task, goal, incentive, feedback, development path, and leadership/relationship — connecting to measurable outcomes such as engagement, commitment, performance, burnout, and turnover, introducing the enterprise life cycle as an enterprise-level moderating variable, and ultimately yielding nine falsifiable laws of motivation."
+seoTitle: "The Situational Motivation Model: Laws of Motivation"
+description: "A situational model of motivation (does drive form, turn into action, and last?) with six workplace levers, life-cycle effects, and nine falsifiable laws."
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.1'
@@ -12,6 +13,9 @@ column: { slug: engineering-ai-judgment, order: 9 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/human-motivation-situational-model
+primaryQuery: "employee motivation theory"
+searchIntent: essay
+relatedQueries: ["how to motivate employees", "self-determination theory at work", "situational motivation model"]
 ---
 
 **Version:** 0.1 (preprint)

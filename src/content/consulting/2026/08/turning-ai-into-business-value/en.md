@@ -1,5 +1,6 @@
 ---
 title: "How to Sell an AI Proposal to Business Owners: From Technical Value to a B2B Business"
+seoTitle: "How to Sell an AI Proposal to Business Owners"
 description: "An edited consultation about an FDE conference, technical communication, and AI’s business value: when owners care about revenue and cost, how can technical people explain their work as a result worth testing?"
 locale: en
 translationStatus: reviewed

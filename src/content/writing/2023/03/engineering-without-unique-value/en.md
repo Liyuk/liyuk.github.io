@@ -1,5 +1,6 @@
 ---
 title: "What Engineers Can Do When the Team Can't Articulate Its Unique Value"
+seoTitle: "When Your Engineering Team Can't Name Its Unique Value"
 description: "Technology can't manufacture a selling point out of thin air, but engineers can still help the team understand users more precisely, shorten validation cycles, and turn implicit constraints into choosable problems."
 locale: en
 translationStatus: reviewed

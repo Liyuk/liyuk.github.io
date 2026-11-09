@@ -5,6 +5,9 @@ import { SEARCH_INTENTS } from './lib/search-intent.ts';
 
 const contentDate = z.preprocess(parseContentDate, z.date());
 const searchMetadata = {
+  // Shorter search-result title (<title>, og:title) when `title` exceeds the
+  // width budget; `title` stays the visible h1. Enforced by audit:content.
+  seoTitle: z.string().trim().min(4).max(80).optional(),
   primaryQuery: z.string().trim().min(2).max(120).optional(),
   searchIntent: z.enum(SEARCH_INTENTS).optional(),
   relatedQueries: z.array(z.string().trim().min(2).max(120)).max(5).optional(),

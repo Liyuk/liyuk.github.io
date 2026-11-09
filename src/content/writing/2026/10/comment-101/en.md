@@ -11,6 +11,9 @@ type: case-study
 tags: [product, technology, algorithms, data, metrics, governance]
 column: { slug: comment-systems-guide, order: 1 }
 citationUrls: []
+primaryQuery: "comment system design"
+searchIntent: definition
+relatedQueries: ["designing a comments feature", "comment section product design"]
 ---
 While revising the comment system on my blog, I found myself thinking about work I had done across publishing, video, communities, maps, e-commerce, and local services. A comment may look like a small interaction layer beneath a piece of content. In practice, it can serve at once as self-expression, discussion, a record of experience, decision support, and a source of data for downstream systems.
 
