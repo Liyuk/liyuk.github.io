@@ -15,6 +15,9 @@ import { site } from '../data/site.mjs';
 const HOME_POSTS = 5;
 const HOME_PROJECTS = 3;
 const HOME_RESEARCH = 3;
+// Reading-path panel: the first paths of each group stay visible; the rest fold
+// into a native <details>, which keeps the first screen quiet.
+const PANEL_VISIBLE = 3;
 
 const locale = Astro.currentLocale ?? 'zh-CN';
 const published = publishedIn(locale);
@@ -74,37 +77,37 @@ const HERO_EASINGS: [number, number, number, number][] = [
   [0.25, 0.8, 0.25, 1],
   [0.45, 0, 0.2, 1],
 ];
-// Two geometries share one rhythm. Wide (2000×1000) fills the two-column hero;
-// narrow (960×1600, portrait) is used when the hero stacks, so `slice` scaling
+// Two geometries share one rhythm. Wide (2000×760) fills the two-column hero;
+// narrow (960×1060) is used when the hero stacks, so `slice` scaling
 // stays near 1:1 and nodes keep their 6–7px size instead of being blown up.
 type HeroLayout = { W: number; H: number; nodeFrom: number; nodeSpan: number; curve: (i: number, n: number, h: number) => { y0: number; y3: number; c1: { x: number; y: number }; c2: { x: number; y: number } } };
 const HERO_LAYOUTS: Record<'wide' | 'narrow', HeroLayout> = {
   // Lines start spread across the band and converge toward the reading panel.
-  // 2000×1000 matches the band's real size (≈1010px tall at 1440–2000px wide),
+  // 2000×760 matches the band's real size (≈755px tall at 1200–2000px wide),
   // so `slice` stays near 1:1 there; narrower desktops crop the sides.
   wide: {
     W: 2000,
-    H: 1000,
+    H: 760,
     nodeFrom: 0.16,
     nodeSpan: 0.64,
     curve: (i, n, h) => {
-      const H = 1000;
-      const y0 = 50 + (i + 0.5) * ((H - 100) / n);
+      const H = 760;
+      const y0 = 40 + (i + 0.5) * ((H - 80) / n);
       const y3 = H * 0.42 + (y0 - H * 0.42) * 0.28;
-      return { y0, y3, c1: { x: 600 + (h % 180), y: y0 + ((h >> 3) % 150) - 75 }, c2: { x: 1300 + ((h >> 7) % 200), y: y3 + ((h >> 11) % 110) - 55 } };
+      return { y0, y3, c1: { x: 600 + (h % 180), y: y0 + ((h >> 3) % 120) - 60 }, c2: { x: 1300 + ((h >> 7) % 200), y: y3 + ((h >> 11) % 90) - 45 } };
     },
   },
   // Gentle near-horizontal threads stacked down the tall band; nodes sit in the
   // middle of each line, the part a phone-width crop actually shows.
   narrow: {
     W: 960,
-    H: 1600,
+    H: 1060,
     nodeFrom: 0.32,
     nodeSpan: 0.36,
     curve: (i, n, h) => {
-      const y0 = 60 + (i + 0.5) * ((1600 - 120) / n);
-      const y3 = y0 + ((h >> 13) % 160) - 80;
-      return { y0, y3, c1: { x: 320 + (h % 120), y: y0 + ((h >> 3) % 100) - 50 }, c2: { x: 620 + ((h >> 7) % 120), y: y3 + ((h >> 11) % 80) - 40 } };
+      const y0 = 40 + (i + 0.5) * ((1060 - 80) / n);
+      const y3 = y0 + ((h >> 13) % 100) - 50;
+      return { y0, y3, c1: { x: 320 + (h % 120), y: y0 + ((h >> 3) % 60) - 30 }, c2: { x: 620 + ((h >> 7) % 120), y: y3 + ((h >> 11) % 50) - 25 } };
     },
   },
 };
@@ -177,20 +180,6 @@ const cadenceTotal = cadence.reduce((sum, row) => sum + row.months.reduce((n, ce
         <a class="btn btn-secondary" href={path('/about/')}>{copy.aboutLink} <span aria-hidden="true">→</span></a>
       </div>
       <p class="hero-contact"><a href={`mailto:${site.email}`}>{copy.contact}{locale === 'en' ? ': ' : '：'}{site.email}</a></p>
-      <figure class="cadence">
-        <figcaption><span>{ux.cadence}</span><span class="mono">{firstYear}—{lastYear} · {cadenceTotal}</span></figcaption>
-        <p class="visually-hidden">{ux.cadenceSummary(cadenceTotal, firstYear, lastYear)}</p>
-        <div class="cadence-grid">
-          {cadence.map((row) => (
-            <div class="cadence-row">
-              {row.hasEntries ? <a class="cadence-year mono" href={path(`/writing/${row.year}/`)}>{row.year}</a> : <span class="cadence-year mono">{row.year}</span>}
-              <span class="cadence-cells" aria-hidden="true">
-                {row.months.map((cell) => <span class={`cadence-cell l${cell.level}`} title={cell.count ? ux.cadenceMonth(row.year, cell.month, cell.count) : undefined}></span>)}
-              </span>
-            </div>
-          ))}
-        </div>
-      </figure>
     </div>
     <nav class="reading-panel" aria-label={ux.readingPaths}>
       <h2 class="panel-title">{ux.readingPaths}</h2>
@@ -198,10 +187,20 @@ const cadenceTotal = cadence.reduce((sum, row) => sum + row.months.reduce((n, ce
         <section class="panel-group">
           <h3><a href={`${path('/columns/')}#${group.key}`}>{group.title}</a></h3>
           <ul>
-            {group.columns.map((column) => (
+            {group.columns.slice(0, PANEL_VISIBLE).map((column) => (
               <li><a href={column.url}><span>{column.label}</span><span class="mono">{String(column.count).padStart(2, '0')}</span></a></li>
             ))}
           </ul>
+          {group.columns.length > PANEL_VISIBLE && (
+            <details class="panel-more">
+              <summary><span class="panel-more-open">{ux.morePaths(group.columns.length - PANEL_VISIBLE)}</span><span class="panel-more-close">{ux.fewerPaths}</span></summary>
+              <ul>
+                {group.columns.slice(PANEL_VISIBLE).map((column) => (
+                  <li><a href={column.url}><span>{column.label}</span><span class="mono">{String(column.count).padStart(2, '0')}</span></a></li>
+                ))}
+              </ul>
+            </details>
+          )}
         </section>
       ))}
     </nav>
@@ -215,6 +214,20 @@ const cadenceTotal = cadence.reduce((sum, row) => sum + row.months.reduce((n, ce
 
   <section class="section shell home-list-section" aria-labelledby="writing-heading" data-home-section="writing">
     <div class="section-label"><h2 id="writing-heading">{ux.homeSections.writing}</h2><span class="mono">{writing.length}</span><a href={path('/writing/')}>{copy.writing.link} <span aria-hidden="true">→</span></a></div>
+    <figure class="cadence home-cadence">
+      <figcaption><span>{ux.cadence}</span><span class="mono">{firstYear}—{lastYear} · {cadenceTotal}</span></figcaption>
+      <p class="visually-hidden">{ux.cadenceSummary(cadenceTotal, firstYear, lastYear)}</p>
+      <div class="cadence-grid">
+        {cadence.map((row) => (
+          <div class="cadence-row">
+            {row.hasEntries ? <a class="cadence-year mono" href={path(`/writing/${row.year}/`)}>{row.year}</a> : <span class="cadence-year mono">{row.year}</span>}
+            <span class="cadence-cells" aria-hidden="true">
+              {row.months.map((cell) => <span class={`cadence-cell l${cell.level}`} title={cell.count ? ux.cadenceMonth(row.year, cell.month, cell.count) : undefined}></span>)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </figure>
     <div class="entry-list">
       {latest.length ? latest.map((entry) => <HomeEntry entry={entry} locale={locale} indexableTags={indexableTags} />) : <p>{copy.writing.empty}</p>}
     </div>

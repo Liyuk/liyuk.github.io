@@ -21,6 +21,9 @@
   --cad-4: #0f7b5f;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Segoe UI", "Microsoft YaHei", sans-serif;
   --serif: var(--sans);
+  /* Display serif for the big titles only (home, page, article, gallery):
+     the publication voice. Body, navigation and panels stay sans. */
+  --display: "Iowan Old Style", "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
   --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
   --radius-sm: 6px;
   --radius-md: 10px;

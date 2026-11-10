@@ -163,6 +163,16 @@ a.cadence-year:hover { color: var(--accent); text-decoration: underline; }
 .panel-group li:first-child a { border-top: 0; }
 .panel-group li a .mono { color: var(--muted); font-size: .8125rem; }
 .panel-group li a:hover { color: var(--accent); }
+.panel-more summary { display: flex; align-items: center; gap: .4rem; min-height: 2.25rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .8125rem; cursor: pointer; list-style: none; }
+.panel-more summary::-webkit-details-marker { display: none; }
+.panel-more summary::after { content: ''; width: .4rem; height: .4rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-.15rem) rotate(45deg); }
+.panel-more[open] summary::after { transform: translateY(.1rem) rotate(-135deg); }
+.panel-more summary:hover { color: var(--accent); }
+.panel-more-close, .panel-more[open] .panel-more-open { display: none; }
+.panel-more[open] .panel-more-close { display: inline; }
+.panel-more li:first-child a { border-top: 1px solid var(--line); }
+/* On the home page the cadence sits with the writing list, below the first screen. */
+.home-cadence { margin: 1.25rem 0 .5rem; }
 .home-start { padding-block: 1.5rem .5rem; }
 .home-list-section { padding-block: clamp(2rem, 4vw, 3rem) .5rem; }
 .home-list-section .subscribe { margin-top: 1.5rem; padding-top: 1.25rem; max-width: none; }
@@ -515,6 +525,11 @@ a.cadence-year:hover { color: var(--accent); text-decoration: underline; }
 .gallery-detail { padding-block: clamp(2.5rem, 6vw, 4.5rem); max-width: var(--wide-w); }
 .gallery-header { max-width: 45rem; margin-bottom: clamp(1.75rem, 4vw, 3rem); }
 .gallery-header h1 { margin: 0 0 1rem; font-size: clamp(2.25rem, 5vw, 4rem); font-weight: 650; letter-spacing: -.035em; line-height: 1.08; }
+/* Publication voice: the big titles are set in the display serif. Serif strokes
+   are lighter than the sans, so the weight drops a step and Latin tracking
+   opens up; CJK keeps a touch of air. */
+.hero h1, .page-heading h1, .article h1, .gallery-header h1 { font-family: var(--display); font-weight: 600; letter-spacing: -.015em; }
+.locale-zh .hero h1, .locale-zh .page-heading h1, .locale-zh .gallery-header h1, .article h1:lang(zh) { letter-spacing: .01em; }
 .gallery-header > p { max-width: 38rem; color: var(--muted); font-size: 1.125rem; line-height: 1.65; }
 .gallery-carousel { max-width: 1180px; }
 .gallery-carousel[tabindex="-1"]:focus { outline: none; }
