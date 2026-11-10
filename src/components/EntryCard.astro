@@ -23,12 +23,13 @@ const entryType = ui.entry.types[typeKey as keyof typeof ui.entry.types] ?? type
 const lastUpdatedLabel = entry.data.updatedAt ? `${ui.entry.updatedAt} ${lastUpdatedDateStr}` : `${ui.entry.publishedAt} ${lastUpdatedDateStr}`;
 ---
 
-<article class="entry-card" data-published-at={isoDate(published)} data-last-updated-at={isoDate(lastUpdated)} data-published-label={`${ui.entry.publishedAt} ${date}`} data-last-updated-label={lastUpdatedLabel}>
-  <div class="entry-meta"><time data-entry-date datetime={isoDate(published)}>{ui.entry.publishedAt} {date}</time></div>
-  <h2><a href={urlPrefix === 'writing' ? writingUrl(entry.id, locale) : contentUrl(urlPrefix, entry.id, locale)}>{entry.data.title}</a></h2>
-  <p>{entry.data.description}</p>
-  <p class="entry-type">{entryType}</p>
-  <p class="entry-reading">{ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</p>
-  {entry.data.column && <p class="column-reference">{ui.entry.columnIn(getColumn(entry.data.column.slug, locale)?.label ?? entry.data.column.slug, entry.data.column.order)}</p>}
-  <TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} max={MAX_CARD_TAGS} />
+<article class="entry-card row-entry" data-published-at={isoDate(published)} data-last-updated-at={isoDate(lastUpdated)} data-published-label={`${ui.entry.publishedAt} ${date}`} data-last-updated-label={lastUpdatedLabel}>
+  <time class="row-date mono" data-entry-date datetime={isoDate(published)}>{ui.entry.publishedAt} {date}</time>
+  <div class="row-body">
+    <h2><a class="row-link" href={urlPrefix === 'writing' ? writingUrl(entry.id, locale) : contentUrl(urlPrefix, entry.id, locale)}>{entry.data.title}</a></h2>
+    <p>{entry.data.description}</p>
+    <p class="entry-type">{entryType}{entry.data.column && <> · <span class="column-reference">{ui.entry.columnIn(getColumn(entry.data.column.slug, locale)?.label ?? entry.data.column.slug, entry.data.column.order)}</span></>}</p>
+    <TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} max={MAX_CARD_TAGS} class="row-tags" />
+  </div>
+  <span class="row-aside mono entry-reading">{ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span>
 </article>

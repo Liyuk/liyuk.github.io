@@ -5,7 +5,7 @@ description: "Rolling backtests on 70-city existing-home price indices (2011–2
 createdAt: 2026-11-05
 updatedAt: 2026-11-06
 version: '0.3'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-probabilistic-housing-price-forecast.md
 locale: en
@@ -32,37 +32,37 @@ searchIntent: data
 relatedQueries: ["70-city home price forecast", "probabilistic house price forecasting", "house price forecast backtest"]
 ---
 
-**Version:** 0.3 (preprint)
+**Version:** 0.3 (working paper)
 
 **Data through:** 2026-09. The backtests and scenarios use data available through this date and do not update automatically with the page.
 
 ## Abstract
 
-For how long can a model forecast urban home prices in China, and how often do its prediction intervals contain the realized outcomes? Using the National Bureau of Statistics' existing-home price indices for 70 cities, this paper constructs forecasts for horizons of 1 to 60 months and evaluates them in rolling backtests against an unchanged-price baseline. The modeling data cover February 2011 through September 2026; origins from 2019 onward are scored, and earlier origins are used for learning.
+For how long can a model forecast urban home prices in China, and how often do its prediction intervals contain the realized outcomes? Using the National Bureau of Statistics' existing-home price indices for 70 cities, this study constructs forecasts for horizons of 1 to 60 months and evaluates them in rolling backtests against an unchanged-price baseline. The modeling data cover February 2011 through September 2026; origins from 2019 onward are scored, and earlier origins are used for learning.
 
 In the city-level backtest, forecast errors at 1, 3, 6, and 12 months are respectively 46%, 43%, 40%, and 38% lower than the unchanged-price baseline; realized coverage of nominal 80% intervals is 80%, 78%, 76%, and 80%. At 24 months, error is 28% lower and coverage is 82%. At 48 and 60 months, errors are 12% and 33% higher, while coverage of the 80% interval falls to 64% and 59%. The global model's multi-horizon labels have been corrected, and 210 cells in the 2021 new-home index inferred from future year-on-year values have been masked. Interpretation is limited by horizon-specific, overlapping origins; retrospective model selection; unavailable historical data snapshots; and an unverified Chronos-2 pretraining boundary. The first saved ledger records the pre-correction model (§6.1).
 
-This paper also finds an implementation error in the mean-reversion component of the author's earlier v0.2 method, whose weight-selection objective differs from the five-year cumulative outcome reported. At matched origins, errors for Beijing fall by approximately 19% and 28% at 12 and 24 months, respectively; model-selection boundaries are summarized in §6.1.
+This study also finds an implementation error in the mean-reversion component of the author's earlier v0.2 method, whose weight-selection objective differs from the five-year cumulative outcome reported. At matched origins, errors for Beijing fall by approximately 19% and 28% at 12 and 24 months, respectively; model-selection boundaries are summarized in §6.1.
 
 **Keywords:** house price indices; probabilistic forecasting; rolling backtests; interval coverage; forecast combinations; China
 
 ## 1. Introduction
 
-Households and researchers care about future house prices, but a single long-range number does not show how large forecast errors may be. This paper asks whether forecasts constructed from historical price indices improve on the simple unchanged-price baseline at different horizons, and how their prediction intervals have covered historical outcomes. The outcome is the cumulative change in city existing-home price indices.
+Households and researchers care about future house prices, but a single long-range number does not show how large forecast errors may be. This study asks whether forecasts constructed from historical price indices improve on the simple unchanged-price baseline at different horizons, and how their prediction intervals have covered historical outcomes. The outcome is the cumulative change in city existing-home price indices.
 
-The paper combines several base models and builds intervals from realized historical errors. The global model also uses recent changes in the new-home price index as a feature. Error, direction, and coverage are reported separately by horizon. The author's previous five-year forecast paper provides an additional comparison. This paper presents the data, method, and results first, then examines the earlier implementation error and differences between the methods. The backtest design and interpretation are discussed in §6.1.
+The study combines several base models and builds intervals from realized historical errors. The global model also uses recent changes in the new-home price index as a feature. Error, direction, and coverage are reported separately by horizon. The author's previous five-year forecast study provides an additional comparison. This study presents the data, method, and results first, then examines the earlier implementation error and differences between the methods. The backtest design and interpretation are discussed in §6.1.
 
 ## 2. Related Work
 
 **Damped trends and forecast combinations.** Damped trends (Gardner & McKenzie, 1985) attenuate extrapolated trends; forecast combinations have been studied by Bates and Granger (1969), among others. The top-k average and the fixed use of a damped trend at long horizons follow these approaches.
 
-**Information across series.** Global modeling and modeling each series separately are alternative ways to forecast a group of time series (Montero-Manso & Hyndman, 2021). This paper uses cross-series information in two ways: a gradient-boosting model pooled across 70 cities and shrinkage of each city's momentum toward its tier's mean (first-, second-, or third-tier cities).
+**Information across series.** Global modeling and modeling each series separately are alternative ways to forecast a group of time series (Montero-Manso & Hyndman, 2021). This study uses cross-series information in two ways: a gradient-boosting model pooled across 70 cities and shrinkage of each city's momentum toward its tier's mean (first-, second-, or third-tier cities).
 
 **Foundation models.** Zero-shot time-series foundation models can forecast without training on the target data (Ansari et al., 2025, Chronos-2). Chronos-2 is included as an optional base model.
 
-**House price momentum and reversion.** For US repeat-sales indices, Case and Shiller (1989) found that annual changes in citywide indices were followed by changes in the same direction, amounting to one-quarter to one-half of the previous year's change, with weak evidence of seasonality. Glaeser and Nathanson's (2017) extrapolative-expectations model produces one-year momentum, five-year mean reversion, and excess volatility relative to fundamentals. Capozza et al. (2002) estimated serial-correlation and reversion coefficients for 62 US metropolitan areas; both varied with city size, income growth, population growth, and construction costs. These studies suggest that short-term momentum and long-term reversion can coexist. US findings do not by themselves establish the same pattern for China's 70 cities. This paper uses an unchanged-price baseline to examine historical performance at different horizons.
+**House price momentum and reversion.** For US repeat-sales indices, Case and Shiller (1989) found that annual changes in citywide indices were followed by changes in the same direction, amounting to one-quarter to one-half of the previous year's change, with weak evidence of seasonality. Glaeser and Nathanson's (2017) extrapolative-expectations model produces one-year momentum, five-year mean reversion, and excess volatility relative to fundamentals. Capozza et al. (2002) estimated serial-correlation and reversion coefficients for 62 US metropolitan areas; both varied with city size, income growth, population growth, and construction costs. These studies suggest that short-term momentum and long-term reversion can coexist. US findings do not by themselves establish the same pattern for China's 70 cities. This study uses an unchanged-price baseline to examine historical performance at different horizons.
 
-**China.** Fang, Gu, Xiong, and Zhou (2016) constructed a 120-city price index from developers' successive sales of new homes for 2003 to 2013; Wu, Deng, and Liu (2014) examined the construction of Chinese house price indices. This paper uses an equal-weighted average of the National Bureau of Statistics' 70-city indices and does not examine measurement error in those indices, a limitation discussed in §6.3.
+**China.** Fang, Gu, Xiong, and Zhou (2016) constructed a 120-city price index from developers' successive sales of new homes for 2003 to 2013; Wu, Deng, and Liu (2014) examined the construction of Chinese house price indices. This study uses an equal-weighted average of the National Bureau of Statistics' 70-city indices and does not examine measurement error in those indices, a limitation discussed in §6.3.
 
 ## 3. Data and Methods
 
@@ -239,7 +239,7 @@ From +13 months, the shrunk damped trend is fixed; removing Chronos-2 does not c
 
 ### 4.2 Credibility Bands
 
-Using the eight evaluated horizons of 1, 3, 6, 12, 24, 36, 48, and 60 months, this paper makes a retrospective division into three ranges to summarize the reported scenarios. Unreported months were not evaluated individually. The bands follow these criteria: within the learning horizon, 80% interval coverage within 0.80 ± 0.05 and improvement ≥ 20% are labeled “better backtest performance”; thereafter, improvement ≥ 15% and coverage ≥ 70% are labeled “cautious reference”:
+Using the eight evaluated horizons of 1, 3, 6, 12, 24, 36, 48, and 60 months, this study makes a retrospective division into three ranges to summarize the reported scenarios. Unreported months were not evaluated individually. The bands follow these criteria: within the learning horizon, 80% interval coverage within 0.80 ± 0.05 and improvement ≥ 20% are labeled “better backtest performance”; thereafter, improvement ≥ 15% and coverage ≥ 70% are labeled “cautious reference”:
 
 | Band | Horizon | Meaning |
 |---|---|---|
@@ -287,11 +287,11 @@ The v0.2 five-year baseline of −22.1% lies near the lower end of the pre-corre
 
 ## 5. Comparison with and Corrections to the Earlier Method
 
-The comparison is the author's earlier [v0.2 five-year forecast paper](https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-five-year-housing-price-forecast.md). Methods and results for the following calculations are in the repository's [audit script](https://github.com/Liyuk/cn-housing-price-training/blob/main/scripts/paper_algorithm_audit.py) and [audit record](https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/review-forecast-paper-algorithm-2026-11.md).
+The comparison is the author's earlier [v0.2 five-year forecast study](https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-five-year-housing-price-forecast.md). Methods and results for the following calculations are in the repository's [audit script](https://github.com/Liyuk/cn-housing-price-training/blob/main/scripts/paper_algorithm_audit.py) and [audit record](https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/review-forecast-paper-algorithm-2026-11.md).
 
 ### 5.1 Replication
 
-On the v0.2 data (2019-01 to 2026-06, 90 months), all v0.2 figures are fully reproduced: national weights 1/0/0 and Beijing weights 0.25/0.50/0.25; ρ = 0.958 and 0.695; five-year baselines of −22.1% (−33.5% to −10.6%) and −4.6% (−9.0% to −0.1%); and all 12 rows of the weight-sensitivity table in §3.2 of that paper.
+On the v0.2 data (2019-01 to 2026-06, 90 months), all v0.2 figures are fully reproduced: national weights 1/0/0 and Beijing weights 0.25/0.50/0.25; ρ = 0.958 and 0.695; five-year baselines of −22.1% (−33.5% to −10.6%) and −4.6% (−9.0% to −0.1%); and all 12 rows of the weight-sensitivity table in §3.2 of that study.
 
 ### 5.2 An Implementation Error
 
@@ -342,23 +342,23 @@ Scoring origins from 2019 onward cover one complete downturn, while nearly all e
 
 ### 6.3 Index Measurement
 
-This paper uses the equal-weighted average of the National Bureau of Statistics' 70-city indices as its price measure. It does not test how well the index represents transaction prices or evaluate equal weighting. Chinese house price index construction has been studied separately (Wu, Deng & Liu, 2014); Fang et al. (2016) constructed their own 120-city new-home index. These measurement questions are outside this analysis.
+This study uses the equal-weighted average of the National Bureau of Statistics' 70-city indices as its price measure. It does not test how well the index represents transaction prices or evaluate equal weighting. Chinese house price index construction has been studied separately (Wu, Deng & Liu, 2014); Fang et al. (2016) constructed their own 120-city new-home index. These measurement questions are outside this analysis.
 
 ### 6.4 Other Limitations
 
 - **No exogenous variables.** Policy, interest rates, population, and income are excluded. Monthly data from 2022 onward for variables such as rental yields have been collected for 12 cities, but remain insufficient to estimate long-run relationships.
 - **The 70 cities are not the whole country.** They cover 30 provincial-level jurisdictions (excluding Tibet), but represent only a small share of China's roughly 300 prefecture-level cities and exclude large cities such as Suzhou, Dongguan, Foshan, Zhongshan, and Zhuhai.
 - **Data sources.** The 2006 to 2010 data come from a third-party mirror without official pages for verification, and the 2006 to 2007 data failed the consistency test between monthly and year-on-year indices.
-- **Long-range intervals cease to be calibrated.** From +36 months, 80% interval coverage falls below nominal; this paper labels those outputs scenarios accordingly.
+- **Long-range intervals cease to be calibrated.** From +36 months, 80% interval coverage falls below nominal; this study labels those outputs scenarios accordingly.
 - **Not done:** hierarchical reconciliation (city → tier → national), online conformal calibration, and turning-point probabilities.
 
 ### 6.5 Implications for v0.2
 
-The v0.2 qualitative conclusion that “Beijing is a mean-reverting market” rested on a 0.1% selection difference and an implementation error; it no longer holds here. The v0.2 characterization of the national market as a “downward-trending market” remains consistent with this paper at +12 months (a −2.8% national point forecast in the pre-correction ledger). This paper neither disproves nor confirms v0.2's discussion of a market bottom: it does not produce an endogenous turning-point probability.
+The v0.2 qualitative conclusion that “Beijing is a mean-reverting market” rested on a 0.1% selection difference and an implementation error; it no longer holds here. The v0.2 characterization of the national market as a “downward-trending market” remains consistent with this study at +12 months (a −2.8% national point forecast in the pre-correction ledger). This study neither disproves nor confirms v0.2's discussion of a market bottom: it does not produce an endogenous turning-point probability.
 
 ## 7. Conclusion
 
-In this 70-city backtest after correcting labels and masking future-bridged cells, 12-month results beat the unchanged-price baseline, and interval coverage is close to nominal. Results at 24 months are also favorable. Five-year results have not shown an advantage over the baseline and are useful as scenarios. The v0.2 five-year baseline of −22.1% relies on momentum extrapolation and does not outperform “unchanged price” in the backtest; its Beijing figure is also affected by an implementation error. Future evaluation should report baseline comparisons by horizon, calibrate interval width against realized errors, and use a frozen forecast ledger to accumulate prospective evidence. The fixed long-horizon rule in this paper still needs independent validation.
+In this 70-city backtest after correcting labels and masking future-bridged cells, 12-month results beat the unchanged-price baseline, and interval coverage is close to nominal. Results at 24 months are also favorable. Five-year results have not shown an advantage over the baseline and are useful as scenarios. The v0.2 five-year baseline of −22.1% relies on momentum extrapolation and does not outperform “unchanged price” in the backtest; its Beijing figure is also affected by an implementation error. Future evaluation should report baseline comparisons by horizon, calibrate interval width against realized errors, and use a frozen forecast ledger to accumulate prospective evidence. The fixed long-horizon rule in this study still needs independent validation.
 
 ## Reproduction
 
@@ -373,7 +373,7 @@ Table 1 includes Chronos-2. Reproducing it requires first running `src.tsfm_base
 
 The table records the corrected backtest and historical ledger. The source-code correction is in commit [`ebbc0b2e2fa983d9bc3f18322d545bce5477173e`](https://github.com/Liyuk/cn-housing-price-training/commit/ebbc0b2e2fa983d9bc3f18322d545bce5477173e) on the model-fix branch. The processed panel and model cache are not included in that commit; hashes identify the local files used, with input and version requirements described in §6.1 and Reproduction.
 
-| Stage | File or result | Relationship to this paper |
+| Stage | File or result | Relationship to this study |
 |---|---|---|
 | Collection and definitions | `data/source_registry.csv`, `src/panel.py` | Source records, data validation, and definition of monthly log change |
 | Cleaned panel | `data/processed/housing_indices_clean_v4.csv` | Modeling input from 2011-02 through 2026-09; SHA-256: `47f85bb3c57978dcbbfd5676cf8c486da0fbe14204965a7434c6d7bc3a1465a8`; untracked file |
@@ -412,11 +412,11 @@ Figure 3 uses the eight reported horizons directly from the corrected results fi
 
 [13] Wu, J., Deng, Y., & Liu, H. (2014). House Price Index Construction in the Nascent Housing Market: The Case of China. *Journal of Real Estate Finance and Economics*, 48(3), 522–545. https://doi.org/10.1007/s11146-013-9416-1
 
-[14] Author. (2026a). Measurable and Unmeasurable: A Source- and Definition-Aware Approach to Constructing Chinese House Price Data (with Beijing as a District-Level Case). Preprint, v0.4.
+[14] Author. (2026a). Measurable and Unmeasurable: A Source- and Definition-Aware Approach to Constructing Chinese House Price Data (with Beijing as a District-Level Case). Working paper, v0.4.
 
-[15] Author. (2026b). China's Existing-Home Prices over the Next Five Years: An Interpretable Combination Forecast and Analysis of a Potential Bottom (2026–2030). Preprint, v0.2.
+[15] Author. (2026b). China's Existing-Home Prices over the Next Five Years: An Interpretable Combination Forecast and Analysis of a Potential Bottom (2026–2030). Working paper, v0.2.
 
-**Citation verification.** The descriptions of [3], [4], [5], [7], and [10] were checked against abstracts on NBER pages. [6], [8], [9], [12], [13], and [1] were verified for existence and bibliographic details via Crossref or arXiv; **their contents were not checked individually**. This paper cites them only for their titles and commonly recognized findings (damped trends, M4, global models, forecast combinations, Chinese index construction, and foundation models). Only the existence of [11] was verified; the paper does not rely on its specific conclusions.
+**Citation verification.** The descriptions of [3], [4], [5], [7], and [10] were checked against abstracts on NBER pages. [6], [8], [9], [12], [13], and [1] were verified for existence and bibliographic details via Crossref or arXiv; **their contents were not checked individually**. This study cites them only for their titles and commonly recognized findings (damped trends, M4, global models, forecast combinations, Chinese index construction, and foundation models). Only the existence of [11] was verified; the study does not rely on its specific conclusions.
 
 ## Author and Disclosures
 
@@ -426,4 +426,4 @@ Figure 3 uses the eight reported horizons directly from the corrected results fi
 
 **Data and code availability:** Collection, cleaning, modeling, backtesting, and acceptance code is in the GitHub repository; reproduction still requires verification of the exact commit, dependencies, and model resources ([cn-housing-price-training](https://github.com/Liyuk/cn-housing-price-training)). Processed data and forecast quantiles can be downloaded from the site's “Data and Methods” page.
 
-**About the writing:** Backtest figures come from the corrected results published below and the v0.2 audit results in the original repository. The paper and code were produced by the author with AI assistance; the author is responsible for their contents.
+**About the writing:** Backtest figures come from the corrected results published below and the v0.2 audit results in the original repository. The study and code were produced by the author with AI assistance; the author is responsible for their contents.

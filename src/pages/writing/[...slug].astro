@@ -65,6 +65,8 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 // Show the TOC only when there is a real outline: at least two h2 sections.
 // (Previously gated on raw heading count, which could trigger on a long flat
 // list of h3s while the TOC only ever renders depth ≤ 3.)
+const pad2 = (n: number) => String(n).padStart(2, '0');
+const columnPosition = pageEntry.data.column ? `${pad2(pageEntry.data.column.order)} / ${pad2(columnEntries.length)}` : '';
 const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 ---
 <script is:inline>
@@ -81,7 +83,7 @@ const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2
     </article>
   ) : (
   <article class="article shell">
-    <header><p class="eyebrow">{ui.navigation.writing}</p><h1>{pageEntry.data.title}</h1><p class="article-dek" data-pagefind-meta="description">{pageEntry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(pageEntry))}>{ui.entry.publishedAt} {formatDate(publishedDate(pageEntry))}</time>{pageEntry.data.updatedAt && <time datetime={isoDate(pageEntry.data.updatedAt)}>{ui.entry.updatedAt} {formatDate(pageEntry.data.updatedAt)}</time>}<span>{ui.entry.readingMinutes(readingMinutes(pageEntry.body, locale))}</span></div><TagList tags={pageEntry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" pagefindFilter /></header>
+    <header><div class="article-dates"><span>{ui.navigation.writing}</span><time datetime={isoDate(publishedDate(pageEntry))}>{ui.entry.publishedAt} {formatDate(publishedDate(pageEntry))}</time>{pageEntry.data.updatedAt && <time datetime={isoDate(pageEntry.data.updatedAt)}>{ui.entry.updatedAt} {formatDate(pageEntry.data.updatedAt)}</time>}<span>{ui.entry.readingMinutes(readingMinutes(pageEntry.body, locale))}</span>{pageEntry.data.column && columnIndex >= 0 && <span>{getColumn(pageEntry.data.column.slug, locale)?.label} {columnPosition}</span>}</div><h1>{pageEntry.data.title}</h1><p class="article-dek" data-pagefind-meta="description">{pageEntry.data.description}</p><AuthorByline locale={locale} /><TagList tags={pageEntry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" pagefindFilter /></header>
     {pageEntry.data.column && <ColumnCard entry={pageEntry} columnSlug={pageEntry.data.column.slug} locale={locale} allEntries={columnMembers} />}
     <div class="article-body">
       {hasOutline && <TableOfContents headings={headings} locale={locale} />}

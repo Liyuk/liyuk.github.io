@@ -404,7 +404,7 @@ try {
 
   // 11. Columns
   await page.goto(`${BASE}/columns/`, { waitUntil: 'networkidle' });
-  const columnCount = await page.locator('.column-grid a').count();
+  const columnCount = await page.locator('.start-path').count();
   check('columns index lists columns', columnCount > 0, `count=${columnCount}`);
 
   // 12. Column reading context: chapter navigation replaces chronological navigation.
@@ -460,7 +460,7 @@ try {
     consultingHref: await page.locator('.home-consulting-card').getAttribute('href'),
   };
   check('English home shows localized recent content and collaboration links',
-    await page.locator('.start-callout a[href="/en/start/"]').count() === 1 &&
+    await page.locator('.start-callout a[href="/en/columns/"]').count() === 1 &&
     englishHomeSections.writing === 5 && englishHomeSections.projects === 3 && englishHomeSections.research === 3 &&
     englishHomeSections.projectHref?.startsWith('/en/projects/') && englishHomeSections.consultingHref === '/en/consulting/',
     JSON.stringify(englishHomeSections));

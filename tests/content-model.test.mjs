@@ -58,7 +58,7 @@ test('shared public copy lives in one site configuration', () => {
   assert.equal(site.locale, 'zh-CN');
   assert.equal(site.name, 'Liyuk');
   assert.equal(site.title, '沉默土豆的烹饪指南 — Liyuk');
-  assert.equal(site.navigation[0].href, '/start/');
+  assert.equal(site.navigation[0].href, '/columns/');
   assert.equal(site.translation.mode, 'manual-review');
 });
 
@@ -402,10 +402,10 @@ test('homepage shows the requested recent content counts in reading order', asyn
   assert.ok(page.indexOf('data-home-section="research"') < page.indexOf('home-consulting'));
 });
 
-test('start page includes every column-bearing content collection', async () => {
-  const page = await readFile(new URL('../src/pages/start/index.astro', import.meta.url), 'utf8');
+test('columns index (the start page) includes every column-bearing content collection', async () => {
+  const page = await readFile(new URL('../src/pages/columns/index.astro', import.meta.url), 'utf8');
 
-  assert.match(page, /const \{ writing, consulting, research, galleries \} = await getColumnCollections\(locale\)/);
+  assert.match(page, /const \{ writing, consulting, research, galleries \} = await getColumnCollections\(locale, import\.meta\.env\.DEV\)/);
   assert.match(page, /const entries = \[\.\.\.writing, \.\.\.consulting, \.\.\.research, \.\.\.galleries\]/);
 });
 

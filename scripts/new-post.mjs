@@ -17,7 +17,7 @@ const TYPE_CHOICES = [
   { key: 'consulting', label: '咨询 (consulting)' },
   { key: 'project', label: '项目 (projects)' },
 ];
-const STATUS_CHOICES = ['preprint', 'published', 'in-progress'];
+const STATUS_CHOICES = ['working-paper', 'published', 'in-progress'];
 const CONSULTING_FORMAT_CHOICES = ['career-case', 'interview', 'mock-interview', 'management-case'];
 const ARTICLE_TYPE_CHOICES = ['essay', 'note', 'case-study'];
 const SEARCH_INTENT_LABELS = {
@@ -99,7 +99,7 @@ export function buildPostFrontmatter(type, answers) {
     return {
       ...common,
       version: answers.version,
-      status: answers.status ?? 'preprint',
+      status: answers.status ?? 'working-paper',
       repositoryUrl: answers.repositoryUrl,
       paperUrl: answers.paperUrl,
       ...(answers.column ? { column: answers.column } : {}),
@@ -240,12 +240,12 @@ async function main() {
       answers.column = await askColumn(rl);
     } else if (type === 'research') {
       answers.version = await rl.ask('版本号（如 0.1）', { default: '0.1' });
-      console.log('状态：1=preprint 2=published 3=in-progress');
+      console.log('状态：1=working-paper（工作稿） 2=published（已正式发表） 3=in-progress');
       const statusAnswer = await rl.ask('选择（1-3）', {
         default: '1',
         validate: (v) => (STATUS_CHOICES[Number(v) - 1] ? null : '请输入 1-3'),
       });
-      answers.status = STATUS_CHOICES[Number(statusAnswer) - 1] ?? 'preprint';
+      answers.status = STATUS_CHOICES[Number(statusAnswer) - 1] ?? 'working-paper';
       const repositoryUrl = await rl.ask('仓库 URL（可留空）: ');
       const paperUrl = await rl.ask('论文 URL（可留空）: ');
       if (!repositoryUrl && !paperUrl) {

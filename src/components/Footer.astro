@@ -24,7 +24,7 @@ const elsewhere = [
       <span class="elsewhere-label">{ui.footer.elsewhere}</span>
       {elsewhere.map((item) => (
         <a href={item.href} {...(item.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
-          {item.label} <span aria-hidden="true">↗</span>
+          {item.label}{item.href.startsWith('http') && <span aria-hidden="true"> ↗</span>}
         </a>
       ))}
     </nav>

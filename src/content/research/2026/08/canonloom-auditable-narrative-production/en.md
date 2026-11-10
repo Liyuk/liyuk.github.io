@@ -1,11 +1,11 @@
 ---
 title: "From Prompt to Narrative Production: CanonLoom 0.2.0's Auditable Human-AI Collaboration Architecture for Long-Form Fiction"
+description: "A system design write-up: long-form fiction collaboration as recoverable, auditable, author-approved state transitions, without mistaking scores for literary value."
 seoTitle: "CanonLoom: Auditable Human-AI Long-Form Fiction Writing"
-description: "A system design paper: long-form fiction collaboration as recoverable, auditable, author-approved state transitions, without mistaking scores for literary value."
 createdAt: 2026-08-03
 publishedAt: 2026-08-03
 version: CanonLoom 0.2.0
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/canonloom
 paperUrl: https://github.com/Liyuk/canonloom/blob/main/docs/paper-0.2.0/paper.md
 tags: [human-ai-collaboration, agent-systems, narrative, auditability, technology]
@@ -21,17 +21,17 @@ relatedQueries: ["AI novel writing tool", "human-AI collaborative fiction", "sto
 
 **Date:** 2026-08-03
 
-**Document nature:** A system design paper; this paper reports engineering validation and proposes a controlled quality-evaluation scheme that has not yet been implemented.
+**Document nature:** A system design write-up; this study reports engineering validation and proposes a controlled quality-evaluation scheme that has not yet been implemented.
 
-**Research boundary:** This paper does not claim that CanonLoom's generation quality is already superior to other architectures; no data that was not actually collected is presented as numerical results.
+**Research boundary:** This study does not claim that CanonLoom's generation quality is already superior to other architectures; no data that was not actually collected is presented as numerical results.
 
 ## Abstract
 
 Human-AI collaboration on long-form fiction is not simply a matter of handing ever-larger contexts to ever-larger language models. As a story spans more chapters, the system must simultaneously maintain author intent, hierarchical plans, chapter causality, character goals, local point of view, the order in which readers learn things, and candidate facts that the author has not yet confirmed. If this state is hidden inside one or more rounds of agent conversation, the generation process is usually hard to recover, review findings are hard to locate, and model suggestions can become canonical story facts without any explicit authorization.
 
-This paper presents CanonLoom 0.2.0, a file-protocol-driven architecture for human-AI collaboration on long-form fiction. CanonLoom models writing as explicit state transitions: author intent is compiled, through hierarchical planning and chapter contracts, into bounded evidence contexts; generators produce candidate prose; structural, continuity, style, and reader-commitment reviewers produce evidence-backed Findings; the author approves, rejects, or defers at stage gates; and finally the prose and the state changes are settled separately. The system uses an S0–S6 stage protocol, a separation between candidate and canonical states, SHA-256 source fingerprints, review provenance, an optional narrative state layer, and a "single primary model + deterministic Python tools" default runtime strategy.
+This study presents CanonLoom 0.2.0, a file-protocol-driven architecture for human-AI collaboration on long-form fiction. CanonLoom models writing as explicit state transitions: author intent is compiled, through hierarchical planning and chapter contracts, into bounded evidence contexts; generators produce candidate prose; structural, continuity, style, and reader-commitment reviewers produce evidence-backed Findings; the author approves, rejects, or defers at stage gates; and finally the prose and the state changes are settled separately. The system uses an S0–S6 stage protocol, a separation between candidate and canonical states, SHA-256 source fingerprints, review provenance, an optional narrative state layer, and a "single primary model + deterministic Python tools" default runtime strategy.
 
-The contribution of this paper is not a new language model, nor a claim that automatic generation quality already exceeds other architectures. We first give a recoverable, auditable, cross-agent model for long-form narrative production; second, we define the boundaries among chapter contracts, Beats, context packages, review reports, and state settlement; third, we give a complete evaluation scheme covering consistency, causal changes, character agency, knowledge leakage, reveal control, tokens, latency, retries, and author burden; and finally, we report the engineering validation results of the current version and explicitly leave the comparison of literary quality to later controlled experiments. The goal of this work is to provide fiction authors with a workflow drivable by a small set of short commands, and to provide agent-systems research with a production protocol that can be replayed and recovered.
+The contribution of this study is not a new language model, nor a claim that automatic generation quality already exceeds other architectures. We first give a recoverable, auditable, cross-agent model for long-form narrative production; second, we define the boundaries among chapter contracts, Beats, context packages, review reports, and state settlement; third, we give a complete evaluation scheme covering consistency, causal changes, character agency, knowledge leakage, reveal control, tokens, latency, retries, and author burden; and finally, we report the engineering validation results of the current version and explicitly leave the comparison of literary quality to later controlled experiments. The goal of this work is to provide fiction authors with a workflow drivable by a small set of short commands, and to provide agent-systems research with a production protocol that can be replayed and recovered.
 
 **Keywords:** long-form fiction generation; human-AI collaboration; agent workflow; narrative state; auditability; context compilation; consistency; author control
 
@@ -43,7 +43,7 @@ Existing LLM-based writing practices often compress the task into "prompt + hist
 
 CanonLoom 0.2.0 shifts from a "writing interface" to a "production protocol." It does not try to turn the author into an operator of a complex GUI, nor does it by default split the task among multiple models that share implicit context. The author only needs a small number of entry points, such as initialize the project, start an idea, start work, continue work, check, and settle; the system keeps the complexity in files, stage artifacts, and a readable trace. Agents can read from and write to the project through the same file protocol, so Codex, Claude, or any other agent that can access files and execute commands can participate, and the core state does not depend on any particular chat product.
 
-This paper addresses four questions:
+This study addresses four questions:
 
 1. How can long-form narrative production be represented as recoverable, auditable state transitions?
 2. How do chapter contracts, Beats, bounded contexts, and the S0–S6 gates jointly limit unauthorized state changes?
@@ -107,7 +107,7 @@ CanonLoom has six goals of equal priority that also balance one another:
 
 ### 3.2 Non-Goals
 
-CanonLoom is not a GUI novel editor, not an automatic publishing platform, not a new foundation model, and it does not promise to produce publishable work without human review. It does not treat "more agents," "a bigger graph database," or "higher automation" as necessarily improvements. Nor does the paper interpret fewer tokens, longer text, or a particular language model's preference score directly as literary quality.
+CanonLoom is not a GUI novel editor, not an automatic publishing platform, not a new foundation model, and it does not promise to produce publishable work without human review. It does not treat "more agents," "a bigger graph database," or "higher automation" as necessarily improvements. Nor does the study interpret fewer tokens, longer text, or a particular language model's preference score directly as literary quality.
 
 ## 4. Related Work and Design Position
 
@@ -117,9 +117,9 @@ Another line of research introduces knowledge graphs, world models, or multi-age
 
 Community projects offer a wealth of reusable practices: autonovel demonstrates an iterative pipeline from seed to finished book; creative-writing-skills, story-skills, and novel-creator-skill demonstrate agent skills, style files, continuity review, and gates; book-os emphasizes the layering of standards, novel state, and manuscript; authorclaw, inkos, and NovelWriter respectively demonstrate task logs, temporal memory, and batch review with multi-model backends. CanonLoom absorbs the parts of these practices that are easiest to inspect and roll back, while keeping a no-GUI, single-model-first, file-protocol core.
 
-CanonLoom's position, therefore, is not to claim that it "writes better than all competitors," but to make explicit the state transitions and author-approval points that long-form writing usually leaves implicit. Related work provides component inspiration; this paper tries to give an operable composition boundary.
+CanonLoom's position, therefore, is not to claim that it "writes better than all competitors," but to make explicit the state transitions and author-approval points that long-form writing usually leaves implicit. Related work provides component inspiration; this study tries to give an operable composition boundary.
 
-Paper and project links are given in the references at the end of this paper.
+Paper and project links are given in the references at the end of this study.
 
 ## 5. CanonLoom 0.2.0 System Architecture
 
@@ -450,7 +450,7 @@ Based on the architectural mechanisms, hypotheses can be proposed but not yet an
 * H4: provenance and regression review will improve repair reproducibility, but increase latency and call counts;
 * H5: a single-primary-model path may have lower synchronization cost than multi-model shared implicit memory under the same context, but does not imply higher review capability on every dimension.
 
-These hypotheses require the controlled experiments of Section 10 for verification. The paper must not write the soundness of the architectural design as an experimental conclusion.
+These hypotheses require the controlled experiments of Section 10 for verification. The study must not write the soundness of the architectural design as an experimental conclusion.
 
 ## 12. Discussion: Reliability, Cost, and Creative Freedom
 
@@ -472,11 +472,11 @@ A system that reduces model errors but makes the author deal with a large number
 
 ## 13. Limitations
 
-This section distinguishes "the boundary of the current implementation" from "the boundary of this paper's evidence." These limitations do not negate CanonLoom's protocol design, but they limit the conclusions this paper can draw.
+This section distinguishes "the boundary of the current implementation" from "the boundary of this study's evidence." These limitations do not negate CanonLoom's protocol design, but they limit the conclusions this study can draw.
 
 ### 13.1 Limited Evidence Scope
 
-What this paper currently reports is repository-level engineering validation, including protocol checks, CLI tests, and minimal-project smoke tests; the sample size is not sufficient to support quality conclusions across models, genres, or architectures. In particular, passing tests only shows that artifacts and stage transitions meet expectations, not that the generated text has higher literary quality. This paper therefore positions CanonLoom as "a runnable, auditable system design" rather than "a generation method already proven superior." Future work needs a pre-registered task set, fixed models and parameters, and additional independent samples with human blind review.
+What this study currently reports is repository-level engineering validation, including protocol checks, CLI tests, and minimal-project smoke tests; the sample size is not sufficient to support quality conclusions across models, genres, or architectures. In particular, passing tests only shows that artifacts and stage transitions meet expectations, not that the generated text has higher literary quality. This study therefore positions CanonLoom as "a runnable, auditable system design" rather than "a generation method already proven superior." Future work needs a pre-registered task set, fixed models and parameters, and additional independent samples with human blind review.
 
 ### 13.2 Metrics Cannot Fully Represent Literary Quality
 
@@ -541,7 +541,7 @@ The project repository provides command-line entries, schemas, example projects,
 
 This draft contains no quality or cost figures that lack an actual collection basis. A formal experiment report should provide, for each condition: protocol pass rate, timeline errors, knowledge leakage, chapter-contract adherence, input and total tokens, retry count, human-revision time, and blind-review quality, while also reporting sample size, model version, parameters, confidence intervals, and reviewer agreement. If a metric has not yet been collected, mark it "not collected" in the experiment report rather than filling in an estimated value or keeping a vague placeholder.
 
-This paper is therefore a system design paper, not a quality benchmark paper; Section 10 gives a reproducible experiment protocol, and Section 11 reports only the engineering validation already completed.
+This study is therefore a system design write-up, not a quality benchmark study; Section 10 gives a reproducible experiment protocol, and Section 11 reports only the engineering validation already completed.
 
 ## 16. Conclusion
 
@@ -549,7 +549,7 @@ CanonLoom 0.2.0 re-represents human-AI collaboration on long-form fiction from a
 
 The current version already has a runnable engineering skeleton and basic validation, but it has not yet completed a public controlled benchmark capable of supporting a conclusion of literary-quality superiority. The most important next step is not to keep stacking agents, but to build an original, reproducible long-form consistency dataset with human blind review, and to measure whether the reliability gains are worth the extra tokens, latency, and author burden. Only after these metrics are reported separately can CanonLoom grow from a structurally sound open-source workflow into a validated narrative production architecture.
 
-This paper's empirical claims are limited to the current version's engineering runnability: the protocol, CLI, tests, and minimal-project path have been verified. Conclusions about literary quality, cross-architecture advantage, token gains, and author experience must wait for the controlled experiments described in Section 10; until those experiments are complete, CanonLoom should only be described as an auditable narrative production protocol and research framework.
+This study's empirical claims are limited to the current version's engineering runnability: the protocol, CLI, tests, and minimal-project path have been verified. Conclusions about literary quality, cross-architecture advantage, token gains, and author experience must wait for the controlled experiments described in Section 10; until those experiments are complete, CanonLoom should only be described as an auditable narrative production protocol and research framework.
 
 ## References and Related Projects
 
@@ -582,18 +582,18 @@ This paper's empirical claims are limited to the current version's engineering r
 * [GPTAuthor](https://github.com/dylanhogg/gptauthor)
 * [agent-skills](https://github.com/jwynia/agent-skills)
 
-## Full Paper and External Links
+## Full Write-up and External Links
 
-- [CanonLoom full paper (GitHub) ↗](https://github.com/Liyuk/canonloom/blob/main/docs/paper-0.2.0/paper.md)
+- [CanonLoom full write-up (GitHub) ↗](https://github.com/Liyuk/canonloom/blob/main/docs/paper-0.2.0/paper.md)
 - [CanonLoom project repository (GitHub) ↗](https://github.com/Liyuk/canonloom)
 
 ## Author Information and Statement
 
 **Author:** Liyuk
 
-**Conflict of interest:** The author declares no conflict of interest. This research was not funded by any commercial institution; the public projects, industry reports, and news cited in the paper are used only as methodological or directional references.
+**Conflict of interest:** The author declares no conflict of interest. This research was not funded by any commercial institution; the public projects, industry reports, and news cited in the study are used only as methodological or directional references.
 
-**Data availability:** This paper reports real engineering-validation data: the current test suite consists of 18 Python unit tests, plus a minimal-project smoke test, a public check, CLI-entry checks, and one external test project's chapter workflow passing through S0–S5b (see §11.1 for details). These results prove that the protocol runs on the current samples and tools, and do not constitute an evaluation of the generated text's literary quality. The comparison of generated text's literary quality and formal controlled experiments across models and genres have not yet been completed, so no related figures are reported. The implementation code and reproduction steps are in the CanonLoom repository.
+**Data availability:** This study reports real engineering-validation data: the current test suite consists of 18 Python unit tests, plus a minimal-project smoke test, a public check, CLI-entry checks, and one external test project's chapter workflow passing through S0–S5b (see §11.1 for details). These results prove that the protocol runs on the current samples and tools, and do not constitute an evaluation of the generated text's literary quality. The comparison of generated text's literary quality and formal controlled experiments across models and genres have not yet been completed, so no related figures are reported. The implementation code and reproduction steps are in the CanonLoom repository.
 
 ## Glossary
 

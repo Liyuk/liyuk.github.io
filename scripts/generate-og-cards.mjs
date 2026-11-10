@@ -18,7 +18,7 @@ const SITE_ORIGIN = 'https://liyuk.com';
 const WIDTH = 1200;
 const HEIGHT = 630;
 // Bump when the card template changes so cached renders are invalidated.
-const TEMPLATE_VERSION = 1;
+const TEMPLATE_VERSION = 2;
 const CONTENT_TYPES = new Set([
   'Article',
   'ScholarlyArticle',
@@ -108,13 +108,13 @@ export function cardHtml({ locale, title, section, date }) {
   return `<!doctype html><html lang="${escapeHtml(locale)}"><head><meta charset="utf-8"><style>
 *{box-sizing:border-box;margin:0}
 html,body{width:${WIDTH}px;height:${HEIGHT}px}
-body{background:#f7f4ee;color:#232522;font-family:Inter,"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","WenQuanYi Zen Hei","Microsoft YaHei",sans-serif;display:flex;flex-direction:column;padding:72px 88px 64px 96px;position:relative}
-body::before{content:"";position:absolute;left:0;top:0;bottom:0;width:16px;background:#35685d}
-.eyebrow{display:flex;gap:18px;align-items:center;color:#35685d;font-size:26px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
-.eyebrow span+span::before{content:"·";margin-right:18px;color:#696a65}
-h1{margin-top:40px;font-family:"Songti SC","Noto Serif CJK SC","Source Han Serif SC",Georgia,"WenQuanYi Zen Hei",serif;font-size:${titleSize}px;line-height:1.22;font-weight:700;letter-spacing:${english ? '-.01em' : '.01em'};display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;text-wrap:balance}
-footer{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;border-top:2px solid #d8d3c8;padding-top:28px;color:#696a65;font-size:26px}
-footer strong{color:#232522;font-weight:600}
+body{background:#f8f9f8;color:#1b211e;font-family:Inter,"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","WenQuanYi Zen Hei","Microsoft YaHei",sans-serif;display:flex;flex-direction:column;padding:72px 88px 64px 96px;position:relative}
+body::before{content:"";position:absolute;left:0;top:0;bottom:0;width:12px;background:#0f7b5f}
+.eyebrow{display:flex;gap:18px;align-items:center;color:#5b605d;font-size:26px;font-weight:600;letter-spacing:0}
+.eyebrow span+span::before{content:"·";margin-right:18px;color:#8b908d}
+h1{margin-top:40px;font-size:${titleSize}px;line-height:1.22;font-weight:700;letter-spacing:${english ? '-.015em' : '0'};display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;text-wrap:balance}
+footer{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;border-top:2px solid #e4e5e3;padding-top:28px;color:#5b605d;font-size:26px}
+footer strong{color:#1b211e;font-weight:600}
 </style></head><body>
 <div class="eyebrow">${section ? `<span>${escapeHtml(section)}</span>` : ''}${date ? `<span>${escapeHtml(date)}</span>` : ''}</div>
 <h1>${escapeHtml(title)}</h1>

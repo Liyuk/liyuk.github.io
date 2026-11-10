@@ -4,20 +4,20 @@ description: '讨论任务开始阶段的拆解、子任务能力分类、模型
 createdAt: 2026-08-19
 publishedAt: 2026-08-19
 version: '0.6'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 locale: zh-CN
 translationStatus: original
 translationKey: 2026/08/model-harness-task-scheduling-context-routing
 draft: false
 tags: [ai, agent-systems, engineering, architecture, planning, observability, measurement, systems]
-column: { slug: engineering-ai-judgment, order: 6 }
+column: { slug: agent-collaboration-research, order: 1 }
 primaryQuery: "多模型路由"
 searchIntent: essay
 relatedQueries: ["Agent 任务拆解", "大模型 子任务调度", "LLM fallback", "模型能力切换"]
 ---
 
-> **版本：preprint v0.6。** 这是一篇面向工程设计的研究综述，不报告新的受控用户实验。本文讨论完整的 Agent 调度问题，但明确区分“理论上的完整调度系统”和 `dsh-quota-router` 的工程边界：Planner 负责拆解，quota-router 负责为已拆分的 subtask 选择模型并执行有界 fallback，上层负责上下文回归、验收和 replan。上下文压缩只作为相关边界，完整方法另行展开。
+> **版本：工作稿 v0.6。** 这是一篇面向工程设计的研究综述，不报告新的受控用户实验。本文讨论完整的 Agent 调度问题，但明确区分“理论上的完整调度系统”和 `dsh-quota-router` 的工程边界：Planner 负责拆解，quota-router 负责为已拆分的 subtask 选择模型并执行有界 fallback，上层负责上下文回归、验收和 replan。上下文压缩只作为相关边界，完整方法另行展开。
 
 ## 摘要
 
@@ -1038,7 +1038,7 @@ Planner 已经拆分 subtask
 
 ### 8.2 它不应该解决什么
 
-以下能力保留在论文的完整理论中，但不作为当前 quota-router 的实现目标：
+以下能力保留在本研究的完整理论中，但不作为当前 quota-router 的实现目标：
 
 - Planner 和复杂任务拆解；
 - DAG、并行执行和依赖编排；
@@ -1342,7 +1342,7 @@ SubtaskSpec
 1. 先支持显式 `taskClass`、`complexity`、`precision` 和 `allowedModels`；
 2. 再支持 subtask 级模型锁定和有序 fallback；
 3. 最后增加 primary/fallback/recovery/outcome 统计；
-4. Planner、上下文压缩、跨 Harness 状态迁移、Receipt/Ledger 和自动 replan 留在上层系统或后续论文。
+4. Planner、上下文压缩、跨 Harness 状态迁移、Receipt/Ledger 和自动 replan 留在上层系统或后续研究。
 
 一句话概括本文的工程判断：
 

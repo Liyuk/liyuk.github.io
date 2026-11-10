@@ -1,43 +1,43 @@
 ---
 title: "Defining the Boundaries Before Bringing AI Capability into an Engineering Organization"
+description: "A position write-up from driving AI pilots in a real engineering org: four boundaries (context, responsibility, authorization, measurement) and a pilot protocol."
 seoTitle: "AI in Engineering Organizations: Define the Boundaries"
-description: "A position paper from driving AI pilots in a real engineering org: four boundaries (context, responsibility, authorization, measurement) and a pilot protocol."
 locale: en
 translationStatus: reviewed
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.3'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [ai, software-engineering, agent-systems, developer-productivity, governance, technology]
-column: { slug: engineering-ai-judgment, order: 4 }
+column: { slug: engineering-ai-judgment, order: 1 }
 translationKey: 2026/08/ai-engineering-capability-boundaries
 primaryQuery: "adopting AI in engineering teams"
 searchIntent: howto
 relatedQueries: ["AI pilot program engineering", "AI coding governance", "measuring AI impact on engineering", "AI agent authorization boundaries"]
 ---
 
-**Version:** 0.3 (preprint)
+**Version:** 0.3 (working paper)
 **Date:** 2026-08-14
-**Type:** Position paper, based on the author's experience driving AI infrastructure and pilots in a real engineering organization, combined with a synthesis of public materials.
+**Type:** Position write-up, based on the author's experience driving AI infrastructure and pilots in a real engineering organization, combined with a synthesis of public materials.
 
 ## Abstract
 
 When a team introduces AI, the most common approach is to plug it in as a tool: choose a model, install an agent, connect a knowledge base, ship an editor. This approach assumes three questions have already been answered—what AI is allowed to touch, who is accountable for the results, and what counts as success. But in a real engineering organization, these are precisely the three questions that must be answered before AI turns from a "personal toy" into a "shared capability."
 
-This paper is a position paper. Its material comes from the author's observations while driving AI infrastructure, knowledge bases, and "super-individual" pilots in a real engineering organization, rather than from new model experiments or performance data. It proposes that, before AI capability is brought into an engineering organization, four kinds of boundaries must first be defined—**context boundary** (where knowledge comes from, who maintains it, and when it expires), **responsibility boundary** (whose capability AI amplifies and who remains accountable for judgment), **authorization boundary** (actions of different risk require different gates), and **measurement boundary** (value is measured by verified outcomes, not by invocation volume). It then enters through small-scale, falsifiable pilots and turns the boundaries into a testable system (illustrated here with the author's minimal coding-agent harness).
+This study is a position write-up. Its material comes from the author's observations while driving AI infrastructure, knowledge bases, and "super-individual" pilots in a real engineering organization, rather than from new model experiments or performance data. It proposes that, before AI capability is brought into an engineering organization, four kinds of boundaries must first be defined—**context boundary** (where knowledge comes from, who maintains it, and when it expires), **responsibility boundary** (whose capability AI amplifies and who remains accountable for judgment), **authorization boundary** (actions of different risk require different gates), and **measurement boundary** (value is measured by verified outcomes, not by invocation volume). It then enters through small-scale, falsifiable pilots and turns the boundaries into a testable system (illustrated here with the author's minimal coding-agent harness).
 
-This paper does not claim that this set of boundaries has already produced widespread gains. It only offers a set of questions to "think through before putting them into an organization," and shifts the discussion from "which agent is stronger" to "have we defined the boundaries well."
+This study does not claim that this set of boundaries has already produced widespread gains. It only offers a set of questions to "think through before putting them into an organization," and shifts the discussion from "which agent is stronger" to "have we defined the boundaries well."
 
-**Main contributions.** The contribution of this paper lies not in proposing new models or data, but in providing four kinds of actionable organizational boundaries, each paired with a checkable judgment:
+**Main contributions.** The contribution of this study lies not in proposing new models or data, but in providing four kinds of actionable organizational boundaries, each paired with a checkable judgment:
 
 1. **Context boundary**: Knowledge must be able to answer six questions—"applicable tasks, maintainer, update, expiration, access, and precedence in conflicts." Minimal necessary context is both a security principle and a quality principle.
 2. **Responsibility boundary**: Cross-domain delivery expands scope, not responsibility; key judgments about data models, security, performance, availability, and so on must still be concluded by an accountable role.
 3. **Authorization boundary**: Actions are divided by risk into four levels—suggestion / draft / restricted execution / high-impact execution—each with minimum controls, rather than a single uniform "human-in-the-loop" rule.
 4. **Measurement boundary**: Metrics are separated into three categories—task outcomes, engineering quality, and organizational cost; invocation volume and generation volume serve only as diagnostic signals.
 
-In addition, this paper provides a falsifiable pilot protocol and turns the boundaries into a minimal coding-agent harness with contract tests, as a demonstration that "boundaries can become a system."
+In addition, this study provides a falsifiable pilot protocol and turns the boundaries into a minimal coding-agent harness with contract tests, as a demonstration that "boundaries can become a system."
 
 **Keywords:** AI-assisted software engineering; engineering organization; context; responsibility; authorization; measurement; pilot
 
@@ -49,7 +49,7 @@ But real engineering work depends on shared codebases, business rules, release c
 
 Public research supports the same judgment: model capability cannot be discussed in isolation from its interface, context, and execution environment—SWE-agent emphasizes how the Agent-Computer Interface changes usable capability [1], and SWE-bench advances the task from "generating code" to "completing changes under real repository constraints" [2]. Therefore, the difficulty for an engineering organization lies not in the model, but in making these things bounded, accountable, and verifiable.
 
-The question of this paper is not "Can AI help us write code?" but rather: **Before bringing AI into an engineering organization, which boundaries should we define first?** Below, based on the author's experience driving this work in a real team, we give four kinds of boundaries and one way to put them into practice.
+The question of this study is not "Can AI help us write code?" but rather: **Before bringing AI into an engineering organization, which boundaries should we define first?** Below, based on the author's experience driving this work in a real team, we give four kinds of boundaries and one way to put them into practice.
 
 ## 2. Framework Background: The Relationship Between the Three-Layer Structure and the Four Boundaries
 
@@ -144,11 +144,11 @@ flowchart TD
 
 The key design is: **writes do not go directly to disk**—they first produce a staged diff that is applied only after human approval; every call leaves an append-only event trail that can be re-examined and recovered. It does not claim to be a complete platform, only to demonstrate that boundaries such as "authorization, audit, recovery" can be put into practice with contract tests—unauthorized writes are rejected, nothing executes before approval, and paths cannot escape the workspace. [8]
 
-For an organization, its significance is not this one tool, but this: **common capability can first be built as a testable vertical slice and then extended, rather than committing up front to a full-featured platform.** Going from "boundaries" to "system boundaries" is the last layer this paper wants to emphasize.
+For an organization, its significance is not this one tool, but this: **common capability can first be built as a testable vertical slice and then extended, rather than committing up front to a full-featured platform.** Going from "boundaries" to "system boundaries" is the last layer this study wants to emphasize.
 
 ## 9. Threats to Validity and Research Boundaries
 
-First, this paper's conclusions are based on the author's experience driving this work in a real engineering organization and on a synthesis of public materials; they do not represent the internal practice of any company, team, or product, nor do they claim that this set of boundaries has already produced widespread gains—whether it is effective must be verified or falsified in a specific team using the pilot protocol (Section 7). Second, the public studies cited are all used as mechanistic evidence; specific numbers and effects should be checked against the original sources, and benchmarks and large-scale surveys in particular must not be extrapolated into the outcomes of an individual organization. Third, this paper derives organizational recommendations from "experience + public materials"; the derivation itself is a position rather than data, and needs task data, code-review records, interviews, and security audits to strengthen it. Fourth, models, agent frameworks, and protocols change quickly; the description of the MCP specification here only represents materials accessible as of 2026-08-14.
+First, this study's conclusions are based on the author's experience driving this work in a real engineering organization and on a synthesis of public materials; they do not represent the internal practice of any company, team, or product, nor do they claim that this set of boundaries has already produced widespread gains—whether it is effective must be verified or falsified in a specific team using the pilot protocol (Section 7). Second, the public studies cited are all used as mechanistic evidence; specific numbers and effects should be checked against the original sources, and benchmarks and large-scale surveys in particular must not be extrapolated into the outcomes of an individual organization. Third, this study derives organizational recommendations from "experience + public materials"; the derivation itself is a position rather than data, and needs task data, code-review records, interviews, and security audits to strengthen it. Fourth, models, agent frameworks, and protocols change quickly; the description of the MCP specification here only represents materials accessible as of 2026-08-14.
 
 It is a set of questions to "think through before putting them into an organization," not a platform blueprint and not a procurement ranking. The final question left to the reader is not "which agent is stronger," but: **Is the context trustworthy and authorized for use? Are actions appropriately authorized? Are outcomes genuinely verified? Can failures be located and recovered from?**
 
@@ -157,7 +157,7 @@ It is a set of questions to "think through before putting them into an organizat
 1. Yang, J. et al. (2024). [SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering](https://arxiv.org/abs/2405.15793). NeurIPS 2024.
 2. Jimenez, C. E. et al. (2024). [SWE-bench: Can Language Models Resolve Real-World GitHub Issues?](https://arxiv.org/abs/2310.06770). ICLR 2024.
 3. Model Context Protocol. [Specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28/). This version changes the protocol core to be stateless.
-4. DORA (2025). [The Impact of Generative AI in Software Development](https://dora.dev/ai/gen-ai-report/report/). Large-scale survey; this paper borrows only its conclusion structure, not unverified numbers.
+4. DORA (2025). [The Impact of Generative AI in Software Development](https://dora.dev/ai/gen-ai-report/report/). Large-scale survey; this study borrows only its conclusion structure, not unverified numbers.
 5. [Is Agent Code Less Maintainable Than Human Code?](https://arxiv.org/abs/2606.21804) (2026). Mechanistic evidence used to show that "passing tests" is not the same as "long-term maintainability."
 6. [vexp-swe-bench: Open benchmark for AI coding agents](https://github.com/Vexp-ai/vexp-swe-bench) (2026). An open benchmark that reports resolution rate, cost, and unique wins side by side.
 7. Google Research (2025). [Deeper insights into retrieval augmented generation: The role of sufficient context](https://research.google/blog/deeper-insights-into-retrieval-augmented-generation-the-role-of-sufficient-context/).
@@ -169,7 +169,7 @@ It is a set of questions to "think through before putting them into an organizat
 
 **Conflict of interest:** The author declares no conflict of interest. This research received no funding from any commercial organization; the public projects, industry reports, and coverage cited are used only as methodological or directional references.
 
-**Data availability:** This is a position paper and does not report new experimental data from the author's team or organizational performance data. The public research, open benchmarks (SWE-bench, vexp-swe-bench), and large-scale surveys (DORA 2025) cited are used as mechanistic evidence; specific numbers and effects should be checked against the original sources. The author's minimal coding-agent harness implementation can be found at [Coding Agent Harness Study](https://github.com/Liyuk/claude-code-harness-study); its capability/approval, sandboxed execution, and event trail serve as a reproducible reference.
+**Data availability:** This is a position write-up and does not report new experimental data from the author's team or organizational performance data. The public research, open benchmarks (SWE-bench, vexp-swe-bench), and large-scale surveys (DORA 2025) cited are used as mechanistic evidence; specific numbers and effects should be checked against the original sources. The author's minimal coding-agent harness implementation can be found at [Coding Agent Harness Study](https://github.com/Liyuk/claude-code-harness-study); its capability/approval, sandboxed execution, and event trail serve as a reproducible reference.
 
 ## Glossary
 

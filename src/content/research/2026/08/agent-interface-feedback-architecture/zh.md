@@ -4,20 +4,20 @@ description: "从 ChatLab 的实际设计出发，记录如何借用人和人协
 createdAt: 2026-08-18
 publishedAt: 2026-08-19
 version: '0.2'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 locale: zh-CN
 translationStatus: original
 translationKey: 2026/08/agent-interface-feedback-architecture
 draft: false
 tags: [hci, agent, feedback, observability, recoverability, authorization, human-ai-collaboration, systems-design]
-column: { slug: engineering-ai-judgment, order: 7 }
+column: { slug: agent-collaboration-research, order: 2 }
 primaryQuery: "AI Agent 交互设计"
 searchIntent: howto
 relatedQueries: ["Agent 运行状态反馈", "Agent 结果确认", "Agent 失败重试设计", "人机协作 界面设计"]
 ---
 
-> **版本：v0.2（preprint）。** 这篇文章是一篇项目驱动的概念架构与设计研究，整理 ChatLab、Coding Agent Harness Study 与 CanonLoom 的设计经验，提出一套待验证的反馈架构，并报告后续实验协议；目前不报告用户实验数据或结果。
+> **版本：v0.2（工作稿）。** 这篇文章是一篇项目驱动的概念架构与设计研究，整理 ChatLab、Coding Agent Harness Study 与 CanonLoom 的设计经验，提出一套待验证的反馈架构，并报告后续实验协议；目前不报告用户实验数据或结果。
 
 ## 摘要
 

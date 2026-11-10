@@ -43,6 +43,20 @@ const entryType = (entry: CollectionEntry<'writing'> | CollectionEntry<'consulti
   articleTitle={column?.label}
   itemList={chapters.map((entry) => ({ name: entry.data.title, url: entryUrl(entry, locale) }))}
 >
-  <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{column?.label}</h1><p>{column?.description}</p></section>
-  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')}>{chapters.length > 0 ? <ol>{chapters.map((entry) => <li><span>{copy.chapterCount(entry.data.column!.order)} · {entryType(entry)} · {ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span><h2><a href={columnEntryUrl(entry, locale)}>{entry.data.title}</a></h2><time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time><p>{entry.data.description}</p></li>)}</ol> : <p class="about-cooperate-desc">{copy.empty}</p>}</section>
+  <section class="page-heading shell"><h1>{column?.label}</h1><p>{column?.description}</p></section>
+  <section class="shell column-chapters archive-list" aria-label={copy.chaptersAria(column?.label ?? '')} data-read-label={ui.column.read}>
+    {chapters.length > 0 ? (
+      <ol>
+        {chapters.map((entry) => (
+          <li data-read-path={entryUrl(entry, locale)}>
+            <span class="thread-node" aria-hidden="true"></span>
+            <h2><a href={columnEntryUrl(entry, locale)} data-read-note>{entry.data.title}</a></h2>
+            <span class="chapter-meta">{copy.chapterCount(entry.data.column!.order)} · {entryType(entry)} · {ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span>
+            <time datetime={isoDate(publishedDate(entry))}>{chapterDates(entry)}</time>
+            <p>{entry.data.description}</p>
+          </li>
+        ))}
+      </ol>
+    ) : <p class="about-cooperate-desc">{copy.empty}</p>}
+  </section>
 </BaseLayout>

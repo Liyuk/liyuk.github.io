@@ -5,7 +5,7 @@ description: 基于 70 城官方二手指数（2019-2026，90 个月无缺口）
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.2'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [housing, forecasting, time-series, explainability, china]
@@ -14,7 +14,7 @@ searchIntent: data
 relatedQueries: ["二手房价格预测", "房价什么时候见底", "北京房价预测", "2026 房价走势"]
 ---
 
-**版本：** 0.2（preprint）
+**版本：** 0.2（工作稿）
 **日期：** 2026-08-15
 
 ## 摘要
@@ -191,7 +191,7 @@ $$
 
 [6] Glaeser, E., & Nathanson, C. (2017). An Extrapolative Model of House Price Dynamics. *Journal of Financial Economics*, 126(1). https://www.nber.org/papers/w21037
 
-[7] 作者. (2026a). 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）. preprint, v0.4.
+[7] 作者. (2026a). 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）. 工作稿，v0.4.
 
 [8] Piazzesi, M., & Schneider, M. (2009). Momentum Traders in the Housing Market: Survey Evidence and a Search Model. *American Economic Review*, 99(2), 406–411. https://benny.aeaweb.org/articles?id=10.1257/aer.99.2.406
 

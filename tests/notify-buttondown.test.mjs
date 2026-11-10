@@ -176,14 +176,19 @@ test('buildEmailHtml follows the site visual language', () => {
       meta: '约 1 分钟阅读 · 2026年8月25日',
     }],
   });
-  assert.match(html, /background:#f7f4ee/);
+  assert.match(html, /background:#f8f9f8/);
   assert.match(html, /charset="UTF-8"/);
-  assert.match(html, /color:#35685d/);
-  assert.match(html, /Iowan Old Style/);
-  assert.match(html, /border-top:1px solid #ddd8ce/);
+  assert.match(html, /color:#0f7b5f/);
+  assert.match(html, /PingFang SC/);
+  assert.doesNotMatch(html, /Iowan Old Style|text-transform:uppercase|letter-spacing:\.1em/);
+  assert.match(html, /border-top:1px solid #e4e5e3/);
   assert.match(html, /<table role="presentation"/);
-  assert.match(html, /bgcolor="#35685d" style="padding:12px 20px;border-radius:4px;"/);
-  assert.match(html, /display:block;border-radius:4px;background-color:#35685d;color:#fff/);
+  // Section divider: accent line + hollow node (border-radius circle), no SVG.
+  assert.match(html, /border-top:1px solid #0f7b5f/);
+  assert.match(html, /width:5px;height:5px;border:1px solid #0f7b5f;border-radius:50%;background-color:#f8f9f8/);
+  assert.doesNotMatch(html, /<svg/);
+  assert.match(html, /bgcolor="#0f7b5f" style="padding:11px 18px;border-radius:6px;"/);
+  assert.match(html, /display:block;border-radius:6px;background-color:#0f7b5f;color:#fff/);
   assert.match(html, /阅读全文 · Read more/);
   assert.doesNotMatch(html, /#1456F0|border-radius:8px/);
 });
@@ -245,10 +250,13 @@ test('publish batches include every article and both available languages in one 
   assert.match(html, /Third Article/);
   assert.match(html, /本次汇总了 3 篇新文章/);
   assert.match(html, /href="https:\/\/liyuk\.com\/en\/writing\/2026\/10\/article-three\/"/);
-  assert.equal(html.match(/<table role="presentation"/g)?.length, 4);
+  // One button per language block, one node divider per article.
+  assert.equal(html.match(/bgcolor="#0f7b5f"/g)?.length, 4);
+  assert.equal(html.match(/border-radius:50%/g)?.length, 3);
   assert.match(html, /中文阅读 ↗/);
   assert.match(html, /Read in English ↗/);
-  assert.match(html, /bgcolor="#35685d"/);
+  assert.match(html, /bgcolor="#0f7b5f"/);
+  assert.match(html, /01 \/ 03/);
 });
 
 test('a newly published article includes an already-published sibling language', () => {

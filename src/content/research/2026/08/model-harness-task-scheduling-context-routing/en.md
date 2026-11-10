@@ -1,30 +1,30 @@
 ---
 title: 'Decompose First, Then Schedule: A Review of Multi-Model Task Decomposition, Capability Switching, and Subtask Routing'
-seoTitle: "Multi-Model Task Decomposition and Subtask Routing"
 description: "Task decomposition, subtask capability classification, model selection, and bounded fallback: the Agent scheduling problem reduced to dsh-quota-router."
+seoTitle: "Multi-Model Task Decomposition and Subtask Routing"
 createdAt: 2026-08-19
 publishedAt: 2026-08-19
 version: '0.6'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/model-harness-task-scheduling-context-routing
 draft: false
 tags: [ai, agent-systems, engineering, architecture, planning, observability, measurement, systems]
-column: { slug: engineering-ai-judgment, order: 6 }
+column: { slug: agent-collaboration-research, order: 1 }
 primaryQuery: "multi-model routing"
 searchIntent: essay
 relatedQueries: ["LLM task decomposition", "agent subtask routing", "LLM fallback strategy", "model selection for agents"]
 ---
 
-> **Version: 0.6 (preprint).** This is an engineering theory and design review, not a report of a controlled user experiment. It distinguishes a complete theoretical Agent scheduler from the engineering boundary of `dsh-quota-router`: the Planner decomposes work, quota-router selects a model for an already-defined subtask and performs bounded fallback, and the upper layer handles context regression, acceptance, and replanning. Context compression is treated as a related boundary and will be developed separately.
+> **Version: 0.6 (working paper).** This is an engineering theory and design review, not a report of a controlled user experiment. It distinguishes a complete theoretical Agent scheduler from the engineering boundary of `dsh-quota-router`: the Planner decomposes work, quota-router selects a model for an already-defined subtask and performs bounded fallback, and the upper layer handles context regression, acceptance, and replanning. Context compression is treated as a related boundary and will be developed separately.
 
 ## Abstract
 
 When an Agent task combines research, coding, writing, and review, the central scheduling question is not always which model should handle the next turn. It may be whether the task was decomposed at the beginning into subtasks with clear boundaries, acceptance conditions, and handoff contracts. Once a subtask exists, model switching should not be an ordinary per-turn optimization; it should primarily serve controlled retry and fallback.
 
-This paper proposes a layered working hypothesis: **the Planner decomposes the task into subtasks; the model router selects an execution model from the subtask's task class, complexity, precision requirement, and available model set; a subtask normally keeps a stable model lease; and an upper-layer acceptance component decides whether the result is acceptable or requires review or replanning.** Benchmarks should form a task-class—capability-tier—candidate-model—fallback policy offline rather than running inside every request. At the same time, recent Agent-routing work is expanding toward trajectory-aware and step-level dynamic routing. “Stable” therefore means a default lease boundary under a contract, not a ban on structured escalation or dynamic switching.
+This study proposes a layered working hypothesis: **the Planner decomposes the task into subtasks; the model router selects an execution model from the subtask's task class, complexity, precision requirement, and available model set; a subtask normally keeps a stable model lease; and an upper-layer acceptance component decides whether the result is acceptable or requires review or replanning.** Benchmarks should form a task-class—capability-tier—candidate-model—fallback policy offline rather than running inside every request. At the same time, recent Agent-routing work is expanding toward trajectory-aware and step-level dynamic routing. “Stable” therefore means a default lease boundary under a contract, not a ban on structured escalation or dynamic switching.
 
 The complete theory still involves task decomposition, context regression, multiple Harnesses, and quality acceptance, but these responsibilities do not all belong inside `dsh-quota-router`. The engineering slice is:
 
@@ -45,7 +45,7 @@ The central claim is therefore not that a router should plan everything. It is t
 
 This is an engineering theory and design review. It does not report a new controlled user experiment, model leaderboard, or production gain. Its material comes from public work on task planning, Agent orchestration, model routing, and context; the local engineering and test boundary of `dsh-quota-router`; and falsifiable engineering hypotheses about multi-model execution.
 
-The paper separates three kinds of evidence:
+The study separates three kinds of evidence:
 
 | Evidence    | Can support                                                     | Cannot support                                     |
 | ----------- | --------------------------------------------------------------- | -------------------------------------------------- |
@@ -53,7 +53,7 @@ The paper separates three kinds of evidence:
 | Design      | A boundary can be represented by interfaces, state, and events  | Users will necessarily be faster or happier        |
 | Behavioral  | A difference was observed under defined experimental conditions | Generalization from one team to every organization |
 
-The paper therefore uses “propose,” “suggest,” “testable,” and “may reduce.” Diagrams, formulas, and local implementation details are not presented as experimental results. The formulas describe constraints and cost structures rather than fitted empirical equations; the research-model diagrams are proposed mechanisms, not causal estimates.
+The study therefore uses “propose,” “suggest,” “testable,” and “may reduce.” Diagrams, formulas, and local implementation details are not presented as experimental results. The formulas describe constraints and cost structures rather than fitted empirical equations; the research-model diagrams are proposed mechanisms, not causal estimates.
 
 ### 0.1 Contributions and non-contributions
 
@@ -63,7 +63,7 @@ The contributions are:
 2. Assigning Planner quality, classification errors, semantic failures, over-decomposition, and capability drift to their proper system layers instead of pushing them all into quota-router;
 3. Proposing benchmark and telemetry designs that distinguish routing gains, infrastructure recovery, and semantic quality.
 
-This paper does not contribute a new model, routing-learning algorithm, context-compression algorithm, or cross-Harness state-transfer protocol. It does not claim to have proved that a fixed model is better than a dynamic model. The testable claim is: **when subtask boundaries, acceptance conditions, and structured handoff information are clear, does plan-first plus subtask-stable routing produce lower context-migration cost and rework than per-turn switching?**
+This study does not contribute a new model, routing-learning algorithm, context-compression algorithm, or cross-Harness state-transfer protocol. It does not claim to have proved that a fixed model is better than a dynamic model. The testable claim is: **when subtask boundaries, acceptance conditions, and structured handoff information are clear, does plan-first plus subtask-stable routing produce lower context-migration cost and rework than per-turn switching?**
 
 ## 1. Research question: does scheduling happen too late?
 
@@ -96,7 +96,7 @@ The first belongs to the Planner or orchestration layer; the second is quota-rou
 
 ### 1.2 Core proposition
 
-The paper addresses seven related questions: whether decomposition should precede dispatch; whether switching should be restricted after dispatch; how models differ from Harnesses; where context compression belongs; how a scheduler can demonstrate benefit; which compression state must cross this boundary; and whether quota-router is a request router, task scheduler, or policy layer between the two.
+The study addresses seven related questions: whether decomposition should precede dispatch; whether switching should be restricted after dispatch; how models differ from Harnesses; where context compression belongs; how a scheduler can demonstrate benefit; which compression state must cross this boundary; and whether quota-router is a request router, task scheduler, or policy layer between the two.
 
 The provisional answer is:
 
@@ -585,7 +585,7 @@ Prompt text, full reasoning, and complete tool traces should not be recorded by 
 
 ## 11. Falsifiable hypotheses and experiment design
 
-The paper proposes, rather than proves, the following hypotheses:
+The study proposes, rather than proves, the following hypotheses:
 
 - **H1:** For medium and long tasks, planned subtasks with stable model leases have fewer normal switches and less rework than per-turn routing.
 - **H2:** Task class, complexity, and precision form a more stable policy than per-turn keyword matching.

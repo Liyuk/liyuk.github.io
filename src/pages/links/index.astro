@@ -22,10 +22,10 @@ const guestbookUrl = getRelativeLocaleUrl(locale, '/about/') + '#guestbook';
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription} seoPage="links">
-  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="page-heading shell"><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
 
   <section class="shell section links-friends" aria-labelledby="links-friends-heading">
-    <p class="eyebrow">{copy.friendsEyebrow}</p>
+    
     <h2 id="links-friends-heading">{copy.friendsTitle}</h2>
     <div class="friends-grid">
       {friends.map((friend) => (
@@ -42,7 +42,7 @@ const guestbookUrl = getRelativeLocaleUrl(locale, '/about/') + '#guestbook';
   </section>
 
   <section class="shell section links-apply" aria-labelledby="links-apply-heading">
-    <p class="eyebrow">{copy.applyEyebrow}</p>
+    
     <h2 id="links-apply-heading">{copy.applyTitle}</h2>
     <p class="links-apply-desc">{copy.applyDesc}</p>
     <ul class="links-apply-rules">

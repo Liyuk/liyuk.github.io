@@ -2,6 +2,7 @@
 // 文章左侧悬浮目录（飞书/Notion 风格）。
 // 桌面：粘性悬浮在正文左侧；移动端：折叠成「目录」按钮点击展开。
 // 含 scroll-spy：滚动时高亮当前章节对应的链接。
+// 目录是一条竖线、每个标题一个节点：当前章节实心，之前的章节标记为已读过，兼作阅读进度。
 import { i18n } from '../i18n/index.mjs';
 
 interface TocHeading {
@@ -18,7 +19,7 @@ const items = headings.filter((heading) => heading.depth >= 2 && heading.depth <
 
 <div class="toc-wrap">
   <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="article-toc">
-    {toc.label}<span aria-hidden="true">▾</span>
+    {toc.label}<span aria-hidden="true">↓</span>
   </button>
   <nav class="article-toc" id="article-toc" aria-label={toc.aria} data-pagefind-ignore>
     <strong>{toc.label}</strong>
@@ -51,32 +52,20 @@ const items = headings.filter((heading) => heading.depth >= 2 && heading.depth <
     .map((link) => document.getElementById((link.getAttribute('href') ?? '').replace(/^#/, '')))
     .filter((el): el is HTMLElement => el != null);
 
-  // 宽屏下：目录初始 absolute 跟随正文顶部（与第一段同高），滚动到正文第一段
-  // 高于阈值后切为 fixed 悬浮，滚回顶部时恢复 absolute。
-  // 用媒体查询判断是否处于「宽屏悬浮形态」——不能用 computed position，因为它会
-  // 随 fixed 切换而变化（一旦 fixed 就永远无法切回 absolute）。
-  const prose = document.querySelector('.article-body > .prose');
-  const wideQuery = matchMedia('(min-width: 1380px)');
-  const updateFixed = () => {
-    if (!nav || !prose) return;
-    if (!wideQuery.matches) { nav.classList.remove('is-fixed'); return; } // 折叠形态
-    // 阈值必须与 CSS 里 .article-toc.is-fixed 的 top: 6rem（96px）一致，否则
-    // 切换瞬间目录会在 80px 与 96px 之间跳变 16px，产生抖动。
-    const threshold = 96;
-    const firstParagraphTop = prose.getBoundingClientRect().top;
-    nav.classList.toggle('is-fixed', firstParagraphTop <= threshold);
-  };
-
   if (targets.length > 0) {
     let activeId = '';
     const setActive = (id: string) => {
       if (id === activeId) return;
       activeId = id;
-      links.forEach((link) => {
-        const on = link.getAttribute('href') === `#${id}`;
+      const activeIndex = links.findIndex((link) => link.getAttribute('href') === `#${id}`);
+      links.forEach((link, index) => {
+        const on = index === activeIndex;
         link.classList.toggle('is-active', on);
         if (on) link.setAttribute('aria-current', 'true');
         else link.removeAttribute('aria-current');
+        // The rail's nodes: active filled, earlier sections passed (reading progress).
+        link.parentElement?.classList.toggle('is-active', on);
+        link.parentElement?.classList.toggle('is-passed', index < activeIndex);
       });
     };
 
@@ -93,7 +82,6 @@ const items = headings.filter((heading) => heading.depth >= 2 && heading.depth <
         currentId = targets[targets.length - 1].id;
       }
       setActive(currentId);
-      updateFixed();
     };
 
     let ticking = false;
@@ -102,8 +90,6 @@ const items = headings.filter((heading) => heading.depth >= 2 && heading.depth <
       ticking = true;
       requestAnimationFrame(() => { compute(); ticking = false; });
     }, { passive: true });
-    // 跨断点（窗口缩放）时也重算一次，避免宽→窄后残留 is-fixed。
-    wideQuery.addEventListener?.('change', updateFixed);
     compute(); // 初始状态
   }
 </script>

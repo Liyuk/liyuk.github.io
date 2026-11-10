@@ -1,30 +1,30 @@
 ---
 title: "Making an Agent a Collaborable Object: State, Feedback, and Result Confirmation"
-seoTitle: "Agent Interface Design: State, Feedback, and Confirmation"
 description: "An HCI design observation from ChatLab: borrowing presence, response, waiting, and delivery cues from human collaboration to make Agent states easier to read."
+seoTitle: "Agent Interface Design: State, Feedback, and Confirmation"
 createdAt: 2026-08-18
 publishedAt: 2026-08-19
 version: '0.2'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/agent-interface-feedback-architecture
 draft: false
 tags: [hci, agent, feedback, observability, recoverability, authorization, human-ai-collaboration, systems-design]
-column: { slug: engineering-ai-judgment, order: 7 }
+column: { slug: agent-collaboration-research, order: 2 }
 primaryQuery: "AI agent UX design"
 searchIntent: howto
 relatedQueries: ["agent status feedback design", "human-in-the-loop agent interface", "agent result confirmation", "agent failure recovery UX"]
 ---
 
-> **Version: 0.2 (preprint).** This is a project-driven conceptual architecture and design study. It organizes design experience from ChatLab, Coding Agent Harness Study, and CanonLoom, proposes a feedback architecture to be tested, and reports a follow-up experimental protocol; it does not report user-experiment data or results.
+> **Version: 0.2 (working paper).** This is a project-driven conceptual architecture and design study. It organizes design experience from ChatLab, Coding Agent Harness Study, and CanonLoom, proposes a feedback architecture to be tested, and reports a follow-up experimental protocol; it does not report user-experiment data or results.
 
 ## Abstract
 
 When I built ChatLab, I first used unread state, processing state, and read position to answer simple questions: is it still alive, where did I stop, and do I need to come back now? I later found that state cues were not enough. Users also need to know why an Agent acted, which results have evidence, which actions require approval, and whether work can continue after failure.
 
-This paper therefore treats an Agent interface as a control surface rather than merely a chat transcript. A task contract defines the goal, state expresses progress, evidence explains grounds, authorization limits possible actions, and checkpoints determine where to continue after an error. Staged diffs, permission checks, and path-escape tests in Coding Agent Harness, together with the separation between candidate and formal states in CanonLoom, are two concrete references for this idea.
+This study therefore treats an Agent interface as a control surface rather than merely a chat transcript. A task contract defines the goal, state expresses progress, evidence explains grounds, authorization limits possible actions, and checkpoints determine where to continue after an error. Staged diffs, permission checks, and path-escape tests in Coding Agent Harness, together with the separation between candidate and formal states in CanonLoom, are two concrete references for this idea.
 
 This is neither a systematic review nor a user study. It abstracts engineering slices from several projects into a feedback architecture that can be discussed, implemented, and ablated. These materials show only that the relevant boundaries can be designed and partly implemented; they do not show that users become faster, safer, or more satisfied. Follow-up work must validate error-localization time, pre-approval execution rate, recovery success, and user burden.
 
@@ -32,7 +32,7 @@ This is neither a systematic review nor a user study. It abstracts engineering s
 
 ## 1. The problem: a chat transcript is not a control surface
 
-Another paper in this research series examines the human experience after delegation: how execution pressure falls, how calm and delegability form, and whether emotional experience changes acceptance and takeover. This paper moves one step earlier: if that calm is to come from interaction that is understandable, actionable, and recoverable rather than from black-box smoothness, what must an Agent interface and runtime protocol express?
+Another study in this research series examines the human experience after delegation: how execution pressure falls, how calm and delegability form, and whether emotional experience changes acceptance and takeover. This study moves one step earlier: if that calm is to come from interaction that is understandable, actionable, and recoverable rather than from black-box smoothness, what must an Agent interface and runtime protocol express?
 
 ### 1.1 From answering questions to running tasks
 
@@ -521,7 +521,7 @@ A good Agent interface neither forces people to watch forever nor removes them f
 
 **Competing interests:** The author declares no competing interests. This research received no commercial funding.
 
-**Data availability:** This paper contains no new user-experiment data or results. ChatLab, Coding Agent Harness Study, and CanonLoom provide engineering and design evidence; this paper reports a reproducible evaluation plan, but user effects, long-term use, and cross-task recovery still require later experiments and logs.
+**Data availability:** This study contains no new user-experiment data or results. ChatLab, Coding Agent Harness Study, and CanonLoom provide engineering and design evidence; this study reports a reproducible evaluation plan, but user effects, long-term use, and cross-task recovery still require later experiments and logs.
 
 ## Glossary
 

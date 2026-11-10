@@ -5,19 +5,21 @@ import { i18n } from '../i18n/index.mjs';
 import { readingMinutes } from '../lib/reading-time.ts';
 import { publishedDate } from '../lib/timeline.ts';
 
-const { entry, collection, action, label, locale: localeProp } = Astro.props;
+const { entry, collection, label, locale: localeProp } = Astro.props;
 const locale = localeProp ?? entry.data.locale ?? Astro.currentLocale ?? 'zh-CN';
 const ui = i18n(locale);
 const published = publishedDate(entry);
 const date = formatFullDate(published, locale);
-const meta = collection === 'research' ? `${entry.data.status} · ${entry.data.version}` : collection === 'gallery' ? ui.count.photos(entry.data.images.length) : entry.data.status;
+const meta = collection === 'research' ? `${ui.page.researchDetail.status[entry.data.status as keyof typeof ui.page.researchDetail.status] ?? entry.data.status} · ${entry.data.version}` : collection === 'gallery' ? ui.count.photos(entry.data.images.length) : ui.page.home.projects.status[entry.data.status as keyof typeof ui.page.home.projects.status] ?? entry.data.status;
 const href = collection === 'gallery' ? galleryUrl(entry.data.slug, locale) : contentUrl(collection, entry.id, locale);
 ---
 
-<article class="entry-card">
-  <div class="entry-meta"><span>{label} · {meta}</span><time datetime={isoDate(published)}>{ui.entry.publishedAt} {date}</time></div>
-  <h2><a href={href}>{entry.data.title}</a></h2>
-  <p>{entry.data.description}</p>
-  {entry.data.column && <p class="entry-reading">{ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</p>}
-  <a class="text-link" href={href}>{action} <span aria-hidden="true">↗</span></a>
+<article class="entry-card row-entry">
+  <time class="row-date mono" datetime={isoDate(published)}>{ui.entry.publishedAt} {date}</time>
+  <div class="row-body">
+    <h2><a class="row-link" href={href}>{entry.data.title}</a></h2>
+    <p>{entry.data.description}</p>
+    <p class="entry-type">{label} · {collection === 'project' && <span class:list={['status-line', { 'is-archived': entry.data.status === 'archived' }]} aria-hidden="true"></span>}{meta}</p>
+  </div>
+  <span class="row-aside mono entry-reading">{collection !== 'gallery' ? ui.entry.readingMinutes(readingMinutes(entry.body, locale)) : ''}</span>
 </article>

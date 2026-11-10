@@ -43,6 +43,6 @@ const resolvedDescription = description ?? fitSampleTitles((titles) => archiveCo
 ---
 
 <BaseLayout title={metaTitle} description={resolvedDescription}>
-  <section class="page-heading shell"><p class="eyebrow">{resolvedEyebrow}</p><h1>{title}</h1><p>{resolvedDescription}</p></section>
+  <section class="page-heading shell"><h1>{title}</h1><p>{resolvedDescription}</p></section>
   <section class="shell entry-list archive-list">{entries.map((entry) => <ContentEntryCard entry={entry} collection={collection} label={label} action={action} locale={locale} />)}</section>
 </BaseLayout>

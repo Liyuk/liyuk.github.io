@@ -1,6 +1,6 @@
 # Category guide: `research`
 
-`research` entries are papers and research notes — the collection's schema (`src/content.config.ts`) requires a `version`, a `status` (`preprint` / `published` / `in-progress`), and at least one of `repositoryUrl` / `paperUrl`. This is the site's highest evidentiary bar: readers arriving here are evaluating claims, not just reading a perspective, so the standard is stricter than `writing`.
+`research` entries are papers and research notes — the collection's schema (`src/content.config.ts`) requires a `version`, a `status` (`working-paper` / `in-progress` / `published`; entries are the author's own unreviewed working papers, so `published` is reserved for work actually published elsewhere), and at least one of `repositoryUrl` / `paperUrl`. This is the site's highest evidentiary bar: readers arriving here are evaluating claims, not just reading a perspective, so the standard is stricter than `writing`.
 
 ## Evidentiary standard
 

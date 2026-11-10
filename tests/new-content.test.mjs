@@ -131,9 +131,9 @@ test('buildPostFrontmatter produces legal writing (strict) frontmatter', () => {
 test('buildPostFrontmatter emits research required fields', () => {
   const fm = buildPostFrontmatter('research', {
     title: 'R', description: 'D', createdAt: '2026-08-15', draft: true, tags: [],
-    version: '0.1', status: 'preprint', repositoryUrl: 'https://github.com/x/y', paperUrl: 'https://github.com/x/y',
+    version: '0.1', status: 'working-paper', repositoryUrl: 'https://github.com/x/y', paperUrl: 'https://github.com/x/y',
   });
-  assert.equal(fm.status, 'preprint');
+  assert.equal(fm.status, 'working-paper');
   assert.equal(fm.version, '0.1');
   assert.equal(fm.repositoryUrl, 'https://github.com/x/y');
   assert.ok(!('publishedAt' in fm));

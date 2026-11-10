@@ -50,9 +50,8 @@ export const site = {
   description: 'Liyuk 关于技术、领导力与日常的现场笔记。',
   descriptionEn: 'Field notes from Liyuk on technology, leadership, and everyday life.',
   navigation: [
-    { href: '/start/', key: 'start' },
-    { href: '/writing/', key: 'writing' },
     { href: '/columns/', key: 'columns' },
+    { href: '/writing/', key: 'writing' },
     { href: '/projects/', key: 'projects' },
     { href: '/research/', key: 'research' },
     { href: '/consulting/', key: 'consulting' },

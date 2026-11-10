@@ -324,8 +324,12 @@ export const columns: Record<string, { label: { 'zh-CN': string; en: string }; d
     description: { 'zh-CN': '从给 Google 爬虫优化到给 AI 引擎优化：一条可观测、可工程的搜索引擎增长线。', en: 'From optimizing for Google crawlers to optimizing for AI engines: an observable, engineerable growth line.' },
   },
   'engineering-ai-judgment': {
-    label: { 'zh-CN': '工程与 AI 判断', en: 'Engineering & AI Judgment' },
-    description: { 'zh-CN': '从问题定位方法到数据度量协议、AI 工程边界、组织重划与 Agent 协作设计——一组研究论文记录的技术与组织判断路径。', en: 'From a problem-framing method to measurement protocols, AI engineering boundaries, org redesign, and agent collaboration — a research thread on technical and organizational judgment.' },
+    label: { 'zh-CN': 'AI 与工程组织', en: 'AI and Engineering Organizations' },
+    description: { 'zh-CN': 'AI 进入工程组织之后：先划能力边界，再看生产力反馈系统、局部提速为什么不等于系统价值，以及职能线与业务线如何重新划分。', en: 'What changes when AI enters an engineering organization: capability boundaries, productivity as a feedback system, why local speedups are not system value, and how functional and business lines get redrawn.' },
+  },
+  'agent-collaboration-research': {
+    label: { 'zh-CN': 'Agent 协作研究', en: 'Agent Collaboration Research' },
+    description: { 'zh-CN': '把 Agent 当作可以协作的对象：多模型任务怎样拆解和调度，状态与反馈怎样设计，以及把执行交出去之后人的信任与压力如何变化。', en: 'Treating agents as collaborators: how multi-model work is decomposed and routed, how state and feedback are designed, and how trust and pressure change once people hand execution over.' },
   },
 };
 
@@ -358,6 +362,7 @@ export const startGroups: { key: 'method' | 'management' | 'engineering'; column
       'product-judgment',
       'search-engine-growth',
       'engineering-ai-judgment',
+      'agent-collaboration-research',
     ],
   },
 ];

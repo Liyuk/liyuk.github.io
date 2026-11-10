@@ -3,24 +3,28 @@ import type { CollectionEntry } from 'astro:content';
 import { contentUrl } from '../lib/content-paths.ts';
 import { formatFullDate, isoDate } from '../lib/format-dates.ts';
 import { publishedDate, lastUpdatedDate } from '../lib/timeline.ts';
+import { readingMinutes } from '../lib/reading-time.ts';
 import { i18n } from '../i18n/index.mjs';
+import TagList from './TagList.astro';
 
 interface Props {
   entry: CollectionEntry<'writing' | 'project' | 'research'>;
   locale: string;
+  indexableTags?: string[];
 }
-const { entry, locale } = Astro.props;
+const { entry, locale, indexableTags = [] } = Astro.props;
 const ui = i18n(locale);
 const project = entry.collection === 'project';
 const date = project ? lastUpdatedDate(entry) : publishedDate(entry);
 const label = project && entry.data.updatedAt ? ui.entry.updatedAt : ui.entry.publishedAt;
 ---
 
-<article class:list={['entry-card', 'home-entry', { 'home-project-entry': project }]}>
-  <div class="entry-meta">
-    <time datetime={isoDate(date)}>{label} {formatFullDate(date, locale)}</time>
-    {entry.collection === 'project' && <span>{ui.page.home.projects.status[entry.data.status]}</span>}
+<article class:list={['entry-card', 'home-entry', 'row-entry', { 'home-project-entry': project }]}>
+  <time class="row-date mono" datetime={isoDate(date)} title={`${label} ${formatFullDate(date, locale)}`}>{isoDate(date)}</time>
+  <div class="row-body">
+    <h3><a class="row-link" href={contentUrl(entry.collection, entry.id, locale)}>{entry.data.title}</a></h3>
+    <p>{entry.data.description}</p>
+    <TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} max={3} class="row-tags" />
   </div>
-  <h3><a href={contentUrl(entry.collection, entry.id, locale)}>{entry.data.title}</a></h3>
-  <p>{entry.data.description}</p>
+  <span class="row-aside mono">{project ? <><span class:list={['status-line', { 'is-archived': entry.data.status === 'archived' }]} aria-hidden="true"></span>{ui.page.home.projects.status[entry.data.status]}</> : ui.entry.readingMinutes(readingMinutes(entry.body, locale))}</span>
 </article>

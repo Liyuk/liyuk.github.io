@@ -3,7 +3,7 @@
 // 纯视觉、无交互（aria-hidden），只在长文详情页引入（写作/研究/项目）。
 // 用 transform:scaleX 而非改 width，走合成层，滚动时无 layout 抖动。
 ---
-<div class="reading-progress" aria-hidden="true"><div class="reading-progress-bar"></div></div>
+<div class="reading-progress" aria-hidden="true" data-read-track><div class="reading-progress-bar"></div></div>
 
 <script>
   const bar = document.querySelector<HTMLElement>('.reading-progress-bar');

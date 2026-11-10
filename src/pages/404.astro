@@ -10,8 +10,15 @@ const en = i18n('en').page.notFound;
 ---
 <BaseLayout title={zh.metaTitle} description={zh.metaDescription} noindex canonical={false}>
   <section class="page-heading shell" id="not-found">
-    <p class="eyebrow">404</p>
     <h1 id="not-found-title">{zh.title}</h1>
+    <div class="not-found-path">
+      <svg class="broken-thread" viewBox="0 0 168 12" aria-hidden="true" focusable="false">
+        <path d="M0 6 H78" />
+        <path d="M104 6 H158" />
+        <circle cx="161.5" cy="6" r="3" />
+      </svg>
+      <p id="not-found-path">{zh.pathEnds}</p>
+    </div>
     <a id="not-found-home" class="text-link" href="/"><span id="not-found-home-label">{zh.returnHome}</span> <span aria-hidden="true">↗</span></a>
   </section>
 </BaseLayout>
@@ -27,6 +34,8 @@ const en = i18n('en').page.notFound;
   const home = document.querySelector('#not-found-home');
   const label = document.querySelector('#not-found-home-label');
   if (title) title.textContent = copy.title;
+  const pathEnds = document.querySelector('#not-found-path');
+  if (pathEnds) pathEnds.textContent = copy.pathEnds;
   if (label) label.textContent = copy.returnHome;
   if (home) home.setAttribute('href', isEn ? '/en/' : '/');
 </script>

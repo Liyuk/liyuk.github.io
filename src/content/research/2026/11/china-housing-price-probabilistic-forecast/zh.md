@@ -4,7 +4,7 @@ description: 基于 2011—2026 年 70 城二手住宅价格指数，比较多�
 createdAt: 2026-11-05
 updatedAt: 2026-11-06
 version: '0.3'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-probabilistic-housing-price-forecast.md
 locale: zh-CN
@@ -30,7 +30,7 @@ searchIntent: data
 relatedQueries: ["70 城房价 预测", "二手房价格 概率预测", "房价预测 回测", "房价 长期预测"]
 ---
 
-**版本：** 0.3（预印本）
+**版本：** 0.3（工作稿）
 
 **研究数据截至：** 2026-09；本文的结果是截至该时点数据的回测与情景，不随页面自动更新。
 
@@ -48,7 +48,7 @@ relatedQueries: ["70 城房价 预测", "二手房价格 概率预测", "房价�
 
 家庭和研究者关心未来房价，但单个长期数值无法说明预测误差有多大。本文研究的问题是：仅用历史价格指数构造的预测，在不同期限上能否改善价格不变的朴素基准，以及预测区间的历史覆盖情况如何。研究对象是城市二手住宅价格指数的累计变化。
 
-本文组合多个基础模型，并根据已实现的历史误差构造区间；全局模型也使用新建住宅指数的近期变化作为特征。各预测期限分别报告误差、方向和覆盖率。作者先前的五年预测论文作为比较对象；本文先介绍本研究的数据、方法与结果，再讨论该方法的实现错误及两种方法的差异。回测设计与结果解释见 §6.1。
+本文组合多个基础模型，并根据已实现的历史误差构造区间；全局模型也使用新建住宅指数的近期变化作为特征。各预测期限分别报告误差、方向和覆盖率。作者先前的五年预测研究作为比较对象；本文先介绍本研究的数据、方法与结果，再讨论该方法的实现错误及两种方法的差异。回测设计与结果解释见 §6.1。
 
 ## 2. 相关工作
 
@@ -288,11 +288,11 @@ v0.2 的五年基准 −22.1% 位于修正前账本的五年区间（−24.3% ~ 
 
 ## 5. 与既有方法的比较和更正
 
-对照对象是作者此前的 [v0.2 五年预测论文](https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-five-year-housing-price-forecast.md)。下列计算方法和结果见仓库中的 [审计脚本](https://github.com/Liyuk/cn-housing-price-training/blob/main/scripts/paper_algorithm_audit.py) 与 [审计记录](https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/review-forecast-paper-algorithm-2026-11.md)。
+对照对象是作者此前的 [v0.2 五年预测研究](https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-five-year-housing-price-forecast.md)。下列计算方法和结果见仓库中的 [审计脚本](https://github.com/Liyuk/cn-housing-price-training/blob/main/scripts/paper_algorithm_audit.py) 与 [审计记录](https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/review-forecast-paper-algorithm-2026-11.md)。
 
 ### 5.1 复现
 
-在 v0.2 的数据（2019-01 至 2026-06，90 个月）上，v0.2 的所有数字完整复现：全国权重 1/0/0，北京 0.25/0.50/0.25；ρ = 0.958 与 0.695；五年基准 −22.1%（−33.5%~−10.6%）与 −4.6%（−9.0%~−0.1%）；论文 §3.2 的权重敏感性表 12 行全部一致。
+在 v0.2 的数据（2019-01 至 2026-06，90 个月）上，v0.2 的所有数字完整复现：全国权重 1/0/0，北京 0.25/0.50/0.25；ρ = 0.958 与 0.695；五年基准 −22.1%（−33.5%~−10.6%）与 −4.6%（−9.0%~−0.1%）；该研究 §3.2 的权重敏感性表 12 行全部一致。
 
 ### 5.2 一处实现错误
 
@@ -414,9 +414,9 @@ python scripts/acceptance.py --full
 
 [13] Wu, J., Deng, Y., & Liu, H. (2014). House Price Index Construction in the Nascent Housing Market: The Case of China. *Journal of Real Estate Finance and Economics*, 48(3), 522–545. https://doi.org/10.1007/s11146-013-9416-1
 
-[14] 作者. (2026a). 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）. preprint, v0.4.
+[14] 作者. (2026a). 可测量与不可测量：中国房价数据的一种来源—口径感知构建方法（以北京为区级案例）. 工作稿，v0.4.
 
-[15] 作者. (2026b). 未来五年中国二手住宅价格：一种可解释组合预测方法及其驻底分析（2026—2030）. preprint, v0.2.
+[15] 作者. (2026b). 未来五年中国二手住宅价格：一种可解释组合预测方法及其驻底分析（2026—2030）. 工作稿，v0.2.
 
 **引用核对说明。** [3][4][5][7][10] 的转述已对照 NBER 页面上的摘要；[6][8][9][12][13] 与 [1] 经 Crossref / arXiv 核实存在与书目信息，**其内容未逐篇核对**，本文只依其标题与公认的结论引用（阻尼趋势、M4、全局模型、预测组合、中国指数构建、基础模型）；[11] 只核实存在，本文不依赖其具体结论。
 
@@ -428,4 +428,4 @@ python scripts/acceptance.py --full
 
 **数据与代码可用性：** 采集、清洗、建模、回测与验收代码见 GitHub 仓库；复现仍需核对具体提交、依赖与模型资源（[cn-housing-price-training](https://github.com/Liyuk/cn-housing-price-training)）。处理后的数据与预测分位数可在站点“数据与方法”页下载。
 
-**关于本文的撰写：** 回测数字来自下方公开的修正后结果及原仓库的 v0.2 审计结果；论文与代码由作者在 AI 辅助下完成，作者对其内容负责。
+**关于本文的撰写：** 回测数字来自下方公开的修正后结果及原仓库的 v0.2 审计结果；本研究与代码由作者在 AI 辅助下完成，作者对其内容负责。

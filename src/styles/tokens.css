@@ -1,14 +1,33 @@
 :root {
   color-scheme: light;
-  --paper: #f7f4ee;
-  --paper-strong: #efeae1;
-  --ink: #232522;
-  --muted: #60625e;
-  --line: #ddd8ce;
-  --accent: #35685d;
-  --accent-soft: #dcebe5;
-  --serif: "Iowan Old Style", "Baskerville", "Noto Serif SC", "Songti SC", serif;
-  --sans: Inter, "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --paper: #f8f9f8;
+  --paper-strong: #f2f2f1;
+  --paper-deep: #e8e8e6;
+  --ink: #1b211e;
+  --body: #262c29; /* running text: a step softer than headings */
+  --muted: #5b605d;
+  --faint: #8b908d; /* decoration / large text only */
+  --line: #e4e5e3;
+  --line-strong: #cfd1ce;
+  --accent: #0f7b5f;
+  --accent-strong: #0a5f49;
+  --accent-soft: #e3f1ec;
+  --band: #edf4f0;
+  --band-line: #d5e5dc;
+  --cad-0: #e1e8e4;
+  --cad-1: #b5dccb;
+  --cad-2: #6fbf9f;
+  --cad-3: #2f9a76;
+  --cad-4: #0f7b5f;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Segoe UI", "Microsoft YaHei", sans-serif;
+  --serif: var(--sans);
+  /* Display serif for the big titles only (home, page, article, gallery):
+     the publication voice. Body, navigation and panels stay sans. */
+  --display: "Iowan Old Style", "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
   --shell-w: 1180px;
   --wide-w: 1280px;
   --article-w: 860px;
@@ -20,31 +39,58 @@
   --icon-size-md: 1.2rem;
   --icon-size-lg: 1.5rem;
   --control-size: 2.75rem;
-  --shadow-rgb: 27, 38, 33;
+  --shadow-rgb: 17, 19, 18;
+  /* Thread-and-node motif: lines are paths/relations, nodes are entries. */
+  --thread-w: 1.25px;
+  --node-size: 7px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     color-scheme: dark;
-    --paper: #1d211e;
-    --paper-strong: #282d29;
-    --ink: #eeece5;
-    --muted: #b9b9b0;
-    --line: #414740;
-    --accent: #9acbbb;
-    --accent-soft: #28443d;
-    --shadow-rgb: 3, 6, 5;
+    --paper: #121614;
+    --paper-strong: #1a1f1c;
+    --paper-deep: #232a26;
+    --ink: #e4e8e5;
+    --body: #d2d8d4;
+    --muted: #a0a8a3;
+    --faint: #7b827e;
+    --line: #262d29;
+    --line-strong: #353d38;
+    --accent: #34c79a;
+    --accent-strong: #5fd8b1;
+    --accent-soft: #12382c;
+    --band: #13211b;
+    --band-line: #22352c;
+    --cad-0: #1d2621;
+    --cad-1: #1d4a3a;
+    --cad-2: #23735a;
+    --cad-3: #2ea37f;
+    --cad-4: #4fd0a6;
+    --shadow-rgb: 0, 0, 0;
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --paper: #1d211e;
-  --paper-strong: #282d29;
-  --ink: #eeece5;
-  --muted: #b9b9b0;
-  --line: #414740;
-  --accent: #9acbbb;
-  --accent-soft: #28443d;
-  --shadow-rgb: 3, 6, 5;
+  --paper: #121614;
+  --paper-strong: #1a1f1c;
+  --paper-deep: #232a26;
+  --ink: #e4e8e5;
+    --body: #d2d8d4;
+  --muted: #a0a8a3;
+  --faint: #7b827e;
+  --line: #262d29;
+  --line-strong: #353d38;
+  --accent: #34c79a;
+  --accent-strong: #5fd8b1;
+  --accent-soft: #12382c;
+    --band: #13211b;
+    --band-line: #22352c;
+    --cad-0: #1d2621;
+    --cad-1: #1d4a3a;
+    --cad-2: #23735a;
+    --cad-3: #2ea37f;
+    --cad-4: #4fd0a6;
+  --shadow-rgb: 0, 0, 0;
 }

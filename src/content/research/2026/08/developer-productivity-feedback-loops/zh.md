@@ -1,22 +1,22 @@
 ---
 title: 开发者生产力不是工具目录，而是一个反馈系统
-description: 一篇研究综述与立场论文：把工程生产力定义为持续缩短的"提出改变—获得可信反馈—安全修正"回路，并给出度量、默认路径与可证伪的试点协议。
+description: 一篇研究综述与立场稿：把工程生产力定义为持续缩短的"提出改变—获得可信反馈—安全修正"回路，并给出度量、默认路径与可证伪的试点协议。
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [developer-productivity, platform-engineering, feedback-loops, software-engineering, technology]
-column: { slug: engineering-ai-judgment, order: 3 }
+column: { slug: engineering-ai-judgment, order: 2 }
 primaryQuery: "研发效能 度量"
 searchIntent: essay
 relatedQueries: ["开发者生产力", "工程效能 反馈回路", "AI 编程 研发效率", "DORA 指标"]
 ---
 
-**版本：** 0.1（preprint）
+**版本：** 0.1（工作稿）
 **日期：** 2026-08-14
-**类型：** 研究综述与立场论文（research synthesis / position paper）
+**类型：** 研究综述与立场稿（research synthesis / position paper）
 
 ## 摘要
 
@@ -145,7 +145,7 @@ flowchart LR
 5. Google (2025). [AI in software engineering at Google: Progress and the path ahead](https://research.google/blog/ai-in-software-engineering-at-google-progress-and-the-path-ahead/). 关于把 AI 能力嵌入开发工作流、以线上反馈迭代的公开复盘。
 6. DORA (2026). [DORA ROI of AI-assisted Software Development](https://cloud.google.com/resources/content/dora-roi-of-ai-assisted-software-development). 2026 年度报告；提供"AI 是放大器"在 ROI 上的展开、价值实现 J 曲线与"验证税"概念，可作为机制证据。
 7. DX (2026). [2026 DX Benchmarks](https://getdx.com/blog/2026-dx-benchmarks-are-now-available/). 行业量化基准；提供"AI 生成代码占比上升而开发者体验指数持平、审查吞吐下滑"的横截面观察。
-8. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹论文。
+8. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹研究。
 
 ## 作者信息与声明
 
@@ -153,7 +153,7 @@ flowchart LR
 
 **利益冲突：** 作者声明无利益冲突。本研究未受任何商业机构资助；文中引用的公开项目、行业报告与报道均仅作方法或方向参考。
 
-**数据可用性：** 本文是综述与立场论文，不报告新的模型实验或组织绩效数据。文中引用的量化来源为第三方公开数据：DORA 2025/2026 报告与 DX 2026 行业基准提供规模化观察（如"AI 生成代码占比上升而开发者体验指数持平"），其具体数字应回到原始出处核验；本文中的 CI 耗时（如"从 30 分钟降到 10 分钟"）为示意数字，用于说明测量对象，不代表任何组织的实测值。
+**数据可用性：** 本文是综述与立场研究稿，不报告新的模型实验或组织绩效数据。文中引用的量化来源为第三方公开数据：DORA 2025/2026 报告与 DX 2026 行业基准提供规模化观察（如"AI 生成代码占比上升而开发者体验指数持平"），其具体数字应回到原始出处核验；本文中的 CI 耗时（如"从 30 分钟降到 10 分钟"）为示意数字，用于说明测量对象，不代表任何组织的实测值。
 
 ## 术语表
 
