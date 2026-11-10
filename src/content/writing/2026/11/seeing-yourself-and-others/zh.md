@@ -1,20 +1,17 @@
 ---
+translationStatus: original
 title: 《后会友期》的看见与珍惜
 seoTitle: "看完《后会友期》：看见与珍惜"
 description: 《后会友期》为什么火，我从里面看到了什么：人和人相处常常只看得见自己，要互相看见，也要把话说出口。再写写最近看日落、做饭、养猫的日子，和为什么珍惜是最重要的东西。
 locale: zh-CN
 createdAt: 2026-11-09
 publishedAt: 2026-11-09
-draft: true
+draft: false
 type: essay
 tags: [reflection, relationships, everyday-life, self-reflection, writing]
 primaryQuery: "一个人如何理解另一个人"
 searchIntent: essay
-relatedQueries:
-  - "后会友期 节目 感想"
-  - "人和人相处为什么只能看见自己"
-  - "如何理解他人的动机和困境"
-  - "珍惜日常生活感受"
+relatedQueries: ["后会友期 节目 感想", "人和人相处为什么只能看见自己", "如何理解他人的动机和困境", "珍惜日常生活感受"]
 ---
 
 最近两周自媒体《后会友期》推得比较多，所以我也看了一些。看节目只是日常里的一小部分，但看得比较有感触，所以想写一写 AI 之外的人类情感，也想记录一下自己是如何珍惜当下这些生活和感受的。

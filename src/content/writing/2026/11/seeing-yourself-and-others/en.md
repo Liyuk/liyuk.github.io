@@ -5,18 +5,14 @@ description: "Why did *I Miss You* resonate with so many people, and what did I 
 locale: en
 createdAt: 2026-11-09
 publishedAt: 2026-11-09
-draft: true
+draft: false
 type: essay
 tags: [reflection, relationships, everyday-life, self-reflection, writing]
-translationStatus: draft
+translationStatus: reviewed
 translationKey: 2026/11/seeing-yourself-and-others
 primaryQuery: "how to understand another person"
 searchIntent: essay
-relatedQueries:
-  - "I Miss You Chinese friendship show review"
-  - "why people see only themselves in relationships"
-  - "how to understand another person's motives and struggles"
-  - "how to appreciate everyday life"
+relatedQueries: ["I Miss You Chinese friendship show review", "why people see only themselves in relationships", "how to understand another person's motives and struggles", "how to appreciate everyday life"]
 ---
 
 The social-media show *I Miss You* has been appearing in my feed a lot over the past two weeks, so I watched some of it. Watching a show takes up only a small part of an ordinary day, but this one stayed with me. I wanted to write about human feelings beyond AI, and to record how I have been learning to cherish the life and feelings I have now.
