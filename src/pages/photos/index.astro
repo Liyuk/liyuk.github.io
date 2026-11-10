@@ -20,7 +20,7 @@ const hasMore = galleries.length > PHOTOS_PER_BATCH;
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription} pageKind="collection" section="photos" seoPage="photos">
-  <section class="page-heading shell"><p class="eyebrow">{copy.label}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="page-heading shell experience"><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   {galleries.length > 0 ? (
     <section class="shell gallery-masonry" aria-label={copy.label} data-photos-masonry>
       {galleries.map((gallery, index) => {

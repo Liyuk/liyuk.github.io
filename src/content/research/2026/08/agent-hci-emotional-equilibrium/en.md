@@ -4,17 +4,17 @@ description: "Based on long-task use, this paper examines how an Agent can adapt
 createdAt: 2026-08-17
 publishedAt: 2026-08-19
 version: '0.3'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/agent-hci-emotional-equilibrium
 draft: false
 tags: [hci, agent, agency, emotion, trust-calibration, cognitive-offloading, deskilling, observability]
-column: { slug: engineering-ai-judgment, order: 8 }
+column: { slug: agent-collaboration-research, order: 3 }
 ---
 
-> **Version: 0.3 (preprint).** This is a project-driven conceptual framework and design study. The material comes from related theory, my Agent use records, and existing design materials; it reports design principles and implementable experimental protocols, not user-experiment data or results.
+> **Version: 0.3 (working paper).** This is a project-driven conceptual framework and design study. The material comes from related theory, my Agent use records, and existing design materials; it reports design principles and implementable experimental protocols, not user-experiment data or results.
 
 ## Abstract
 

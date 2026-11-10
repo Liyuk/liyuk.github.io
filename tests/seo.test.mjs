@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { contentKeywords, getPageSeo } from '../src/lib/seo.ts';
 
 test('every indexable global page has localized SEO description and keywords', () => {
-  const pages = ['home', 'writing', 'projects', 'research', 'photos', 'about', 'consulting', 'links', 'start', 'columns', 'tags'];
+  const pages = ['home', 'writing', 'projects', 'research', 'photos', 'about', 'consulting', 'links', 'columns', 'tags'];
 
   for (const locale of ['zh-CN', 'en']) {
     for (const page of pages) {

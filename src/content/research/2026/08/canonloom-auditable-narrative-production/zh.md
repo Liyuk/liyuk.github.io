@@ -4,7 +4,7 @@ description: 一篇系统设计论文：将长篇小说协作建模为可恢复�
 createdAt: 2026-08-03
 publishedAt: 2026-08-03
 version: CanonLoom 0.2.0
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/canonloom
 paperUrl: https://github.com/Liyuk/canonloom/blob/main/docs/paper-0.2.0/paper.md
 tags: [human-ai-collaboration, agent-systems, narrative, auditability, technology]

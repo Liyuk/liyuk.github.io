@@ -83,24 +83,52 @@ function stripInlineMarkdown(text = '') {
 // wrapped around every email by Buttondown. The unsubscribe footer is also
 // added automatically by Buttondown, so this function only produces the
 // article content itself.
+// Email palette mirrors src/styles/tokens.css (light theme). Email clients
+// cannot read CSS variables, so the values are repeated here; keep the two in
+// step when the site palette changes.
+export const EMAIL_PALETTE = {
+  paper: '#f8f9f8',
+  ink: '#1b211e',
+  body: '#262c29',
+  muted: '#5b605d',
+  faint: '#8b908d',
+  line: '#e4e5e3',
+  accent: '#0f7b5f',
+};
+const EMAIL_SANS = "-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Noto Sans SC','Segoe UI','Microsoft YaHei',Arial,sans-serif";
+const EMAIL_MONO = "'SF Mono',Menlo,Consolas,monospace";
+
 export function buildEmailHtml({ blocks = null, articles = null }) {
+  const c = EMAIL_PALETTE;
   const renderButton = (url, label) => {
     const absoluteUrl = new URL(url, SITE_ORIGIN).href;
-    return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tbody><tr><td align="left" bgcolor="#35685d" style="padding:12px 20px;border-radius:4px;"><a href="${esc(absoluteUrl)}" style="display:block;border-radius:4px;background-color:#35685d;color:#fff;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none;">${esc(label)}</a></td></tr></tbody></table>`;
+    return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tbody><tr><td align="left" bgcolor="${c.accent}" style="padding:11px 18px;border-radius:6px;"><a href="${esc(absoluteUrl)}" style="display:block;border-radius:6px;background-color:${c.accent};color:#fff;font-size:14px;font-weight:600;line-height:1.4;text-decoration:none;">${esc(label)}</a></td></tr></tbody></table>`;
   };
+
+  // Section divider in the site's thread-and-node motif: a short accent line,
+  // a hollow node, then the hairline. Email-safe: a presentation table with
+  // borders and border-radius (no SVG); clients without border-radius show a
+  // small square node, which still reads.
+  const divider = (gap = 22, top = 0) =>
+    `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:${top}px 0 ${gap}px;border-collapse:collapse;"><tbody><tr>` +
+    `<td width="24" style="width:24px;padding:0;vertical-align:middle;"><div style="height:0;border-top:1px solid ${c.accent};font-size:0;line-height:0;">&nbsp;</div></td>` +
+    `<td width="7" style="width:7px;padding:0;vertical-align:middle;"><div style="width:5px;height:5px;border:1px solid ${c.accent};border-radius:50%;background-color:${c.paper};font-size:0;line-height:0;">&nbsp;</div></td>` +
+    `<td style="padding:0;vertical-align:middle;"><div style="height:0;border-top:1px solid ${c.line};font-size:0;line-height:0;">&nbsp;</div></td>` +
+    `</tr></tbody></table>`;
 
   const renderBlock = ({ lang, title, summary, url, meta }) => {
     const safeTitle = esc(title);
     const langLabel = lang === 'zh' ? '中文 · Chinese' : 'English';
     const metaLine = meta
-      ? `<p style="margin:0 0 18px;font-size:13px;line-height:1.5;color:#696a65;">${esc(meta)}</p>`
+      ? `<p style="margin:0 0 18px;font-family:${EMAIL_MONO};font-size:12px;line-height:1.5;color:${c.muted};">${esc(meta)}</p>`
       : '';
     return [
-      `<div style="border-top:1px solid #ddd8ce;padding-top:24px;">`,
-      `<p style="margin:0 0 10px;font-size:12px;line-height:1.3;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#35685d;">${langLabel}</p>`,
-      `<h1 style="margin:0 0 14px;font-family:'Iowan Old Style','Baskerville','Noto Serif SC','Songti SC',Georgia,serif;font-size:28px;font-weight:500;letter-spacing:-.035em;line-height:1.15;color:#232522;">${safeTitle}</h1>`,
+      divider(24),
+      `<div>`,
+      `<p style="margin:0 0 10px;font-size:13px;line-height:1.3;font-weight:600;color:${c.muted};">${langLabel}</p>`,
+      `<h1 style="margin:0 0 12px;font-family:${EMAIL_SANS};font-size:26px;font-weight:650;letter-spacing:-.01em;line-height:1.25;color:${c.ink};">${safeTitle}</h1>`,
       metaLine,
-      `<p style="max-width:520px;margin:0 0 22px;font-size:16px;line-height:1.7;color:#696a65;">${esc(summary)}</p>`,
+      `<p style="max-width:520px;margin:0 0 22px;font-size:16px;line-height:1.7;color:${c.body};">${esc(summary)}</p>`,
       renderButton(url, '阅读全文 · Read more ↗'),
       `</div>`,
     ].join('');
@@ -118,18 +146,19 @@ export function buildEmailHtml({ blocks = null, articles = null }) {
               const label = lang === 'zh' ? '中文阅读 ↗' : 'Read in English ↗';
               return [
                 `<div style="margin:0 0 16px;">`,
-                `<p style="margin:0 0 6px;font-size:13px;line-height:1.5;color:#696a65;">${lang === 'zh' ? '中文' : 'English'} · ${esc(languageTitle)}</p>`,
-                `<p style="margin:0 0 6px;font-size:14px;line-height:1.6;color:#696a65;">${esc(summary)}</p>`,
-                meta ? `<p style="margin:0 0 8px;font-size:12px;line-height:1.5;color:#8a8b85;">${esc(meta)}</p>` : '',
+                `<p style="margin:0 0 6px;font-size:13px;line-height:1.5;font-weight:600;color:${c.muted};">${lang === 'zh' ? '中文' : 'English'} · ${esc(languageTitle)}</p>`,
+                `<p style="margin:0 0 6px;font-size:14px;line-height:1.6;color:${c.body};">${esc(summary)}</p>`,
+                meta ? `<p style="margin:0 0 8px;font-family:${EMAIL_MONO};font-size:12px;line-height:1.5;color:${c.muted};">${esc(meta)}</p>` : '',
                 renderButton(url, label),
                 `</div>`,
               ].join('');
             })
             .join('');
           return [
-            `<section style="border-top:1px solid #ddd8ce;padding-top:22px;margin-top:8px;">`,
-            `<p style="margin:0 0 8px;font-size:11px;line-height:1.3;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#35685d;">ARTICLE ${index + 1}</p>`,
-            `<h2 style="margin:0 0 16px;font-family:'Iowan Old Style','Baskerville','Noto Serif SC','Songti SC',Georgia,serif;font-size:22px;font-weight:500;letter-spacing:-.025em;line-height:1.2;color:#232522;">${articleTitle}</h2>`,
+            divider(22, 8),
+            `<section>`,
+            `<p style="margin:0 0 8px;font-family:${EMAIL_MONO};font-size:12px;line-height:1.3;color:${c.muted};">${String(index + 1).padStart(2, '0')} / ${String(articles.length).padStart(2, '0')}</p>`,
+            `<h2 style="margin:0 0 16px;font-family:${EMAIL_SANS};font-size:21px;font-weight:650;letter-spacing:-.01em;line-height:1.3;color:${c.ink};">${articleTitle}</h2>`,
             languageLinks,
             `</section>`,
           ].join('');
@@ -138,16 +167,16 @@ export function buildEmailHtml({ blocks = null, articles = null }) {
     : (articles?.[0]?.blocks ?? blocks ?? []).map(renderBlock).join('');
 
   const intro = digest
-    ? `<p style="margin:0 0 24px;font-size:15px;line-height:1.65;color:#696a65;">本次汇总了 ${articles.length} 篇新文章。 · This issue collects ${articles.length} newly published articles.</p>`
+    ? `<p style="margin:0 0 24px;font-size:15px;line-height:1.65;color:${c.body};">本次汇总了 ${articles.length} 篇新文章。 · This issue collects ${articles.length} newly published articles.</p>`
     : '';
 
   return [
-    `<!doctype html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f7f4ee;font-family:Inter,'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif;color:#232522;">`,
+    `<!doctype html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:${c.paper};font-family:${EMAIL_SANS};color:${c.body};">`,
     `<div style="max-width:600px;margin:0 auto;padding:40px 24px 32px;">`,
-    `<div style="padding:0 0 24px;"><p style="margin:0;color:#232522;font-size:12px;font-weight:700;letter-spacing:.08em;">LIYUK <span style="color:#35685d;">/</span> FIELD NOTES</p></div>`,
+    `<div style="padding:0 0 24px;"><p style="margin:0;color:${c.ink};font-size:15px;font-weight:650;">沉默土豆<span style="color:${c.accent};">.</span> <span style="color:${c.muted};font-weight:400;font-size:13px;">Liyuk</span></p></div>`,
     intro,
     sections,
-    `<div style="border-top:1px solid #ddd8ce;margin-top:8px;padding-top:18px;"><p style="margin:0;color:#696a65;font-size:12px;line-height:1.6;">沉默土豆的烹饪指南 · Silent Potato’s Cookbook</p></div>`,
+    `<div style="border-top:1px solid ${c.line};margin-top:8px;padding-top:18px;"><p style="margin:0;color:${c.muted};font-size:12px;line-height:1.6;">沉默土豆的烹饪指南 · Silent Potato’s Cookbook</p></div>`,
     `</div></body></html>`,
   ].join('');
 }

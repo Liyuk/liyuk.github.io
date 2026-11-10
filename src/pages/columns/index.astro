@@ -1,19 +1,68 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { columns, getColumn, getColumnEntries } from '../../lib/taxonomy.ts';
+import { getColumn, getColumnEntries, startGroups } from '../../lib/taxonomy.ts';
 import { getColumnCollections } from '../../lib/content-query.ts';
-import { columnUrl } from '../../lib/content-paths.ts';
+import { columnUrl, entryUrl } from '../../lib/content-paths.ts';
 import { i18n } from '../../i18n/index.mjs';
 
+// The columns index is also the site's "start here" page: one place that lists
+// every reading path, grouped by the reader's problem (taxonomy startGroups).
+// The former /start/ route redirects here (public/_redirects).
 const locale = Astro.currentLocale ?? 'zh-CN';
-const copy = i18n(locale).page.columns;
 const ui = i18n(locale);
+const copy = ui.page.columns;
+const start = ui.page.start;
 const { writing, consulting, research, galleries } = await getColumnCollections(locale, import.meta.env.DEV);
 const entries = [...writing, ...consulting, ...research, ...galleries];
-const availableColumns = Object.keys(columns).map((slug) => ({ ...columns[slug], slug, count: getColumnEntries(entries, slug).length })).filter(({ count }) => count > 0);
+
+const groups = startGroups
+  .map((group) => ({
+    key: group.key,
+    head: start.groups[group.key],
+    columns: group.columns.flatMap((slug) => {
+      const column = getColumn(slug, locale);
+      const members = getColumnEntries(entries, slug);
+      const count = members.length;
+      return column && count > 0 ? [{ ...column, url: columnUrl(slug, locale), count, paths: members.map((entry) => entryUrl(entry, locale)) }] : [];
+    }),
+  }))
+  .filter((group) => group.columns.length > 0);
+
+const anchorUrl = getRelativeLocaleUrl(locale, start.anchor.url);
+const moreWays = start.moreWays.items.map((item) => ({ ...item, url: getRelativeLocaleUrl(locale, item.url) }));
 ---
 
 <BaseLayout noindex={import.meta.env.DEV} title={`${copy.eyebrow} — ${ui.brand}`} description={copy.description} pageKind="collection" section="columns" seoPage="columns">
-  <section class="page-heading shell"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
-  <section class="shell taxonomy-section archive-list"><div class="column-grid">{availableColumns.map(({ slug, count }) => { const column = getColumn(slug, locale); return <a href={columnUrl(slug, locale)}><span>{copy.seriesLabel}</span><strong>{column?.label}</strong><p>{column?.description}</p><em>{copy.count(count)}</em></a>; })}</div></section>
+  <section class="page-heading shell"><h1>{start.title[0]}<br />{start.title[1]}</h1><p>{start.description}</p></section>
+
+  <div class="shell start-groups">
+    <div class="start-intro">
+      <p class="start-anchor"><span class="start-anchor-eyebrow">{start.anchor.eyebrow}</span><a href={anchorUrl}>{start.anchor.title} <span aria-hidden="true">→</span></a></p>
+      <p class="start-howto-copy">{start.howToRead}</p>
+    </div>
+
+    {groups.map((group) => (
+      <section class="start-group" id={group.key}>
+        <div class="start-group-head"><h2>{group.head.title}</h2><p>{group.head.description}</p></div>
+        <div class="start-group-list">
+          {group.columns.map((column) => (
+            <a class="start-path" href={column.url}>
+              <strong>{column.label}</strong>
+              <p>{column.description}</p>
+              <span class="path-thread" aria-hidden="true">{column.paths.map((readPath) => <span class="thread-node" data-read-path={readPath}></span>)}</span>
+              <em>{copy.count(column.count)}</em>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <nav class="start-moreways" aria-label={start.moreWays.label}>
+      <span class="start-moreways-label">{start.moreWays.label}</span>
+      {moreWays.map((item) => (
+        <a href={item.url}>{item.label}<em>{item.desc}</em></a>
+      ))}
+    </nav>
+  </div>
 </BaseLayout>

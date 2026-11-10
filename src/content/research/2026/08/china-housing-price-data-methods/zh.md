@@ -4,13 +4,13 @@ description: 基于一套已补全的中国房价数据资产（70 城官方指�
 createdAt: 2026-08-08
 publishedAt: 2026-08-08
 version: '0.4'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [data, machine-learning, housing, reproducibility, provenance]
 ---
 
-**版本：** 0.4（preprint）
+**版本：** 0.4（工作稿）
 **日期：** 2026-08-15
 
 ## 摘要

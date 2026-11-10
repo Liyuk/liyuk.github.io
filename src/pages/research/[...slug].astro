@@ -18,6 +18,7 @@ import { formatFullDate, isoDate } from '../../lib/format-dates.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate, getChronologicalNeighbors } from '../../lib/timeline.ts';
 import { contentKeywords } from '../../lib/seo.ts';
+import { readingMinutes } from '../../lib/reading-time.ts';
 
 export async function getStaticPaths() {
   const research = await getCollection('research', previewable);
@@ -50,18 +51,28 @@ const formatDate = (date: Date) => formatFullDate(date, locale);
 const BLOG_REPO_URL = 'https://github.com/Liyuk/liyuk.github.io';
 const paperUrl = entry.data.paperUrl && entry.data.paperUrl !== BLOG_REPO_URL ? entry.data.paperUrl : undefined;
 const repositoryUrl = entry.data.repositoryUrl && entry.data.repositoryUrl !== BLOG_REPO_URL ? entry.data.repositoryUrl : undefined;
+const pad2 = (n: number) => String(n).padStart(2, '0');
+const columnPosition = entry.data.column ? `${pad2(entry.data.column.order)} / ${pad2(columnEntries.length)}` : '';
+// Version as a node on a short thread. The schema holds only the current
+// version (no history), so exactly one node is drawn; an in-progress paper gets
+// a dashed tail because the line is still being extended.
+const versionLabel = /^\d/.test(entry.data.version) ? `v${entry.data.version}` : entry.data.version;
+const versionOpen = entry.data.status === 'in-progress';
 const hasOutline = headings.filter((heading) => heading.depth === 2).length >= 2;
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
+<script is:inline>
+  document.documentElement.dataset.readingContext = new URLSearchParams(window.location.search).get('context') === 'column' ? 'column' : 'chronological';
+</script>
 <BaseLayout noindex={entry.data.draft} title={`${entry.data.title} — ${ui.brand}`} description={entry.data.description} type="article" pageKind="research" section="research" articleTitle={entry.data.title} keywords={contentKeywords(entry.data.tags, locale, [entry.data.primaryQuery, ...(entry.data.relatedQueries ?? [])].filter((value): value is string => Boolean(value)))} citations={entry.data.citationUrls} publishedAt={isoDate(publishedDate(entry))} updatedAt={entry.data.updatedAt && isoDate(entry.data.updatedAt)} repositoryUrl={repositoryUrl} paperUrl={paperUrl} status={entry.data.status} version={entry.data.version}>
   <ReadingProgress />
-  <article class="article shell"><header><p class="eyebrow">{ui.navigation.research} · {entry.data.status} · {entry.data.version}</p><h1>{entry.data.title}</h1><p class="article-dek">{entry.data.description}</p><div class="article-dates"><AuthorByline locale={locale} /><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time>{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header>
+  <article class="article shell"><header><div class="article-dates"><span>{ui.navigation.research}</span><span class:list={['version-thread', { 'is-open': versionOpen }]}><span class="thread-node is-filled" aria-hidden="true"></span>{versionOpen && <span class="version-tail" aria-hidden="true"></span>}<span>{versionLabel}</span></span><span>{pageCopy.researchDetail.status[entry.data.status]}</span><time datetime={isoDate(publishedDate(entry))}>{pageCopy.researchDetail.versionDate} {formatDate(publishedDate(entry))}</time><span>{ui.entry.readingMinutes(readingMinutes(entry.body, entry.data.locale))}</span>{entry.data.column && columnIndex >= 0 && <span>{getColumn(entry.data.column.slug, locale)?.label} {columnPosition}</span>}</div><p class="article-note">{pageCopy.researchDetail.disclosure}</p><h1 lang={entry.data.locale}>{entry.data.title}</h1><p class="article-dek" lang={entry.data.locale}>{entry.data.description}</p><div class="article-links"><AuthorByline locale={locale} />{paperUrl && <a href={paperUrl}>{pageCopy.researchDetail.readPaper} ↗</a>}{repositoryUrl && <a href={repositoryUrl}>{pageCopy.researchDetail.repo} ↗</a>}</div><TagList tags={entry.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header>
   {entry.data.column && <ColumnCard entry={entry} columnSlug={entry.data.column.slug} locale={locale} allEntries={columnMembers} />}
-  <div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose"><Content /></div></div>
+  <div class="article-body">{hasOutline && <TableOfContents headings={headings} locale={locale} />}<div class="prose" lang={entry.data.locale}><Content /></div></div>
   <ShareRow locale={locale} title={entry.data.title} url={shareUrl} type="research" />
   <RssSubscribe locale={locale} />
-  {(previousResearch || nextResearch) && <nav class="post-pagination" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousResearch && <a class="prev" href={researchUrl(previousResearch.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousResearch.data.title}</span></a>}</div><div class="pagination-col">{nextResearch && <a class="next" href={researchUrl(nextResearch.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextResearch.data.title}</span></a>}</div></nav>}
-  {entry.data.column && <nav class="column-pagination" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(entry.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(entry.data.column.slug, locale)?.label ?? '')}</a>{previousColumnEntry && <a class="prev" href={columnEntryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a class="next" href={columnEntryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
+  {(previousResearch || nextResearch) && <nav class="post-pagination" data-reading-nav="chronological" aria-label={ui.postNav.prev || ui.postNav.next}><div class="pagination-col">{previousResearch && <a class="prev" href={researchUrl(previousResearch.id, locale)}><span class="nav-label">{ui.postNav.prev}</span><span class="nav-title">{previousResearch.data.title}</span></a>}</div><div class="pagination-col">{nextResearch && <a class="next" href={researchUrl(nextResearch.id, locale)}><span class="nav-label">{ui.postNav.next}</span><span class="nav-title">{nextResearch.data.title}</span></a>}</div></nav>}
+  {entry.data.column && <nav class="column-pagination" data-reading-nav="column" aria-label={ui.entry.columnChaptersAria}><a href={columnUrl(entry.data.column.slug, locale)}>{pageCopy.columnsDetail.viewDirectory(getColumn(entry.data.column.slug, locale)?.label ?? '')}</a>{previousColumnEntry && <a class="prev" href={columnEntryUrl(previousColumnEntry, locale)}>{pageCopy.columnsDetail.prev(previousColumnEntry.data.title)}</a>}{nextColumnEntry && <a class="next" href={columnEntryUrl(nextColumnEntry, locale)}>{pageCopy.columnsDetail.next(nextColumnEntry.data.title)}</a>}</nav>}
   <Comments lang={locale} />
   {relatedEntries.length > 0 && <RelatedEntries items={relatedEntries} locale={locale} />}
   </article>

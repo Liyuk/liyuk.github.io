@@ -163,5 +163,133 @@ const ogLocale = isEnglish ? 'en_US' : 'zh_CN';
     <main id="content"><slot /></main>
     <Footer locale={locale} />
     <SiteChat locale={locale} />
+    <p class="visually-hidden" id="ux-live" role="status" aria-live="polite"></p>
+    <script is:inline define:vars={{ ux: { copy: ui.ux.copy, copied: ui.ux.copied, copyCode: ui.ux.copyCode, copiedCode: ui.ux.copiedCode, copySection: ui.ux.copySection, sectionCopied: ui.ux.sectionCopied } }}>
+      (() => {
+        const live = document.getElementById('ux-live');
+        const announce = (message) => {
+          if (!live) return;
+          live.textContent = '';
+          requestAnimationFrame(() => { live.textContent = message; });
+        };
+        const copyText = async (text) => {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch {
+            const area = document.createElement('textarea');
+            area.value = text;
+            area.setAttribute('readonly', '');
+            area.style.position = 'fixed';
+            area.style.opacity = '0';
+            document.body.append(area);
+            area.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch { ok = false; }
+            area.remove();
+            return ok;
+          }
+        };
+
+        // Code blocks: wrap each fenced block and add a copy button (Mermaid renders to SVG, KaTeX is not <pre>).
+        document.querySelectorAll('.prose pre').forEach((pre) => {
+          if (pre.closest('.code-block') || pre.classList.contains('mermaid')) return;
+          const wrap = document.createElement('div');
+          wrap.className = 'code-block';
+          pre.parentNode.insertBefore(wrap, pre);
+          wrap.append(pre);
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'code-copy';
+          button.textContent = ux.copy;
+          button.setAttribute('aria-label', ux.copyCode);
+          let timer;
+          button.addEventListener('click', async () => {
+            const ok = await copyText(pre.textContent || '');
+            if (!ok) return;
+            button.textContent = ux.copied;
+            announce(ux.copiedCode);
+            clearTimeout(timer);
+            timer = setTimeout(() => { button.textContent = ux.copy; }, 1800);
+          });
+          wrap.append(button);
+        });
+
+        // Heading anchors: h2/h3 with ids get a # link that copies the section URL.
+        document.querySelectorAll('.prose h2[id], .prose h3[id]').forEach((heading) => {
+          const link = document.createElement('a');
+          link.className = 'heading-anchor';
+          link.href = `#${heading.id}`;
+          link.textContent = '#';
+          link.setAttribute('aria-label', `${ux.copySection}: ${heading.textContent}`);
+          link.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const url = `${location.origin}${location.pathname}${location.search}#${heading.id}`;
+            history.replaceState(null, '', `#${heading.id}`);
+            heading.scrollIntoView();
+            if (await copyText(url)) announce(ux.sectionCopied);
+          });
+          heading.append(link);
+        });
+
+        // Keyboard: "/" focuses search; "[" and "]" move between posts.
+        document.addEventListener('keydown', (event) => {
+          if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+          const target = event.target;
+          if (target instanceof HTMLElement && target.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"]')) return;
+          if (document.querySelector('dialog[open], [role="dialog"]:not([hidden])')) return;
+          if (event.key === '/') {
+            const input = document.getElementById('site-search');
+            if (input) {
+              event.preventDefault();
+              input.focus();
+            } else {
+              const link = document.querySelector('[data-search-link]');
+              if (link) {
+                event.preventDefault();
+                location.href = link.href;
+              }
+            }
+          } else if (event.key === '[' || event.key === ']') {
+            const cls = event.key === '[' ? 'prev' : 'next';
+            const link = [...document.querySelectorAll(`.column-pagination a.${cls}, .post-pagination a.${cls}`)].find((a) => a.offsetParent !== null);
+            if (link) location.href = link.href;
+          }
+        });
+      })();
+    </script>
+    <script>
+      // Thread-and-node reading state: fill nodes for articles read in this
+      // browser, and mark the current article read once the reader reaches
+      // ~80% of it (or the end). Only pages with a [data-read-track] marker
+      // (long-form detail pages) are recorded.
+      import { markRead, paintReadNodes } from '../lib/read-state.ts';
+
+      paintReadNodes();
+      if (document.querySelector('[data-read-track]')) {
+        let done = false;
+        let ticking = false;
+        const check = () => {
+          ticking = false;
+          if (done) return;
+          const root = document.documentElement;
+          const total = root.scrollHeight - root.clientHeight;
+          const reached = total <= 0 || window.scrollY / total >= 0.8 || window.innerHeight + window.scrollY >= root.scrollHeight - 4;
+          if (!reached) return;
+          done = true;
+          markRead(location.pathname);
+          window.removeEventListener('scroll', onScroll);
+          paintReadNodes();
+        };
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(check);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        // Short pages that do not scroll count as read after a brief look.
+        window.setTimeout(check, 4000);
+      }
+    </script>
   </body>
 </html>

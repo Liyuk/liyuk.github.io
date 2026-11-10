@@ -4,17 +4,17 @@ description: "A theoretical synthesis, conceptual model, and application framewo
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [psychology, motivation, behavior, work-leadership, management]
-column: { slug: engineering-ai-judgment, order: 9 }
+column: { slug: team-building, order: 7 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/human-motivation-situational-model
 ---
 
-**Version:** 0.1 (preprint)
+**Version:** 0.1 (working paper)
 **Date:** 2026-08-15
 **Type:** Theoretical synthesis, conceptual model, and application framework
 

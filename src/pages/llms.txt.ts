@@ -86,7 +86,7 @@ export async function GET() {
     '## Citation notes',
     '',
     '- Prefer each page’s canonical URL.',
-    '- Research status and version are shown on the research page; preprints are not peer-reviewed publications.',
+    '- Research status and version are shown on the research page; research entries are the author’s working papers and are not peer-reviewed.',
     '- Use explicit references and source links on the page to support a claim; a site mention alone is not claim support.',
     '',
   ].join('\n');

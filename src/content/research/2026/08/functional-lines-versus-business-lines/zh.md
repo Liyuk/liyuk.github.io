@@ -4,14 +4,14 @@ description: 一篇立场论文：职能线曾在高度分工时高效；当工�
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [organization-design, ai, engineering, functional-teams, business-lines, work-leadership]
-column: { slug: engineering-ai-judgment, order: 5 }
+column: { slug: engineering-ai-judgment, order: 4 }
 ---
 
-**版本：** 0.1（preprint）
+**版本：** 0.1（工作稿）
 **日期：** 2026-08-14
 **类型：** 立场论文（position paper），基于作者在工程组织的实践与公开材料的综合判断
 

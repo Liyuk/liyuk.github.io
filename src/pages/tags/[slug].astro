@@ -28,14 +28,14 @@ const hubCopy = pageCopy.tags.hub;
 ---
 
 <BaseLayout title={hub ? `${hub.title} — ${ui.name}` : pageCopy.tags.detailTitle(tag.label, ui.name)} description={hub ? hub.description : description} keywords={hub?.searchTerms ?? [tag.label]} pageKind={hub ? 'collection' : 'website'} section={hub ? 'tags' : undefined} itemList={hub?.groups.flatMap((group) => group.items.map((item) => ({ name: item.title, url: item.url })))}>
-  <section class="page-heading shell"><p class="eyebrow">{pageCopy.tags.eyebrow}</p><h1>{hub ? hub.title : `#${tag.label}`}</h1><p>{hub ? hub.intro : description}</p></section>
+  <section class="page-heading shell"><h1>{hub ? hub.title : `#${tag.label}`}</h1><p>{hub ? hub.intro : description}</p></section>
   {hub && (
     <section class="shell topic-hub" aria-labelledby="hub-reading-path">
       <h2 id="hub-reading-path">{hubCopy.readingPath}</h2>
       {hub.groups.map((group) => (
         <div class="topic-hub-group">
           <h3>{group.heading}</h3>
-          <ul>{group.items.map((item) => <li><a href={item.url}>{item.title}</a><p>{item.why}</p></li>)}</ul>
+          <ul class="thread-list">{group.items.map((item) => <li><a href={item.url}>{item.title}</a><p>{item.why}</p></li>)}</ul>
         </div>
       ))}
       {hub.faqs.length > 0 && (
@@ -47,5 +47,5 @@ const hubCopy = pageCopy.tags.hub;
       <h2 id="hub-all">{hubCopy.all(tag.label)}</h2>
     </section>
   )}
-  <section class="shell entry-list archive-list">{entries.map((entry) => entry.collection === 'writing' ? <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} /> : entry.collection === 'consulting' ? <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} urlPrefix="consulting" /> : entry.collection === 'research' ? <ContentEntryCard entry={entry} collection="research" label={cards.research.label} action={cards.research.action} locale={locale} /> : entry.collection === 'project' ? <ContentEntryCard entry={entry} collection="project" label={cards.project.label} action={cards.project.action} locale={locale} /> : <ContentEntryCard entry={entry} collection="gallery" label={cards.gallery.label} action={cards.gallery.action} locale={locale} />)}</section>
+  <section class="shell entry-list archive-list thread-list">{entries.map((entry) => entry.collection === 'writing' ? <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} /> : entry.collection === 'consulting' ? <EntryCard entry={entry} indexableTags={indexableTags} locale={locale} urlPrefix="consulting" /> : entry.collection === 'research' ? <ContentEntryCard entry={entry} collection="research" label={cards.research.label} action={cards.research.action} locale={locale} /> : entry.collection === 'project' ? <ContentEntryCard entry={entry} collection="project" label={cards.project.label} action={cards.project.action} locale={locale} /> : <ContentEntryCard entry={entry} collection="gallery" label={cards.gallery.label} action={cards.gallery.action} locale={locale} />)}</section>
 </BaseLayout>

@@ -12,7 +12,7 @@ const topics = Object.entries(topicHubs).map(([slug, hub]) => ({ url: tagUrl(slu
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription} noindex>
-  <section class="page-heading shell search-heading"><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
+  <section class="page-heading shell search-heading"><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   <section class="shell search-page" aria-labelledby="search-label">
     <label id="search-label" for="site-search">{copy.label}</label>
     <input id="site-search" type="search" maxlength="600" placeholder={copy.placeholder} autocomplete="off" />
@@ -85,7 +85,7 @@ const topics = Object.entries(topicHubs).map(([slug, hub]) => ({ url: tagUrl(slu
     topicCard.hidden = !topic;
     if (!topic) { topicCard.replaceChildren(); return; }
     const label = document.createElement('p');
-    label.className = 'eyebrow';
+    label.className = 'topic-label';
     label.textContent = topicLabel;
     const link = document.createElement('a');
     link.href = topic.url;

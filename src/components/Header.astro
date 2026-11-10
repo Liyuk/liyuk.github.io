@@ -18,7 +18,7 @@ const alternateHref = getRelativeLocaleUrl(otherLocale, rootPath);
     <Icon name="menu" size="md" />
   </button>
   <div class="utility-controls" aria-label={ui.accessibility.siteSettings}>
-    <a class="search-link" href={searchUrl(locale)}>{ui.navigation.search}</a>
+    <a class="search-link" href={searchUrl(locale)} title={ui.ux.searchHint} aria-keyshortcuts="/" data-search-link><Icon name="search" size="sm" /><span class="visually-hidden">{ui.navigation.search}</span></a>
     <a class="tags-link" href={getRelativeLocaleUrl(locale, '/tags/')} aria-current={currentPath.startsWith(getRelativeLocaleUrl(locale, '/tags/')) ? 'page' : undefined}>{ui.navigation.tags}</a>
     {showLanguageSwitch && <a class="language-switch" href={alternateHref} lang="en"><b>{ui.language.current}</b><i>/</i><em>{ui.language.alternate}</em></a>}
     <ThemeToggle labels={ui.theme} />
@@ -28,32 +28,62 @@ const alternateHref = getRelativeLocaleUrl(otherLocale, rootPath);
       {site.navigation.map((item) => (
         <li><a href={getRelativeLocaleUrl(locale, item.href)} aria-current={currentPath.startsWith(getRelativeLocaleUrl(locale, item.href)) ? 'page' : undefined}>{ui.navigation[item.key as keyof typeof ui.navigation]}</a></li>
       ))}
+      <li class="nav-tags"><a href={getRelativeLocaleUrl(locale, '/tags/')} aria-current={currentPath.startsWith(getRelativeLocaleUrl(locale, '/tags/')) ? 'page' : undefined}>{ui.navigation.tags}</a></li>
     </ul>
   </nav>
 </header>
 
 <script>
-  // 移动端汉堡菜单：切换导航展开/收起，并同步 aria 状态。
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const nav = document.querySelector<HTMLElement>('#site-nav');
   const header = document.querySelector<HTMLElement>('.site-header');
+
+  // 移动端菜单：全宽浮层；Esc 关闭，点击导航链接关闭；打开时焦点进第一个链接，关闭时回到按钮。
+  const setMenu = (open: boolean, restoreFocus = false) => {
+    if (!toggle || !nav) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? (toggle.dataset.menuClose ?? '') : (toggle.dataset.menuOpen ?? ''));
+    header?.classList.toggle('menu-open', open);
+    nav.classList.toggle('is-open', open);
+    document.documentElement.classList.toggle('menu-lock', open);
+    if (open) nav.querySelector<HTMLAnchorElement>('a')?.focus();
+    else if (restoreFocus) toggle.focus();
+  };
   if (toggle && nav) {
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!open));
-      toggle.setAttribute('aria-label', open ? (toggle.dataset.menuOpen ?? '') : (toggle.dataset.menuClose ?? ''));
-      header?.classList.toggle('menu-open', !open);
-      nav.classList.toggle('is-open', !open);
+    toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+    nav.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setMenu(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+    });
+    matchMedia('(min-width: 961px)').addEventListener('change', (event) => {
+      if (event.matches) setMenu(false);
     });
   }
 
-  // 上划展现、下滑隐藏 sticky header（PC 与移动端一致）。
+  // 上划展现、下滑隐藏 sticky header；方向变化需累计超过 8px 才触发，避免抖动。
+  const THRESHOLD = 8;
   let lastY = window.scrollY;
+  let anchorY = lastY;
+  let direction = 0;
   const onScroll = () => {
     const y = window.scrollY;
-    // 顶部附近始终展现；下滑超过阈值隐藏，上划展现。
-    if (y < 80) header?.classList.remove('is-hidden');
-    else header?.classList.toggle('is-hidden', y > lastY);
+    if (y < 80 || header?.classList.contains('menu-open')) {
+      header?.classList.remove('is-hidden');
+      lastY = anchorY = y;
+      direction = 0;
+      return;
+    }
+    const dir = y > lastY ? 1 : y < lastY ? -1 : direction;
+    if (dir !== direction) {
+      direction = dir;
+      anchorY = lastY;
+    }
+    if (Math.abs(y - anchorY) >= THRESHOLD) header?.classList.toggle('is-hidden', direction > 0);
     lastY = y;
   };
   window.addEventListener('scroll', onScroll, { passive: true });

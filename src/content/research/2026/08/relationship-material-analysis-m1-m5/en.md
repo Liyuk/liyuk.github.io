@@ -7,13 +7,13 @@ translationKey: 2026/08/relationship-material-analysis-m1-m5
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [relationships, interpersonal-analysis, anti-scam, psychology, human-ai-collaboration, work-leadership]
 ---
 
-**Version:** 0.1 (preprint)
+**Version:** 0.1 (working paper)
 **Date:** 2026-08-14
 **Type:** Research design / protocol paper
 

@@ -4,7 +4,7 @@ description: "A research-design and protocol paper proposing a safety-action-ori
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [workplace, power, professional-relationships, risk-analysis, human-ai-collaboration, work-leadership]
@@ -13,7 +13,7 @@ translationStatus: reviewed
 translationKey: 2026/08/workplace-relationship-analysis-protocol
 ---
 
-**Version:** 0.1 (preprint)
+**Version:** 0.1 (working paper)
 **Date:** 2026-08-14
 **Type:** Research design / protocol paper
 

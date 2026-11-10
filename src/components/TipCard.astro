@@ -24,7 +24,7 @@ const tipLink = 'https://paypal.me/liyuk7';
 {isEnglish ? (
   <aside class="tip-card tip-card-inline">
     <span class="tip-card-toggle-copy">
-      <span class="eyebrow">{t.eyebrow}</span>
+      <span class="tip-label">{t.eyebrow}</span>
       <strong>{t.title}</strong>
     </span>
     <p class="tip-card-desc">{t.description}</p>
@@ -35,7 +35,7 @@ const tipLink = 'https://paypal.me/liyuk7';
   <aside class="tip-card" data-open="false">
     <button class="tip-card-toggle" type="button" aria-expanded="false">
       <span class="tip-card-toggle-copy">
-        <span class="eyebrow">{t.eyebrow}</span>
+        <span class="tip-label">{t.eyebrow}</span>
         <strong>{t.title}</strong>
       </span>
       <span class="tip-card-chevron" aria-hidden="true">⌄</span>
@@ -97,12 +97,10 @@ const tipLink = 'https://paypal.me/liyuk7';
     gap: 0.55rem;
     flex-wrap: wrap;
   }
-  .tip-card-toggle-copy .eyebrow {
+  .tip-card-toggle-copy .tip-label {
     margin: 0;
     font-size: 0.7rem;
     color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
   }
   .tip-card-toggle-copy strong {
     font-family: var(--serif);
@@ -146,7 +144,7 @@ const tipLink = 'https://paypal.me/liyuk7';
   .tip-method-btn {
     padding: 0.4rem 0.9rem;
     border: 1px solid var(--line);
-    border-radius: 999px;
+    border-radius: 6px;
     background: none;
     color: var(--ink);
     font-size: 0.85rem;
@@ -167,13 +165,13 @@ const tipLink = 'https://paypal.me/liyuk7';
     pointer-events: none;
     transition: opacity 0.15s ease, transform 0.15s ease;
     padding: 0.5rem;
-    border: 1px solid var(--line);
-    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
     background: #fff;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     z-index: 5;
   }
   .tip-method-popup::after {
+    display: none;
     content: '';
     position: absolute;
     top: 100%;
@@ -204,9 +202,9 @@ const tipLink = 'https://paypal.me/liyuk7';
     display: inline-block;
     margin-top: 0.7rem;
     padding: 0.45rem 0.95rem;
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    color: var(--accent);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    color: var(--ink);
     text-decoration: none;
     font-size: 0.88rem;
   }

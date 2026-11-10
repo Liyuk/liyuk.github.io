@@ -4,15 +4,15 @@ description: 一篇方法框架论文：把结构化思维从"结论先行、不
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 draft: false
 tags: [thinking, problem-framing, decision-making, communication, leadership, work-leadership, strategy]
-column: { slug: engineering-ai-judgment, order: 1 }
+column: { slug: thinking-training, order: 5 }
 ---
 
-**版本：** 0.1（preprint）
+**版本：** 0.1（工作稿）
 **日期：** 2026-08-15
 **类型：** 方法框架论文（framework paper），兼立场论文
 

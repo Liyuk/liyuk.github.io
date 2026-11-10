@@ -69,7 +69,7 @@ around the whole value). Do **not** quote slugs, tags, dates, URLs, enums,
    - `draft`, `featured`, `type`, `format` (same values / same presence)
    - `tags` (these are stable slugs, never translate them)
    - `column` (slug + order unchanged)
-   - enums: top-level `status` (`active` / `preprint` / …) and `version`
+   - enums: top-level `status` (`active` / `working-paper` / …) and `version`
    - URLs: `repositoryUrl`, `paperUrl`, `workUrl`, `citationUrls`
    - `hero.src`, image `src`, image `id`, image `width` / `height`
    - gallery `slug`, `cover`, and each image `id`

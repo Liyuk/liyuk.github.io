@@ -4,14 +4,14 @@ description: 一篇研究综述与立场论文：把工程生产力定义为持�
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [developer-productivity, platform-engineering, feedback-loops, software-engineering, technology]
-column: { slug: engineering-ai-judgment, order: 3 }
+column: { slug: engineering-ai-judgment, order: 2 }
 ---
 
-**版本：** 0.1（preprint）
+**版本：** 0.1（工作稿）
 **日期：** 2026-08-14
 **类型：** 研究综述与立场论文（research synthesis / position paper）
 

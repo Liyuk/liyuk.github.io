@@ -4,14 +4,14 @@ description: 一篇立场论文：基于作者在真实工程组织推进 AI 基
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.3'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [ai, software-engineering, agent-systems, developer-productivity, governance, technology]
-column: { slug: engineering-ai-judgment, order: 4 }
+column: { slug: engineering-ai-judgment, order: 1 }
 ---
 
-**版本：** 0.3（preprint）
+**版本：** 0.3（工作稿）
 **日期：** 2026-08-14
 **类型：** 立场论文（position paper），基于作者在真实工程组织推进 AI 基建与试点的经验与公开材料的综合判断
 

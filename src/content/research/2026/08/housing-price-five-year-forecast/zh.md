@@ -4,13 +4,13 @@ description: 基于 70 城官方二手指数（2019-2026，90 个月无缺口）
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.2'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [housing, forecasting, time-series, explainability, china]
 ---
 
-**版本：** 0.2（preprint）
+**版本：** 0.2（工作稿）
 **日期：** 2026-08-15
 
 ## 摘要

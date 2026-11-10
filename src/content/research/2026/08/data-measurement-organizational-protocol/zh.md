@@ -4,14 +4,14 @@ description: 一篇研究设计与协议论文：把数据度量从"看板上放
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [data, metrics, measurement, collaboration, reproducibility, technology]
-column: { slug: engineering-ai-judgment, order: 2 }
+column: { slug: data-metrics-guide, order: 6 }
 ---
 
-**版本：** 0.1（preprint）
+**版本：** 0.1（工作稿）
 **日期：** 2026-08-14
 **类型：** 研究设计与协议论文（research design / protocol paper）
 

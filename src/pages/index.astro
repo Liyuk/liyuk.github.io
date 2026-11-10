@@ -4,11 +4,13 @@ import { getCollection } from 'astro:content';
 import { publishedIn } from '../lib/content-model.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomeEntry from '../components/HomeEntry.astro';
-import { startGroups } from '../lib/taxonomy.ts';
+import { getColumn, getColumnEntries, getIndexableTags, startGroups } from '../lib/taxonomy.ts';
+import { getColumnCollections } from '../lib/content-query.ts';
+import { columnUrl, entryUrl } from '../lib/content-paths.ts';
 import RssSubscribe from '../components/RssSubscribe.astro';
 import { i18n } from '../i18n/index.mjs';
+import { groupByYearMonth, sortByCreatedAt, sortByLastUpdatedAt } from '../lib/timeline.ts';
 import { site } from '../data/site.mjs';
-import { sortByCreatedAt, sortByLastUpdatedAt } from '../lib/timeline.ts';
 
 const HOME_POSTS = 5;
 const HOME_PROJECTS = 3;
@@ -22,74 +24,221 @@ const allProjects = sortByLastUpdatedAt(await getCollection('project', published
 const projects = allProjects.slice(0, HOME_PROJECTS);
 const allResearch = sortByCreatedAt(await getCollection('research', published));
 const research = allResearch.slice(0, HOME_RESEARCH);
+const galleries = await getCollection('gallery', published);
+const indexableTags = getIndexableTags([...writing, ...allResearch, ...allProjects, ...galleries]).map(({ slug }) => slug);
 const ui = i18n(locale);
 const copy = ui.page.home;
-const readingPaths = startGroups.map((group) => ({ key: group.key, ...ui.page.start.groups[group.key] }));
+const ux = ui.ux;
+
+const columnPool = await getColumnCollections(locale);
+const columnEntriesPool = [...columnPool.writing, ...columnPool.consulting, ...columnPool.research, ...columnPool.galleries];
+const readingPaths = startGroups.map((group) => ({
+  key: group.key,
+  ...ui.page.start.groups[group.key],
+  columns: group.columns.flatMap((slug) => {
+    const column = getColumn(slug, locale);
+    const entries = getColumnEntries(columnEntriesPool, slug);
+    const count = entries.length;
+    return column && count > 0 ? [{ label: column.label, url: columnUrl(slug, locale), count, paths: entries.map((entry) => entryUrl(entry, locale)) }] : [];
+  }),
+}));
 const path = (p: string) => getRelativeLocaleUrl(locale, p);
+
+// Writing cadence: one row per year, one cell per month, shaded by how many
+// pieces were published that month. Built from the same grouping the monthly
+// archive routes use, so a year label always links to a page that exists.
+const monthCounts = new Map(groupByYearMonth(writing).map(({ year, month, entries }) => [`${year}-${month}`, entries.length]));
+const lastYear = new Date().getFullYear();
+const firstYear = site.since;
+const level = (n: number) => (n === 0 ? 0 : n === 1 ? 1 : n <= 3 ? 2 : n <= 6 ? 3 : 4);
+const cadence = Array.from({ length: lastYear - firstYear + 1 }, (_, i) => lastYear - i).map((year) => ({
+  year,
+  hasEntries: [...monthCounts.keys()].some((key) => key.startsWith(`${year}-`)),
+  months: Array.from({ length: 12 }, (_, m) => {
+    const count = monthCounts.get(`${year}-${m + 1}`) ?? 0;
+    return { month: m + 1, count, level: level(count) };
+  }),
+}));
+// Hero texture: every reading path (column) drawn as one faint line, with a
+// node for each entry in it. Lines start spread across the band and converge
+// toward the reading-path panel, so the decoration is the site's real structure.
+// Draw-in rhythm: each line gets its own start delay, duration and ease-out
+// curve, derived deterministically from its column URL, so the field grows
+// unevenly but identically on every build. Nodes appear when their own line's
+// stroke reaches them: the node's arc-length fraction is mapped back through
+// that line's easing curve to a time. Everything settles within ~3s.
+const HERO_EASINGS: [number, number, number, number][] = [
+  [0.22, 0.61, 0.36, 1],
+  [0.16, 1, 0.3, 1],
+  [0.33, 1, 0.68, 1],
+  [0.25, 0.8, 0.25, 1],
+  [0.45, 0, 0.2, 1],
+];
+// Two geometries share one rhythm. Wide (2000×1000) fills the two-column hero;
+// narrow (960×1600, portrait) is used when the hero stacks, so `slice` scaling
+// stays near 1:1 and nodes keep their 6–7px size instead of being blown up.
+type HeroLayout = { W: number; H: number; nodeFrom: number; nodeSpan: number; curve: (i: number, n: number, h: number) => { y0: number; y3: number; c1: { x: number; y: number }; c2: { x: number; y: number } } };
+const HERO_LAYOUTS: Record<'wide' | 'narrow', HeroLayout> = {
+  // Lines start spread across the band and converge toward the reading panel.
+  // 2000×1000 matches the band's real size (≈1010px tall at 1440–2000px wide),
+  // so `slice` stays near 1:1 there; narrower desktops crop the sides.
+  wide: {
+    W: 2000,
+    H: 1000,
+    nodeFrom: 0.16,
+    nodeSpan: 0.64,
+    curve: (i, n, h) => {
+      const H = 1000;
+      const y0 = 50 + (i + 0.5) * ((H - 100) / n);
+      const y3 = H * 0.42 + (y0 - H * 0.42) * 0.28;
+      return { y0, y3, c1: { x: 600 + (h % 180), y: y0 + ((h >> 3) % 150) - 75 }, c2: { x: 1300 + ((h >> 7) % 200), y: y3 + ((h >> 11) % 110) - 55 } };
+    },
+  },
+  // Gentle near-horizontal threads stacked down the tall band; nodes sit in the
+  // middle of each line, the part a phone-width crop actually shows.
+  narrow: {
+    W: 960,
+    H: 1600,
+    nodeFrom: 0.32,
+    nodeSpan: 0.36,
+    curve: (i, n, h) => {
+      const y0 = 60 + (i + 0.5) * ((1600 - 120) / n);
+      const y3 = y0 + ((h >> 13) % 160) - 80;
+      return { y0, y3, c1: { x: 320 + (h % 120), y: y0 + ((h >> 3) % 100) - 50 }, c2: { x: 620 + ((h >> 7) % 120), y: y3 + ((h >> 11) % 80) - 40 } };
+    },
+  },
+};
+const heroColumns = readingPaths.flatMap((group, g) => group.columns.map((column) => ({ ...column, g })));
+const heroHash = (text: string) => [...text].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7);
+const bez = (p0: number, p1: number, p2: number, p3: number, t: number) => (1 - t) ** 3 * p0 + 3 * (1 - t) ** 2 * t * p1 + 3 * (1 - t) * t ** 2 * p2 + t ** 3 * p3;
+// Time (0..1) at which a CSS cubic-bezier easing reaches `progress`.
+const easingTime = ([x1, y1, x2, y2]: [number, number, number, number], progress: number) => {
+  let lo = 0;
+  let hi = 1;
+  for (let n = 0; n < 40; n += 1) {
+    const mid = (lo + hi) / 2;
+    if (bez(0, y1, y2, 1, mid) < progress) lo = mid;
+    else hi = mid;
+  }
+  return bez(0, x1, x2, 1, (lo + hi) / 2);
+};
+const buildHeroLines = ({ W, nodeFrom, nodeSpan, curve }: HeroLayout) =>
+  heroColumns.map((column, i) => {
+    const h = heroHash(column.url);
+    const { y0, y3, c1, c2 } = curve(i, heroColumns.length, h);
+    const p0 = { x: -40, y: y0 };
+    const p3 = { x: W + 40, y: y3 };
+    const d = `M${p0.x} ${y0.toFixed(1)} C${c1.x} ${c1.y.toFixed(1)} ${c2.x} ${c2.y.toFixed(1)} ${p3.x} ${y3.toFixed(1)}`;
+    // Rhythm depends only on the column, so both geometries grow alike.
+    const r = heroHash(`${column.url}#rhythm`);
+    const delay = r % 800;
+    const duration = 1000 + ((r >>> 9) % 1000);
+    const easing = HERO_EASINGS[(r >>> 19) % HERO_EASINGS.length];
+    // Cumulative arc length, sampled, to place each node along its own stroke.
+    const SAMPLES = 200;
+    const lengths = [0];
+    for (let n = 1; n <= SAMPLES; n += 1) {
+      const a = (n - 1) / SAMPLES;
+      const b = n / SAMPLES;
+      lengths.push(lengths[n - 1] + Math.hypot(bez(p0.x, c1.x, c2.x, p3.x, b) - bez(p0.x, c1.x, c2.x, p3.x, a), bez(y0, c1.y, c2.y, y3, b) - bez(y0, c1.y, c2.y, y3, a)));
+    }
+    const total = lengths[SAMPLES];
+    const nodes = column.paths.map((readPath, k) => {
+      const t = nodeFrom + (nodeSpan * (k + 0.5)) / column.count;
+      const fraction = lengths[Math.round(t * SAMPLES)] / total;
+      return { x: bez(p0.x, c1.x, c2.x, p3.x, t).toFixed(1), y: bez(y0, c1.y, c2.y, y3, t).toFixed(1), delay: `${Math.round(delay + easingTime(easing, fraction) * duration)}ms`, readPath };
+    });
+    const rhythm = `--line-delay:${delay}ms;--line-dur:${duration}ms;--line-ease:cubic-bezier(${easing.join(',')})`;
+    return { d, nodes, g: column.g, rhythm };
+  });
+const heroGeometries = (['wide', 'narrow'] as const).map((key) => ({ key, layout: HERO_LAYOUTS[key], lines: buildHeroLines(HERO_LAYOUTS[key]) }));
+const cadenceTotal = cadence.reduce((sum, row) => sum + row.months.reduce((n, cell) => n + cell.count, 0), 0);
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.description} seoPage="home">
+  <div class="home-hero-band">
   <section class="hero shell home-hero">
-    <p class="eyebrow">{copy.eyebrow}</p>
-    <h1>{copy.title[0]}<br />{copy.title[1]}</h1>
+    {heroGeometries.map(({ key, layout, lines }) => (
+      <svg class={`hero-paths hero-paths--${key}`} viewBox={`0 0 ${layout.W} ${layout.H}`} preserveAspectRatio={key === 'wide' ? 'xMidYMid slice' : 'xMidYMin slice'} aria-hidden="true" focusable="false">
+        {lines.map((line) => (
+          <g class={`hero-path g${line.g}`} style={line.rhythm}>
+            <path d={line.d} pathLength="1" />
+            {line.nodes.map((node) => <circle cx={node.x} cy={node.y} r="3" style={`--d:${node.delay}`} data-read-path={node.readPath} />)}
+          </g>
+        ))}
+      </svg>
+    ))}
     <div class="hero-copy">
+      <h1>{copy.title[0]}<br />{copy.title[1]}</h1>
       <p class="hero-byline">{copy.byline}</p>
-      <p>{copy.description}</p>
-      <a class="text-link" href={path('/about/')}>{copy.aboutLink} <span aria-hidden="true">↗</span></a>
-      <a class="text-link" href={`mailto:${site.email}`}>{copy.contact}: {site.email} <span aria-hidden="true">↗</span></a>
+      <p class="hero-lede">{copy.description}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href={path('/columns/')}>{ux.startHere} <span aria-hidden="true">→</span></a>
+        <a class="btn btn-secondary" href={path('/about/')}>{copy.aboutLink} <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="cadence">
+        <figcaption><span>{ux.cadence}</span><span class="mono">{firstYear}—{lastYear} · {cadenceTotal}</span></figcaption>
+        <p class="visually-hidden">{ux.cadenceSummary(cadenceTotal, firstYear, lastYear)}</p>
+        <div class="cadence-grid">
+          {cadence.map((row) => (
+            <div class="cadence-row">
+              {row.hasEntries ? <a class="cadence-year mono" href={path(`/writing/${row.year}/`)}>{row.year}</a> : <span class="cadence-year mono">{row.year}</span>}
+              <span class="cadence-cells" aria-hidden="true">
+                {row.months.map((cell) => <span class={`cadence-cell l${cell.level}`} title={cell.count ? ux.cadenceMonth(row.year, cell.month, cell.count) : undefined}></span>)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </figure>
     </div>
-  </section>
-
-  <section class="section shell start-callout home-start" aria-labelledby="start-heading">
-    <p class="eyebrow">{copy.start.eyebrow}</p><h2 id="start-heading">{copy.start.title}</h2><p>{copy.start.description}</p><a class="text-link" href={path('/start/')}>{copy.start.link} <span aria-hidden="true">↗</span></a>
-    <nav class="home-reading-paths" aria-label={copy.start.title}>
-      {readingPaths.map((group) => <a href={`${path('/start/')}#${group.key}`}><strong>{group.title}</strong><span>{group.description}</span></a>)}
+    <nav class="reading-panel" aria-label={ux.readingPaths}>
+      <h2 class="panel-title">{ux.readingPaths}</h2>
+      {readingPaths.map((group) => (
+        <section class="panel-group">
+          <h3><a href={`${path('/columns/')}#${group.key}`}>{group.title}</a></h3>
+          <ul>
+            {group.columns.map((column) => (
+              <li><a href={column.url}><span>{column.label}</span><span class="mono">{String(column.count).padStart(2, '0')}</span></a></li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </nav>
   </section>
+  </div>
 
-  <section class="section shell split-section home-list-section" aria-labelledby="writing-heading" data-home-section="writing">
-    <div class="section-intro">
-      <p class="eyebrow">{copy.writing.eyebrow}</p>
-      <h2 id="writing-heading">{copy.writing.title[0]}<br />{copy.writing.title[1]}</h2>
-      <p class="writing-scale">{copy.writing.archiveHint(writing.length)}</p>
-      <a class="text-link" href={path('/writing/')}>{copy.writing.link} <span aria-hidden="true">↗</span></a>
-      <RssSubscribe locale={locale} />
-    </div>
+  <section class="section shell start-callout home-start" aria-labelledby="start-heading">
+    <div class="section-label"><h2 id="start-heading">{copy.start.title}</h2><a href={path('/columns/')}>{copy.start.link} <span aria-hidden="true">→</span></a></div>
+    <p class="section-note">{copy.start.description}</p>
+  </section>
+
+  <section class="section shell home-list-section" aria-labelledby="writing-heading" data-home-section="writing">
+    <div class="section-label"><h2 id="writing-heading">{ux.homeSections.writing}</h2><span class="mono">{writing.length}</span><a href={path('/writing/')}>{copy.writing.link} <span aria-hidden="true">→</span></a></div>
     <div class="entry-list">
-      {latest.length ? latest.map((entry) => <HomeEntry entry={entry} locale={locale} />) : <p>{copy.writing.empty}</p>}
+      {latest.length ? latest.map((entry) => <HomeEntry entry={entry} locale={locale} indexableTags={indexableTags} />) : <p>{copy.writing.empty}</p>}
+    </div>
+    <RssSubscribe locale={locale} />
+  </section>
+
+  <section class="section shell home-project-section home-list-section" aria-labelledby="projects-heading" data-home-section="projects">
+    <div class="section-label"><h2 id="projects-heading">{ux.homeSections.projects}</h2><span class="mono">{allProjects.length}</span><a href={path('/projects/')}>{copy.projects.link} <span aria-hidden="true">→</span></a></div>
+    <div class="entry-list">
+      {projects.length ? projects.map((entry) => <HomeEntry entry={entry} locale={locale} indexableTags={indexableTags} />) : <p>{copy.projects.empty}</p>}
     </div>
   </section>
 
-  <section class="section shell home-project-section" aria-labelledby="projects-heading" data-home-section="projects">
-    <div class="section-intro">
-      <p class="eyebrow">{copy.projects.eyebrow}</p>
-      <h2 id="projects-heading">{copy.projects.title}</h2>
-      <p class="writing-scale">{copy.projects.archiveHint(allProjects.length)}</p>
-      <a class="text-link" href={path('/projects/')}>{copy.projects.link} <span aria-hidden="true">↗</span></a>
-    </div>
-    <div class="entry-list home-project-grid">
-      {projects.length ? projects.map((entry) => <HomeEntry entry={entry} locale={locale} />) : <p>{copy.projects.empty}</p>}
-    </div>
-  </section>
-
-  <section class="section shell split-section home-list-section" aria-labelledby="research-heading" data-home-section="research">
-    <div class="section-intro">
-      <p class="eyebrow">{copy.research.eyebrow}</p>
-      <h2 id="research-heading">{copy.research.title}</h2>
-      <p class="writing-scale">{copy.research.archiveHint(allResearch.length)}</p>
-      <a class="text-link" href={path('/research/')}>{copy.research.link} <span aria-hidden="true">↗</span></a>
-    </div>
+  <section class="section shell home-list-section" aria-labelledby="research-heading" data-home-section="research">
+    <div class="section-label"><h2 id="research-heading">{ux.homeSections.research}</h2><span class="mono">{allResearch.length}</span><a href={path('/research/')}>{copy.research.link} <span aria-hidden="true">→</span></a></div>
     <div class="entry-list">
-      {research.length ? research.map((entry) => <HomeEntry entry={entry} locale={locale} />) : <p>{copy.research.empty}</p>}
+      {research.length ? research.map((entry) => <HomeEntry entry={entry} locale={locale} indexableTags={indexableTags} />) : <p>{copy.research.empty}</p>}
     </div>
   </section>
 
   <section class="section shell home-consulting" aria-labelledby="consulting-heading">
-    <p class="eyebrow">{copy.consulting.eyebrow}</p>
     <a class="home-consulting-card" href={path('/consulting/')}>
       <h2 id="consulting-heading">{copy.consulting.title}</h2>
       <p>{copy.consulting.description}</p>
-      <span class="home-consulting-cta">{copy.consulting.link} <span aria-hidden="true">↗</span></span>
+      <span class="home-consulting-cta">{copy.consulting.link} <span aria-hidden="true">→</span></span>
     </a>
   </section>
 </BaseLayout>

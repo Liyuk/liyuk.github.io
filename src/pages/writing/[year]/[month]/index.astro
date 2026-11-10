@@ -21,6 +21,6 @@ const archive = i18n(locale).page.writingArchive;
 const ui = i18n(locale);
 ---
 <BaseLayout title={archive.metaTitle(year, archive.yearSuffix, ui.brand)} description={archive.description}>
-  <section class="page-heading shell"><p class="eyebrow">{archive.eyebrow}</p><h1>{archive.titleMonth(year, archive.yearSuffix, month, archive.monthSuffix)}</h1><p>{archive.description}</p></section>
+  <section class="page-heading shell"><h1>{archive.titleMonth(year, archive.yearSuffix, month, archive.monthSuffix)}</h1><p>{archive.description}</p></section>
   <section class="shell entry-list archive-list">{localEntries.map((entry) => <EntryCard entry={entry} locale={locale} />)}</section>
 </BaseLayout>

@@ -4,7 +4,7 @@ description: 基于 2011—2026 年 70 城二手住宅价格指数，比较多�
 createdAt: 2026-11-05
 updatedAt: 2026-11-06
 version: '0.3'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-probabilistic-housing-price-forecast.md
 locale: zh-CN
@@ -27,7 +27,7 @@ citationUrls:
   - https://doi.org/10.1007/s11146-013-9416-1
 ---
 
-**版本：** 0.3（预印本）
+**版本：** 0.3（工作稿）
 
 **研究数据截至：** 2026-09；本文的结果是截至该时点数据的回测与情景，不随页面自动更新。
 

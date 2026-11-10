@@ -1,9 +1,11 @@
 ---
 // Column card: shows the full chapter list of the current article's column,
-// bolding the current entry; collapsible (expanded by default).
+// bolding the current entry; collapsible (expanded by default). Above the list,
+// a horizontal thread draws the column with one node per chapter: the current
+// chapter is filled, read chapters fill client-side (lib/read-state.ts).
 import type { CollectionEntry } from 'astro:content';
 import { getColumn, getColumnEntries } from '../lib/taxonomy.ts';
-import { columnEntryUrl } from '../lib/content-paths.ts';
+import { columnEntryUrl, entryUrl } from '../lib/content-paths.ts';
 import { i18n } from '../i18n/index.mjs';
 import { readingMinutes } from '../lib/reading-time.ts';
 
@@ -28,18 +30,28 @@ const column = getColumn(columnSlug, locale);
 
 const columnEntries = getColumnEntries(allEntries, columnSlug);
 const currentId = entry.id;
+const currentIndex = columnEntries.findIndex((colEntry) => colEntry.id === currentId);
+const pad2 = (n: number) => String(n).padStart(2, '0');
 ---
 
 {column && (
-<div class="column-card" data-open="true">
+<div class="column-card" data-open="true" data-read-label={ui.column.read}>
   <button class="column-card-toggle" type="button" aria-expanded="true">
     <span class="column-card-title">
-      <span class="eyebrow">{ui.column.eyebrow}</span>
       <strong>{column.label}</strong>
-      <em class="column-card-count">{ui.column.count(columnEntries.length)}</em>
+      {currentIndex >= 0 ? (
+        <em class="column-card-count"><span aria-hidden="true">{pad2(currentIndex + 1)} / {pad2(columnEntries.length)}</span><span class="visually-hidden">{ui.column.position(currentIndex + 1, columnEntries.length)}</span></em>
+      ) : (
+        <em class="column-card-count">{ui.column.count(columnEntries.length)}</em>
+      )}
     </span>
     <span class="column-card-chevron" aria-hidden="true">⌄</span>
   </button>
+  <div class="column-card-thread" aria-hidden="true">
+    {columnEntries.map((colEntry) => (
+      <span class:list={['thread-node', { 'is-current': colEntry.id === currentId }]} data-read-path={entryUrl(colEntry, locale)}></span>
+    ))}
+  </div>
   <ol class="column-card-list">
     {columnEntries.map((colEntry) => {
       const isCurrent = colEntry.id === currentId;
@@ -47,16 +59,16 @@ const currentId = entry.id;
       const type = ui.entry.types[typeKey as keyof typeof ui.entry.types] ?? typeKey;
       const meta = `${type} · ${ui.entry.readingMinutes(readingMinutes(colEntry.body, locale))}`;
       return (
-        <li class:list={{ current: isCurrent }}>
+        <li class:list={{ current: isCurrent }} data-read-path={isCurrent ? undefined : entryUrl(colEntry, locale)}>
           {isCurrent ? (
             <span class="column-card-item-current">
-              <span class="column-card-order">{colEntry.data.column!.order}</span>
+              <span class="column-card-order">{String(colEntry.data.column!.order).padStart(2, '0')}</span>
               <span><strong>{colEntry.data.title}</strong><em class="column-card-meta">{meta}</em></span>
               <em class="column-card-you">{ui.column.current}</em>
             </span>
           ) : (
-            <a href={columnEntryUrl(colEntry, locale)}>
-              <span class="column-card-order">{colEntry.data.column!.order}</span>
+            <a href={columnEntryUrl(colEntry, locale)} data-read-note>
+              <span class="column-card-order">{String(colEntry.data.column!.order).padStart(2, '0')}</span>
               <span><span>{colEntry.data.title}</span><em class="column-card-meta">{meta}</em></span>
             </a>
           )}
@@ -69,19 +81,18 @@ const currentId = entry.id;
 
 <style>
   .column-card {
-    margin: 1.25rem auto 2.5rem;
+    margin: 0 auto 2.5rem;
     max-width: var(--prose-w);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    overflow: hidden;
-    background: var(--paper-strong);
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line);
   }
   .column-card-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 0.85rem 1.1rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0;
     border: none;
     background: none;
     cursor: pointer;
@@ -89,100 +100,107 @@ const currentId = entry.id;
     text-align: left;
     font-family: inherit;
   }
-  .column-card-toggle:hover {
-    background: var(--accent-soft);
-  }
   .column-card-title {
     display: flex;
     align-items: baseline;
-    gap: 0.6rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
   }
-  .column-card-title .eyebrow {
-    margin: 0;
-    font-size: 0.75rem;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
   .column-card-title strong {
-    font-family: var(--serif);
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 600;
   }
   .column-card-count {
     color: var(--muted);
-    font-size: 0.78rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
     font-style: normal;
+  }
+  /* The column as one line, a node per chapter; spacing stays even across the
+     prose width so position along the line reads as position in the column. */
+  .column-card-thread {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    margin: 0.1rem 0 0.75rem;
+  }
+  .column-card-thread::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--node-size) / 2);
+    right: calc(var(--node-size) / 2);
+    top: 50%;
+    height: var(--thread-w);
+    margin-top: calc(var(--thread-w) / -2);
+    background: var(--accent);
+  }
+  .column-card-thread .thread-node {
+    position: relative;
+  }
+  .column-card-thread .thread-node.is-current {
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
   }
   .column-card-chevron {
     color: var(--muted);
     font-size: 0.9rem;
     transition: transform 0.2s ease;
-    transform: rotate(0deg);
   }
   .column-card[data-open="false"] .column-card-chevron {
     transform: rotate(-90deg);
   }
   .column-card-list {
     margin: 0;
-    padding: 0 1.1rem 0.7rem;
+    padding: 0 0 0.6rem;
     list-style: none;
-    display: grid;
-    gap: 0.1rem;
   }
   .column-card[data-open="false"] .column-card-list {
     display: none;
   }
-  .column-card-list a {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    padding: 0.35rem 0.3rem;
-    color: var(--ink);
-    text-decoration: none;
-    font-size: 0.92rem;
-    border-radius: 5px;
-  }
-  .column-card-list a:hover {
-    color: var(--accent);
-    background: var(--accent-soft);
-  }
-  .column-card-order {
-    flex-shrink: 0;
-    width: 1.2rem;
-    color: var(--muted);
-    font-size: 0.72rem;
-    text-align: right;
-  }
+  .column-card-list a,
   .column-card-item-current {
     display: flex;
     align-items: baseline;
-    gap: 0.6rem;
-    padding: 0.35rem 0.3rem;
+    gap: 0.9rem;
+    padding: 0.4rem 0;
+    color: var(--ink);
+    text-decoration: none;
     font-size: 0.92rem;
-    border-radius: 5px;
-    background: var(--accent-soft);
+    line-height: 1.5;
+  }
+  .column-card-list a:hover {
+    color: var(--accent);
+  }
+  .column-card-order {
+    flex-shrink: 0;
+    width: 1.6rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+  }
+  .column-card-item-current,
+  .column-card-item-current .column-card-order {
+    color: var(--accent);
   }
   .column-card-item-current strong {
-    font-weight: 700;
+    font-weight: 600;
   }
   .column-card-you {
     margin-left: auto;
     color: var(--accent);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-style: normal;
-    font-weight: 700;
-    letter-spacing: 0.05em;
+    font-weight: 600;
+    white-space: nowrap;
   }
   .column-card-meta {
     display: block;
-    margin-top: .1rem;
     color: var(--muted);
-    font-size: .68rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 400;
-    letter-spacing: .01em;
   }
 </style>
 

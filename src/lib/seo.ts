@@ -9,7 +9,6 @@ export type SeoPage =
   | 'about'
   | 'consulting'
   | 'links'
-  | 'start'
   | 'columns'
   | 'tags';
 
@@ -35,7 +34,7 @@ const seo: LocalizedSeo = {
       keywords: ['开源项目', 'AI 工具', '系统设计', '开发者工具', '产品实验', '工程原型'],
     },
     research: {
-      description: '关于数据研究、机器学习、AI 工程与组织系统的研究笔记、论文、方法和可复现工作。',
+      description: '关于数据研究、机器学习、AI 工程与组织系统的研究笔记、方法和可复现工作。',
       keywords: ['数据研究', '机器学习', '可复现研究', 'AI 工程', '研究方法', '组织研究'],
     },
     photos: {
@@ -54,13 +53,9 @@ const seo: LocalizedSeo = {
       description: 'Liyuk 常读并愿意推荐的独立博客、技术站点和持续写作的个人空间。',
       keywords: ['独立博客', '技术博客', '个人网站', '阅读推荐', '友链'],
     },
-    start: {
-      description: '从技术、管理、职业发展、AI 工程和数据研究等问题出发，找到适合你的站内阅读路径。',
-      keywords: ['阅读路径', '技术学习', '管理成长', 'AI 工程', '职业发展', '数据研究'],
-    },
     columns: {
-      description: '按主题和推荐顺序整理的技术、管理、职业发展、AI 工程与咨询专栏。',
-      keywords: ['主题专栏', '技术管理', '职业发展', 'AI 工程', '咨询案例', '系统化阅读'],
+      description: '按读者正在处理的问题分组、按推荐顺序阅读的专栏：技术、管理、职业发展、AI 工程与研究，第一次来可以从这里开始。',
+      keywords: ['阅读路径', '主题专栏', '技术管理', '职业发展', 'AI 工程', '系统化阅读'],
     },
     tags: {
       description: '按 AI、工程、管理、职业发展、研究和摄影等主题浏览站内文章、项目与作品。',
@@ -81,7 +76,7 @@ const seo: LocalizedSeo = {
       keywords: ['open-source projects', 'AI tools', 'system design', 'developer tools', 'product experiments', 'engineering prototypes'],
     },
     research: {
-      description: 'Research notes, papers, methods, and reproducible work on data, machine learning, AI engineering, and organizational systems.',
+      description: 'Research notes, methods, and reproducible work on data, machine learning, AI engineering, and organizational systems.',
       keywords: ['data research', 'machine learning', 'reproducible research', 'AI engineering', 'research methods', 'organizational research'],
     },
     photos: {
@@ -100,13 +95,9 @@ const seo: LocalizedSeo = {
       description: 'Independent blogs, technical sites, and personal spaces that Liyuk reads regularly and recommends.',
       keywords: ['independent blogs', 'technical blogs', 'personal websites', 'reading recommendations', 'blogroll'],
     },
-    start: {
-      description: 'Find a reading path through technical work, management, career development, AI engineering, and data research.',
-      keywords: ['reading paths', 'technical learning', 'management growth', 'AI engineering', 'career development', 'data research'],
-    },
     columns: {
-      description: 'Curated reading paths covering technology, management, career development, AI engineering, and consulting cases.',
-      keywords: ['curated columns', 'technical leadership', 'career development', 'AI engineering', 'consulting cases', 'structured reading'],
+      description: 'Curated reading paths grouped by the problem you are working on — technology, management, career development, AI engineering, and research. Start here on a first visit.',
+      keywords: ['reading paths', 'curated columns', 'technical leadership', 'career development', 'AI engineering', 'structured reading'],
     },
     tags: {
       description: 'Browse site content by AI, engineering, management, career development, research, photography, and related topics.',

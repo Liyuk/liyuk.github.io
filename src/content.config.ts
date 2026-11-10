@@ -100,7 +100,9 @@ const research = defineCollection({
     publishedAt: contentDate.optional(),
     updatedAt: contentDate.optional(),
     version: z.string(),
-    status: z.enum(['preprint', 'published', 'in-progress']),
+    // working-paper: the author's own, unreviewed write-up; published is reserved
+    // for work actually published elsewhere.
+    status: z.enum(['working-paper', 'published', 'in-progress']),
     repositoryUrl: z.string().url().optional(),
     paperUrl: z.string().url().optional(),
     locale: z.enum(['zh-CN', 'en']).default('zh-CN'),

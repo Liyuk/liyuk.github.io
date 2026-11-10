@@ -4,7 +4,7 @@ description: "Based on the official second-hand residential price indices of 70 
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.2'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [housing, forecasting, time-series, explainability, china]
@@ -13,7 +13,7 @@ translationStatus: reviewed
 translationKey: 2026/08/housing-price-five-year-forecast
 ---
 
-**Version:** 0.2 (preprint)
+**Version:** 0.2 (working paper)
 **Date:** 2026-08-15
 
 ## Abstract

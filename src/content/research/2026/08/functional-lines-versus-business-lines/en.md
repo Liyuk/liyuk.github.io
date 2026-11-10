@@ -4,17 +4,17 @@ description: "A position paper: functional lines were efficient in an era of hig
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [organization-design, ai, engineering, functional-teams, business-lines, work-leadership]
-column: { slug: engineering-ai-judgment, order: 5 }
+column: { slug: engineering-ai-judgment, order: 4 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/functional-lines-versus-business-lines
 ---
 
-**Version:** 0.1 (preprint)
+**Version:** 0.1 (working paper)
 **Date:** 2026-08-14
 **Type:** Position paper, based on the author's practice in engineering organizations and a synthesis of public materials.
 

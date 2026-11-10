@@ -4,7 +4,7 @@ description: "Using existing-home price indices for 70 cities from 2011 to 2026,
 createdAt: 2026-11-05
 updatedAt: 2026-11-06
 version: '0.3'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training/blob/main/docs/paper-probabilistic-housing-price-forecast.md
 locale: en
@@ -28,7 +28,7 @@ citationUrls:
   - https://doi.org/10.1007/s11146-013-9416-1
 ---
 
-**Version:** 0.3 (preprint)
+**Version:** 0.3 (working paper)
 
 **Data through:** 2026-09. The backtests and scenarios use data available through this date and do not update automatically with the page.
 

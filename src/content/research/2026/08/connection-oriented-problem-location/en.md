@@ -4,18 +4,18 @@ description: A framework paper that advances structured thinking from the generi
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 draft: false
 tags: [thinking, problem-framing, decision-making, communication, leadership, work-leadership, strategy]
-column: { slug: engineering-ai-judgment, order: 1 }
+column: { slug: thinking-training, order: 5 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/connection-oriented-problem-location
 ---
 
-**Version:** 0.1 (preprint)
+**Version:** 0.1 (working paper)
 **Date:** 2026-08-15
 **Type:** Framework paper, and a position paper as well.
 

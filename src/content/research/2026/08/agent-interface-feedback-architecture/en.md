@@ -4,17 +4,17 @@ description: "Based on ChatLab design work, this paper records how presence, res
 createdAt: 2026-08-18
 publishedAt: 2026-08-19
 version: '0.2'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/agent-interface-feedback-architecture
 draft: false
 tags: [hci, agent, feedback, observability, recoverability, authorization, human-ai-collaboration, systems-design]
-column: { slug: engineering-ai-judgment, order: 7 }
+column: { slug: agent-collaboration-research, order: 2 }
 ---
 
-> **Version: 0.2 (preprint).** This is a project-driven conceptual architecture and design study. It organizes design experience from ChatLab, Coding Agent Harness Study, and CanonLoom, proposes a feedback architecture to be tested, and reports a follow-up experimental protocol; it does not report user-experiment data or results.
+> **Version: 0.2 (working paper).** This is a project-driven conceptual architecture and design study. It organizes design experience from ChatLab, Coding Agent Harness Study, and CanonLoom, proposes a feedback architecture to be tested, and reports a follow-up experimental protocol; it does not report user-experiment data or results.
 
 ## Abstract
 

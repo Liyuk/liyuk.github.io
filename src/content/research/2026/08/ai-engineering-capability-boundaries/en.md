@@ -6,15 +6,15 @@ translationStatus: reviewed
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.3'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [ai, software-engineering, agent-systems, developer-productivity, governance, technology]
-column: { slug: engineering-ai-judgment, order: 4 }
+column: { slug: engineering-ai-judgment, order: 1 }
 translationKey: 2026/08/ai-engineering-capability-boundaries
 ---
 
-**Version:** 0.3 (preprint)
+**Version:** 0.3 (working paper)
 **Date:** 2026-08-14
 **Type:** Position paper, based on the author's experience driving AI infrastructure and pilots in a real engineering organization, combined with a synthesis of public materials.
 

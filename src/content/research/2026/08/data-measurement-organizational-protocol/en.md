@@ -4,17 +4,17 @@ description: "A research-design and protocol paper: reframing data measurement f
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
-status: preprint
+status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [data, metrics, measurement, collaboration, reproducibility, technology]
-column: { slug: engineering-ai-judgment, order: 2 }
+column: { slug: data-metrics-guide, order: 6 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/data-measurement-organizational-protocol
 ---
 
-**Version:** 0.1 (preprint)
+**Version:** 0.1 (working paper)
 **Date:** 2026-08-14
 **Type:** Research design / protocol paper
 
