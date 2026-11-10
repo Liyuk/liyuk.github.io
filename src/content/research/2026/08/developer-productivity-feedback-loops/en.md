@@ -1,6 +1,6 @@
 ---
 title: "Developer Productivity Is Not a Tool Catalog, but a Feedback System"
-description: "A research synthesis and position paper: defining engineering productivity as a continuously shortening \"propose change — get trustworthy feedback — correct safely\" loop, with metrics, a default path, and a falsifiable pilot protocol."
+description: "A research synthesis and position write-up: defining engineering productivity as a continuously shortening \"propose change — get trustworthy feedback — correct safely\" loop, with metrics, a default path, and a falsifiable pilot protocol."
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/developer-productivity-feedback-loops
@@ -16,15 +16,15 @@ column: { slug: engineering-ai-judgment, order: 2 }
 
 **Version:** 0.1 (working paper)
 **Date:** 2026-08-14
-**Type:** Research synthesis / position paper
+**Type:** Research synthesis / position write-up
 
 ## Abstract
 
-"Improving engineering efficiency" often starts with procuring a batch of tools: a new CI, code scanning, a release platform, a knowledge base, an AI assistant. Each tool may be valuable on its own, but lining them up side by side in a workflow does not automatically form a productivity system. This paper proposes an alternative view: **developer productivity is a feedback system, not a tool catalog.** Its goal is not to make people "busier," but to continuously shorten a loop — propose a change, get trustworthy and task-relevant feedback, locate and correct failures quickly and safely, and use the results to calibrate the next change.
+"Improving engineering efficiency" often starts with procuring a batch of tools: a new CI, code scanning, a release platform, a knowledge base, an AI assistant. Each tool may be valuable on its own, but lining them up side by side in a workflow does not automatically form a productivity system. This study proposes an alternative view: **developer productivity is a feedback system, not a tool catalog.** Its goal is not to make people "busier," but to continuously shorten a loop — propose a change, get trustworthy and task-relevant feedback, locate and correct failures quickly and safely, and use the results to calibrate the next change.
 
-This paper synthesizes public software engineering research (Google's large-scale continuous testing, the SPACE framework, static analysis infrastructure), the latest practice of AI-assisted development, and the industry quantitative data from DORA 2026 and DX 2026 to form four claims: first, define the loop to shorten before choosing a platform; second, productivity has multiple dimensions and cannot be proxied by a single number; third, the value of a tool lies in entering the default path and becoming a trustworthy capability, not in adding entry points; fourth, failure should be designed as diagnosable, recoverable feedback rather than noise or blockage. The paper ends with a lightweight, falsifiable pilot protocol.
+This study synthesizes public software engineering research (Google's large-scale continuous testing, the SPACE framework, static analysis infrastructure), the latest practice of AI-assisted development, and the industry quantitative data from DORA 2026 and DX 2026 to form four claims: first, define the loop to shorten before choosing a platform; second, productivity has multiple dimensions and cannot be proxied by a single number; third, the value of a tool lies in entering the default path and becoming a trustworthy capability, not in adding entry points; fourth, failure should be designed as diagnosable, recoverable feedback rather than noise or blockage. The study ends with a lightweight, falsifiable pilot protocol.
 
-This paper reports no new model experiments or organizational performance data. It is a position and synthesis that separates "tool integration" from "capability building," and argues: the standard for evaluating an internal tool is whether it makes a feedback loop faster, more reliable, and easier to recover from — not how many times it is used.
+This study reports no new model experiments or organizational performance data. It is a position and synthesis that separates "tool integration" from "capability building," and argues: the standard for evaluating an internal tool is whether it makes a feedback loop faster, more reliable, and easier to recover from — not how many times it is used.
 
 **Keywords:** developer productivity; feedback loops; platform engineering; developer experience; measurability
 
@@ -34,7 +34,7 @@ When a team faces "low efficiency," the most common response is to inventory gap
 
 This explains why "efficiency projects" often look busy yet produce outcomes that are hard to verify: they optimize activity volume, not the loop. DORA 2025's large-scale survey gives the same judgment in another phrasing: AI and tools are **amplifiers** of existing processes, and adoption does not equal effective use. [1] A team that has not clearly defined its loop amplifies the speed of its existing processes — including the mess in them.
 
-Therefore, the research question of this paper is not "which tools do we need," but: **how do we build a team's developer productivity into a continuously shortening, verifiable feedback loop?**
+Therefore, the research question of this study is not "which tools do we need," but: **how do we build a team's developer productivity into a continuously shortening, verifiable feedback loop?**
 
 ```mermaid
 flowchart LR
@@ -46,7 +46,7 @@ flowchart LR
 
 ## 2. Method and Materials
 
-This paper adopts a focused literature and position synthesis. Material selection follows three criteria: the subject of study directly involves real software engineering tasks; the paper or practice is publicly accessible; and the material helps distinguish the two ways of building productivity — "integrating tools" versus "establishing a feedback loop." The main materials include:
+This study adopts a focused literature and position synthesis. Material selection follows three criteria: the subject of study directly involves real software engineering tasks; the paper or practice is publicly accessible; and the material helps distinguish the two ways of building productivity — "integrating tools" versus "establishing a feedback loop." The main materials include:
 
 - Google's large-scale continuous testing research, showing how feedback lag emerges as test scale grows, and why "providing quality information related to the change while the developer is still writing code" matters [2];
 - Microsoft's SPACE framework, showing that productivity is multidimensional and cannot be proxied by a single number [3];
@@ -56,7 +56,7 @@ This paper adopts a focused literature and position synthesis. Material selectio
 - the DORA 2026 report on the ROI of AI-assisted software development, providing the latest large-scale evidence for "value realization follows a J-curve," the "verification tax," and "AI is an amplifier" [6];
 - the DX 2026 industry benchmarks, providing the quantitative observation that "AI-generated code is rising sharply while developer experience metrics stay flat" and that "review throughput is becoming a new bottleneck" [7].
 
-These materials serve only as mechanistic evidence; specific numbers and effects should be verified against their original sources. This paper does not treat them as a purchasing ranking. The two 2026 quantitative materials ([6][7]) are used to calibrate judgment and pilot thresholds, not to prove causation: they describe cross-sectional correlational phenomena across the industry, and whether the thresholds apply to your team returns to the baseline protocol in §5 for verification.
+These materials serve only as mechanistic evidence; specific numbers and effects should be verified against their original sources. This study does not treat them as a purchasing ranking. The two 2026 quantitative materials ([6][7]) are used to calibrate judgment and pilot thresholds, not to prove causation: they describe cross-sectional correlational phenomena across the industry, and whether the thresholds apply to your team returns to the baseline protocol in §5 for verification.
 
 ## 3. Four Claims
 
@@ -110,7 +110,7 @@ A productivity system does not aim for "never fail." Builds, tests, releases, an
 
 ## 4. AI Is an Evaluable Link in the Feedback Loop, Not a Reason to Skip Verification
 
-This paper's four claims are especially relevant in AI-assisted development. AI should become an evaluable link in the feedback loop: the acceptance rate of suggestions, the volume of generated code, or the number of calls do not by themselves indicate value; one must also see whether it reduces rework, whether it increases review burden, whether it is reliable on critical tasks, and whether developers can understand and correct it when uncertain. [5]
+This study's four claims are especially relevant in AI-assisted development. AI should become an evaluable link in the feedback loop: the acceptance rate of suggestions, the volume of generated code, or the number of calls do not by themselves indicate value; one must also see whether it reduces rework, whether it increases review burden, whether it is reliable on critical tasks, and whether developers can understand and correct it when uncertain. [5]
 
 This complements the site's "Define the Boundaries Before Putting AI Capabilities into an Engineering Organization" [8]: that piece discusses four kinds of boundaries — context, responsibility, authorization, and measurement — that must be defined before AI enters an engineering organization; this piece expands the "measurement boundary" and "end-to-end workflow" of that discussion onto developer productivity — treating AI as a feedback loop to be shortened and verified, rather than a tool that is done once integrated.
 
@@ -128,7 +128,7 @@ This protocol does not aim to prove "efficiency gains" in one shot. What it iden
 
 ## 6. Validity Threats and Research Boundaries
 
-First, this paper's materials are mainly public research and cannot represent regulated, legacy, or highly sensitive domains. Second, frameworks such as SPACE are descriptive, and moving from framework to team decision requires verification in the specific context. Third, this paper derives organizational recommendations from technical mechanisms, and the derivation itself needs to be strengthened in specific teams with task data, code review records, and interviews. Fourth, the AI and tool ecosystem changes quickly, and the descriptions of Google's practices here represent only the materials accessible as of 2026-08-14; all citations serve as mechanistic evidence and do not constitute a ranking of any product or method.
+First, this study's materials are mainly public research and cannot represent regulated, legacy, or highly sensitive domains. Second, frameworks such as SPACE are descriptive, and moving from framework to team decision requires verification in the specific context. Third, this study derives organizational recommendations from technical mechanisms, and the derivation itself needs to be strengthened in specific teams with task data, code review records, and interviews. Fourth, the AI and tool ecosystem changes quickly, and the descriptions of Google's practices here represent only the materials accessible as of 2026-08-14; all citations serve as mechanistic evidence and do not constitute a ranking of any product or method.
 
 ## 7. Conclusion
 
@@ -138,14 +138,14 @@ By moving the focus from "what tools are we still missing" to "which feedback lo
 
 ## References
 
-1. DORA (2025). [The Impact of Generative AI in Software Development](https://dora.dev/ai/gen-ai-report/report/). Large-scale survey; this paper only borrows its conclusion structure of "adoption vs. effective use" and "AI is an amplifier."
+1. DORA (2025). [The Impact of Generative AI in Software Development](https://dora.dev/ai/gen-ai-report/report/). Large-scale survey; this study only borrows its conclusion structure of "adoption vs. effective use" and "AI is an amplifier."
 2. Google (2019). [Taming Google-Scale Continuous Testing](https://research.google/pubs/taming-google-scale-continuous-testing/). Paper on large-scale continuous testing and feedback lag.
 3. Forsgren, N., Storey, M.-A., et al. (2021). [The SPACE of Developer Productivity: There's More to It Than You Think](https://www.microsoft.com/en-us/research/publication/the-space-of-developer-productivity-theres-more-to-it-than-you-think/). A multidimensional framework for developer productivity.
 4. Google (2016). [Lessons from Building Static Analysis Tools at Google](https://research.google/pubs/lessons-from-building-static-analysis-tools-at-google/). Public lessons from static analysis infrastructure.
 5. Google (2025). [AI in software engineering at Google: Progress and the path ahead](https://research.google/blog/ai-in-software-engineering-at-google-progress-and-the-path-ahead/). A public retrospective on embedding AI capabilities into the development workflow and iterating on online feedback.
 6. DORA (2026). [DORA ROI of AI-assisted Software Development](https://cloud.google.com/resources/content/dora-roi-of-ai-assisted-software-development). 2026 annual report; provides the ROI expansion of "AI is an amplifier," the value-realization J-curve, and the "verification tax" concept, usable as mechanistic evidence.
 7. DX (2026). [2026 DX Benchmarks](https://getdx.com/blog/2026-dx-benchmarks-are-now-available/). Industry quantitative benchmarks; provide the cross-sectional observation that "the share of AI-generated code is rising while the developer experience index stays flat and review throughput declines."
-8. Liyuk (2026). [Define the Boundaries Before Putting AI Capabilities into an Engineering Organization](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). A sister paper on this site.
+8. Liyuk (2026). [Define the Boundaries Before Putting AI Capabilities into an Engineering Organization](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). A sister study on this site.
 
 ## Author Information and Statement
 
@@ -153,7 +153,7 @@ By moving the focus from "what tools are we still missing" to "which feedback lo
 
 **Conflict of interest:** The author declares no conflict of interest. This research received no funding from any commercial organization; the public projects, industry reports, and articles cited are used only as methodological or directional references.
 
-**Data availability:** This is a synthesis and position paper and reports no new model experiments or organizational performance data. The quantitative sources cited are third-party public data: the DORA 2025/2026 reports and the DX 2026 industry benchmarks provide large-scale observations (e.g. "the share of AI-generated code is rising while the developer experience index stays flat"), and their specific numbers should be verified against the original sources; the CI times in this paper (e.g. "from 30 minutes to 10 minutes") are illustrative numbers used to explain what is being measured, and do not represent measured values from any organization.
+**Data availability:** This is a synthesis and position write-up and reports no new model experiments or organizational performance data. The quantitative sources cited are third-party public data: the DORA 2025/2026 reports and the DX 2026 industry benchmarks provide large-scale observations (e.g. "the share of AI-generated code is rising while the developer experience index stays flat"), and their specific numbers should be verified against the original sources; the CI times in this study (e.g. "from 30 minutes to 10 minutes") are illustrative numbers used to explain what is being measured, and do not represent measured values from any organization.
 
 ## Glossary
 

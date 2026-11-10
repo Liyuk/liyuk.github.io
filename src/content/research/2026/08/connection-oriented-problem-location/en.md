@@ -1,6 +1,6 @@
 ---
 title: "The Five Lenses: Connection-Oriented Problem Location"
-description: A framework paper that advances structured thinking from the generic expression of "conclusion first, mutually exclusive and collectively exhaustive" into a four-stage problem-location method — Structure → Surface connections → Infer root problem → Find solution — with the causal, duality, dialectical, position, and interest lenses at its core, offering a testable training protocol and its boundaries of use.
+description: A framework write-up that advances structured thinking from the generic expression of "conclusion first, mutually exclusive and collectively exhaustive" into a four-stage problem-location method — Structure → Surface connections → Infer root problem → Find solution — with the causal, duality, dialectical, position, and interest lenses at its core, offering a testable training protocol and its boundaries of use.
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.1'
@@ -17,17 +17,17 @@ translationKey: 2026/08/connection-oriented-problem-location
 
 **Version:** 0.1 (working paper)
 **Date:** 2026-08-15
-**Type:** Framework paper, and a position paper as well.
+**Type:** Framework write-up, and a position write-up as well.
 
 ## Abstract
 
 Many plans ultimately fail not because they were executed poorly, but because they answered a **surface problem** rather than a **root problem**. Structured thinking is commonly treated as an expression technique — conclusion first, mutually exclusive and collectively exhaustive — but its real value lies elsewhere: once structure makes thinking explicit, a person can then discover the connections between things, follow those connections to infer the root problem, and finally find a solution that genuinely targets it.
 
-This paper proposes a **connection-oriented problem-location method (the Five Lenses)**: a four-stage main line — Structure → Surface connections → Infer root problem → Find solution — paired with a set of five perspective lenses (the five lenses: causal, duality, dialectical, position, interest). Structuring (the Pyramid Principle, MECE, induction and deduction) turns raw material into checkable propositions; the five lenses discover the connections in that material — the first three lenses look at the "thing" (causal = multi-level questioning, duality = both sides, dialectical = stepping outside both sides to see what is objective), and the last two look at the "person" (position = goals and needs, interest = the real cause and whose interest).
+This study proposes a **connection-oriented problem-location method (the Five Lenses)**: a four-stage main line — Structure → Surface connections → Infer root problem → Find solution — paired with a set of five perspective lenses (the five lenses: causal, duality, dialectical, position, interest). Structuring (the Pyramid Principle, MECE, induction and deduction) turns raw material into checkable propositions; the five lenses discover the connections in that material — the first three lenses look at the "thing" (causal = multi-level questioning, duality = both sides, dialectical = stepping outside both sides to see what is objective), and the last two look at the "person" (position = goals and needs, interest = the real cause and whose interest).
 
 The method's claim can be tested this way: **rewriting a surface problem through the five lenses should produce a solution that differs from the original one and is better aligned with the underlying constraint; if the rewritten solution is unchanged, then either the problem does not live at the level of "connections" at all, or the wrong lens was applied.**
 
-This paper is a framework paper and reports no new experimental data. It gathers the thinking tools scattered across the field (the Pyramid Principle, MECE, 2×2, decision matrix, 5W2H, SMART, STAR, 5 Whys / fishbone diagram, Golden Circle, Toulmin) together with the discipline of "no investigation, no right to speak," folds them into the four-stage main line, and makes explicit which step each tool serves, what problem it solves, and where its boundaries lie.
+This study is a framework write-up and reports no new experimental data. It gathers the thinking tools scattered across the field (the Pyramid Principle, MECE, 2×2, decision matrix, 5W2H, SMART, STAR, 5 Whys / fishbone diagram, Golden Circle, Toulmin) together with the discipline of "no investigation, no right to speak," folds them into the four-stage main line, and makes explicit which step each tool serves, what problem it solves, and where its boundaries lie.
 
 **Keywords:** structured thinking; problem location; five lenses; causal; dialectical; position; interest; decision-making
 
@@ -39,7 +39,7 @@ I have made this mistake myself: seeing an engineer stop proactively suggesting 
 
 Classic teaching of structured thinking mostly stops at the level of "saying things clearly": conclusion first, group and categorize, mutually exclusive and collectively exhaustive. This training makes a report easier to follow, but it does not necessarily help a person ask the right question. Because **structure only solves "making things explicit," not "what to make explicit"** — writing a wrong assumption into a neat table does not reduce the error; it only makes it harder to spot.
 
-The problem this paper addresses is not "how to express things in an organized way," but this: **once a person has structured the material, how to go further and find the connections within it, infer the root problem, and aim the solution at it.** In other words, structuring is the means; location is the end.
+The problem this study addresses is not "how to express things in an organized way," but this: **once a person has structured the material, how to go further and find the connections within it, infer the root problem, and aim the solution at it.** In other words, structuring is the means; location is the end.
 
 ## 2. Method overview: one main line, five lenses
 
@@ -69,7 +69,7 @@ flowchart TD
   LC["Position lens: goals & needs"] --> LY["Interest lens: real cause & whose interest"]
 ```
 
-A criterion that runs through the whole paper: **whether the solution is aimed at the "underlying constraint."** The underlying constraint is the one cause or structural condition that explains and governs several surface symptoms; a solution aimed at it stays effective, while a solution aimed at the symptoms merely lets the problem reappear in a different form.
+A criterion that runs through the whole study: **whether the solution is aimed at the "underlying constraint."** The underlying constraint is the one cause or structural condition that explains and governs several surface symptoms; a solution aimed at it stays effective, while a solution aimed at the symptoms merely lets the problem reappear in a different form.
 
 ## 3. Stage 1 · Structure: turn material into checkable propositions
 
@@ -199,29 +199,29 @@ A solution must ultimately become actions, and actions must be verifiable. **SMA
 
 ### 6.5 STAR: make retrospectives and expression inspectable
 
-**STAR** (Situation—Task—Action—Result) is used in retrospectives, promotion defenses, and interview answers; its essence is decomposing an experience into four inspectable cells: the situation at the time, the task you had to accomplish, the actions you took, and the results they produced. It is isomorphic to this paper's main line — rewriting a scattered narrative into a structure where "others can point out which cell they disagree with."
+**STAR** (Situation—Task—Action—Result) is used in retrospectives, promotion defenses, and interview answers; its essence is decomposing an experience into four inspectable cells: the situation at the time, the task you had to accomplish, the actions you took, and the results they produced. It is isomorphic to this study's main line — rewriting a scattered narrative into a structure where "others can point out which cell they disagree with."
 
 ## 7. Falsifiable claims and research boundaries
 
-The method-level claims of this paper can be written as several **testable predictions**. Each tries to give an executable criterion for judgment, rather than stopping at slogans:
+The method-level claims of this study can be written as several **testable predictions**. Each tries to give an executable criterion for judgment, rather than stopping at slogans:
 
 1. **The rewrite test**: rewriting a surface problem through the five lenses should produce a solution different from the original and closer to the underlying constraint. Operationalized: take N real problems (N≥10 recommended), and have two managers who are unaware of the method independently judge "whether the root problem produced by the five lenses differs from the original statement and is closer to the constraint"; if at least 3/5 of the cases are judged "different and closer," the claim holds; otherwise, the five lenses do not apply in that problem domain.
 2. **The location test**: after "Stage 3 discrimination," a team's discussion shifts from "which solution to pick" to "what the underlying constraint is." Operationalized: compare the share of time spent on "solution disputes" versus "constraint disputes" in discussion records of the same batch of problems, and the number of "rework episodes caused by misjudging the root cause"; both should decline with use.
 3. **The structure test**: the mark of structure being in place is that another person can point precisely at which of "conclusion, evidence, assumption, next step" they disagree with. Operationalized: hand the structured output to someone who was not involved in the process and ask them to mark the "cell" they disagree with; if they can only say vaguely "this is wrong" without pointing to a cell, the structure has not met the standard.
 
-These three predictions are **not yet verified by this paper** — Appendix C only demonstrates how the method runs and does not constitute evidence; they are the testing standards left for subsequent empirical work, not conclusions already measured.
+These three predictions are **not yet verified by this study** — Appendix C only demonstrates how the method runs and does not constitute evidence; they are the testing standards left for subsequent empirical work, not conclusions already measured.
 
 **Research boundaries**, which must be stated honestly:
 
-1. This paper is a framework paper and reports no new experimental data; the "testable predictions" above are method-level expectations, not conclusions already measured.
+1. This study is a framework write-up and reports no new experimental data; the "testable predictions" above are method-level expectations, not conclusions already measured.
 2. The five lenses are **heuristic lenses, not an algorithm**: they help you ask the right question, but they cannot answer domain facts for you.
-3. **The five lenses make no claim to completeness** — there may be a sixth or seventh perspective; what this paper gives is the five most-used categories repeatedly validated in the author's practice, not a closed list.
+3. **The five lenses make no claim to completeness** — there may be a sixth or seventh perspective; what this study gives is the five most-used categories repeatedly validated in the author's practice, not a closed list.
 4. The decoupling of the Five Lenses method from worldview: its validity rests only on falsifiable tests, not on any philosophical, religious, or political position.
 5. No thinking method can replace domain knowledge and first-hand information: after the five lenses ask a good question, the answer still has to come from the facts.
 
-### 7.1 This paper's method
+### 7.1 This study's method
 
-This paper adopts the method of **practical induction + conceptual analysis + falsifiability**: the five lenses come from the convergence of the author's long-term reading (mainly history) and practical retrospectives; the paper draws explicit distinctions among concepts such as "surface/root," "connection," and "structuring"; the validity of the whole method is judged solely by the testable predictions of Section 7, not by any authority or worldview. This paper is therefore neither deduced from axioms nor the result of experimental measurement, but an operational framework that can be adopted and can also be overturned.
+This study adopts the method of **practical induction + conceptual analysis + falsifiability**: the five lenses come from the convergence of the author's long-term reading (mainly history) and practical retrospectives; the study draws explicit distinctions among concepts such as "surface/root," "connection," and "structuring"; the validity of the whole method is judged solely by the testable predictions of Section 7, not by any authority or worldview. This study is therefore neither deduced from axioms nor the result of experimental measurement, but an operational framework that can be adopted and can also be overturned.
 
 ## 8. Relation to related work
 
@@ -245,26 +245,26 @@ The Five Lenses method is not a replacement for any existing system, but the inc
 | No investigation, no right to speak | Common research method | Stage 4: investigate facts before concluding |
 | STAR | Behavioral-interview / retrospective practice | Stage 4: structure of retrospectives and expression |
 
-Compared with the tools above, the Five Lenses method's incremental contribution lies not in the tools themselves but in **using one main line of "structure → connection → root → solution" to organize the scattered tools into a machine that has order, outputs, and falsifiability** — each tool is for the first time explicitly hung at the step where it belongs, with its boundaries spelled out. This is what distinguishes this paper from a "thinking-tools cheat sheet."
+Compared with the tools above, the Five Lenses method's incremental contribution lies not in the tools themselves but in **using one main line of "structure → connection → root → solution" to organize the scattered tools into a machine that has order, outputs, and falsifiability** — each tool is for the first time explicitly hung at the step where it belongs, with its boundaries spelled out. This is what distinguishes this study from a "thinking-tools cheat sheet."
 
 ### 8.1 Correspondences of the five lenses in existing research
 
-Taken individually, each of the five lenses has a mature correspondence in psychology and the social sciences; this paper's increment is packaging them into one operable problem-location checklist, together with a grouping and a progression. The key academic roots are as follows:
+Taken individually, each of the five lenses has a mature correspondence in psychology and the social sciences; this study's increment is packaging them into one operable problem-location checklist, together with a grouping and a progression. The key academic roots are as follows:
 
-| Five lenses | Corresponding existing research | Relation to this paper |
+| Five lenses | Corresponding existing research | Relation to this study |
 | --- | --- | --- |
 | Causal lens | Attribution theory (Heider 1958; Kelley 1967), causal inference (Pearl) | Operationalizes "finding the cause" into an executable chain of questioning |
 | Duality lens | Structuralist binary oppositions, CBT's "all-or-nothing" cognitive distortion (Beck) | Makes both sides explicit; CBT also warns that "forced dichotomy" is a cognitive distortion |
 | Dialectical lens | Naive dialecticism (Peng & Nisbett 1999), holistic cognition (Nisbett 2003), dialectical thinking (Basseches 1984) | "Step outside both sides to see what is objective" corresponds to East Asian cognition's tolerance of contradiction and "taking the middle" |
 | Position lens + Interest lens | Negotiation theory positions vs interests (Fisher, Ury & Patton 1981), stakeholder theory (Freeman 1984) | The Position lens asks the stated goals and needs; the Interest lens pursues the real cause and whose interest — corresponding to the "don't stop at positions, ask about interests" distinction |
 
-Among these, Beck ("all-or-nothing") and Basseches (dialectical thinking) serve as cross-disciplinary auxiliary references — used to show that these perspectives have already been touched in existing research, not as load-bearing arguments for this paper's validity; the Miller reference in 3.1 (working memory 7±2) is likewise only a lay explanation. In the Chinese management context, the Dialectical lens has a corresponding expression — Ren Zhengfei's idea of "grayness" (*Openness, Compromise, and Grayness*), the notion that "clear direction emerges from grayness"; it points the same way as "step outside both sides to see what is objective" ("gray cognition, black-and-white decision" is a later folk summary, not the original text).
+Among these, Beck ("all-or-nothing") and Basseches (dialectical thinking) serve as cross-disciplinary auxiliary references — used to show that these perspectives have already been touched in existing research, not as load-bearing arguments for this study's validity; the Miller reference in 3.1 (working memory 7±2) is likewise only a lay explanation. In the Chinese management context, the Dialectical lens has a corresponding expression — Ren Zhengfei's idea of "grayness" (*Openness, Compromise, and Grayness*), the notion that "clear direction emerges from grayness"; it points the same way as "step outside both sides to see what is objective" ("gray cognition, black-and-white decision" is a later folk summary, not the original text).
 
 Furthermore, the most famous precedent in management for "viewing the same object through multiple lenses" is Bolman & Deal's four frames (structural / human resources / political / symbolic), and de Bono's Six Thinking Hats is of the same kind; but they look at organizations or meetings, while the five lenses look at problems — a different granularity.
 
 ### 8.2 Methodological stance: decoupling method from worldview
 
-The five lenses are angles for observing problems, not a philosophy or a faith. This paper advocates no philosophical, religious, or political position; **a reader who rejects every aspect of the author's worldview can still use the Five Lenses method** — its validity comes from the testable predictions of Section 7, not from any worldview.
+The five lenses are angles for observing problems, not a philosophy or a faith. This study advocates no philosophical, religious, or political position; **a reader who rejects every aspect of the author's worldview can still use the Five Lenses method** — its validity comes from the testable predictions of Section 7, not from any worldview.
 
 ### 8.3 Differences from full-process methods
 
@@ -288,7 +288,7 @@ Structured thinking is not "the look of being organized," but making thinking jo
 
 The Five Lenses method combines these four steps into one repeatable path: first structure (separate conclusion, evidence, assumption, and next step), then use the five lenses to bring out connections (causal, duality, dialectical, position, interest), then distinguish surface from root, and finally aim the solution at the underlying constraint. This path does not guarantee a correct answer — no method can — but it guarantees this: when you arrive at a wrong answer, others can point out which cell the error sits in, and you yourself know which step to return to and redo.
 
-This paper is the "argument" version of the method; readers who just want to apply it can see the practical version, [*Thinking Training (4): Structured Thinking in Practice*](/en/writing/2026/08/structured-thinking-practice/).
+This study is the "argument" version of the method; readers who just want to apply it can see the practical version, [*Thinking Training (4): Structured Thinking in Practice*](/en/writing/2026/08/structured-thinking-practice/).
 
 ## References
 
@@ -399,7 +399,7 @@ After the revision, a reader can point precisely at which cell they disagree wit
 
 **Conflicts of interest:** The author declares no conflicts of interest. This research received no funding from any commercial institution; the frameworks and tools cited serve only as methodological or directional reference, and do not constitute endorsement of any commercial product or consulting firm.
 
-**Data availability:** This paper is a framework paper and reports no new experimental data. All tool names, attributions, and sources cited are a collation of public concepts; the main sources have been verified, and classic concepts are given by original book/text.
+**Data availability:** This study is a framework write-up and reports no new experimental data. All tool names, attributions, and sources cited are a collation of public concepts; the main sources have been verified, and classic concepts are given by original book/text.
 
 ## Glossary
 

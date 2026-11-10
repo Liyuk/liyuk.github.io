@@ -1035,7 +1035,7 @@ Planner 已经拆分 subtask
 
 ### 8.2 它不应该解决什么
 
-以下能力保留在论文的完整理论中，但不作为当前 quota-router 的实现目标：
+以下能力保留在本研究的完整理论中，但不作为当前 quota-router 的实现目标：
 
 - Planner 和复杂任务拆解；
 - DAG、并行执行和依赖编排；
@@ -1339,7 +1339,7 @@ SubtaskSpec
 1. 先支持显式 `taskClass`、`complexity`、`precision` 和 `allowedModels`；
 2. 再支持 subtask 级模型锁定和有序 fallback；
 3. 最后增加 primary/fallback/recovery/outcome 统计；
-4. Planner、上下文压缩、跨 Harness 状态迁移、Receipt/Ledger 和自动 replan 留在上层系统或后续论文。
+4. Planner、上下文压缩、跨 Harness 状态迁移、Receipt/Ledger 和自动 replan 留在上层系统或后续研究。
 
 一句话概括本文的工程判断：
 

@@ -1,6 +1,6 @@
 ---
 title: "Let the Agent Execute: Emotional Adaptation, Trust Calibration, and Human Relief from Execution Pressure"
-description: "Based on long-task use, this paper examines how an Agent can adapt state, evidence, and action feedback to uncertainty, waiting, failure, and takeover needs, while documenting how delegated execution changes human pressure, trust, and capability boundaries."
+description: "Based on long-task use, this study examines how an Agent can adapt state, evidence, and action feedback to uncertainty, waiting, failure, and takeover needs, while documenting how delegated execution changes human pressure, trust, and capability boundaries."
 createdAt: 2026-08-17
 publishedAt: 2026-08-19
 version: '0.3'
@@ -22,7 +22,7 @@ When I use an Agent for a long task, the first change I notice is not a sudden i
 
 This experience made me reconsider “emotional value.” It is not only excitement after completion. It also includes the trust and composure that come from handing over execution pressure, and the feeling that a person still has a place at critical judgment points. Emotional adaptation here does not mean that an Agent guesses or declares that a user is anxious, nor that it hides uncertainty behind comforting language. It means adapting state, evidence, pacing, and action entry points to task risk, runtime state, explicit preferences, and observable interaction difficulty, so that the user can regain predictability and agency. The other side also deserves attention: can repeated delegation reduce manual practice until a person discovers, when the Agent is unavailable, that returning to the execution layer has become difficult?
 
-I organize this observation into three research propositions—P1a, P1b, and P2—and provide implementable protocols. The material comes from related theory, first-person observation, and existing design materials. This paper reports no user-experiment data or results; the “sweet trap” remains a hypothesis.
+I organize this observation into three research propositions—P1a, P1b, and P2—and provide implementable protocols. The material comes from related theory, first-person observation, and existing design materials. This study reports no user-experiment data or results; the “sweet trap” remains a hypothesis.
 
 **Keywords:** Agent HCI; trust calibration; reliability; execution pressure; responsibility release; capability reallocation; cognitive offloading; takeover ability; observability
 
@@ -46,9 +46,9 @@ I am willing to delegate execution, but I usually do not delegate three prior de
 
 That is the difference between deep delegation and abandoning judgment. A person may stop watching every tool call, but cannot hand over an ambiguous goal and then treat the Agent’s chosen goal as their own. An Agent may design an execution path, but the human must retain responsibility for risk, scope, acceptance, and takeover.
 
-### 1.3 Scope of this paper
+### 1.3 Scope of this study
 
-This paper does not claim that Agents create a general emotional benefit, that chat-like presentation is always better than a workbench, or that delegation inevitably causes deskilling. It asks narrower questions: which feedback structures support appropriate relief and trust, what capabilities are reallocated, and how those claims could be tested without confusing design evidence with behavioral evidence.
+This study does not claim that Agents create a general emotional benefit, that chat-like presentation is always better than a workbench, or that delegation inevitably causes deskilling. It asks narrower questions: which feedback structures support appropriate relief and trust, what capabilities are reallocated, and how those claims could be tested without confusing design evidence with behavioral evidence.
 
 ## 2. Do not reduce “emotional value” to a score, and do not treat adaptation as mind-reading
 
@@ -383,7 +383,7 @@ Do not use a single self-report or engagement metric as proof. Distinguish:
 
 Three points are currently clear: delegation can reduce execution pressure while creating takeover risk; reliability must be judged with evidence and recovery; and emotional adaptation should restore understanding and action rather than hide risk with reassurance. First-person observation and design materials justify the questions, but cannot establish how often they hold or for whom.
 
-The next sequence is to record authorization, acceptance, and re-entry cost in real tasks; compare manual tasks with a baseline; and only then study long-term skill change. The adjacent systems problem is how to make state, evidence, authorization, and recovery understandable and correctable; this paper treats them as design variables, not validated user effects.
+The next sequence is to record authorization, acceptance, and re-entry cost in real tasks; compare manual tasks with a baseline; and only then study long-term skill change. The adjacent systems problem is how to make state, evidence, authorization, and recovery understandable and correctable; this study treats them as design variables, not validated user effects.
 
 ## 11. Conclusion
 
@@ -415,7 +415,7 @@ The sweet trap asks not whether people like useful systems, but: **when a system
 
 **Competing interests:** The author declares no competing interests. This research received no commercial funding.
 
-**Data availability:** This paper contains no new user-experiment data or results. First-person observations generate hypotheses; design materials and experimental protocols provide design evidence and planned behavioral evidence, and cannot substitute for one another.
+**Data availability:** This study contains no new user-experiment data or results. First-person observations generate hypotheses; design materials and experimental protocols provide design evidence and planned behavioral evidence, and cannot substitute for one another.
 
 ## Glossary
 

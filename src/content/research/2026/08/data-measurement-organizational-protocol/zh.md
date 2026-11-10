@@ -1,6 +1,6 @@
 ---
 title: 数据度量作为组织协议：口径、测量、分级与复盘
-description: 一篇研究设计与协议论文：把数据度量从"看板上放什么"重构为可复算、可复核、能支持决策的协作协议，给出口径定义、测量单位、指标分级、字典与复盘的最小机制。
+description: 一篇研究设计与协议稿：把数据度量从"看板上放什么"重构为可复算、可复核、能支持决策的协作协议，给出口径定义、测量单位、指标分级、字典与复盘的最小机制。
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
@@ -13,7 +13,7 @@ column: { slug: data-metrics-guide, order: 6 }
 
 **版本：** 0.1（工作稿）
 **日期：** 2026-08-14
-**类型：** 研究设计与协议论文（research design / protocol paper）
+**类型：** 研究设计与协议稿（research design / protocol paper）
 
 ## 摘要
 
@@ -21,7 +21,7 @@ column: { slug: data-metrics-guide, order: 6 }
 
 本文把数据度量重构为一种**组织协议**：一套让不同角色围绕同一对象做判断、且能独立复算的口径系统。它不回答"看板上应该放什么"，而回答"一个数字怎样才能被信任、被比较、被用于决策"。为此，本文提出四组最小机制：**口径定义**（一个指标至少包含测量对象、事件定义、计算方法、时间范围与使用边界）；**测量单位**（请求、会话、用户、任务各有用途，任务最能贴近用户结果）；**指标分级**（任务结果、体验护栏、过程诊断、数据质量四层，配合核心/观察/按需三张清单）；**字典与复盘**（把定义变成可复算的协作接口，把变化变成可验证的行动）。
 
-本文是一篇研究设计与协议论文，不报告新的实验数据。它把"看结果而非看活动量""先确认数据可信，再解释原因""把行动写成可验证假设"整理成一套可被团队采用、也可否证的协议。
+本文是一篇研究设计与协议稿，不报告新的实验数据。它把"看结果而非看活动量""先确认数据可信，再解释原因""把行动写成可验证假设"整理成一套可被团队采用、也可否证的协议。
 
 **关键词：** 数据度量；口径；测量；指标分级；数据质量；复盘；协作
 
@@ -146,7 +146,7 @@ flowchart TD
 
 ## 8. 有效性威胁与研究边界
 
-第一，本文是一篇协议论文，不报告新的实验数据；它把作者团队与公开工程实践整理为协议，协议的有效性需要在具体团队中检验。第二，指标定义会随标准演进，使用时应以公开标准为准：例如 Web Vitals 于 2024 年以 INP（Interaction to Next Paint）取代 FID 作为第三项核心指标，当前为 LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1，且按移动端与桌面端分别取 75 分位测量——任何沿用旧版（如仍以 FID 为准）的表述都已过时。第三，文中所有"可检验预测"均为协议层面的预期，不是已测得的结论。第四，任何指标协议都不能替代对用户、系统与场景的理解——数字是观察，不是裁决。
+第一，本文是一篇协议研究稿，不报告新的实验数据；它把作者团队与公开工程实践整理为协议，协议的有效性需要在具体团队中检验。第二，指标定义会随标准演进，使用时应以公开标准为准：例如 Web Vitals 于 2024 年以 INP（Interaction to Next Paint）取代 FID 作为第三项核心指标，当前为 LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1，且按移动端与桌面端分别取 75 分位测量——任何沿用旧版（如仍以 FID 为准）的表述都已过时。第三，文中所有"可检验预测"均为协议层面的预期，不是已测得的结论。第四，任何指标协议都不能替代对用户、系统与场景的理解——数字是观察，不是裁决。
 
 ## 9. 结论
 
@@ -160,8 +160,8 @@ flowchart TD
 2. Forsgren, N., Storey, M.-A., Maddila, C., Zimmermann, T., Houck, B., & Butler, J. (2021). [The SPACE of Developer Productivity: There's More to It Than You Think](https://www.microsoft.com/en-us/research/publication/the-space-of-developer-productivity-theres-more-to-it-than-you-think/). *ACM Queue*, 19(1). 开发者生产力的多维度框架。
 3. DORA. (2024). [DORA's software delivery performance metrics](https://dora.dev/guides/dora-metrics/). 当前五指标：变更前置时间、部署频率、失败部署恢复时间、变更失败率、部署返工率；指标当目标即触发 Goodhart 效应的官方提醒。
 4. Google. (2020, updated 2024). [Web Vitals](https://web.dev/articles/vitals). Core Web Vitals：LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1；2024 年 INP 取代 FID。
-5. Liyuk (2026). [开发者生产力不是工具目录，而是一个反馈系统](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/developer-productivity-feedback-loops/zh.md). 本站姊妹论文。
-6. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹论文。
+5. Liyuk (2026). [开发者生产力不是工具目录，而是一个反馈系统](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/developer-productivity-feedback-loops/zh.md). 本站姊妹研究。
+6. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹研究。
 7. Liyuk (2021). [数据度量工作指南（一）：数据口径是组织协作的接口](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2021/04/data-definitions-are-collaboration-interfaces/zh.md). 本站写作系列；数据口径作为协作接口的五部分构成、绝对量/比例/体验三分与基线原则。
 8. Liyuk (2021). [数据度量工作指南（二）：指标争论之前，先定义测量对象](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2021/04/define-the-measurement-before-arguing-about-metrics/zh.md). 本站写作系列；请求、会话、用户、任务等测量对象的公开词典。
 9. Liyuk (2021). [数据度量工作指南（三）：指标分级，让数据先服务最重要的决策](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2021/04/metric-tiers-prioritize-decisions/zh.md). 本站写作系列；指标分级模型与四维排序。
@@ -186,7 +186,7 @@ flowchart TD
 
 **利益冲突：** 作者声明无利益冲突。本研究未受任何商业机构资助；文中引用的公开项目、行业报告与报道均仅作方法或方向参考。
 
-**数据可用性：** 本文是协议论文，不报告新的实验数据。文中引用的量化阈值来自第三方公开标准（如 Web Vitals 的 LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1）与公开框架（DORA 软件交付指标），具体数字与阈值应回到公开标准核验时效，不能当作本协议产出的测量结果；"完成率 1%""平均耗时下降"等为说明口径的示意示例。
+**数据可用性：** 本文是协议研究稿，不报告新的实验数据。文中引用的量化阈值来自第三方公开标准（如 Web Vitals 的 LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1）与公开框架（DORA 软件交付指标），具体数字与阈值应回到公开标准核验时效，不能当作本协议产出的测量结果；"完成率 1%""平均耗时下降"等为说明口径的示意示例。
 
 ## 术语表
 

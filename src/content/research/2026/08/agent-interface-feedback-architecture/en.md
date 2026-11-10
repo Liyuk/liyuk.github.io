@@ -1,6 +1,6 @@
 ---
 title: "Making an Agent a Collaborable Object: State, Feedback, and Result Confirmation"
-description: "Based on ChatLab design work, this paper records how presence, response, waiting, and delivery patterns from human collaboration can make Agent runtime states easier to understand; it is an HCI design observation about feedback, evidence, intervention, and result confirmation."
+description: "Based on ChatLab design work, this study records how presence, response, waiting, and delivery patterns from human collaboration can make Agent runtime states easier to understand; it is an HCI design observation about feedback, evidence, intervention, and result confirmation."
 createdAt: 2026-08-18
 publishedAt: 2026-08-19
 version: '0.2'
@@ -20,7 +20,7 @@ column: { slug: agent-collaboration-research, order: 2 }
 
 When I built ChatLab, I first used unread state, processing state, and read position to answer simple questions: is it still alive, where did I stop, and do I need to come back now? I later found that state cues were not enough. Users also need to know why an Agent acted, which results have evidence, which actions require approval, and whether work can continue after failure.
 
-This paper therefore treats an Agent interface as a control surface rather than merely a chat transcript. A task contract defines the goal, state expresses progress, evidence explains grounds, authorization limits possible actions, and checkpoints determine where to continue after an error. Staged diffs, permission checks, and path-escape tests in Coding Agent Harness, together with the separation between candidate and formal states in CanonLoom, are two concrete references for this idea.
+This study therefore treats an Agent interface as a control surface rather than merely a chat transcript. A task contract defines the goal, state expresses progress, evidence explains grounds, authorization limits possible actions, and checkpoints determine where to continue after an error. Staged diffs, permission checks, and path-escape tests in Coding Agent Harness, together with the separation between candidate and formal states in CanonLoom, are two concrete references for this idea.
 
 This is neither a systematic review nor a user study. It abstracts engineering slices from several projects into a feedback architecture that can be discussed, implemented, and ablated. These materials show only that the relevant boundaries can be designed and partly implemented; they do not show that users become faster, safer, or more satisfied. Follow-up work must validate error-localization time, pre-approval execution rate, recovery success, and user burden.
 
@@ -28,7 +28,7 @@ This is neither a systematic review nor a user study. It abstracts engineering s
 
 ## 1. The problem: a chat transcript is not a control surface
 
-Another paper in this research series examines the human experience after delegation: how execution pressure falls, how calm and delegability form, and whether emotional experience changes acceptance and takeover. This paper moves one step earlier: if that calm is to come from interaction that is understandable, actionable, and recoverable rather than from black-box smoothness, what must an Agent interface and runtime protocol express?
+Another study in this research series examines the human experience after delegation: how execution pressure falls, how calm and delegability form, and whether emotional experience changes acceptance and takeover. This study moves one step earlier: if that calm is to come from interaction that is understandable, actionable, and recoverable rather than from black-box smoothness, what must an Agent interface and runtime protocol express?
 
 ### 1.1 From answering questions to running tasks
 
@@ -517,7 +517,7 @@ A good Agent interface neither forces people to watch forever nor removes them f
 
 **Competing interests:** The author declares no competing interests. This research received no commercial funding.
 
-**Data availability:** This paper contains no new user-experiment data or results. ChatLab, Coding Agent Harness Study, and CanonLoom provide engineering and design evidence; this paper reports a reproducible evaluation plan, but user effects, long-term use, and cross-task recovery still require later experiments and logs.
+**Data availability:** This study contains no new user-experiment data or results. ChatLab, Coding Agent Harness Study, and CanonLoom provide engineering and design evidence; this study reports a reproducible evaluation plan, but user effects, long-term use, and cross-task recovery still require later experiments and logs.
 
 ## Glossary
 
