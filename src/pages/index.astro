@@ -176,6 +176,7 @@ const cadenceTotal = cadence.reduce((sum, row) => sum + row.months.reduce((n, ce
         <a class="btn btn-primary" href={path('/columns/')}>{ux.startHere} <span aria-hidden="true">→</span></a>
         <a class="btn btn-secondary" href={path('/about/')}>{copy.aboutLink} <span aria-hidden="true">→</span></a>
       </div>
+      <p class="hero-contact"><a href={`mailto:${site.email}`}>{copy.contact}{locale === 'en' ? ': ' : '：'}{site.email}</a></p>
       <figure class="cadence">
         <figcaption><span>{ux.cadence}</span><span class="mono">{firstYear}—{lastYear} · {cadenceTotal}</span></figcaption>
         <p class="visually-hidden">{ux.cadenceSummary(cadenceTotal, firstYear, lastYear)}</p>

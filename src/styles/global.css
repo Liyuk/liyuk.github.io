@@ -133,6 +133,10 @@ h1, h2, h3, h4 { color: var(--ink); }
 .hero-byline { margin: 1.75rem 0 .5rem; color: var(--ink); font-size: .9375rem; font-weight: 600; }
 .hero-lede { max-width: 34rem; margin: 0; color: var(--muted); font-size: 1.125rem; line-height: 1.7; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+/* Contact as a quiet text link under the actions, so it never competes with the primary button. */
+.hero-contact { margin: 1rem 0 0; font-size: .875rem; }
+.hero-contact a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-strong); }
+.hero-contact a:hover { color: var(--accent); text-decoration-color: currentColor; }
 .reading-panel { padding: 1.25rem 1.5rem 1rem; border: 1px solid var(--band-line); border-radius: 10px; background: var(--paper); }
 .reading-panel .panel-title { padding-bottom: .65rem; border-bottom: 2px solid var(--accent); }
 /* Writing cadence: year rows x month cells, shaded by output. */
