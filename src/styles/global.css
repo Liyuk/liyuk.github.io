@@ -139,20 +139,6 @@ h1, h2, h3, h4 { color: var(--ink); }
 .hero-contact a:hover { color: var(--accent); text-decoration-color: currentColor; }
 .reading-panel { padding: 1.25rem 1.5rem 1rem; border: 1px solid var(--band-line); border-radius: 10px; background: var(--paper); }
 .reading-panel .panel-title { padding-bottom: .65rem; border-bottom: 2px solid var(--accent); }
-/* Writing cadence: year rows x month cells, shaded by output. */
-.cadence { margin: 2.75rem 0 0; }
-.cadence figcaption { display: flex; align-items: baseline; gap: .75rem; margin-bottom: .75rem; color: var(--ink); font-size: .875rem; font-weight: 600; }
-.cadence figcaption .mono { color: var(--muted); font-size: .8125rem; font-weight: 400; }
-.cadence-grid { display: grid; gap: 3px; }
-.cadence-row { display: grid; grid-template-columns: 3rem auto; align-items: center; gap: .5rem; }
-.cadence-year { color: var(--muted); font-size: .75rem; text-decoration: none; }
-a.cadence-year:hover { color: var(--accent); text-decoration: underline; }
-.cadence-cells { display: grid; grid-template-columns: repeat(12, 13px); gap: 3px; }
-.cadence-cell { width: 13px; height: 13px; border-radius: 2px; background: var(--cad-0); }
-.cadence-cell.l1 { background: var(--cad-1); }
-.cadence-cell.l2 { background: var(--cad-2); }
-.cadence-cell.l3 { background: var(--cad-3); }
-.cadence-cell.l4 { background: var(--cad-4); }
 .panel-title { margin: 0 0 .5rem; font-size: 1rem; font-weight: 600; }
 .panel-group { padding-top: .9rem; }
 .panel-group h3 { margin: 0 0 .25rem; font-size: .8125rem; font-weight: 600; letter-spacing: 0; }
@@ -171,8 +157,6 @@ a.cadence-year:hover { color: var(--accent); text-decoration: underline; }
 .panel-more-close, .panel-more[open] .panel-more-open { display: none; }
 .panel-more[open] .panel-more-close { display: inline; }
 .panel-more li:first-child a { border-top: 1px solid var(--line); }
-/* On the home page the cadence sits with the writing list, below the first screen. */
-.home-cadence { margin: 1.25rem 0 .5rem; }
 .home-start { padding-block: 1.5rem .5rem; }
 .home-list-section { padding-block: clamp(2rem, 4vw, 3rem) .5rem; }
 .home-list-section .subscribe { margin-top: 1.5rem; padding-top: 1.25rem; max-width: none; }
@@ -491,9 +475,24 @@ a.cadence-year:hover { color: var(--accent); text-decoration: underline; }
 .search-result-excerpt { max-width: 44rem; margin: .35rem 0 0; color: var(--muted); font-size: .9375rem; line-height: 1.7; }
 
 /* ---------- Archives chrome ---------- */
-.writing-years { display: flex; flex-wrap: wrap; gap: .25rem 1rem; margin-bottom: 1rem; }
-.writing-years a { color: var(--muted); font-family: var(--mono); font-size: .8125rem; text-decoration: none; }
-.writing-years a:hover { color: var(--accent); }
+/* Writing cadence (top of the writing archive): year rows x month cells,
+   shaded by output. Year labels link to that year's archive, so rows keep a
+   24px pitch to stay comfortable touch targets. */
+.cadence { margin: 0 0 2rem; }
+.cadence-caption { display: flex; align-items: baseline; gap: .75rem; margin: 0 0 .75rem; color: var(--ink); font-size: .875rem; font-weight: 600; }
+.cadence-caption .mono { color: var(--muted); font-size: .8125rem; font-weight: 400; }
+.cadence-grid { display: grid; gap: 0; }
+.cadence-row { display: grid; grid-template-columns: 4rem auto; align-items: center; gap: .5rem; min-height: 1.5rem; }
+.cadence-year { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--muted); font-size: .8125rem; text-decoration: none; }
+a.cadence-year { color: var(--ink); }
+a.cadence-year:hover { color: var(--accent); text-decoration: underline; }
+.cadence-cells { display: grid; grid-template-columns: repeat(12, 15px); gap: 3px; }
+.cadence-cell { width: 15px; height: 15px; border-radius: 2px; background: var(--cad-0); }
+.cadence-cell.l1 { background: var(--cad-1); }
+.cadence-cell.l2 { background: var(--cad-2); }
+.cadence-cell.l3 { background: var(--cad-3); }
+.cadence-cell.l4 { background: var(--cad-4); }
+.cadence-gap-note { color: var(--muted); font-size: .8125rem; }
 .writing-sort { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .8rem; margin-bottom: 1rem; color: var(--muted); font-size: .8125rem; }
 .writing-sort label { color: var(--ink); font-weight: 600; }
 .writing-sort select { min-height: 2.25rem; padding: .3rem 1.9rem .3rem .6rem; border: 1px solid var(--line-strong); border-radius: 6px; background: var(--paper); color: var(--ink); font: inherit; }

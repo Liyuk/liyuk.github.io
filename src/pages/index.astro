@@ -9,7 +9,7 @@ import { getColumnCollections } from '../lib/content-query.ts';
 import { columnUrl, entryUrl } from '../lib/content-paths.ts';
 import RssSubscribe from '../components/RssSubscribe.astro';
 import { i18n } from '../i18n/index.mjs';
-import { groupByYearMonth, sortByCreatedAt, sortByLastUpdatedAt } from '../lib/timeline.ts';
+import { sortByCreatedAt, sortByLastUpdatedAt } from '../lib/timeline.ts';
 import { site } from '../data/site.mjs';
 
 const HOME_POSTS = 5;
@@ -47,21 +47,6 @@ const readingPaths = startGroups.map((group) => ({
 }));
 const path = (p: string) => getRelativeLocaleUrl(locale, p);
 
-// Writing cadence: one row per year, one cell per month, shaded by how many
-// pieces were published that month. Built from the same grouping the monthly
-// archive routes use, so a year label always links to a page that exists.
-const monthCounts = new Map(groupByYearMonth(writing).map(({ year, month, entries }) => [`${year}-${month}`, entries.length]));
-const lastYear = new Date().getFullYear();
-const firstYear = site.since;
-const level = (n: number) => (n === 0 ? 0 : n === 1 ? 1 : n <= 3 ? 2 : n <= 6 ? 3 : 4);
-const cadence = Array.from({ length: lastYear - firstYear + 1 }, (_, i) => lastYear - i).map((year) => ({
-  year,
-  hasEntries: [...monthCounts.keys()].some((key) => key.startsWith(`${year}-`)),
-  months: Array.from({ length: 12 }, (_, m) => {
-    const count = monthCounts.get(`${year}-${m + 1}`) ?? 0;
-    return { month: m + 1, count, level: level(count) };
-  }),
-}));
 // Hero texture: every reading path (column) drawn as one faint line, with a
 // node for each entry in it. Lines start spread across the band and converge
 // toward the reading-path panel, so the decoration is the site's real structure.
@@ -155,7 +140,6 @@ const buildHeroLines = ({ W, nodeFrom, nodeSpan, curve }: HeroLayout) =>
     return { d, nodes, g: column.g, rhythm };
   });
 const heroGeometries = (['wide', 'narrow'] as const).map((key) => ({ key, layout: HERO_LAYOUTS[key], lines: buildHeroLines(HERO_LAYOUTS[key]) }));
-const cadenceTotal = cadence.reduce((sum, row) => sum + row.months.reduce((n, cell) => n + cell.count, 0), 0);
 ---
 
 <BaseLayout title={copy.metaTitle} description={copy.description} seoPage="home">
@@ -214,20 +198,6 @@ const cadenceTotal = cadence.reduce((sum, row) => sum + row.months.reduce((n, ce
 
   <section class="section shell home-list-section" aria-labelledby="writing-heading" data-home-section="writing">
     <div class="section-label"><h2 id="writing-heading">{ux.homeSections.writing}</h2><span class="mono">{writing.length}</span><a href={path('/writing/')}>{copy.writing.link} <span aria-hidden="true">→</span></a></div>
-    <figure class="cadence home-cadence">
-      <figcaption><span>{ux.cadence}</span><span class="mono">{firstYear}—{lastYear} · {cadenceTotal}</span></figcaption>
-      <p class="visually-hidden">{ux.cadenceSummary(cadenceTotal, firstYear, lastYear)}</p>
-      <div class="cadence-grid">
-        {cadence.map((row) => (
-          <div class="cadence-row">
-            {row.hasEntries ? <a class="cadence-year mono" href={path(`/writing/${row.year}/`)}>{row.year}</a> : <span class="cadence-year mono">{row.year}</span>}
-            <span class="cadence-cells" aria-hidden="true">
-              {row.months.map((cell) => <span class={`cadence-cell l${cell.level}`} title={cell.count ? ux.cadenceMonth(row.year, cell.month, cell.count) : undefined}></span>)}
-            </span>
-          </div>
-        ))}
-      </div>
-    </figure>
     <div class="entry-list">
       {latest.length ? latest.map((entry) => <HomeEntry entry={entry} locale={locale} indexableTags={indexableTags} />) : <p>{copy.writing.empty}</p>}
     </div>

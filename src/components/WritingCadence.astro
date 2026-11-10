@@ -1,0 +1,67 @@
+---
+// Writing cadence: one row per year, one cell per month, shaded by how many
+// pieces were published that month. Lives at the top of the writing archive,
+// where each year label links to that year's archive page, so the chart is
+// navigation rather than decoration. Runs of two or more empty years collapse
+// into one gap row so early outliers don't stretch the chart.
+import type { CollectionEntry } from 'astro:content';
+import { i18n } from '../i18n/index.mjs';
+import { groupByYearMonth } from '../lib/timeline.ts';
+
+interface Props {
+  entries: CollectionEntry<'writing'>[];
+  locale: string;
+  archivePrefix: string;
+  label: string;
+}
+
+const { entries, locale, archivePrefix, label } = Astro.props as Props;
+const ux = i18n(locale).ux;
+
+const monthCounts = new Map(groupByYearMonth(entries).map(({ year, month, entries: group }) => [`${year}-${month}`, group.length]));
+const yearsWithEntries = new Set([...monthCounts.keys()].map((key) => Number(key.split('-')[0])));
+const lastYear = Math.max(new Date().getFullYear(), ...yearsWithEntries);
+const firstYear = Math.min(...yearsWithEntries);
+const level = (n: number) => (n === 0 ? 0 : n === 1 ? 1 : n <= 3 ? 2 : n <= 6 ? 3 : 4);
+const total = [...monthCounts.values()].reduce((sum, n) => sum + n, 0);
+
+type Row = { kind: 'year'; year: number; hasEntries: boolean; months: { month: number; count: number; level: number }[] } | { kind: 'gap'; from: number; to: number };
+const rows: Row[] = [];
+for (let year = lastYear; year >= firstYear; year -= 1) {
+  if (!yearsWithEntries.has(year)) {
+    let from = year;
+    while (from - 1 >= firstYear && !yearsWithEntries.has(from - 1)) from -= 1;
+    if (from < year) {
+      rows.push({ kind: 'gap', from, to: year });
+      year = from;
+      continue;
+    }
+  }
+  rows.push({
+    kind: 'year',
+    year,
+    hasEntries: yearsWithEntries.has(year),
+    months: Array.from({ length: 12 }, (_, m) => {
+      const count = monthCounts.get(`${year}-${m + 1}`) ?? 0;
+      return { month: m + 1, count, level: level(count) };
+    }),
+  });
+}
+---
+
+<nav class="cadence" aria-label={label}>
+  <p class="cadence-caption"><span>{ux.cadence}</span><span class="mono">{firstYear}—{lastYear} · {total}</span></p>
+  <p class="visually-hidden">{ux.cadenceSummary(total, firstYear, lastYear)}</p>
+  <div class="cadence-grid">
+    {rows.map((row) => row.kind === 'gap' ? (
+      <div class="cadence-row cadence-gap"><span class="cadence-year mono">{row.from}—{String(row.to).slice(-2)}</span><span class="cadence-gap-note">{ux.cadenceGap}</span></div>
+    ) : (
+      <div class="cadence-row">
+        {row.hasEntries ? <a class="cadence-year mono" href={`${archivePrefix}${row.year}/`}>{row.year}</a> : <span class="cadence-year mono">{row.year}</span>}
+        <span class="cadence-cells" aria-hidden="true">
+          {row.months.map((cell) => <span class={`cadence-cell l${cell.level}`} title={cell.count ? ux.cadenceMonth(row.year, cell.month, cell.count) : undefined}></span>)}
+        </span>
+      </div>
+    ))}
+  </div>
+</nav>

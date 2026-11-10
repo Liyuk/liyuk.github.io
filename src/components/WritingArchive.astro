@@ -7,8 +7,9 @@ import { publishedIn } from '../lib/content-model.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EntryCard from './EntryCard.astro';
 import PaginationNav from './PaginationNav.astro';
+import WritingCadence from './WritingCadence.astro';
 import { i18n } from '../i18n/index.mjs';
-import { sortByCreatedAt, groupByYear } from '../lib/timeline.ts';
+import { sortByCreatedAt } from '../lib/timeline.ts';
 import { getIndexableTags } from '../lib/taxonomy.ts';
 import { PAGE_SIZE, paginateList } from '../lib/pagination.ts';
 
@@ -16,7 +17,6 @@ const { page = 1 } = Astro.props;
 const locale = Astro.currentLocale ?? 'zh-CN';
 const writing = sortByCreatedAt(await getCollection('writing', publishedIn(locale)));
 const indexableTags = getIndexableTags(writing).map(({ slug }) => slug);
-const years = groupByYear(writing).map(({ year }) => year);
 const copy = i18n(locale).page.writing;
 const sortCopy = i18n(locale).page.writingIndex;
 const archivePrefix = locale === 'en' ? '/en/writing/' : '/writing/';
@@ -28,7 +28,7 @@ const descriptionSuffix = currentPage > 1 ? i18n(locale).pagination.pageDescript
 <BaseLayout title={copy.metaTitle + titleSuffix} description={copy.metaDescription} pageKind="collection" section="writing" seoPage="writing" descriptionSuffix={descriptionSuffix}>
   <section class="page-heading shell"><h1>{copy.title[0]}<br />{copy.title[1]}</h1><p>{copy.description}</p></section>
   <section class="shell archive-list">
-    <nav class="writing-years" aria-label={sortCopy.archiveLabel}>{years.map((year) => <a href={`${archivePrefix}${year}/`}>{year}</a>)}</nav>
+    <WritingCadence entries={writing} locale={locale} archivePrefix={archivePrefix} label={sortCopy.archiveLabel} />
     <div class="writing-sort">
       <label for="writing-sort-select">{sortCopy.sortLabel}</label>
       <select id="writing-sort-select" name="sort">
