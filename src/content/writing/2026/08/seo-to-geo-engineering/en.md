@@ -1,5 +1,6 @@
 ---
 title: "SEO to GEO: From Discoverable Pages to Reviewable Answer Evidence"
+seoTitle: "SEO to GEO: From Discoverable Pages to Answer Evidence"
 description: "Connect SEO page engineering, AI-search observation, and claim–evidence evaluation into a replayable loop."
 locale: en
 translationStatus: reviewed
@@ -10,6 +11,9 @@ type: case-study
 draft: false
 tags: [seo, ai, observability, explainability, information-architecture]
 column: { slug: search-engine-growth, order: 9 }
+primaryQuery: "SEO vs GEO"
+searchIntent: compare
+relatedQueries: ["GEO optimization", "AI search visibility", "evaluating LLM citations"]
 ---
 
 GEO is easy to turn into a new ranking trick: buy a visibility score, run a few questions, and rewrite titles around the result. The more useful questions are simpler: can the page be read, are its facts clear, does the citation support the claim, and can the user complete the next task?

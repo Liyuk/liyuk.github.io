@@ -1,5 +1,6 @@
 ---
 title: "Data Measurement Guide (Part 5): Periodic Statistics and Retrospectives, Turning Numbers into the Next Action"
+seoTitle: "Data Measurement Guide (5): Periodic Metrics and Reviews"
 description: "From daily and weekly reports to problem retrospectives: how to maintain baselines, record changes, judge impact, and turn data conclusions into verifiable action items."
 locale: en
 translationStatus: reviewed

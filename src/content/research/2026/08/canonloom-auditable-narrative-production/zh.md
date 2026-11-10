@@ -1,6 +1,7 @@
 ---
 title: 从提示词到叙事生产：CanonLoom 0.2.0 的可审计长篇小说人机协作架构
 description: 一篇系统设计研究稿：将长篇小说协作建模为可恢复、可审计且由作者批准的状态转换，并给出不把机械分数误认为文学价值的评估方案。
+seoTitle: "CanonLoom：可审计的 AI 长篇小说协作架构"
 createdAt: 2026-08-03
 publishedAt: 2026-08-03
 version: CanonLoom 0.2.0
@@ -8,6 +9,9 @@ status: working-paper
 repositoryUrl: https://github.com/Liyuk/canonloom
 paperUrl: https://github.com/Liyuk/canonloom/blob/main/docs/paper-0.2.0/paper.md
 tags: [human-ai-collaboration, agent-systems, narrative, auditability, technology]
+primaryQuery: "AI 写长篇小说"
+searchIntent: project
+relatedQueries: ["AI 小说创作工具", "长篇小说 人机协作", "AI 写作 一致性", "CanonLoom"]
 ---
 
 **版本：** CanonLoom 0.2.0 定稿版

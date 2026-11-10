@@ -17,6 +17,9 @@ citationUrls:
   - https://shopify.dev/docs/api/storefront/latest/enums/orderfinancialstatus
   - https://docs.stripe.com/payout-reconciliation
 translationKey: 2026/08/ai-productivity-complex-systems
+primaryQuery: "AI 能提高生产力吗"
+searchIntent: essay
+relatedQueries: ["AI 局部提效 系统价值", "AI 投入产出", "AI 落地 价值"]
 ---
 
 我最近越来越不相信一句听起来很顺的话：AI 会直接带来生产力。

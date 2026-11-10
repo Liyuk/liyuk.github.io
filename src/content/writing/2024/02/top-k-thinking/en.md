@@ -1,5 +1,6 @@
 ---
 title: "Thinking Training (I): The Top K Problem — First Find What Matters Most"
+seoTitle: "Thinking Training (1): The Top K Problem"
 description: "When facing a long list of tasks, problems, and opinions, first define the standard of judgment, then find the few things that truly rank at the top."
 locale: en
 translationStatus: reviewed

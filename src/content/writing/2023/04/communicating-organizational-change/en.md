@@ -1,5 +1,6 @@
 ---
 title: "When Organizational Change Happens, How to Sync Without Breeding Speculation"
+seoTitle: "How to Communicate Organizational Change Clearly"
 description: "Sync the officially confirmed objective facts first, without covering up problems; then explain goals, stability, and the new ways of collaborating separately to superiors, the team, and collaborators."
 createdAt: 2023-04-04
 publishedAt: 2023-04-04

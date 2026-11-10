@@ -1,5 +1,6 @@
 ---
 title: "The Product–Engineering Relationship Isn't About 'Going Along': Get on the Same Side First"
+seoTitle: "Building Trust Between Product and Engineering"
 description: "Good collaboration is built on trust, shared information, and solving problems together; when goals conflict, don't make promises privately—escalate with complete information to align."
 locale: en
 translationStatus: reviewed

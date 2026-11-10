@@ -10,6 +10,9 @@ type: case-study
 tags: [product, technology, algorithms, data, metrics, governance]
 column: { slug: comment-systems-guide, order: 1 }
 citationUrls: []
+primaryQuery: "评论系统设计"
+searchIntent: definition
+relatedQueries: ["评论功能 产品设计", "评论区 运营", "评论系统 架构"]
 ---
 最近在改博客评论系统时，我想起过去做过的文章、视频、社区、地图、电商和生活服务业务。评论看起来只是内容下面的一层互动，实际会同时承担表达、讨论、经验记录、决策辅助和数据供给。
 

@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, image-seo, video-seo, architecture]
 column: { slug: search-engine-growth, order: 6 }
+primaryQuery: "结构化数据 SEO"
+searchIntent: howto
+relatedQueries: ["Schema 标记", "图片 SEO alt", "视频 SEO"]
 ---
 
 人看到一张截图，往往马上知道它在说明什么；搜索系统看到的可能只是一个文件名和一块播放器。以前我也会先想给图片补 alt、给视频补 Schema，做完才发现正文没有说明这份媒体为什么放在这里。标签补齐了，页面还是没有变得更好懂。

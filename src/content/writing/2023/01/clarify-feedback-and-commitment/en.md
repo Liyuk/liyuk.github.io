@@ -1,5 +1,6 @@
 ---
 title: "How to Communicate Well: From 'Not Knowing What to Talk About' to Making Things Clear"
+seoTitle: "How to Communicate Clearly at Work"
 description: "Communication is a broad topic, but it can be made concrete. Starting with 'clarify first, then give feedback, then commit,' plus a complete list of questions for workplace communication."
 locale: en
 translationStatus: reviewed

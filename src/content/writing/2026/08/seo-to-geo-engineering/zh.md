@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, ai, observability, explainability, information-architecture]
 column: { slug: search-engine-growth, order: 9 }
+primaryQuery: "SEO 和 GEO 区别"
+searchIntent: compare
+relatedQueries: ["GEO 优化", "AI 搜索优化", "AI 引用来源 评估"]
 ---
 
 GEO 很容易变成新的排名技巧：买一个可见性分数，跑几次问题，再根据分数改标题。对我来说更值得追的是几个朴素的问题：页面能不能被读到，事实有没有写清楚，回答里的引用是否真的支持这句话，用户能不能继续完成任务。

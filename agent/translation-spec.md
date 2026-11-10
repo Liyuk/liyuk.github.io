@@ -49,13 +49,17 @@ title: "Why Code Decays: From Local Convenience to Debt"
 description: "A command-driven workflow: the author drives with short commands."
 ```
 
-Quote these fields: `title`, `description`, `hero.alt`, `hero.caption`,
+Quote these fields: `title`, `seoTitle`, `description`, `hero.alt`, `hero.caption`,
 `work.penName`, `work.platform`, `work.status`, and gallery `alt` / `caption`.
 If a value contains a double quote, escape it as `\"` (or use single quotes
 around the whole value). Do **not** quote slugs, tags, dates, URLs, enums,
 `version`, or numeric values like `width` / `height`.
 
 1. **Translate** `title` and `description` into natural, idiomatic English.
+   Write `seoTitle` fresh for English when the English `title` exceeds the
+   search-title budget or the source has one; follow "Search titles" in
+   `agent/editorial-rules.md` rather than translating the Chinese `seoTitle`
+   word for word. Omit it when the English `title` already fits.
 2. **Set** `locale: en`.
 3. **Set** `translationStatus: draft` (machine/AI translation, not yet
    human-reviewed). Only a human reviewer accepts `reviewed` after checking it

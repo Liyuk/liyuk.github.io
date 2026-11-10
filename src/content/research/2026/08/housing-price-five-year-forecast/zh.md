@@ -1,5 +1,6 @@
 ---
 title: 未来五年中国二手住宅价格：一种可解释组合预测方法及其驻底分析（2026—2030）
+seoTitle: "中国二手房价格未来五年预测（2026—2030）"
 description: 基于 70 城官方二手指数（2019-2026，90 个月无缺口）提出可解释三成分组合预测（趋势延续/均值回归/季节性，权重由滚动样本外验证选择），给出全国与北京五年预测，并讨论驻底可能性。
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
@@ -8,6 +9,9 @@ status: working-paper
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 paperUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [housing, forecasting, time-series, explainability, china]
+primaryQuery: "房价未来五年走势"
+searchIntent: data
+relatedQueries: ["二手房价格预测", "房价什么时候见底", "北京房价预测", "2026 房价走势"]
 ---
 
 **版本：** 0.2（工作稿）

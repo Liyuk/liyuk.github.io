@@ -1,5 +1,6 @@
 ---
 title: "Anxiety and Pressure: Talking Out Actionable Work Boundaries in Times of Unease"
+seoTitle: "Work Anxiety and Pressure: Setting Actionable Boundaries"
 description: "One-on-ones at work are not counseling. Break anxiety into \"what you can control and what you cannot\"; talk through perception first, then concrete pressures and working conditions."
 locale: en
 translationStatus: reviewed

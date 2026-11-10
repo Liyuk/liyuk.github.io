@@ -10,6 +10,18 @@ The primary query should be stated naturally in the title or opening where it fi
 
 After publication, use `npm run seo:signals` to refresh the local Search Console query table and `npm run seo:match` to map queries to published pages, highlight content gaps, and identify internal-link or cannibalization opportunities. Treat the generated report as editorial evidence to review; it must not automatically create or publish content. Keep exported data and reports in ignored `artifacts/seo/`.
 
+### Search titles (`seoTitle`)
+
+The search-result title is `seoTitle` when present, otherwise `title`. It must fit 60 columns, with each CJK character counting as two: about 30 Chinese characters or 60 Latin characters. Longer titles get truncated or rewritten by Google, and the cut usually removes the subtitle that says what the piece is about. `title` stays the visible h1, the JSON-LD headline, and the text on the generated share card, so keep writing the full title there. Add `seoTitle` only when `title` is over budget, or when the term readers actually search for is missing from it. `npm run audit:content` fails a published entry that is still over budget without one.
+
+When writing a `seoTitle`:
+
+- Put the primary query, or the reader's own wording for it, in the first half. Prefer the term people search for over the essay's internal metaphor, for example `商业模式画布（九宫格）` rather than just `九个格子`.
+- Keep it a faithful compression of `title`: same subject and same claim, no new promises, no clickbait, no keyword lists.
+- Keep series labels short (`数据度量指南（四）`, `Comment Systems 101 (2)`) and drop the brand. The layout appends the brand only when it still fits.
+- Localize it per locale like `title`. The English `seoTitle` uses the English searcher's phrasing; it is not a literal translation of the Chinese one.
+- Do not add a `seoTitle` that repeats `title`; the audit rejects an identical value.
+
 ## Diagrams, flowcharts, and formulas: English labels, even in Chinese articles
 
 Mermaid diagrams and math formulas use English node labels and variable names, in both `zh.md` and `en.md` — this is already how every existing diagram and formula on the site is written (verified: zero Chinese characters inside any `mermaid` block or KaTeX expression across the content tree). Keep it that way:

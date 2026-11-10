@@ -8,6 +8,7 @@ draft: true
 # type 可选：essay | note | case-study（默认 essay）
 type: essay
 tags: [technology]
+# seoTitle: "关键词前置的短标题"   # title 超过约 30 个汉字时必填（可选）
 primaryQuery: "读者会搜索的具体问题"
 searchIntent: essay
 relatedQueries: []

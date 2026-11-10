@@ -1,5 +1,6 @@
 ---
 title: "People, Work, and Money: The Operating Structure Managers of Managers Must Understand"
+seoTitle: "People, Work, and Money: What Managers of Managers Run"
 description: "A framework for understanding how an organization distributes people decisions, problem and priority decisions, budgets, and capacity—and for seeing what a manager of managers can decide, negotiate, or escalate."
 createdAt: 2026-08-19
 publishedAt: 2026-08-20
@@ -10,6 +11,9 @@ column: { slug: multi-team-management, order: 2 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/people-work-money-authority
+primaryQuery: "manager decision rights"
+searchIntent: essay
+relatedQueries: ["headcount and budget authority", "how organizations allocate decisions"]
 ---
 
 Once someone starts managing multiple frontline managers, many management questions cannot be answered by looking only at the organization chart.

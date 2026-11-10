@@ -1,5 +1,6 @@
 ---
 title: "After AI Acceleration: How to Redraw Functional and Business Lines"
+seoTitle: "After AI: Redrawing Functional and Business Lines"
 description: "Functional lines once made specialized capability run efficiently; once tools lower workflow barriers, organizations should redesign around end-to-end business capability rather than cling to historical divisions of labor."
 locale: en
 translationStatus: reviewed

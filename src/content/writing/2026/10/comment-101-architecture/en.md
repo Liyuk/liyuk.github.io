@@ -1,5 +1,6 @@
 ---
 title: "Comment Systems 101 (5): Data Models, Cleaning, and Algorithms"
+seoTitle: "Comment Systems 101 (5): Data Models and Algorithms"
 description: "From comment-domain models, moderation lifecycles, and data cleaning to recommendations, search, AI search, and GEO, this article follows the engineering path of comment data."
 locale: en
 translationStatus: reviewed
@@ -22,6 +23,9 @@ citationUrls:
   - https://research.google/pubs/improving-user-topic-interest-profiles-by-behavior-factorization/
   - https://research.google/pubs/transparent-scrutable-and-explainable-user-models-for-personalized-recommendation/
   - https://arxiv.org/abs/2605.24245
+primaryQuery: "comment system data model"
+searchIntent: howto
+relatedQueries: ["comment system architecture", "comment data cleaning", "comments in search and recommendations"]
 ---
 A comment is both user-facing content and a data object that keeps changing. Consider the restaurant place listing (point of interest, or POI) in this series. The system needs to connect a specific experience to a place, time, author, and exposure context. Algorithms must then distinguish consumption interests, expressive behavior, and evidence in the content; raw interaction counts are not preferences.
 

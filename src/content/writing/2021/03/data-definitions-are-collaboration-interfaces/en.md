@@ -1,5 +1,6 @@
 ---
 title: "Data Measurement Guide (Part 1): Data Definitions Are the Interface of Collaboration"
+seoTitle: "Data Measurement Guide (1): Data Definitions"
 description: "Metrics are not numbers on a report; they are the shared language a team uses to describe the same thing. Only after defining the object, event, denominator, and time can data participate in decisions."
 locale: en
 translationStatus: reviewed
@@ -10,6 +11,9 @@ featured: true
 tags: [data, metrics, collaboration, measurement, technology]
 column: { slug: data-metrics-guide, order: 1 }
 translationKey: 2021/03/data-definitions-are-collaboration-interfaces
+primaryQuery: "metric definitions"
+searchIntent: howto
+relatedQueries: ["data definitions", "inconsistent metrics across teams", "defining a metric"]
 ---
 
 Many data arguments appear, on the surface, to be disputes over whether a number is right, when they are actually about two different things.

@@ -1,5 +1,6 @@
 ---
 title: "When a Project Gets No Product Support, How Should Engineering Move Forward?"
+seoTitle: "No Product Manager? How Engineering Can Move a Project"
 description: "A consultation about a high-pressure blended role: looking past the schedule to the business goal, shared expectations, resources, and authority the work requires."
 locale: en
 translationStatus: reviewed

@@ -1,5 +1,6 @@
 ---
 title: "Data Measurement Guide (Part 4): The Metric Dictionary Template — Turning Definitions into a Recomputable Collaboration Interface"
+seoTitle: "Data Measurement Guide (4): Metric Dictionary Template"
 description: "A ready-to-copy metric dictionary template, plus public examples for completion rate, retention, conversion, error, experience quality, and feedback metrics."
 locale: en
 translationStatus: reviewed

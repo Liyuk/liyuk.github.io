@@ -1,5 +1,6 @@
 ---
 title: "Growth Milestones: Turning 'I Want to Grow' into Something Concrete"
+seoTitle: "Growth Milestones: Making 'I Want to Grow' Concrete"
 description: "The worst thing about growth talk is when it stays vague. Break 'I want to grow faster' down into situation, capability, evidence, and the next round of practice, so both manager and report know what to ask."
 locale: en
 translationStatus: reviewed

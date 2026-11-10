@@ -1,5 +1,6 @@
 ---
 title: "From Conversation to Delivery: When Has a Personal Agent Finished the Job?"
+seoTitle: "When Has a Personal Agent Finished the Job?"
 description: "Starting from a quantitative research task, this essay looks at how Personal Agents carry long-running work forward, organize capabilities and collaboration, and deliver results that can be reviewed."
 locale: en
 translationStatus: reviewed
@@ -35,6 +36,9 @@ citationUrls:
   - https://arxiv.org/abs/2606.29537
   - https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/
   - https://www.microsoft.com/en-us/research/publication/the-impact-of-ai-on-developer-productivity-evidence-from-github-copilot/
+primaryQuery: "personal AI agent"
+searchIntent: essay
+relatedQueries: ["long-running agent tasks", "evaluating agent output", "AI agent delivery"]
 ---
 
 ## The Quantitative Research Task

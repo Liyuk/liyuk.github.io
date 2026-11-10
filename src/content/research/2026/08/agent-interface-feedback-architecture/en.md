@@ -1,6 +1,7 @@
 ---
 title: "Making an Agent a Collaborable Object: State, Feedback, and Result Confirmation"
-description: "Based on ChatLab design work, this study records how presence, response, waiting, and delivery patterns from human collaboration can make Agent runtime states easier to understand; it is an HCI design observation about feedback, evidence, intervention, and result confirmation."
+description: "An HCI design observation from ChatLab: borrowing presence, response, waiting, and delivery cues from human collaboration to make Agent states easier to read."
+seoTitle: "Agent Interface Design: State, Feedback, and Confirmation"
 createdAt: 2026-08-18
 publishedAt: 2026-08-19
 version: '0.2'
@@ -12,6 +13,9 @@ translationKey: 2026/08/agent-interface-feedback-architecture
 draft: false
 tags: [hci, agent, feedback, observability, recoverability, authorization, human-ai-collaboration, systems-design]
 column: { slug: agent-collaboration-research, order: 2 }
+primaryQuery: "AI agent UX design"
+searchIntent: howto
+relatedQueries: ["agent status feedback design", "human-in-the-loop agent interface", "agent result confirmation", "agent failure recovery UX"]
 ---
 
 > **Version: 0.2 (working paper).** This is a project-driven conceptual architecture and design study. It organizes design experience from ChatLab, Coding Agent Harness Study, and CanonLoom, proposes a feedback architecture to be tested, and reports a follow-up experimental protocol; it does not report user-experiment data or results.

@@ -1,5 +1,6 @@
 ---
 title: "Gifting Is Not About Picking a Product: A Question Framework for Understanding Relationships"
+seoTitle: "Gift-Giving: A Question Framework for Relationships"
 description: "A ready-to-use gifting guide: first confirm the person and the occasion, then narrow the choices across three categories — generic, custom, and experience."
 createdAt: 2025-02-20
 publishedAt: 2025-02-20

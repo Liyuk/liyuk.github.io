@@ -1,6 +1,7 @@
 ---
 title: "Defining the Boundaries Before Bringing AI Capability into an Engineering Organization"
-description: "A position write-up based on the author's experience driving AI infrastructure and pilots in a real engineering organization: it proposes four kinds of boundaries—context, responsibility, authorization, and measurement—and offers a falsifiable pilot protocol plus a minimal harness as a demonstration of putting them into practice."
+description: "A position write-up from driving AI pilots in a real engineering org: four boundaries (context, responsibility, authorization, measurement) and a pilot protocol."
+seoTitle: "AI in Engineering Organizations: Define the Boundaries"
 locale: en
 translationStatus: reviewed
 createdAt: 2026-08-14
@@ -12,6 +13,9 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [ai, software-engineering, agent-systems, developer-productivity, governance, technology]
 column: { slug: engineering-ai-judgment, order: 1 }
 translationKey: 2026/08/ai-engineering-capability-boundaries
+primaryQuery: "adopting AI in engineering teams"
+searchIntent: howto
+relatedQueries: ["AI pilot program engineering", "AI coding governance", "measuring AI impact on engineering", "AI agent authorization boundaries"]
 ---
 
 **Version:** 0.3 (working paper)

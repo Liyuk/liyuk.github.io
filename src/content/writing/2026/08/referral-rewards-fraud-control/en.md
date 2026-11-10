@@ -1,5 +1,6 @@
 ---
 title: "How a Marketing Campaign Becomes a Growth System: From Transaction Facts to Auditable Entitlements"
+seoTitle: "Referral Rewards as a Growth System: Fraud Control"
 description: "Starting with referral rewards and transaction systems, this article designs reusable, auditable marketing infrastructure across campaigns, audiences, entitlements, budgets, attribution, risk, experimentation, messaging, and measurement."
 locale: en
 translationStatus: reviewed

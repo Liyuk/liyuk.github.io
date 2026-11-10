@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, engineering, systems, reliability]
 column: { slug: search-engine-growth, order: 3 }
+primaryQuery: "技术 SEO"
+searchIntent: howto
+relatedQueries: ["canonical 标签", "网站迁移 SEO", "Core Web Vitals 优化", "SEO 渲染"]
 ---
 
 技术 SEO 的问题通常很具体：同一篇内容有带参数和不带参数的多个地址，canonical 指到了一个旧模板；迁移时只做了域名级跳转，旧文章没有对应的新页面；某个前端路由在浏览器里能打开，爬虫拿到的 HTML 却只有一个空壳。性能问题也常被简化成“加一个 preload 就好了”，但真正慢的可能是服务器、图片、长任务或第三方脚本。

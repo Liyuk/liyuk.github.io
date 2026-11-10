@@ -1,5 +1,6 @@
 ---
 title: "Managing Teams as a Manager of Managers: Authority and Resources"
+seoTitle: "Managing Managers: Authority and Resources"
 description: How a manager of managers can coordinate frontline managers, make cross-team choices, and use authorization and resources without taking back daily management.
 createdAt: 2026-08-17
 publishedAt: 2026-08-17

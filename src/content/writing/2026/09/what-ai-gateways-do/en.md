@@ -1,5 +1,6 @@
 ---
 title: "What Is an AI Gateway? From Backend Scheduling to Cost Governance"
+seoTitle: "What Is an AI Gateway? Scheduling and Cost Governance"
 description: "What is an AI Gateway? This article explains model routing, capacity controls, failure switching, distributed state, usage accounting, and cost governance across multiple model backends."
 locale: en
 createdAt: 2026-09-03

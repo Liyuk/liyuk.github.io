@@ -1,5 +1,6 @@
 ---
 title: 'SEO Experiments and Incidents: Let the Timeline Protect Judgment'
+seoTitle: "SEO Experiments and Incidents: Use the Timeline"
 description: 'A learning protocol for search delay, CUPED, page versions, and traffic incidents.'
 locale: en
 translationStatus: reviewed
@@ -10,6 +11,9 @@ type: case-study
 draft: false
 tags: [seo, growth, engineering, metrics]
 column: { slug: search-engine-growth, order: 8 }
+primaryQuery: "SEO experiment design"
+searchIntent: troubleshoot
+relatedQueries: ["SEO traffic anomaly", "CUPED variance reduction", "misreading algorithm updates"]
 ---
 
 In one recommendation experiment, Web clicks rose the same day while search exposure had not redistributed. A hot page later lifted the experiment average. We checked assignment, versions, crawl state, and historical traffic and learned that assignment had started; the search experiment had not yet matured.

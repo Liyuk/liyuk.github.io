@@ -27,6 +27,9 @@ citationUrls:
   - https://doi.org/10.27034/j.cnki.ISSN:1006-4885.2026.01.004
   - https://doi.org/10.1080/19368623.2026.2734369
   - https://doi.org/10.1287/mnsc.2023.01006
+primaryQuery: "评论区 产品设计"
+searchIntent: essay
+relatedQueries: ["评论 冷启动", "用户评论 激励", "AI 评论摘要"]
 ---
 
 评论产品先要选清评论承担什么任务。体验证据、问答、公共讨论和关系型社区的评论看起来都在“回复”，但用户要的结果、供给成本与治理边界并不相同。

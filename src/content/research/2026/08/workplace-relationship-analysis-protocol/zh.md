@@ -8,6 +8,9 @@ status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [workplace, power, professional-relationships, risk-analysis, human-ai-collaboration, work-leadership]
+primaryQuery: "职场关系分析"
+searchIntent: howto
+relatedQueries: ["职场权力结构", "职场冲突怎么处理", "权责错位", "职场 风险信号"]
 ---
 
 **版本：** 0.1（工作稿）

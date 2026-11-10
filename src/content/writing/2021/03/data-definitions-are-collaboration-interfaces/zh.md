@@ -7,6 +7,9 @@ type: essay
 featured: true
 tags: [data, metrics, collaboration, measurement, technology]
 column: { slug: data-metrics-guide, order: 1 }
+primaryQuery: "数据口径"
+searchIntent: howto
+relatedQueries: ["指标定义", "数据口径不一致", "指标 分母"]
 ---
 
 举例来说，某次周会上，产品经理说“这周错误率涨了三倍”，运维说“工单量没什么变化”，数据分析师翻了后台数据，发现两边都没算错。争到最后才发现，三个人说的根本不是同一件事：产品经理数的是后台记录的错误事件总数，运维看的是用户主动提交的工单数，数据分析师算的是出现过错误的去重用户占活跃用户的比例。三个数字都对，却描述着三个不同的对象，谁也说服不了谁。

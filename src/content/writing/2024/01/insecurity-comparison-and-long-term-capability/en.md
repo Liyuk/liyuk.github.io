@@ -1,5 +1,6 @@
 ---
 title: "Insecurity, Comparison, and Long-Term Capability: Turning Anxiety into Actionable Direction"
+seoTitle: "Insecurity and Comparison: Building Long-Term Capability"
 description: "Insecurity comes from the environment and also from comparison. First identify the source, then adjust expectations, extend the time horizon, and pull attention back from 'how others are doing' to 'what I should practice.'"
 locale: en
 translationStatus: reviewed

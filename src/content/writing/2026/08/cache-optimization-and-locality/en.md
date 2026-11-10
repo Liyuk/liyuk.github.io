@@ -1,5 +1,6 @@
 ---
 title: "Where Exactly Is the Cache? Locality in a Multi-Layer Execution Service"
+seoTitle: "Cache Locality in a Multi-Layer Execution Service"
 description: "Using a multi-layer execution service as an example, this article breaks down the multiple levels of locality across request identity, edge routing, execution resources, and backend caches, then presents reusable approaches to routing, invalidation, failover, and observability."
 locale: en
 createdAt: 2026-08-28
@@ -11,6 +12,9 @@ tags: [performance, systems-design, algorithms, reliability, observability, rout
 column: { slug: technical-systems, order: 7 }
 translationStatus: reviewed
 translationKey: 2026/08/cache-optimization-and-locality
+primaryQuery: "cache optimization"
+searchIntent: howto
+relatedQueries: ["cache locality", "multi-level caching", "cache invalidation", "sticky routing"]
 ---
 Cache optimization easily starts with a number: What is the hit rate? If the hit rate is not enough, extend the TTL, add a layer of Redis, and stick more requests to the same machine. This sequence often keeps people busy for a long time without actually answering the question.
 

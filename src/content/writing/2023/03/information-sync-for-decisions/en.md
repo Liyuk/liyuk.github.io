@@ -1,5 +1,6 @@
 ---
 title: "Information Sync Is Not CC: How to Help the Other Person Decide"
+seoTitle: "Information Sync Is Not CC: Help the Other Person Decide"
 description: "The goal of effective sync is not to send out everything you know, but to give a specific reader, at the right time, the information needed to judge, collaborate, or act."
 locale: en
 translationStatus: reviewed

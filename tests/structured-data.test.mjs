@@ -90,3 +90,14 @@ test('pages without an item list keep their previous mainEntity wiring', () => {
   assert.equal(collection['@graph'].find((node) => node['@type'] === 'CollectionPage').mainEntity, undefined);
   assert.ok(research['@graph'].find((node) => node['@type'] === 'WebPage').mainEntity['@id']);
 });
+
+test('breadcrumbs use localized section labels and skip a duplicate section crumb', () => {
+  const detail = buildStructuredData({ ...base, canonicalUrl: 'https://liyuk.com/en/photos/x/', locale: 'en', pageKind: 'gallery', section: 'photos' });
+  const crumbs = detail['@graph'].find((node) => node['@type'] === 'BreadcrumbList').itemListElement;
+  assert.deepEqual(crumbs.map((c) => [c.position, c.name]), [[1, 'Liyuk'], [2, 'Photos'], [3, base.title]]);
+
+  const index = buildStructuredData({ ...base, canonicalUrl: 'https://liyuk.com/photos/', locale: 'zh-CN', pageKind: 'collection', section: 'photos' });
+  const indexCrumbs = index['@graph'].find((node) => node['@type'] === 'BreadcrumbList').itemListElement;
+  assert.equal(indexCrumbs.length, 2);
+  assert.deepEqual(indexCrumbs.map((c) => c.position), [1, 2]);
+});

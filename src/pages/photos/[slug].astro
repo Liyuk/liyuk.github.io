@@ -14,7 +14,7 @@ import { previewable } from '../../lib/content-model.ts';
 import { groupByLocaleVariant, pickLocaleVariant } from '../../lib/content-query.ts';
 import { i18n } from '../../i18n/index.mjs';
 import { publishedDate, getChronologicalNeighbors } from '../../lib/timeline.ts';
-import { contentKeywords } from '../../lib/seo.ts';
+import { contentKeywords, pageTitle } from '../../lib/seo.ts';
 
 export async function getStaticPaths() {
   const galleries = await getCollection('gallery', previewable);
@@ -50,7 +50,7 @@ const nextColumnEntry = columnEntries[columnIndex + 1];
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
-<BaseLayout noindex={gallery.data.draft} title={`${gallery.data.title} — ${ui.navigation.photos} — ${ui.name}`} description={gallery.data.description} type="article" pageKind="gallery" section="photos" articleTitle={gallery.data.title} keywords={contentKeywords(gallery.data.tags, locale, [gallery.data.primaryQuery, ...(gallery.data.relatedQueries ?? [])].filter((value): value is string => Boolean(value)))} image={cover.src} galleryImages={gallery.data.images} publishedAt={isoDate(publishedDate(gallery))} updatedAt={gallery.data.updatedAt && isoDate(gallery.data.updatedAt)}>
+<BaseLayout noindex={gallery.data.draft} title={pageTitle(gallery.data.seoTitle ?? gallery.data.title, `${ui.navigation.photos} — ${ui.name}`)} description={gallery.data.description} type="article" pageKind="gallery" section="photos" articleTitle={gallery.data.title} keywords={contentKeywords(gallery.data.tags, locale, [gallery.data.primaryQuery, ...(gallery.data.relatedQueries ?? [])].filter((value): value is string => Boolean(value)))} image={cover.src} imageWidth={cover.width} imageHeight={cover.height} imageAlt={cover.alt} galleryImages={gallery.data.images} publishedAt={isoDate(publishedDate(gallery))} updatedAt={gallery.data.updatedAt && isoDate(gallery.data.updatedAt)}>
   <article class="gallery-detail shell experience">
     <header class="gallery-header"><div class="article-dates"><span>{ui.navigation.photos}</span><time datetime={isoDate(publishedDate(gallery))}>{formatDate(publishedDate(gallery))}</time><span>{ui.count.photos(gallery.data.images.length)}</span></div><h1>{gallery.data.title}</h1><p>{gallery.data.description}</p><AuthorByline locale={locale} />{gallery.data.column && <p class="column-reference">{ui.entry.columnIn(getColumn(gallery.data.column.slug, locale)?.label ?? gallery.data.column.slug, gallery.data.column.order)}</p>}<TagList tags={gallery.data.tags} locale={locale} indexableTags={indexableTags} class="article-tags" /></header>
     <section class="gallery-carousel" aria-label={ui.gallery.carouselAria(gallery.data.title)} data-gallery-carousel tabindex="-1">

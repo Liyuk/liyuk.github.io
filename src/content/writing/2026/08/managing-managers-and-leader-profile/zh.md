@@ -7,6 +7,9 @@ draft: false
 type: essay
 tags: [leadership, management, organization, team, work-leadership]
 column: { slug: multi-team-management, order: 1 }
+primaryQuery: "管理管理者"
+searchIntent: essay
+relatedQueries: ["二线经理", "经理的经理 职责", "什么人适合做管理"]
 ---
 
 团队从一个方向长到多个方向时，最先变复杂的往往不是人数，而是目标。

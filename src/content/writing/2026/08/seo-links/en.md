@@ -1,5 +1,6 @@
 ---
 title: 'Links and Authority: From Link Count to Citable Relationships'
+seoTitle: "SEO Links and Authority: Beyond Link Count"
 description: 'A source-quality and referral framework that keeps third-party authority metrics separate from ranking facts.'
 locale: en
 translationStatus: reviewed
@@ -10,6 +11,9 @@ type: case-study
 draft: false
 tags: [seo, backlinks, growth, trust]
 column: { slug: search-engine-growth, order: 7 }
+primaryQuery: "link building strategy"
+searchIntent: howto
+relatedQueries: ["backlink quality", "domain authority metrics", "earning citations"]
 ---
 
 In one backlink review, link count kept growing while real referral traffic did not. Opening the sources one by one made the problem obvious: many links came from low-relevance directories, templated articles, or exchanges. Few had topic context and real readers.

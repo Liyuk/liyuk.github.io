@@ -11,8 +11,12 @@ test('production builds install the Chromium headless shell required by Mermaid'
 test('production builds audit article bodies before indexing them', () => {
   assert.match(
     packageJson.scripts.build,
-    /astro build && node scripts\/audit-rendered-content\.mjs && pagefind --site dist/,
+    /node scripts\/audit-rendered-content\.mjs && pagefind --site dist/,
   );
+});
+
+test('production builds render social cards right after astro build', () => {
+  assert.match(packageJson.scripts.build, /^astro build && node scripts\/generate-og-cards\.mjs && /);
 });
 
 test('Mermaid uses the same font stack as the site', async () => {

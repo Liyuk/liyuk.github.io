@@ -121,3 +121,56 @@ export function contentKeywords(tags: string[], locale: string, queries: string[
     }
   })].map((value) => value.trim()).filter(Boolean))];
 }
+
+// Visual width of a string for title-length budgeting: CJK, kana, Hangul and
+// full-width forms count as two columns, everything else as one.
+export function visualWidth(value: string): number {
+  let width = 0;
+  for (const char of value) {
+    const code = char.codePointAt(0) ?? 0;
+    const wide =
+      (code >= 0x1100 && code <= 0x115f) ||
+      (code >= 0x2e80 && code <= 0xa4cf) ||
+      (code >= 0xac00 && code <= 0xd7a3) ||
+      (code >= 0xf900 && code <= 0xfaff) ||
+      (code >= 0xfe30 && code <= 0xfe6f) ||
+      (code >= 0xff00 && code <= 0xff60) ||
+      (code >= 0xffe0 && code <= 0xffe6);
+    width += wide ? 2 : 1;
+  }
+  return width;
+}
+
+export const TITLE_WIDTH_BUDGET = 60;
+
+// `<title>` for a detail page: "Title — Brand" while it fits the budget,
+// otherwise just the title (og:site_name still carries the brand).
+export function pageTitle(title: string, brand: string, budget: number = TITLE_WIDTH_BUDGET): string {
+  const combined = `${title} — ${brand}`;
+  return visualWidth(combined) > budget ? title : combined;
+}
+
+// Meta descriptions beyond ~160 columns are truncated in search results. Archive
+// descriptions list sample titles; keep as many (up to `max`) as fit the budget.
+export const DESCRIPTION_WIDTH_BUDGET = 160;
+
+export function fitSampleTitles(
+  build: (titles: string[]) => string,
+  titles: string[],
+  max = 3,
+  budget: number = DESCRIPTION_WIDTH_BUDGET,
+): string {
+  for (let count = Math.min(max, titles.length); count > 0; count--) {
+    const candidate = build(titles.slice(0, count));
+    if (visualWidth(candidate) <= budget) return candidate;
+  }
+  return build([]);
+}
+
+// Public path of the generated social card for a page route:
+// `/writing/2026/05/slug/` → `/og/writing/2026/05/slug.png`. Kept here so the
+// layout and scripts/generate-og-cards.mjs agree on one mapping.
+export function ogCardUrl(pathname: string): string {
+  const trimmed = pathname.replace(/^\/+|\/+$/g, '');
+  return `/og/${trimmed || 'index'}.png`;
+}

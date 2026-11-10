@@ -9,6 +9,9 @@ repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [organization-design, ai, engineering, functional-teams, business-lines, work-leadership]
 column: { slug: engineering-ai-judgment, order: 4 }
+primaryQuery: "AI 时代 组织架构"
+searchIntent: essay
+relatedQueries: ["职能型 业务型 组织", "AI 对组织分工的影响", "全栈业务团队", "组织架构调整"]
 ---
 
 **版本：** 0.1（工作稿）

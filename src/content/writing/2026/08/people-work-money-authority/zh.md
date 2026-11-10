@@ -7,6 +7,9 @@ draft: false
 type: essay
 tags: [management, leadership, organization, governance, decision-making, strategy]
 column: { slug: multi-team-management, order: 2 }
+primaryQuery: "管理者 权限"
+searchIntent: essay
+relatedQueries: ["人事权 预算权", "二线经理 决策权", "企业 组织运作"]
 ---
 
 当一个人开始管理多个一线负责人时，很多管理问题不能只看组织架构图。

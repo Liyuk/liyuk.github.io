@@ -1,5 +1,6 @@
 ---
 title: "Use Your Own Product First: How Developers Build a Real Feedback Loop"
+seoTitle: "Use Your Own Product: A Developer Feedback Loop"
 description: "Self-use isn't about 'spending more time in the product'; it's a feedback system spanning real tasks, valid evidence, and verified fixes."
 locale: en
 translationStatus: reviewed

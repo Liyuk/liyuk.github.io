@@ -8,6 +8,9 @@ status: working-paper
 repositoryUrl: https://github.com/Liyuk/liyuk.github.io
 paperUrl: https://github.com/Liyuk/liyuk.github.io
 tags: [relationships, interpersonal-analysis, anti-scam, psychology, human-ai-collaboration, work-leadership]
+primaryQuery: "人际关系风险分析"
+searchIntent: howto
+relatedQueries: ["亲密关系 风险评估", "如何判断一段关系", "AI 分析人际关系", "关系 事实与假设"]
 ---
 
 **版本：** 0.1（工作稿）

@@ -1,5 +1,6 @@
 ---
 title: "Structured Thinking: Turning 'Being Organized' into Something You Can Train"
+seoTitle: "Structured Thinking at Work: How to Train It"
 description: "Structure isn't about applying a template; it's about making problems, evidence, trade-offs, and decisions checkable by others. A ready-to-use training and questioning checklist."
 locale: en
 translationStatus: reviewed

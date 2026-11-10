@@ -1,5 +1,6 @@
 ---
 title: 'Structured Data and Media SEO: Make Page Facts Understandable'
+seoTitle: "Structured Data and Media SEO"
 description: 'A verifiable content model for structured data, images, video, and related-page context.'
 locale: en
 translationStatus: reviewed
@@ -10,6 +11,9 @@ type: case-study
 draft: false
 tags: [seo, image-seo, video-seo, architecture]
 column: { slug: search-engine-growth, order: 6 }
+primaryQuery: "structured data SEO"
+searchIntent: howto
+relatedQueries: ["schema markup", "image SEO alt text", "video SEO"]
 ---
 
 People can understand an image or short video while a search system sees an empty player, a vague title, or a file without context. We first tried to solve this with media fields. The real gap was a translation chain: the media object, page text, structured data, and recommendations must describe the same thing.

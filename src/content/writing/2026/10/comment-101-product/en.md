@@ -1,5 +1,6 @@
 ---
 title: "Comment Systems 101 (3): Product Forms, Supply, and Community"
+seoTitle: "Comment Systems 101 (3): Product Forms and Community"
 description: "From experience-based evidence and Q&A to public discussion, this article examines comment formats, contributor motives, cold start, AI summaries, and multilingual design."
 locale: en
 translationStatus: reviewed
@@ -28,6 +29,9 @@ citationUrls:
   - https://doi.org/10.27034/j.cnki.ISSN:1006-4885.2026.01.004
   - https://doi.org/10.1080/19368623.2026.2734369
   - https://doi.org/10.1287/mnsc.2023.01006
+primaryQuery: "comment section product design"
+searchIntent: essay
+relatedQueries: ["comment cold start", "user review incentives", "AI review summaries"]
 ---
 A comment product first needs to decide what work comments are meant to do. Reviews as evidence, Q&A, public discussion, and relationship-based communities may all look like replies, but they serve different user outcomes, carry different supply costs, and need different governance boundaries.
 

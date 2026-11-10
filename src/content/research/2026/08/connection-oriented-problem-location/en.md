@@ -1,6 +1,6 @@
 ---
 title: "The Five Lenses: Connection-Oriented Problem Location"
-description: A framework write-up that advances structured thinking from the generic expression of "conclusion first, mutually exclusive and collectively exhaustive" into a four-stage problem-location method — Structure → Surface connections → Infer root problem → Find solution — with the causal, duality, dialectical, position, and interest lenses at its core, offering a testable training protocol and its boundaries of use.
+description: "A framework write-up: a four-stage problem-location method (structure, connections, root problem, solution) built on five lenses, with a testable training protocol."
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 version: '0.1'
@@ -13,6 +13,9 @@ column: { slug: thinking-training, order: 5 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/connection-oriented-problem-location
+primaryQuery: "how to find the root problem"
+searchIntent: howto
+relatedQueries: ["problem framing method", "structured problem solving framework", "root cause thinking lenses"]
 ---
 
 **Version:** 0.1 (working paper)

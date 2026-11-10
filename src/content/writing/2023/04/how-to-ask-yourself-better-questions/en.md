@@ -9,6 +9,9 @@ column: { slug: thinking-training, order: 3 }
 locale: en
 translationStatus: reviewed
 translationKey: 2023/04/how-to-ask-yourself-better-questions
+primaryQuery: "how to ask better questions"
+searchIntent: howto
+relatedQueries: ["asking good questions at work", "questioning skills practice"]
 ---
 
 Many people assume that growth comes from finding answers faster. But in real work, the scarcer ability is often this: before the answer even appears, to see the place worth questioning. I have repeatedly found in my reviews that my least valuable output is usually not "getting the answer wrong," but "not asking the right question in the first place"—a vague question drags the whole discussion in a meaningless direction.

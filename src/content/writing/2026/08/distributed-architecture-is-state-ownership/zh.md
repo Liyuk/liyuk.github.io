@@ -20,6 +20,9 @@ citationUrls:
   - https://research.google/pubs/dora-2025-state-of-ai-assisted-software-development-report/
   - https://stackoverflow.blog/2024/09/23/where-developers-feel-ai-coding-tools-are-working-and-where-they-re-missing-the-mark/
   - https://martinfowler.com/fragments/2026-04-02.html
+primaryQuery: "分布式系统 架构演进"
+searchIntent: essay
+relatedQueries: ["分布式 状态管理", "多节点 故障", "架构 重构"]
 ---
 
 本文讨论的是一套跨区域的多节点执行系统。调用方只需要面对一个稳定的服务入口，系统根据能力、容量、区域和当前状态，把请求交给合适的执行节点；执行节点再调用外部依赖，完成任务并把结果返回给调用方。

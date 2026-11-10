@@ -1,5 +1,6 @@
 ---
 title: "Shared Core and Local Variation: How Multi-Region Systems Evolve"
+seoTitle: "Multi-Region Systems: Shared Core and Local Variation"
 description: "A multi-region system can neither cram every difference into a single core nor rebuild everything for each region. The key is to identify stable boundaries, preserve extension points, and clarify module ownership."
 locale: en
 translationStatus: reviewed

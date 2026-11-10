@@ -7,6 +7,9 @@ updatedAt: 2026-08-15
 type: essay
 tags: [technical-planning, engineering-management, strategy, decision-making, technology]
 column: { slug: technical-systems, order: 1 }
+primaryQuery: "技术规划怎么做"
+searchIntent: howto
+relatedQueries: ["技术规划 业务分析", "竞品分析", "技术路线图"]
 ---
 
 很多技术规划写到最后，会变成一张按季度排列的项目表：要升级什么、建设什么、优化什么。它看起来很完整，却经常回答不了最重要的问题：为什么此刻应该投入这些事，而不是另外一些事？这个问题我自己就被问住过——写完一份"很全"的规划，面对"为什么是这些"时，说不清取舍的根据。

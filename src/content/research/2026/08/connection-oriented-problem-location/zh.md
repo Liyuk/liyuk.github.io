@@ -10,6 +10,9 @@ paperUrl: https://github.com/Liyuk/liyuk.github.io
 draft: false
 tags: [thinking, problem-framing, decision-making, communication, leadership, work-leadership, strategy]
 column: { slug: thinking-training, order: 5 }
+primaryQuery: "如何找到问题的根本原因"
+searchIntent: howto
+relatedQueries: ["结构化思维 问题分析", "问题定位方法", "五镜法", "底层问题 分析框架"]
 ---
 
 **版本：** 0.1（工作稿）

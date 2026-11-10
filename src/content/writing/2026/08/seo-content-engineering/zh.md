@@ -7,6 +7,9 @@ type: case-study
 draft: false
 tags: [seo, writing, ai, governance]
 column: { slug: search-engine-growth, order: 5 }
+primaryQuery: "关键词扩展"
+searchIntent: howto
+relatedQueries: ["内容下线 退出机制", "内容规模化", "AI 生成内容 SEO", "低质量页面 清理"]
 ---
 
 关键词扩展最容易让人产生进展感：表格每天变长，生成任务也不断完成。但页面数量增加以后，真正有访问、有阅读、有后续动作的页面没有变多。回头看，问题往往不是候选词少，而是没有先问这个词对应什么任务、现有页面能不能接住、做出来以后谁来维护。

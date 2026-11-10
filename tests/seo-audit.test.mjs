@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expectedAlternates, normalizePath } from '../scripts/audit-seo.mjs';
+import { countH1, expectedAlternates, normalizePath } from '../scripts/audit-seo.mjs';
 
 test('SEO alternates keep the default locale on the locale-free canonical route', () => {
   assert.deepEqual(expectedAlternates('/writing/example/'), {
@@ -18,4 +18,10 @@ test('SEO alternates keep the default locale on the locale-free canonical route'
 test('SEO route normalization preserves trailing slashes and file paths', () => {
   assert.equal(normalizePath('https://liyuk.com/writing/example'), '/writing/example/');
   assert.equal(normalizePath('https://liyuk.com/robots.txt'), '/robots.txt');
+});
+
+test('h1 counting sees duplicates but ignores other heading tags', () => {
+  assert.equal(countH1('<h1 class="a">One</h1><h2>x</h2><header></header>'), 1);
+  assert.equal(countH1('<h1>One</h1><main><h1>Two</h1></main>'), 2);
+  assert.equal(countH1('<h2>None</h2>'), 0);
 });

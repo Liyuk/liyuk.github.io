@@ -1,6 +1,7 @@
 ---
 title: "Workplace Relationship Analysis Protocol: Power, Responsibility, and Structural Positions"
-description: "A research-design and protocol write-up proposing a safety-action-oriented framework for organizing material and annotating risk in workplace settings, covering top-middle-bottom three-tier safety, power structures, horizontal competition, authority-responsibility misalignment, career safety, career development, and occupational mental health."
+description: "A protocol write-up for organizing workplace material and flagging risk toward safe action: power, peer competition, misaligned authority, career safety, mental health."
+seoTitle: "Workplace Relationship Analysis: Power and Responsibility"
 createdAt: 2026-08-14
 publishedAt: 2026-08-14
 version: '0.1'
@@ -11,6 +12,9 @@ tags: [workplace, power, professional-relationships, risk-analysis, human-ai-col
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/workplace-relationship-analysis-protocol
+primaryQuery: "workplace relationship analysis"
+searchIntent: howto
+relatedQueries: ["workplace power dynamics", "handling workplace conflict"]
 ---
 
 **Version:** 0.1 (working paper)

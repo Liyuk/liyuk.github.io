@@ -1,5 +1,6 @@
 ---
 title: "Interview Compass: A guide to engineering interviews and promotions"
+seoTitle: "Interview Compass: Engineering Interviews and Promotions"
 description: "A guide to engineering interviews and promotions, shaped by a decade of work. Know the role. Show the evidence. Examine role fit for interviews and next-stage responsibilities for promotions; interviewers and managers can align on the basis for their judgments."
 createdAt: 2026-10-20
 locale: en

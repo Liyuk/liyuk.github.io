@@ -1,5 +1,6 @@
 ---
 title: "Engineering POC: Responsibilities, Boundaries, and Delivery Loops in Cross-Functional Requirements"
+seoTitle: "Engineering POC: Responsibilities in Cross-Team Work"
 description: "An engineering POC is neither a project secretary nor someone who covers for everyone else; the role exists to keep goals, commitments, risks, and decisions clear in cross-functional collaboration."
 locale: en
 translationStatus: reviewed

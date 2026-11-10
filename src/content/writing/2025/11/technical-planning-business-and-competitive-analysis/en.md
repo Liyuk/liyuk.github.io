@@ -1,5 +1,6 @@
 ---
 title: "Technical Planning Is Fundamentally Business Analysis and Competitive Analysis"
+seoTitle: "Technical Planning Is Business and Competitive Analysis"
 description: "Technical planning is not a project list. At its core it is two things: understanding the business you serve (business analysis) and understanding the gap and level against competitors (competitive analysis), then linking them into a causal chain of goals, trade-offs, and execution."
 createdAt: 2025-11-10
 publishedAt: 2025-11-10
@@ -10,6 +11,9 @@ column: { slug: technical-systems, order: 1 }
 locale: en
 translationStatus: reviewed
 translationKey: 2025/11/technical-planning-business-and-competitive-analysis
+primaryQuery: "how to write a technical plan"
+searchIntent: howto
+relatedQueries: ["engineering roadmap planning", "competitive analysis for engineering", "technical strategy"]
 ---
 
 Many technical plans end up becoming a quarterly project list: what to upgrade, what to build, what to optimize. It looks complete, but it often can't answer the most important question: why invest in these things now, rather than some other things? I've been stumped by this question myself — after writing a "comprehensive" plan, when faced with "why these," I couldn't articulate the basis for the trade-offs.

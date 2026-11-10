@@ -1,6 +1,7 @@
 ---
 title: 'Decompose First, Then Schedule: A Review of Multi-Model Task Decomposition, Capability Switching, and Subtask Routing'
-description: 'This study examines task decomposition, subtask capability classification, model selection, and bounded execution-time fallback, while reducing the broader Agent scheduling problem to an engineering slice of dsh-quota-router.'
+description: "Task decomposition, subtask capability classification, model selection, and bounded fallback: the Agent scheduling problem reduced to dsh-quota-router."
+seoTitle: "Multi-Model Task Decomposition and Subtask Routing"
 createdAt: 2026-08-19
 publishedAt: 2026-08-19
 version: '0.6'
@@ -12,6 +13,9 @@ translationKey: 2026/08/model-harness-task-scheduling-context-routing
 draft: false
 tags: [ai, agent-systems, engineering, architecture, planning, observability, measurement, systems]
 column: { slug: agent-collaboration-research, order: 1 }
+primaryQuery: "multi-model routing"
+searchIntent: essay
+relatedQueries: ["LLM task decomposition", "agent subtask routing", "LLM fallback strategy", "model selection for agents"]
 ---
 
 > **Version: 0.6 (working paper).** This is an engineering theory and design review, not a report of a controlled user experiment. It distinguishes a complete theoretical Agent scheduler from the engineering boundary of `dsh-quota-router`: the Planner decomposes work, quota-router selects a model for an already-defined subtask and performs bounded fallback, and the upper layer handles context regression, acceptance, and replanning. Context compression is treated as a related boundary and will be developed separately.

@@ -1,5 +1,6 @@
 ---
 title: "AI Does Not Automatically Create Productivity: From Local Acceleration to System Value"
+seoTitle: "AI Productivity: From Local Speedups to System Value"
 description: "Starting from a multi-system integration experience, this essay distinguishes creation, task efficiency, organizational productivity, and business value—and asks where value and cost actually come from when AI enters a complex system."
 locale: en
 translationStatus: reviewed
@@ -17,6 +18,9 @@ citationUrls:
   - https://shopify.dev/docs/api/storefront/latest/enums/orderfinancialstatus
   - https://docs.stripe.com/payout-reconciliation
 translationKey: 2026/08/ai-productivity-complex-systems
+primaryQuery: "does AI improve productivity"
+searchIntent: essay
+relatedQueries: ["AI local speedup vs system value", "AI ROI in enterprises", "measuring AI business value"]
 ---
 
 I have become increasingly skeptical of a sentence that sounds straightforward: AI will directly create productivity.

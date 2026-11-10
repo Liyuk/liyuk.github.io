@@ -1,5 +1,6 @@
 ---
 title: "How Engineering Standards Reduce Rework Without Creating Bureaucracy"
+seoTitle: "Engineering Standards That Cut Rework, Not Add Red Tape"
 description: "Good standards don't turn every step into an approval; they make the key handoff points — where distortion, rework, and accidents are most likely — visible, discussable, and reusable."
 locale: en
 translationStatus: reviewed
