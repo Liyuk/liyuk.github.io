@@ -6,6 +6,13 @@ publishedAt: 2020-10-01
 type: essay
 tags: [mentorship, onboarding, career-development, feedback, leadership, work-leadership]
 column: { slug: team-building, order: 6 }
+primaryQuery: "如何设计新人入职培养计划和导师关系"
+searchIntent: howto
+relatedQueries:
+  - "新员工前90天计划怎么做"
+  - "怎样给新人有效反馈和指导"
+  - "新人入职最容易卡在哪里"
+  - "团队成员怎样从依赖到独立"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「团队与成长」这条线的展开。

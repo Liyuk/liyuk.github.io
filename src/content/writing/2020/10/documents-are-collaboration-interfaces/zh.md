@@ -7,6 +7,12 @@ updatedAt: 2026-08-14
 type: essay
 tags: [writing, technical-writing, communication, work-leadership]
 column: { slug: documentation, order: 1 }
+primaryQuery: "怎样写好技术文档和方案文档"
+searchIntent: howto
+relatedQueries:
+  - "方案文档结构怎么写"
+  - "文档如何快速表达问题和结论"
+  - "技术文档的背景和目标怎么交代"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「上下文」这条线的展开。

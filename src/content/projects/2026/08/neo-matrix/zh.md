@@ -10,6 +10,12 @@ hero:
   alt: Neo Matrix 管理端的结算与提现页面，12 张结算单、¥123 流水，含一张对账异常待核验。
   caption: 结算与提现管理页面——这个项目最终要把每次调用变成一笔能解释的账。
 tags: [ai-relay, api-key, revenue-sharing, routing, settlement]
+primaryQuery: "Neo Matrix AI中转平台"
+searchIntent: project
+relatedQueries:
+  - "AI API 中转站如何搭建"
+  - "API 密钥路由和分成机制"
+  - "OpenAI 兼容中转怎么实现结算"
 ---
 
 [在 GitHub 查看 Neo Matrix ↗](https://github.com/Liyuk/neo-matrix)

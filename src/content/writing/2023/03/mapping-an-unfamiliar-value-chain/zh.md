@@ -5,6 +5,13 @@ createdAt: 2023-03-03
 publishedAt: 2023-03-03
 type: essay
 tags: [product-thinking, learning, systems-thinking, work-leadership]
+primaryQuery: "怎样快速理解陌生系统或业务流程"
+searchIntent: howto
+relatedQueries:
+  - "价值链地图怎么画"
+  - "接手新项目怎么上手"
+  - "复杂业务系统怎么分析"
+  - "用户任务流程图"
 ---
 
 刚进入一个陌生领域时，最容易做的事是从自己熟悉的技术入口开始：先看仓库、接口和报错。我也这样做过——结果是得到一张零散的地图，知道系统怎样运行，却不知道它为什么存在、谁依赖它、哪里最值得改变。

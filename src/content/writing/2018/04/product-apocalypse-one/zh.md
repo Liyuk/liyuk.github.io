@@ -6,6 +6,12 @@ publishedAt: 2018-04-05
 updatedAt: 2026-08-14
 type: case-study
 tags: [product, problem-framing, archive, work-leadership]
+primaryQuery: "产品设计 先搞清问题再想方案"
+searchIntent: essay
+relatedQueries:
+  - "用户需求 怎么分辨真实问题"
+  - "产品经理 如何做问题诊断"
+  - "功能设计前 需要问哪些问题"
 ---
 
 > 整理说明：这篇最初的案例和思路来自一位朋友，我当年把它搬到了博客。自己那时并没有真正做过产品，所以这里只留问题拆解，不假装在讲一套完整方法论。

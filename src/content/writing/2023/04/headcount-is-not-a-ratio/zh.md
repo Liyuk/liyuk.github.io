@@ -6,6 +6,13 @@ publishedAt: 2023-04-02
 type: essay
 tags: [planning, management, capacity-planning, work-leadership]
 column: { slug: engineering-collaboration, order: 4 }
+primaryQuery: "什么时候应该给团队增加人手"
+searchIntent: howto
+relatedQueries:
+  - "人力规划 目标对齐"
+  - "团队忙 是不是该扩编"
+  - "加人之前怎么排查瓶颈"
+  - "能力缺口 流程问题 怎么区分"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「资源与容量」这条线的展开。

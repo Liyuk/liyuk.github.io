@@ -14,6 +14,13 @@ featured: false
 tags: [ai, communication, product-thinking, strategy, metrics, operations, engineering, career-development]
 column: { slug: consulting-and-b2b-business, order: 1 }
 translationKey: 2026/08/turning-ai-into-business-value
+primaryQuery: "how to pitch an AI solution to business owners instead of just explaining the tech"
+searchIntent: howto
+relatedQueries:
+  - "how to connect AI capability to business outcomes"
+  - "what questions to ask a client before proposing AI"
+  - "how to measure and communicate AI project results to executives"
+  - "turning an AI demo into something a business will actually adopt"
 ---
 
 > This is the second episode of Consultation Interviews. The person, companies, conference, and business details have been abstracted, and some facts have been combined. This is an edited account of a real consultation rather than a verbatim transcript; the selected exchanges are the ones that moved the problem definition forward, while the notes explain my analysis.

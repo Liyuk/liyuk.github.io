@@ -6,6 +6,13 @@ publishedAt: 2021-04-21
 updatedAt: 2026-08-14
 type: essay
 tags: [engineering, collaboration, project-management, risk-management, ownership, work-leadership]
+primaryQuery: "工程 POC 怎么做好协作 分工 风险和交付"
+searchIntent: howto
+relatedQueries:
+  - "技术方案评审 什么时候开 谁需要参加"
+  - "如何识别和处理项目风险"
+  - "需求变更 范围调整怎么处理"
+  - "进度报告应该包含什么信息"
 ---
 
 研发 POC 很容易被误解成"负责推进一切的人"。这种理解既不准确，也难以持续。一个好的 POC 不是项目的瓶颈或救火队，而是帮助参与者建立共同上下文，让责任、风险和决策不在协作中丢失。

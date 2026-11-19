@@ -13,6 +13,13 @@ featured: false
 tags: [ai, communication, product-thinking, strategy, metrics, operations, engineering, career-development]
 column: { slug: consulting-and-b2b-business, order: 1 }
 translationKey: 2026/08/turning-ai-into-business-value
+primaryQuery: "怎样把AI方案卖给老板：从技术讲清楚经营结果"
+searchIntent: howto
+relatedQueries:
+  - "AI demo怎样进入实际业务产生价值"
+  - "技术人员向老板推销时怎样避免讲太细"
+  - "AI项目应该用什么指标向企业说明效果"
+  - "对方说想要AI提效，具体要问什么问题"
 ---
 
 > 这是「咨询访谈」的第二期。人物、公司、会议和业务细节均已抽象化，部分事实做了合并。本文是基于一次真实咨询的整理稿，不是逐字稿；保留对问题定义有帮助的问答，旁白是我对问题的分析。

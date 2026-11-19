@@ -6,6 +6,12 @@ publishedAt: 2024-01-20
 type: essay
 tags: [self-reflection, growth, communication, work-leadership]
 column: { slug: one-on-one-conversations, order: 13 }
+primaryQuery: "职场不安全感怎么办 怎么分清来源"
+searchIntent: howto
+relatedQueries:
+  - "与他人比较导致焦虑如何应对"
+  - "怎样调整职业预期和现实的落差"
+  - "十年长期目标怎么设置"
 ---
 
 这个话题的由来：近期跟同学聊天，组内组外都有，大家普遍反馈的问题叫做"不安全感"。来源主要是内外部环境变化和大行情的趋势，公司内也有一些业务变化。综合因素带来一些不确定性和不安全感，这里主要讨论**破局的办法**。

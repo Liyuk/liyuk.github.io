@@ -24,4 +24,10 @@ images:
     caption: Another moment on the same chair, looking up this way.
     width: 1200
     height: 1600
+primaryQuery: "maomao cat sitting on chair"
+searchIntent: visual
+relatedQueries:
+  - "home cat portrait photography"
+  - "curious cat looking up"
+  - "pet photography moments"
 ---

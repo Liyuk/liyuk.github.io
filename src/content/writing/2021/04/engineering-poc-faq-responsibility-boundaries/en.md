@@ -10,6 +10,13 @@ updatedAt: 2026-08-14
 type: essay
 tags: [engineering, collaboration, project-management, risk-management, ownership, work-leadership]
 translationKey: 2021/04/engineering-poc-faq-responsibility-boundaries
+primaryQuery: "how engineering POC manages collaboration dependencies and delivery"
+searchIntent: howto
+relatedQueries:
+  - "when to hold technical design review meetings"
+  - "how to identify and surface project risks early"
+  - "handling scope changes during development"
+  - "what to include in project status updates"
 ---
 
 A development POC is easily misunderstood as "the person responsible for pushing everything forward." That understanding is neither accurate nor sustainable. A good POC is not the project's bottleneck or firefighting squad, but someone who helps participants build shared context so that responsibilities, risks, and decisions are not lost in collaboration.

@@ -5,6 +5,13 @@ createdAt: 2025-04-12
 publishedAt: 2025-04-12
 type: note
 tags: [beauty, everyday-life, guide, field-notes]
+primaryQuery: "日常全妆怎么化 自然持妆步骤"
+searchIntent: howto
+relatedQueries:
+  - "修容怎么做 高光修容顺序"
+  - "眼妆怎么画 眼影眼线睫毛"
+  - "散粉定妆技巧 怎么定妆不卡粉"
+  - "遮瑕黑眼圈 液体膏状遮瑕怎么用"
 ---
 
 ## 阅读说明

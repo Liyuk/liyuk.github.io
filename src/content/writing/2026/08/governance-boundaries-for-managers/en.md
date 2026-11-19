@@ -10,6 +10,13 @@ column: { slug: multi-team-management, order: 6 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/governance-boundaries-for-managers
+primaryQuery: "how manager of managers should set governance boundaries for authority"
+searchIntent: howto
+relatedQueries:
+  - "how to investigate management incidents while protecting people"
+  - "decision review process for risky management choices"
+  - "balancing speed with safety and fairness in teams"
+  - "how to handle dissent and bad news from direct reports"
 ---
 
 Here, “second tier” means a manager of managers who can allocate resources and influence several teams. Speed is not the same as correctness. Safety, compliance, privacy, stability, and people’s professional safety cannot be treated as costs that a short-term result is allowed to buy.

@@ -10,6 +10,12 @@ type: essay
 tags: [thinking, prioritization, communication, work-leadership]
 column: { slug: thinking-training, order: 1 }
 translationKey: 2024/02/top-k-thinking
+primaryQuery: "how to identify and prioritize what matters most"
+searchIntent: howto
+relatedQueries:
+  - "prioritization framework with clear criteria"
+  - "how to rank project goals and tasks"
+  - "what makes something truly important"
 ---
 
 > This essay expands on the "Judgment" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).

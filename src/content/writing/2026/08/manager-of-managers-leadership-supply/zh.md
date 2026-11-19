@@ -8,6 +8,12 @@ type: essay
 draft: false
 tags: [management, hiring, organization, team, leadership, planning]
 column: { slug: multi-team-management, order: 4 }
+primaryQuery: "管理多个团队时如何规划招聘和人员安排"
+searchIntent: howto
+relatedQueries:
+  - "HRBP、TA、管理者在招聘中的分工"
+  - "如何定义真实的招聘缺口而不是盲目加人"
+  - "负责人接班和内部培养怎么做"
 ---
 
 当组织从一个团队走向多个团队，招聘问题也会改变。

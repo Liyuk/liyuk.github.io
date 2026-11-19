@@ -6,6 +6,12 @@ publishedAt: 2018-04-02
 updatedAt: 2026-08-14
 type: note
 tags: [interview, engineering, archive, technology]
+primaryQuery: "工程师如何补齐知识结构空缺"
+searchIntent: essay
+relatedQueries:
+  - "面试题考察工程师什么能力"
+  - "计算机基础 算法 操作系统怎么学"
+  - "技术面试准备资料"
 ---
 
 > 整理说明：原始题库仍托管在外部阅读器，可从下方链接直接阅读。这里保留它当时的整理缘由与背景。

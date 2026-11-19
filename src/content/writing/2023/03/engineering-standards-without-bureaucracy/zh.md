@@ -6,6 +6,13 @@ publishedAt: 2023-03-13
 type: essay
 tags: [engineering, process, collaboration, technology]
 column: { slug: technical-systems, order: 3 }
+primaryQuery: "工程规范怎样既防止返工又不制造官僚流程"
+searchIntent: howto
+relatedQueries:
+  - "规范从哪里开始设计"
+  - "怎样评估一个流程是否必要"
+  - "交付过程中谁负责什么"
+  - "紧急改动怎样简化流程"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「闭环」这条线的展开。

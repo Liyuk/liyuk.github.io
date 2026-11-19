@@ -13,6 +13,12 @@ tags: [ai-relay, api-key, revenue-sharing, routing, settlement]
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/neo-matrix
+primaryQuery: "Neo Matrix AI relay platform"
+searchIntent: project
+relatedQueries:
+  - "how to build AI API relay"
+  - "revenue sharing for API suppliers"
+  - "OpenAI compatible routing settlement"
 ---
 
 [View Neo Matrix on GitHub ↗](https://github.com/Liyuk/neo-matrix)

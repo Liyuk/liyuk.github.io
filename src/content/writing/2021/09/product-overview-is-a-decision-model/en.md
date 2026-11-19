@@ -11,6 +11,13 @@ type: essay
 tags: [product-thinking, writing, research, collaboration, work-leadership]
 column: { slug: product-judgment, order: 2 }
 translationKey: 2021/09/product-overview-is-a-decision-model
+primaryQuery: "how to write a product overview for decision making"
+searchIntent: howto
+relatedQueries:
+  - "how to organize product research materials effectively"
+  - "product documentation using user tasks instead of features"
+  - "separating facts assumptions and open questions in product analysis"
+  - "how to structure a competitor analysis report"
 ---
 
 A product overview is most easily written as a kind of "material warehouse": founding dates, market lists, feature screenshots, competitor tables, news links, page after page. I started my own product research from this warehouse model — until I found that readers might know more after reading, yet still could not answer the most important question: **Whose problem does this product actually solve? What makes it work? What judgment should we act on right now?**

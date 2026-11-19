@@ -17,6 +17,12 @@ hero:
   alt: "Quota Router inside DSH: a user turn enters the policy layer, passes through source priority, task-model mapping, and guardrails, then returns to the native DSH layer."
   caption: "Quota Router's architectural boundary: explainable model selection and fallback, without owning providers, credentials, or the model catalog."
 tags: [ai-gateway, agent, routing, algorithms, explainability, reliability, observability, typescript]
+primaryQuery: "deepseek harness multi-source model fallback router"
+searchIntent: project
+relatedQueries:
+  - "ai gateway automatic model failover"
+  - "quota-aware model selection with fallback"
+  - "transparent model routing for cost optimization"
 ---
 
 [View Quota Router on GitHub ↗](https://github.com/Liyuk/dsh-quota-router) · [View the published package on npm ↗](https://www.npmjs.com/package/@liyuk/dsh-quota-router)

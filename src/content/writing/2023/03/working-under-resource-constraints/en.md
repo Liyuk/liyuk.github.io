@@ -10,6 +10,12 @@ column: { slug: engineering-collaboration, order: 3 }
 locale: en
 translationStatus: reviewed
 translationKey: 2023/03/working-under-resource-constraints
+primaryQuery: "managing team capacity with limited resources"
+searchIntent: howto
+relatedQueries:
+  - "how to prioritize when resources are tight"
+  - "team burnout prevention"
+  - "capacity planning for small teams"
 ---
 
 > This essay expands the "resources and capacity" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).

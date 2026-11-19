@@ -9,6 +9,13 @@ publishedAt: 2023-03-15
 type: essay
 tags: [collaboration, trust, product-thinking, work-leadership]
 translationKey: 2023/03/product-engineering-trust
+primaryQuery: "building trust between product and engineering teams"
+searchIntent: essay
+relatedQueries:
+  - "how to handle conflicting goals in cross-functional teams"
+  - "product engineering collaboration best practices"
+  - "escalating disagreements at work effectively"
+  - "preventing information asymmetry in teams"
 ---
 
 I've never much liked the word "going along." It sounds like two groups each finishing their own tasks and then checking in at the seams—yet the real gap between product and engineering usually shows up exactly at those seams.

@@ -6,6 +6,12 @@ publishedAt: 2024-02-09
 type: essay
 tags: [thinking, prioritization, communication, work-leadership]
 column: { slug: thinking-training, order: 1 }
+primaryQuery: "优先级排序方法 判断最重要的事"
+searchIntent: howto
+relatedQueries:
+  - "怎样在项目里找出最重要的三件事"
+  - "工作复杂的信息怎么排优先级"
+  - "Top K 问题 什么是判断口径"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「判断」这条线的展开。

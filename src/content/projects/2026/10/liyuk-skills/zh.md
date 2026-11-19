@@ -9,6 +9,12 @@ repositoryUrl: https://github.com/Liyuk/skills
 draft: false
 tags: [ai, coding-agent, engineering-management, decision-making, open-source, workflow]
 translationKey: 2026/10/liyuk-skills
+primaryQuery: "工程和管理决策 AI 助手"
+searchIntent: project
+relatedQueries:
+  - "技术方案评审 AI 工具"
+  - "项目复盘 管理决策框架"
+  - "开源 engineering management 技能库"
 ---
 
 这个项目最初是瑶子提到，他做了一个内部用的 Ask Liyuk skill。我听完想到，自己这些年也积累了一些文章、工程方法和管理沟通里的判断，或许可以蒸馏成能单独调用的技能；再补进一部分口述里的内容。做出来的东西要能解决什么问题，也慢慢清楚了：当你手上有一个方案、一次指标变化或一段工作经历，可以把材料交给 AI，让它按一套明确的方法检查。还没想清该用什么方法时，再让 Ask Liyuk 帮忙选入口。

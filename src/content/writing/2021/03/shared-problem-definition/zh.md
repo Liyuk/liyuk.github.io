@@ -6,6 +6,13 @@ publishedAt: 2021-03-15
 type: essay
 tags: [communication, problem-framing, collaboration, work-leadership]
 column: { slug: one-on-one-conversations, order: 2 }
+primaryQuery: "一对一怎么开场 如何定义问题"
+searchIntent: howto
+relatedQueries:
+  - "怎样进行有效的工作沟通"
+  - "事实 判断 假设 怎么区分"
+  - "一对一会议应该聊什么"
+  - "如何把问题说清楚"
 ---
 
 一对一的难题通常是两个：不知道聊什么，或者聊到一半发现两人在答不同的问题。从一个能说清"我们在解决什么问题"的具体现象开始就够了。

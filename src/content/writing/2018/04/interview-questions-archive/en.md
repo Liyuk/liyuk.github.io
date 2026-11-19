@@ -9,6 +9,12 @@ updatedAt: 2026-08-14
 type: note
 tags: [interview, engineering, archive, technology]
 translationKey: 2018/04/interview-questions-archive
+primaryQuery: "how interview questions reveal gaps in engineering knowledge"
+searchIntent: essay
+relatedQueries:
+  - "technical interview preparation resources"
+  - "computer fundamentals and algorithms study"
+  - "engineering knowledge structure assessment"
 ---
 
 > Compilation note: the original question bank is still hosted on an external reader and can be read directly from the link below. This page keeps the original reason and background for compiling it.

@@ -7,6 +7,13 @@ draft: false
 type: essay
 tags: [leadership, management, organization, risk-management, work-leadership]
 column: { slug: multi-team-management, order: 6 }
+primaryQuery: "二线管理者如何设置权力边界和风险底线"
+searchIntent: howto
+relatedQueries:
+  - "管理风险事故发生后如何处理流程"
+  - "员工举报负责人压榨工作怎么调查"
+  - "快速交付和安全合规如何平衡"
+  - "为什么要有管理决策的复核机制"
 ---
 
 二线拥有更多资源、能推动更多团队，也就更容易把决定做得很快。问题是，快不等于对。

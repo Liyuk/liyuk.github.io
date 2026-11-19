@@ -135,4 +135,10 @@ images:
     caption: "Final Chapter · The Road Continues to Unfold"
     width: 1600
     height: 900
+primaryQuery: "Monument Valley game visual journey"
+searchIntent: visual
+relatedQueries:
+  - "Monument Valley 2 screenshots personal story"
+  - "optical illusion game design"
+  - "Monument Valley levels and maps"
 ---

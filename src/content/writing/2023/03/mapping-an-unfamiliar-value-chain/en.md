@@ -9,6 +9,13 @@ publishedAt: 2023-03-03
 type: essay
 tags: [product-thinking, learning, systems-thinking, work-leadership]
 translationKey: 2023/03/mapping-an-unfamiliar-value-chain
+primaryQuery: "how to understand an unfamiliar system quickly"
+searchIntent: howto
+relatedQueries:
+  - "mapping a value chain"
+  - "how to analyze business processes"
+  - "understanding complex systems"
+  - "user task flow diagrams"
 ---
 
 When first entering an unfamiliar field, the easiest thing to do is to start from the technical entry point you already know: first look at the repository, the interfaces, and the errors. I've done this too—and the result was a fragmented map that told me how the system runs, but not why it exists, who depends on it, or where change is most worthwhile.

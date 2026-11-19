@@ -6,6 +6,12 @@ publishedAt: 2026-08-14
 type: note
 featured: true
 tags: [site-notes, field-notes]
+primaryQuery: "旧博客重建 怎样整理迁移内容"
+searchIntent: essay
+relatedQueries:
+  - "个人网站内容管理 分类体系设计"
+  - "博客文章归档 大量存档怎么处理"
+  - "写作工作流 编辑习惯建立"
 ---
 
 这个博客放了很多年，旧东西散在各种地方，有些链接也早就不能看了。现在想重新把它收拾一下：过去写过的东西慢慢挑着整理，最近在做、在研究、在路上看到的事也放进来。

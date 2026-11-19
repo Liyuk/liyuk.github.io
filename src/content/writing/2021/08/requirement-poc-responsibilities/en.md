@@ -10,6 +10,13 @@ updatedAt: 2026-08-14
 type: essay
 tags: [project-management, engineering, collaboration, ownership, delivery, work-leadership]
 translationKey: 2021/08/requirement-poc-responsibilities
+primaryQuery: "engineering poc responsibilities cross-functional collaboration"
+searchIntent: howto
+relatedQueries:
+  - "how to prevent poc from becoming a bottleneck"
+  - "defining completion criteria for cross-team requirements"
+  - "building effective communication loops in product development"
+  - "managing risks and dependencies in complex projects"
 ---
 
 When a requirement involves product, design, engineering, testing, data, or operations at the same time, what is most easily lost is usually not any specific task but the overall view: everyone is doing their own part, yet no one keeps confirming whether those parts can come together at the same time to form a deliverable result. When I first took on the role of requirement POC, I treated "making everyone happy" as my responsibility — and the result was both exhausting and unfocused. Later I clarified the boundary: it is not about covering for everyone else, but about keeping the collaboration loop from dropping anything.

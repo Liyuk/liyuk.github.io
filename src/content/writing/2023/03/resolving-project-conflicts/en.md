@@ -10,6 +10,13 @@ type: essay
 tags: [project-management, collaboration, communication, work-leadership]
 column: { slug: engineering-collaboration, order: 1 }
 translationKey: 2023/03/resolving-project-conflicts
+primaryQuery: "how to resolve project conflicts through alignment"
+searchIntent: howto
+relatedQueries:
+  - "resolving team disagreements on project goals"
+  - "cross-functional collaboration when priorities differ"
+  - "clarifying decision authority in projects"
+  - "fact-based conflict resolution in teams"
 ---
 
 > This article is an expansion of the "alignment" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

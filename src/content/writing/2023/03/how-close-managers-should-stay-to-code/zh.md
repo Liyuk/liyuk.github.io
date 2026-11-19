@@ -5,6 +5,13 @@ createdAt: 2023-03-09
 publishedAt: 2023-03-09
 type: essay
 tags: [engineering-management, leadership, engineering, work-leadership]
+primaryQuery: "管理者离代码多远合适"
+searchIntent: essay
+relatedQueries:
+  - "技术管理者要不要继续写代码"
+  - "什么时候管理者应该亲自下场解决问题"
+  - "跨团队协作 管理者的职责"
+  - "技术管理 目标管理 权限争取"
 ---
 
 技术管理者常被两种焦虑拉扯：继续写代码，担心顾不上团队；不再碰代码，又担心自己很快只会说空话。这两种我都经历过，也见身边的同行在两者之间反复摇摆。

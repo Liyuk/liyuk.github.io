@@ -5,6 +5,13 @@ createdAt: 2025-04-12
 publishedAt: 2025-04-12
 type: note
 tags: [beauty, everyday-life, guide, skincare, field-notes]
+primaryQuery: "怎样根据肤色和肤感选彩妆"
+searchIntent: howto
+relatedQueries:
+  - "彩妆选色 明度冷暖饱和度"
+  - "粉底怎么选不显灰不显突兀"
+  - "腮红唇色怎么搭配显气色"
+  - "皮肤干或出油怎么选产品质地"
 ---
 
 ## 先把“适合”说清楚

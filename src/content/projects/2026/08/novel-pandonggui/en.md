@@ -16,6 +16,12 @@ work:
   status: "Updates paused (serialization experiment complete)"
   cover: /images/projects/novel-pandonggui/cover.webp
 tags: [fiction, novel, work-leadership]
+primaryQuery: "longing to return east novel"
+searchIntent: project
+relatedQueries:
+  - "lu zhao mingcult story"
+  - "ordinary person resisting fate fiction"
+  - "identity and choice in historical fiction"
 ---
 
 [Read *Longing to Return East* on Xiaoxiang Academy ↗](https://www.xxsypro.com/book/36408026604477109)

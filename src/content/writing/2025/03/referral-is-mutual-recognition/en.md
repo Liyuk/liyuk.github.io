@@ -10,6 +10,13 @@ type: essay
 tags: [communication, relationships, career, team, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 2 }
 translationKey: 2025/03/referral-is-mutual-recognition
+primaryQuery: "how to refer someone professionally"
+searchIntent: howto
+relatedQueries:
+  - "what to say when recommending a candidate"
+  - "referring candidates best practices"
+  - "mutual recognition professional referral"
+  - "effective job referral tips"
 ---
 
 “Take a look when you have a chance” and “help me forward this” are common phrases in professional relationships. But sending out a job link often only completes the easiest step: information moving from one place to another. What is genuinely difficult is helping a person understand — what problem this job is solving, and whether they are willing to take on its responsibilities; and helping the team understand — whether the next experience this person is looking for can find an honest answer here.

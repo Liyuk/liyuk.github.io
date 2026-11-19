@@ -9,6 +9,12 @@ publishedAt: 2022-01-01
 type: essay
 tags: [growth, career, reflection, work-leadership]
 column: { slug: growth-self-assessment, order: 2 }
+primaryQuery: "how to evaluate if your job helps you grow"
+searchIntent: essay
+relatedQueries:
+  - "signs of personal growth at work"
+  - "real career development beyond promotions"
+  - "how to assess learning from work experience"
 ---
 
 Whether a job really helps you grow cannot be judged only by whether it makes you busier, whether you are recognized, or whether you land a seemingly better position. The more worthwhile question is: has this experience changed the way I understand problems, invest my time, and take action? Can these changes be carried into the next context?

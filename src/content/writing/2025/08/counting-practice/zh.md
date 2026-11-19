@@ -6,6 +6,13 @@ publishedAt: 2025-08-20
 type: essay
 tags: [thinking, communication, self-reflection, work-leadership]
 column: { slug: thinking-training, order: 2 }
+primaryQuery: "怎样把混乱的想法说清楚"
+searchIntent: howto
+relatedQueries:
+  - "倾听和复述的技巧"
+  - "如何快速同步一个问题"
+  - "工作汇报怎么讲重点"
+  - "怎样做自我复盘"
 ---
 
 有一种很朴素的训练，我把它叫作“数数”。它最初用来解决的不是知识不足，而是一个更常见的问题：脑子里有很多东西，却说不清自己在问什么；听见别人讲了很多，也抓不住重点。

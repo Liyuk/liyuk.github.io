@@ -9,6 +9,12 @@ type: essay
 tags: [technical-management, leadership, decision-making, team, work-leadership]
 column: { slug: team-building, order: 1 }
 translationKey: 2023/03/frontline-engineering-management
+primaryQuery: "how to build an effective engineering team culture"
+searchIntent: howto
+relatedQueries:
+  - "engineering management avoid bottleneck"
+  - "how to help engineers make better decisions"
+  - "predictable project delivery and risk management"
 ---
 
 > This article expands on the "Team and Growth" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).

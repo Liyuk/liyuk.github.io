@@ -6,6 +6,12 @@ publishedAt: 2021-08-20
 type: essay
 tags: [growth, self-reflection, feedback, work-leadership]
 column: { slug: one-on-one-conversations, order: 4 }
+primaryQuery: "一对一怎样把成长计划聊得更具体"
+searchIntent: howto
+relatedQueries:
+  - "员工成长反馈 怎么问"
+  - "如何设定明确的成长里程碑"
+  - "团队沟通 成长规划框架"
 ---
 
 "我想成长得更快"很容易谈空。把这套问题准备出来，是因为一次真实的一对一——沟通了 20 到 30 小时之后，把零散问题汇总成了这份清单。聊的时候记住一点：成长是一个里程碑的积累，而一个里程碑由**情境、行为、证据、下一轮练习**四部分组成。

@@ -6,6 +6,13 @@ publishedAt: 2021-03-27
 type: essay
 tags: [data, metrics, measurement, observability, technology]
 column: { slug: data-metrics-guide, order: 2 }
+primaryQuery: "如何定义一个能执行的指标体系"
+searchIntent: howto
+relatedQueries:
+  - "指标争论前需要先确认什么"
+  - "保存成功率怎么定义才准确"
+  - "一个完整的指标包括哪几类"
+  - "任务状态和指标的关系"
 ---
 
 “把指标做上去”不是一个明确的要求。先要问：我们究竟在测量什么？

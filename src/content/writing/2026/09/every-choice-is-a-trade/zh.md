@@ -20,6 +20,13 @@ citationUrls:
   - https://doi.org/10.2307/1884852
   - https://www.econlib.org/library/Knight/knRUP.html?chapter_num=10
   - https://doi.org/10.1109/TSSC.1966.300074
+primaryQuery: "怎样判断一个项目值不值做"
+searchIntent: essay
+relatedQueries:
+  - "供需关系 市场验证"
+  - "什么时候该进入或退出一个项目"
+  - "职业选择 长期决策"
+  - "判断决策的依据和方法"
 ---
 
 最近在整理过去做 startup 项目的一些经验，也借着看金融交易，重新回头想企业发展到底在做什么。做项目和做交易差别很大，一个要面对用户、产品、团队，一个要面对价格、仓位和风险。但放在一起复盘时，我常常会先后碰到两个问题：供需关系是什么，资源什么时候进入和退出。

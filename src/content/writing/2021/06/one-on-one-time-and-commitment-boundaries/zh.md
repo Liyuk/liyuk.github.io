@@ -6,6 +6,13 @@ publishedAt: 2021-06-10
 type: essay
 tags: [communication, prioritization, collaboration, work-leadership]
 column: { slug: one-on-one-conversations, order: 3 }
+primaryQuery: "1对1面谈 如何讨论工作忙碌和容量问题"
+searchIntent: howto
+relatedQueries:
+  - "员工说很忙 管理者怎么问"
+  - "团队协作 如何设定优先级"
+  - "工作承诺过载 怎样提出来"
+  - "一对一会议 有效沟通模板"
 ---
 
 "我最近很忙"是一个真实感受，但它不足以帮助协作。把忙拆开聊：已承诺的事、尚未确认的请求、不可压缩的恢复时间，以及必须放弃的选项。判断承诺是否过载，不只看工时和强度，还要看长期是否可持续。

@@ -14,6 +14,13 @@ hero:
   caption: 飞书皮肤下的项目组、联系人会话列表和聊天输入区。
 draft: false
 tags: [technology, agent-systems, developer-productivity]
+primaryQuery: "dsh-skin-chatlab 多皮肤聊天工作台"
+searchIntent: project
+relatedQueries:
+  - "dsh-skin-chatlab 安装配置"
+  - "聊天应用ui皮肤切换"
+  - "飞书Slack企业微信皮肤对比"
+  - "dsh web 皮肤系统"
 ---
 
 [在 GitHub 查看项目与安装说明 ↗](https://github.com/Liyuk/dsh-skin-chatlab)

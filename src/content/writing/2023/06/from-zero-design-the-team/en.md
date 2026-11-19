@@ -10,6 +10,13 @@ column: { slug: team-building, order: 2 }
 locale: en
 translationStatus: reviewed
 translationKey: 2023/06/from-zero-design-the-team
+primaryQuery: "rebuilding team from scratch strategy"
+searchIntent: howto
+relatedQueries:
+  - "how to establish team accountability"
+  - "setting shared goals across teams"
+  - "building team capability sustainably"
+  - "team reorganization best practices"
 ---
 
 Sometimes a team that once ran smoothly loses its continuity because of shifting goals, changes in key roles, or long-term attrition. The most common mistake at such a moment is to understand "starting over" as redrawing a division-of-labor chart, or immediately filling the void with a list of tasks.

@@ -6,6 +6,12 @@ publishedAt: 2022-01-01
 type: essay
 tags: [growth, career, reflection, work-leadership]
 column: { slug: growth-self-assessment, order: 2 }
+primaryQuery: "工作中判断个人成长的标准"
+searchIntent: essay
+relatedQueries:
+  - "如何评估一段工作经历的价值"
+  - "工作成长与职级晋升的区别"
+  - "怎样知道自己在工作中进步了"
 ---
 
 一段工作是否真的让人成长，不能只看是否更忙、是否被认可，或是否获得了一个看起来更好的位置。更值得问的是：这段经历有没有改变我理解问题、投入时间和采取行动的方式？这些变化能不能被带到下一个场景？

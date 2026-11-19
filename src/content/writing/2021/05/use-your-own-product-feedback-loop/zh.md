@@ -5,6 +5,12 @@ createdAt: 2021-05-15
 publishedAt: 2021-05-15
 type: essay
 tags: [product-thinking, engineering, feedback, work-leadership]
+primaryQuery: "产品反馈系统怎么建立才有效"
+searchIntent: howto
+relatedQueries:
+  - "用户体验测试 任务设计"
+  - "产品问题分类 缺陷摩擦机会"
+  - "团队体验产品 反馈记录模板"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「闭环」这条线的展开。

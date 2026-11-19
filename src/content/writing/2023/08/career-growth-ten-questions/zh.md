@@ -6,6 +6,13 @@ publishedAt: 2023-08-01
 updatedAt: 2026-08-14
 type: essay
 tags: [career, promotion, interview, leadership, engineering, work-leadership]
+primaryQuery: "晋升面试前怎么准备 自查清单"
+searchIntent: howto
+relatedQueries:
+  - "项目总结怎么写 有说服力"
+  - "团队管理能力怎么考察"
+  - "技术方案评估标准"
+  - "职业发展规划问题"
 ---
 
 这不是一篇给出结论的职业发展文章，而是一份问题库。它用于准备晋升材料、面试和阶段复盘：选择一到两个重点项目或一个负责方向，逐项写下事实、判断、行动、结果与证据。

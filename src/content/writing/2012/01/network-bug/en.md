@@ -9,6 +9,12 @@ publishedAt: 2012-01-01
 updatedAt: 2026-08-14
 type: essay
 tags: [fiction, archive, field-notes]
+primaryQuery: "how knowledge can paralyze action"
+searchIntent: essay
+relatedQueries:
+  - "cognitive mismatch and decision-making"
+  - "information overload effects"
+  - "perspective and perception gaps"
 ---
 
 > Editorial note: the original draft was written in 2012 and first published on the old site in 2018. Only the year of composition survives in the source material, so the creation date is archived as January 1 of that year; this version only tidies the paragraphs and punctuation.

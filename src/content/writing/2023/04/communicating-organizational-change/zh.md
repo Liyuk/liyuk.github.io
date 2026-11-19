@@ -5,6 +5,12 @@ createdAt: 2023-04-04
 publishedAt: 2023-04-04
 type: essay
 tags: [management, communication, organizational-change, work-leadership]
+primaryQuery: "组织变化如何沟通才能避免猜测"
+searchIntent: howto
+relatedQueries:
+  - "团队变动消息怎么同步"
+  - "对上对下如何分别说明变化"
+  - "信息真空中怎样稳定人心"
 ---
 
 组织变化最伤人的，往往不是变化本身，而是它留下的信息真空。改动大多是提前计划好的；真正失控的，是真空里长出来的猜测。

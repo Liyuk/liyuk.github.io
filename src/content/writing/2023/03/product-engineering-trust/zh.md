@@ -5,6 +5,13 @@ createdAt: 2023-03-15
 publishedAt: 2023-03-15
 type: essay
 tags: [collaboration, trust, product-thinking, work-leadership]
+primaryQuery: "产研合作 如何建立信任"
+searchIntent: essay
+relatedQueries:
+  - "目标冲突时怎么沟通对齐"
+  - "团队协作信息不对称怎么办"
+  - "产品和工程团队意见不合"
+  - "工作中如何处理承诺和压力"
 ---
 
 "配合"这个词我一直不太喜欢。它听起来像两拨人各自完成任务、再在接缝处对一下——而产研之间真正的差距，往往就出在接缝上。

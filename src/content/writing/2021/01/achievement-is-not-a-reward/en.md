@@ -9,6 +9,12 @@ publishedAt: 2021-01-01
 type: essay
 tags: [career, motivation, reflection, work-leadership]
 translationKey: 2021/01/achievement-is-not-a-reward
+primaryQuery: "sense of achievement in professional work"
+searchIntent: essay
+relatedQueries:
+  - "building professional identity and self-recognition"
+  - "understanding the value of your work"
+  - "commitment and feedback in career growth"
 ---
 
 There are already plenty of well-known theories about the sense of achievement. I won't go into theory here; I'll just organize some personal reflections: achievement is not merely the reward you receive after getting something done. It is more like a feedback system that runs continuously, helping you confirm what you are accomplishing, why you are investing yourself, and whether you still approve of the person you are becoming.

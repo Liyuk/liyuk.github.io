@@ -5,6 +5,12 @@ createdAt: 2024-05-20
 publishedAt: 2024-05-20
 type: essay
 tags: [hiring, leadership, communication, team-building, work-leadership]
+primaryQuery: "怎样写好招聘文案 吸引合适人才"
+searchIntent: essay
+relatedQueries:
+  - "招聘品牌建设 共同信念"
+  - "如何向候选人讲清楚岗位职责"
+  - "招聘文案 愿景 执行路径"
 ---
 
 一份招聘文案真正想完成的，不是介绍一个职位，也不是制造一次热闹的传播，而是让一个陌生人愿意花时间理解：这件事为什么重要，团队凭什么觉得能做成，以及如果加入，自己会具体承担哪一段。

@@ -13,6 +13,13 @@ draft: false
 tags: [career-development, engineering, product-thinking, operations, communication, collaboration, prioritization, risk-management]
 column: { slug: engineering-team-judgment, order: 1 }
 translationKey: 2026/09/product-engineer-without-boundaries
+primaryQuery: "how to move a project forward when engineering handles both product and engineering"
+searchIntent: howto
+relatedQueries:
+  - "setting decision authority in cross-functional projects"
+  - "aligning business goals with technical constraints and timelines"
+  - "clarifying scope and resources before taking on a new project"
+  - "communicating product risks to business stakeholders"
 ---
 
 > This is an edited account of a real consultation, not a verbatim transcript. The conversation is presented in its original order: the client first described the situation, then I worked through it with him. People, organizations, business details, and project specifics have been abstracted, and some repeated facts have been combined. The advice reflects what we discussed; the client and his team have not yet acted on it.

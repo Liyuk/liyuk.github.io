@@ -11,6 +11,13 @@ featured: true
 tags: [communication, collaboration, self-reflection, work-leadership]
 column: { slug: one-on-one-conversations, order: 1 }
 translationKey: 2021/02/one-on-one-from-definition-to-action
+primaryQuery: "how to structure effective one-on-one meetings"
+searchIntent: howto
+relatedQueries:
+  - "one-on-one meeting framework"
+  - "what topics to discuss in one-on-ones"
+  - "managing difficult one-on-one conversations"
+  - "employee development one-on-one guide"
 ---
 
 This series of "Themed One-on-Ones" was originally created to solve one problem: "**not knowing what to talk about**". The backstory is plain: as a leader, I noticed that during one-on-ones people often had nothing to say, or the conversations wandered off course, so I prepared a topic list for each theme — before the conversation, think it through yourself first (prepare your own feelings); then talk through the questions (points to cover); and finally leave an open channel for venting and feedback.

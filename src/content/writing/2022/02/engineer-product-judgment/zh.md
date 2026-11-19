@@ -6,6 +6,12 @@ publishedAt: 2022-02-01
 type: essay
 tags: [engineering, product-thinking, career-development, decision-making, work-leadership]
 column: { slug: product-judgment, order: 1 }
+primaryQuery: "工程师怎样理解产品、参与业务规划"
+searchIntent: essay
+relatedQueries:
+  - "工程师产品思维怎么培养"
+  - "技术方案如何连接业务目标"
+  - "从需求理解到决策讨论的三层追问"
 ---
 
 

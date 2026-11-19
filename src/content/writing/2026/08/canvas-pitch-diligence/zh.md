@@ -6,6 +6,12 @@ publishedAt: 2026-08-15
 type: note
 draft: false
 tags: [strategy, product-thinking, decision-making, learning]
+primaryQuery: "商业模式画布、创业路演、投资人尽调的区别"
+searchIntent: essay
+relatedQueries:
+  - "创业路演怎么讲最有说服力"
+  - "投资人尽调重点查什么"
+  - "商业模式画布怎么填"
 ---
 
 同样是"看一个项目"，其实有三种目的完全不同的视角，很容易混在一起。记下来：**商业模式画布是"做给自己看"，创业路演是"讲给别人听"，投资人尽调是"别人来查你"。** 前者偏"怎么做成"，后者偏"值不值得投"，中间的路演，是把"做成"包装成"值得投"的一次表达。

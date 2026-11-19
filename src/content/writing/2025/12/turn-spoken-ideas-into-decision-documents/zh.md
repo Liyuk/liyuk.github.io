@@ -6,6 +6,13 @@ publishedAt: 2025-12-31
 type: essay
 tags: [writing, decision-making, communication, work-leadership]
 column: { slug: documentation, order: 3 }
+primaryQuery: "怎样把想法整理成决策文档"
+searchIntent: howto
+relatedQueries:
+  - "年度总结怎么写得清楚"
+  - "工具如何帮助结构化思维"
+  - "团队文档整理最佳实践"
+  - "口头表达改成书面语的方法"
 ---
 
 最近大家都在写年度总结和规划，文档一多，就很容易变成众筹现场。把大家的内容汇总起来过一遍，再结合一些写作工具和自己的脑子改一改，常常能看到很有意思的差别。

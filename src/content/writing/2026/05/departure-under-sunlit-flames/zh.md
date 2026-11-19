@@ -6,6 +6,13 @@ publishedAt: 2026-05-29
 type: essay
 featured: true
 tags: [career, reflection, leadership, work-leadership]
+primaryQuery: "职业生涯八年半的总结与感悟"
+searchIntent: essay
+relatedQueries:
+  - "如何在工作中保持初心"
+  - "职场转变和个人成长"
+  - "离职前的反思与告别"
+  - "Context not control 管理理念"
 ---
 
 刷过很多同事的离职告别，真轮到自己写的时候，反而突然不知道说什么好了。距离最后一天还有一些时间，但也先行告别吧。

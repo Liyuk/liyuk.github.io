@@ -9,6 +9,12 @@ column: { slug: engineering-collaboration, order: 5 }
 locale: en
 translationStatus: reviewed
 translationKey: 2023/03/when-a-team-member-loses-motivation
+primaryQuery: "what to do when employee loses motivation"
+searchIntent: howto
+relatedQueries:
+  - "how to diagnose why team member lost motivation"
+  - "talking to unmotivated employee"
+  - "how to restore employee engagement"
 ---
 
 When someone seems to have "lost their drive," the most dangerous reaction from a manager is to immediately explain it as an attitude problem. I have made this mistake myself — when I saw an engineer stop proactively proposing improvements, my first reaction was "Has he stopped trying to get ahead?" Later I discovered that, almost every time, the real cause had nothing to do with attitude.

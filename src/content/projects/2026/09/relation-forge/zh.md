@@ -10,6 +10,13 @@ repositoryUrl: https://github.com/Liyuk/relation-forge
 draft: false
 tags: [agent, interpersonal-analysis, anti-scam, privacy, workflow]
 translationKey: 2026/09/relation-forge
+primaryQuery: "网恋频繁要钱 分不清是真困难还是诈骗 怎么判断"
+searchIntent: howto
+relatedQueries:
+  - "怎样分析别人一句话里隐含的真实意图"
+  - "工作纠正和职场霸凌 区别在哪"
+  - "交友软件对象身份无法核实 该不该继续往来"
+  - "拒绝别人的要求 怎样既坚定又不伤关系"
 ---
 
 有些关系让人不舒服，却又很难说清楚哪里不对。可能是对方提了一个你不愿意答应的要求，可能是一次争执之后，你一直在想自己是不是说重了。事情还在发生，要怎么回、要不要继续谈，心里都没个准数。

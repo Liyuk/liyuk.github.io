@@ -6,6 +6,13 @@ publishedAt: 2023-06-01
 type: essay
 tags: [team, leadership, growth, mentoring, work-leadership]
 column: { slug: team-building, order: 4 }
+primaryQuery: "如何培养团队能力让团队变强"
+searchIntent: howto
+relatedQueries:
+  - "团队成长 管理者怎么教"
+  - "员工发展 安排什么样的挑战"
+  - "工作复盘怎么反馈才有效"
+  - "团队经验怎么沉淀成资产"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「团队与成长」这条线的展开。

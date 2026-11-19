@@ -17,6 +17,13 @@ citationUrls:
   - https://kafka.apache.org/documentation/
   - https://nightlies.apache.org/flink/flink-docs-stable/
 translationKey: 2026/08/data-center-revenue-design
+primaryQuery: "多业务平台数据中心架构设计"
+searchIntent: howto
+relatedQueries:
+  - "数据指标定义方法论"
+  - "数据分级和实时性设计"
+  - "数据流处理系统设计"
+  - "业务数据对账和结算"
 ---
 
 我做过很长时间的数据流，做过内容发布、搜索、推荐、增长、交易，也做过客户端和 SDK 的采集、服务接入、数据清洗、跨环境流转、落表、迁移和合规。很多时候，业务方看到的是一张报表、一条推荐结果，或者一次交易是否完成；我更常面对的是这些结果之前的那条链路：数据从哪里来，经过哪些处理，最后落在哪里，又怎样交给下一个系统。

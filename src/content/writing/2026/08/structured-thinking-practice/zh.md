@@ -7,6 +7,12 @@ type: essay
 draft: false
 tags: [thinking, problem-framing, decision-making, communication, work-leadership]
 column: { slug: thinking-training, order: 4 }
+primaryQuery: "怎样在工作中清晰表达自己的想法"
+searchIntent: howto
+relatedQueries:
+  - "面试讲项目经验怎样说得更有说服力"
+  - "汇报卡住的问题给上级怎样让他快速理解"
+  - "晋升材料怎样从流水账写成有逻辑的总结"
 ---
 
 > 本文是[《五镜法：联系导向的问题定位》](/research/2026/08/connection-oriented-problem-location/)的实战篇——那篇讲这套方法"是什么、凭什么成立、边界在哪"，这篇只讲"怎么用"。工具的定义不在这里重复，用到的地方顺手带一句；想查完整定义，看研究版或文末速查卡。

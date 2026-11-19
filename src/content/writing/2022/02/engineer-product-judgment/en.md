@@ -9,6 +9,12 @@ type: essay
 tags: [engineering, product-thinking, career-development, decision-making, work-leadership]
 column: { slug: product-judgment, order: 1 }
 translationKey: 2022/02/engineer-product-judgment
+primaryQuery: "how engineers develop product judgment"
+searchIntent: essay
+relatedQueries:
+  - "engineering mindset beyond coding"
+  - "connecting technical solutions to business outcomes"
+  - "five stages of product understanding for engineers"
 ---
 
 Product judgment for engineers is not a demand that everyone replace the product manager, nor is it an extra "soft skill" bolted onto technical work. Its purpose is to let engineers know: whose problem they are solving, why the approach holds, how the effort produces results, and where to go back and correct when results fall short of expectations.

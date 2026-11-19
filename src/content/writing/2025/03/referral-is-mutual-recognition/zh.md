@@ -6,6 +6,13 @@ publishedAt: 2025-03-01
 type: essay
 tags: [communication, relationships, career, team, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 2 }
+primaryQuery: "怎样做好一个职业推荐"
+searchIntent: howto
+relatedQueries:
+  - "推荐候选人 要说什么"
+  - "帮人推荐工作 注意事项"
+  - "职位推荐 怎样尊重对方"
+  - "被推荐跳槽 如何判断"
 ---
 
 “有机会可以看看”“帮忙转发一下”是职业关系中很常见的话。但把一个职位链接发出去，往往只完成了最容易的一步：信息从一处移动到另一处。真正困难的是帮助一个人理解——这份工作在解决什么问题，自己是否愿意承担其中的责任；也帮助团队理解——这个人想寻找的下一段经历，是否能在这里得到诚实的回应。

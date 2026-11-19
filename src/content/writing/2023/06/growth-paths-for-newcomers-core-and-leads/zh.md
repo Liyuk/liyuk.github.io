@@ -6,6 +6,13 @@ publishedAt: 2023-06-01
 type: essay
 tags: [career, growth, team, leadership, work-leadership]
 column: { slug: team-building, order: 5 }
+primaryQuery: "团队成长路径设计"
+searchIntent: essay
+relatedQueries:
+  - "新人如何建立完成能力"
+  - "骨干怎样从执行转向经营"
+  - "负责人如何培养下一层管理者"
+  - "责任如何在组织中扩大传递"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「团队与成长」这条线的展开。

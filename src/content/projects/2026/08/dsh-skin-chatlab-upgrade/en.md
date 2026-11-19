@@ -16,6 +16,13 @@ hero:
 draft: false
 tags: [technology, agent-systems, developer-productivity]
 translationKey: 2026/08/dsh-skin-chatlab-upgrade
+primaryQuery: "dsh-skin-chatlab switchable chat skins"
+searchIntent: project
+relatedQueries:
+  - "how to install dsh-skin-chatlab"
+  - "chat ui theme switching"
+  - "feishu slack wecom skins comparison"
+  - "dsh web plugin skins"
 ---
 
 [View the project and installation guide on GitHub ↗](https://github.com/Liyuk/dsh-skin-chatlab)

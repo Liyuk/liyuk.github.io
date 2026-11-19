@@ -10,6 +10,13 @@ type: essay
 tags: [team, leadership, growth, work-leadership]
 column: { slug: team-building, order: 3 }
 translationKey: 2022/01/team-growth-is-not-expansion
+primaryQuery: "building reliable team efficiency beyond hiring"
+searchIntent: essay
+relatedQueries:
+  - "team collaboration standards and responsibility boundaries"
+  - "transferring knowledge across team members"
+  - "developing experience gradient in teams"
+  - "team continuity when people leave"
 ---
 
 > This essay expands on the "Team and Growth" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

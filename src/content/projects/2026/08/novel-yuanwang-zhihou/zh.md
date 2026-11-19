@@ -13,6 +13,12 @@ work:
   status: 暂停更新（连载实验已完成）
   cover: /images/projects/novel-yuanwang-zhihou/cover.webp
 tags: [fiction, novel, work-leadership]
+primaryQuery: "愿望之后 长篇小说"
+searchIntent: project
+relatedQueries:
+  - "愿望实现后的责任"
+  - "沙漠商路冒险小说"
+  - "愿望改变命运的故事"
 ---
 
 [在起点中文网阅读《愿望之后》 ↗](https://www.qidian.com/book/1050031941/)

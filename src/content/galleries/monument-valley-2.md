@@ -134,4 +134,10 @@ images:
     caption: 终章・路仍在长
     width: 1600
     height: 900
+primaryQuery: "纪念碑谷 游戏截图 个人经历"
+searchIntent: visual
+relatedQueries:
+  - "纪念碑谷2 通关 八年成长"
+  - "错视建筑 游戏设计"
+  - "纪念碑谷关卡地图"
 ---

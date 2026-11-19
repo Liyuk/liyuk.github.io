@@ -9,6 +9,13 @@ publishedAt: 2023-03-17
 type: essay
 tags: [quality, reliability, engineering, technology]
 translationKey: 2023/03/quality-is-shared-accountability
+primaryQuery: "shared accountability for quality in product delivery"
+searchIntent: essay
+relatedQueries:
+  - "why quality breaks at handoffs"
+  - "four step quality loop for incidents"
+  - "containment before root cause analysis"
+  - "monitoring to detect production issues"
 ---
 
 > This essay expands on the "closed loop" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).

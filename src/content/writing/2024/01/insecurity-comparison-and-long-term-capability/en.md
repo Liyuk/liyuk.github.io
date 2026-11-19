@@ -10,6 +10,12 @@ type: essay
 tags: [self-reflection, growth, communication, work-leadership]
 column: { slug: one-on-one-conversations, order: 13 }
 translationKey: 2024/01/insecurity-comparison-and-long-term-capability
+primaryQuery: "how to deal with workplace insecurity and anxiety"
+searchIntent: howto
+relatedQueries:
+  - "managing career comparison anxiety"
+  - "adjusting career expectations realistically"
+  - "setting long-term career goals"
 ---
 
 Where this topic came from: in recent chats with colleagues, both inside and outside my team, the problem everyone kept raising was "insecurity." Its sources are mainly changes in the internal and external environment and the broader market trend, plus some business changes within the company. Together these factors bring uncertainty and insecurity; here I mainly discuss **ways to break the deadlock**.

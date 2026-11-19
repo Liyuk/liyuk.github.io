@@ -5,6 +5,13 @@ createdAt: 2023-04-10
 publishedAt: 2023-04-10
 type: essay
 tags: [collaboration, organization, management, work-leadership]
+primaryQuery: "健康冗余和有害重叠怎样区分"
+searchIntent: essay
+relatedQueries:
+  - "组织赛马和零和竞争"
+  - "团队授权不清楚该怎么办"
+  - "协作中避免重复建设"
+  - "汇报线和实际工作流不一致"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「边界与责任」这条线的展开。

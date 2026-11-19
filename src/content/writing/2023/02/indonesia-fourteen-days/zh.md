@@ -5,6 +5,13 @@ createdAt: 2023-02-20
 publishedAt: 2023-02-20
 type: essay
 tags: [indonesia, jakarta, travel, field-notes]
+primaryQuery: "雅加达物价 交通 生活成本"
+searchIntent: essay
+relatedQueries:
+  - "印尼雅加达十四天旅行记录"
+  - "雅加达地铁 打车 交通费用"
+  - "雅加达商场 路边摊 两套消费系统"
+  - "雅加达网络 支付 电话卡"
 ---
 
 > 文中价格和换算均为 2023 年 2 月在雅加达的个人记录，不代表当前价格或统计数据。

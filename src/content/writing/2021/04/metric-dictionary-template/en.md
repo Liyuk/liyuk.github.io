@@ -10,6 +10,13 @@ type: essay
 tags: [data, metrics, collaboration, measurement]
 column: { slug: data-metrics-guide, order: 4 }
 translationKey: 2021/04/metric-dictionary-template
+primaryQuery: "how to create a metric dictionary template for data alignment"
+searchIntent: howto
+relatedQueries:
+  - "metric definition card structure and fields"
+  - "completion rate retention conversion metric definitions"
+  - "how to standardize metric definitions across teams"
+  - "metric documentation best practices"
 ---
 
 The same "completion rate" often has different denominators in different people's hands: some use clicking start as the denominator, some use request initiation, some exclude timeouts, and some count a success after retry as a complete success. Without a metric dictionary, data definitions gradually diverge across meetings, SQL, and dashboards.

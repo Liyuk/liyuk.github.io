@@ -8,6 +8,12 @@ publishedAt: 2023-06-11
 type: essay
 tags: [japan, tokyo, travel, field-notes]
 translationKey: 2023/06/tokyo-wandering
+primaryQuery: "tokyo six day trip real expenses experience"
+searchIntent: essay
+relatedQueries:
+  - "tokyo cost of living accommodation prices"
+  - "shibuya shibuya kamakura day trip"
+  - "tokyo transit crowding metro"
 ---
 
 > All prices and exchange rates below are personal records from June 2023 and do not represent current prices or travel advice.

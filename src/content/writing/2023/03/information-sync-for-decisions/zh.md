@@ -5,6 +5,13 @@ createdAt: 2023-03-27
 publishedAt: 2023-03-27
 type: essay
 tags: [communication, documentation, collaboration, work-leadership]
+primaryQuery: "怎样同步信息让对方能做决定"
+searchIntent: howto
+relatedQueries:
+  - "工作汇报怎么写才清楚"
+  - "向不同人汇报同一进展"
+  - "信息沟通容易产生歧义怎么办"
+  - "如何避免信息同步变成存档"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「对齐」这条线的展开。

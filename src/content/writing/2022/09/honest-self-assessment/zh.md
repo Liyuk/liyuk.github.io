@@ -6,6 +6,13 @@ publishedAt: 2022-09-25
 type: essay
 tags: [self-reflection, growth, feedback, work-leadership]
 column: { slug: one-on-one-conversations, order: 8 }
+primaryQuery: "如何客观评估自己的能力水平和晋升差距"
+searchIntent: howto
+relatedQueries:
+  - "工作能力模型怎么理解和应用"
+  - "怎么判断自己是否达到晋升标准"
+  - "职场自我评估 避免偏差的方法"
+  - "如何收集真实反馈来了解自己的不足"
 ---
 
 这个话题的由来很具体：不论刚毕业还是工作五六年的同学，对能力模型的理解、对自己所处阶段都有不少疑问——当前阶段的要求是什么、能力怎么提升、晋升的标准是什么，常常陷入迷雾。这次一对一想回答两个通用问题：**标准的模型，细读之后应当如何理解**；**如何测量自己所处阶段，以及能力的提升方向**。前提是：沟通、回答都真诚务实。

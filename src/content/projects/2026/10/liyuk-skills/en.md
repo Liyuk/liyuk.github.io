@@ -10,6 +10,12 @@ repositoryUrl: https://github.com/Liyuk/skills
 draft: false
 tags: [ai, coding-agent, engineering-management, decision-making, open-source, workflow]
 translationKey: 2026/10/liyuk-skills
+primaryQuery: "engineering and management decision AI assistant"
+searchIntent: project
+relatedQueries:
+  - "technical proposal review AI tool"
+  - "project retrospective decision framework"
+  - "open source engineering management skills"
 ---
 
 The project started when Yaozi mentioned building an internal Ask Liyuk skill. I began thinking about the articles, engineering methods, and judgments about management and communication I'd accumulated over the years. I could distill some of them into skills people could call on their own, then add a few insights from spoken conversations. The practical use gradually became clearer: bring an existing proposal, a change in metrics, or an account of work to an AI assistant and ask it to examine the material with a defined method. If you're not sure which method fits, Ask Liyuk can help you choose where to start.

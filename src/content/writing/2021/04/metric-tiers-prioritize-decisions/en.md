@@ -10,6 +10,12 @@ type: essay
 tags: [data, metrics, collaboration, measurement]
 column: { slug: data-metrics-guide, order: 3 }
 translationKey: 2021/04/metric-tiers-prioritize-decisions
+primaryQuery: "how to prioritize metrics on a dashboard"
+searchIntent: howto
+relatedQueries:
+  - "metric prioritization framework"
+  - "which metrics matter most for product"
+  - "how to tier business metrics"
 ---
 
 A dashboard can hold dozens of metrics, but human attention cannot. Without tiering, teams are easily drawn to the most prominent, fastest-moving numbers while ignoring the signals that actually determine user outcomes.

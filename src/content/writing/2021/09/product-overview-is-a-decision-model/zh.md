@@ -7,6 +7,13 @@ updatedAt: 2026-08-14
 type: essay
 tags: [product-thinking, writing, research, collaboration, work-leadership]
 column: { slug: product-judgment, order: 2 }
+primaryQuery: "产品概览怎么写才能让人快速理解和决策"
+searchIntent: howto
+relatedQueries:
+  - "产品研究资料如何组织才不会堆成百科"
+  - "怎样用用户任务替代功能列表写产品"
+  - "产品文档中事实推断和问题怎么分开"
+  - "竞品分析报告怎么写才有用"
 ---
 
 产品概览最容易写成一种"资料仓库"：成立时间、市场列表、功能截图、竞品表格、新闻链接，一页接一页。我写产品研究时，就是从这个仓库模式起步的——直到发现读者读完以后也许知道得更多，却仍回答不了最重要的问题：**这个产品究竟替谁解决了什么问题？它靠什么方式成立？我们现在应该据此做什么判断？**

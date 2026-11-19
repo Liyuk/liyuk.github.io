@@ -18,6 +18,13 @@ citationUrls:
   - https://kafka.apache.org/documentation/
   - https://nightlies.apache.org/flink/flink-docs-stable/
 translationKey: 2026/08/data-center-revenue-design
+primaryQuery: "data center architecture for multi-source platforms"
+searchIntent: howto
+relatedQueries:
+  - "how to define metrics in data systems"
+  - "data classification and latency design"
+  - "building data pipelines and event streams"
+  - "billing reconciliation in data infrastructure"
 ---
 
 I have worked on data flows for a long time: content publishing, search, recommendations, growth, and transactions, as well as collection through clients and SDKs, server ingestion, data cleaning, cross-environment movement, table writes, migrations, and compliance. Business teams often see a report, a recommendation, or the answer to whether a transaction completed. I have more often worked on the chain behind those results: where the data came from, what processed it, where it ended up, and how it was handed to the next system.

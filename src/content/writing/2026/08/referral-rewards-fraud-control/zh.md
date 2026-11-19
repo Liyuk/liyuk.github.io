@@ -19,6 +19,13 @@ citationUrls:
   - https://www.mckinsey.com/capabilities/operations/our-insights/zero-based-productivity-marketing-measure-allocate-and-invest-marketing-dollars-more-effectively
   - https://support.google.com/analytics/answer/10596866
   - https://mixpanel.com/blog/north-star-metric/
+primaryQuery: "营销系统设计：如何从交易数据构建增长基础设施"
+searchIntent: howto
+relatedQueries:
+  - "裂变活动风控和反作弊"
+  - "营销系统与交易系统的边界设计"
+  - "营销成本管理和预算追踪"
+  - "用户权益发放系统怎样设计"
 ---
 
 一开始，营销系统并不在营销部门。它通常已经散落在交易、账户、产品和客服系统里。

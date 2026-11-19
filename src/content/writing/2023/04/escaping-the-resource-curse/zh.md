@@ -5,6 +5,13 @@ createdAt: 2023-04-09
 publishedAt: 2023-04-09
 type: essay
 tags: [organization, decision-making, prioritization, work-leadership]
+primaryQuery: "资源充足反而做事变慢怎么办"
+searchIntent: essay
+relatedQueries:
+  - "团队扩招后工作效率反而下降"
+  - "如何识别组织内制造的低价值忙碌"
+  - "预算充足但项目难推进的原因"
+  - "怎样判断决策质量是否出了问题"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「资源与容量」这条线的展开。

@@ -6,6 +6,13 @@ publishedAt: 2023-03-19
 type: essay
 tags: [project-management, collaboration, communication, work-leadership]
 column: { slug: engineering-collaboration, order: 1 }
+primaryQuery: "项目冲突怎么解决 对齐方法"
+searchIntent: howto
+relatedQueries:
+  - "团队合作产生分歧 解决方案"
+  - "跨部门协作 目标不一致怎么办"
+  - "项目决策权 如何明确职责"
+  - "事实分歧 团队沟通技巧"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「对齐」这条线的展开。

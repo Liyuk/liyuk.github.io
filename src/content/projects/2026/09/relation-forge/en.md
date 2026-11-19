@@ -11,6 +11,13 @@ repositoryUrl: https://github.com/Liyuk/relation-forge
 draft: false
 tags: [agent, interpersonal-analysis, anti-scam, privacy, workflow]
 translationKey: 2026/09/relation-forge
+primaryQuery: "how to identify romance scams with escalating money requests"
+searchIntent: howto
+relatedQueries:
+  - "how to analyze what someone really wants from a conversation"
+  - "difference between constructive workplace feedback and bullying"
+  - "online dating verification when you cannot confirm identity"
+  - "how to say no without damaging a relationship"
 ---
 
 Some relationships leave you uneasy, but it can be hard to say exactly why. Maybe someone has asked you to do something you do not want to do. Maybe, after an argument, you keep wondering whether you were too harsh. Things are still unfolding, and you are not sure what to say next or whether to keep talking.

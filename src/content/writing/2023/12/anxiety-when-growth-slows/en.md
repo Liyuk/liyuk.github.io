@@ -10,6 +10,13 @@ type: essay
 tags: [self-reflection, communication, decision-making, work-leadership]
 column: { slug: one-on-one-conversations, order: 12 }
 translationKey: 2023/12/anxiety-when-growth-slows
+primaryQuery: "handling team anxiety when business growth slows"
+searchIntent: essay
+relatedQueries:
+  - "how to communicate with team during uncertain times"
+  - "avoiding burnout under uncertain business pressure"
+  - "distinguishing facts from worry at work"
+  - "setting tone and priorities during slowdowns"
 ---
 
 This topic comes from a specific year: business metrics were still growing, but overall OKR progress had a gap — existing markets were performing well, yet important new markets hadn't yet delivered the expected high-speed growth, while there were also some concurrent problems that needed solutions. Faced with this, **first set the tone: respond positively to the difficulty, analyze the problem thoroughly, and solve the critical path.**

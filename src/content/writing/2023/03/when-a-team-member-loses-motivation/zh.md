@@ -6,6 +6,12 @@ publishedAt: 2023-03-11
 type: essay
 tags: [management, team, growth, work-leadership]
 column: { slug: engineering-collaboration, order: 5 }
+primaryQuery: "员工失去动力怎么办"
+searchIntent: howto
+relatedQueries:
+  - "团队成员动力下降怎么管理"
+  - "员工不积极背后的真实原因"
+  - "如何和失去动力的员工沟通"
 ---
 
 一个人看起来"没斗志"时，管理者最危险的反应，是立刻把它解释成态度问题。我自己就犯过这个错——看到一个工程师不再主动提改进，第一反应是"他是不是不上进了"。后来发现，几乎每一次，真实原因都不在态度上。

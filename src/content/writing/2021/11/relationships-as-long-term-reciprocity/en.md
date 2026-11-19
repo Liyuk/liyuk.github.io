@@ -10,6 +10,13 @@ publishedAt: 2021-11-15
 type: essay
 tags: [relationships, communication, collaboration, career, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 3 }
+primaryQuery: "how to build reliable professional relationships"
+searchIntent: howto
+relatedQueries:
+  - "long-term reciprocity in professional networks"
+  - "how to maintain professional relationships with boundaries"
+  - "giving help without being exploited at work"
+  - "setting boundaries in professional relationships"
 ---
 
 "Networking" easily conjures images of exchanging business cards, maintaining a contact list, or thinking of someone only when you need help. This way of thinking turns relationships into inventory: how many people do I know, and who might be useful to me in the future?

@@ -13,6 +13,12 @@ work:
   status: 暂停更新（连载实验已完成）
   cover: /images/projects/novel-pandonggui/cover.webp
 tags: [fiction, novel, work-leadership]
+primaryQuery: "盼东归 长篇小说"
+searchIntent: project
+relatedQueries:
+  - "普通人 命运选择 小说"
+  - "西域明教 潼关 历史"
+  - "身世寻找 个人成长 网络文学"
 ---
 
 [在潇湘书院阅读《盼东归》 ↗](https://www.xxsypro.com/book/36408026604477109)

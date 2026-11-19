@@ -8,6 +8,12 @@ publishedAt: 2022-07-01
 type: essay
 tags: [career, campus-recruitment, engineering, work-leadership]
 translationKey: 2022/07/campus-recruitment-training
+primaryQuery: "what technical interviewers really look for"
+searchIntent: essay
+relatedQueries:
+  - "how to explain projects in interviews"
+  - "resume tips for engineering roles"
+  - "how to answer technical fundamentals questions"
 ---
 
 Campus recruitment preparation is often turned into a question-bank sprint: memorize more questions, solve more questions, collect more interview experiences. But the resume, the fundamentals Q&A, and the project discussion all ultimately answer the same thing: **when you face a problem with no standard answer yet, can you understand it, make a judgment, and push things through to a result?**

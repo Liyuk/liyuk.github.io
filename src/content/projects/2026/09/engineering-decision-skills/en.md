@@ -11,6 +11,13 @@ repositoryUrl: https://github.com/Liyuk/engineering-decision-skills
 draft: false
 tags: [agent, technical-management, decision-making, metrics, workflow, open-source]
 translationKey: 2026/09/engineering-decision-skills
+primaryQuery: "how to review technical proposals for rollback risks"
+searchIntent: howto
+relatedQueries:
+  - "technical planning prioritization and resource allocation"
+  - "project retrospective root cause analysis"
+  - "idempotency in queue-based systems"
+  - "cross-team requirements validation"
 ---
 
 [View the project on GitHub ↗](https://github.com/Liyuk/engineering-decision-skills)

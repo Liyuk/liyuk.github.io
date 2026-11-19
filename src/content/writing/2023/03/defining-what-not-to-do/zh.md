@@ -5,6 +5,12 @@ createdAt: 2023-03-21
 publishedAt: 2023-03-21
 type: essay
 tags: [prioritization, time-management, leadership, work-leadership]
+primaryQuery: "工作优先级排序 如何说不"
+searchIntent: howto
+relatedQueries:
+  - "时间管理 承诺边界"
+  - "紧急重要四象限 实践"
+  - "角色变化后如何调整工作重心"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「边界与责任」这条线的展开。

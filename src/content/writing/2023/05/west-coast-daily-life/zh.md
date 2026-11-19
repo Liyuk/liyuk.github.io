@@ -5,6 +5,12 @@ createdAt: 2023-05-15
 publishedAt: 2023-05-15
 type: essay
 tags: [united-states, west-coast, travel, field-notes]
+primaryQuery: "美国西海岸旅行需要多少钱 15天预算"
+searchIntent: essay
+relatedQueries:
+  - "跨时区远程办公怎么协作"
+  - "美国西海岸停车加油住宿价格"
+  - "洛杉矶湾区自驾旅游成本"
 ---
 
 > 文中价格来自 2023 年 5 月个人消费记录；当时人民币兑美元约为 6.8，不代表当前价格。

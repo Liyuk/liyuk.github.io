@@ -10,6 +10,13 @@ type: essay
 tags: [data, metrics, measurement, observability, technology]
 column: { slug: data-metrics-guide, order: 2 }
 translationKey: 2021/03/define-the-measurement-before-arguing-about-metrics
+primaryQuery: "how to define metrics before arguing about thresholds"
+searchIntent: howto
+relatedQueries:
+  - "how to structure a metric definition"
+  - "defining task success criteria"
+  - "metrics that reveal user experience not just system performance"
+  - "building a metric system for a new feature"
 ---
 
 "Improving the metric" is not a clear requirement. First ask: what exactly are we measuring?

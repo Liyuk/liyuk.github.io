@@ -10,6 +10,13 @@ type: essay
 tags: [retrospective, decision-making, growth, work-leadership]
 column: { slug: one-on-one-conversations, order: 11 }
 translationKey: 2023/07/goals-retrospectives-and-next-actions
+primaryQuery: "how to do effective retrospectives for real growth"
+searchIntent: howto
+relatedQueries:
+  - "how to set actionable work goals"
+  - "retrospective template for improvement plans"
+  - "how to plan and review work effectively"
+  - "avoiding self-justification in retrospectives"
 ---
 
 > This article expands on the "retrospective" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).
