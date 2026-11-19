@@ -11,6 +11,13 @@ repositoryUrl: https://github.com/Liyuk/engineering-decision-skills
 draft: false
 tags: [agent, technical-management, decision-making, metrics, workflow, open-source]
 translationKey: 2026/09/engineering-decision-skills
+primaryQuery: "技术方案评审 如何避免回滚风险"
+searchIntent: howto
+relatedQueries:
+  - "工程规划 优先级排期取舍"
+  - "项目延期 复盘根本原因"
+  - "异步队列 幂等性设计"
+  - "跨团队协作 需求确认"
 ---
 
 [在 GitHub 查看项目 ↗](https://github.com/Liyuk/engineering-decision-skills)

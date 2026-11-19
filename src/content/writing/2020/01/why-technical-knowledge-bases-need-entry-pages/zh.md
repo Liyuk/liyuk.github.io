@@ -7,6 +7,13 @@ updatedAt: 2026-08-14
 type: essay
 tags: [technical-writing, knowledge-management, information-architecture, engineering, technology]
 column: { slug: documentation, order: 2 }
+primaryQuery: "知识库入口页怎么设计"
+searchIntent: howto
+relatedQueries:
+  - "技术文档 组织结构 分类"
+  - "团队知识库 维护责任"
+  - "过期文档 状态标记"
+  - "新人入职 文档导航"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「上下文」这条线的展开。

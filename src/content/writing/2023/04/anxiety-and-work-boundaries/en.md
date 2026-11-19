@@ -10,6 +10,12 @@ type: essay
 tags: [communication, self-reflection, collaboration, work-leadership]
 column: { slug: one-on-one-conversations, order: 10 }
 translationKey: 2023/04/anxiety-and-work-boundaries
+primaryQuery: "how to discuss work pressure and boundaries in one on ones"
+searchIntent: howto
+relatedQueries:
+  - "ability and willingness matrix management"
+  - "how to communicate workload concerns to your manager"
+  - "setting healthy boundaries at work"
 ---
 
 The background for this topic is very real: in a less-than-friendly environment, I've talked with many people, and the vast majority expressed anxiety and pressure (often both at once). The goal here is not to fully resolve anxiety and pressure, but to talk through a cognitive approach — drawing on "Rational Emotive Therapy" from psychology — to offer some channeling and relief.

@@ -9,6 +9,12 @@ createdAt: 2023-03-21
 publishedAt: 2023-03-21
 type: essay
 tags: [prioritization, time-management, leadership, work-leadership]
+primaryQuery: "how to prioritize work commitments and say no"
+searchIntent: howto
+relatedQueries:
+  - "setting boundaries at work"
+  - "time management priority framework"
+  - "how to renegotiate commitments"
 ---
 
 > This essay expands on the "Boundaries and Responsibility" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

@@ -6,6 +6,12 @@ publishedAt: 2021-05-02
 type: essay
 tags: [data, metrics, retrospective, operations, technology]
 column: { slug: data-metrics-guide, order: 5 }
+primaryQuery: "如何建立周期统计和数据复盘制度"
+searchIntent: howto
+relatedQueries:
+  - "数据异常发现与验证的流程"
+  - "团队指标监控表格怎么做"
+  - "怎样把数据结论转成行动项"
 ---
 
 周期统计的目的不是“每周填一次数”，而是让团队在变化仍可处理时发现问题，并持续知道已采取的行动是否有效。好的统计表只保留能支持判断的字段；好的复盘则把事实、解释和行动分开，避免用一张波动图替代结论。

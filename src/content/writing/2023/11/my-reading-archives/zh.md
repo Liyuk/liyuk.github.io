@@ -5,6 +5,13 @@ createdAt: 2023-11-14
 publishedAt: 2023-11-14
 type: note
 tags: [reading, books, notes, learning, archive, field-notes]
+primaryQuery: "怎样养成阅读习惯 记笔记"
+searchIntent: essay
+relatedQueries:
+  - "读书笔记怎么记才有效"
+  - "纸书和电子书怎样搭配读"
+  - "2023年值得读的书单推荐"
+  - "读不完一本书怎么办"
 ---
 
 > 这是一份阶段性的个人阅读记录。书中观点、我的判断和推荐程度都受当时的阅读经验影响；它们不是购书、医疗、职业或投资建议。

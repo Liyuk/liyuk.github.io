@@ -10,6 +10,13 @@ column: { slug: team-building, order: 5 }
 locale: en
 translationStatus: reviewed
 translationKey: 2023/06/growth-paths-for-newcomers-core-and-leads
+primaryQuery: "how to design growth paths for team members"
+searchIntent: essay
+relatedQueries:
+  - "developing newcomers into core contributors"
+  - "how to mentor junior staff"
+  - "building organizational capability through delegation"
+  - "expanding responsibility in teams"
 ---
 
 > This article expands on the "Team and Growth" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

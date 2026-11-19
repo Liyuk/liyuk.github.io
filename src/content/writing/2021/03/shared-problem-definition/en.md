@@ -9,6 +9,13 @@ type: essay
 tags: [communication, problem-framing, collaboration, work-leadership]
 column: { slug: one-on-one-conversations, order: 2 }
 translationKey: 2021/03/shared-problem-definition
+primaryQuery: "how to structure a one-on-one meeting"
+searchIntent: howto
+relatedQueries:
+  - "how to define a problem clearly"
+  - "effective one-on-one conversation tips"
+  - "how to separate facts from assumptions"
+  - "asking better questions in meetings"
 ---
 
 The usual difficulties with a one-on-one are two: not knowing what to talk about, or discovering halfway through that the two of you are answering different questions. It is enough to start from a concrete phenomenon that can clearly state "what problem we are solving."

@@ -9,6 +9,12 @@ publishedAt: 2023-03-31
 type: essay
 tags: [management, communication, ownership, work-leadership]
 translationKey: 2023/03/one-on-ones-and-decision-rights
+primaryQuery: "how to run effective one on one meetings"
+searchIntent: howto
+relatedQueries:
+  - "clarifying decision rights and authorization in one on ones"
+  - "how to share context without creating confusion about authority"
+  - "what to cover in a one on one meeting agenda"
 ---
 
 > This article expands on the "alignment" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).

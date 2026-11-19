@@ -6,6 +6,12 @@ publishedAt: 2023-03-01
 type: essay
 tags: [technical-management, leadership, decision-making, team, work-leadership]
 column: { slug: team-building, order: 1 }
+primaryQuery: "一线技术管理如何避免瓶颈 提升团队能力"
+searchIntent: howto
+relatedQueries:
+  - "技术团队管理 让成员独立判断"
+  - "交付计划如何预期和应对风险"
+  - "技术管理者应该做什么不应该做什么"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「团队与成长」这条线的展开。

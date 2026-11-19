@@ -9,6 +9,13 @@ publishedAt: 2023-04-10
 type: essay
 tags: [collaboration, organization, management, work-leadership]
 translationKey: 2023/04/healthy-redundancy-and-harmful-overlap
+primaryQuery: "healthy redundancy versus harmful overlap"
+searchIntent: essay
+relatedQueries:
+  - "organizational horse racing zero-sum competition"
+  - "who owns the problem in team"
+  - "reporting structure versus actual workflow"
+  - "when is duplication worth keeping"
 ---
 
 > This essay expands on the "Boundaries and Responsibility" thread in [*Management Retrospective*](/en/writing/2026/08/management-retrospective/).

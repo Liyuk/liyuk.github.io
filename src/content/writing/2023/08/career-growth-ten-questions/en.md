@@ -10,6 +10,13 @@ updatedAt: 2026-08-14
 type: essay
 tags: [career, promotion, interview, leadership, engineering, work-leadership]
 translationKey: 2023/08/career-growth-ten-questions
+primaryQuery: "how to prepare for promotion and interviews engineering"
+searchIntent: howto
+relatedQueries:
+  - "how to write project retrospectives"
+  - "evaluating engineering judgment"
+  - "technical decision making framework"
+  - "career development self assessment"
 ---
 
 This is not a career development article that offers conclusions, but a question bank. It is used to prepare promotion materials, interviews, and stage reviews: choose one or two key projects or one direction you are responsible for, and write down the facts, judgments, actions, results, and evidence item by item.

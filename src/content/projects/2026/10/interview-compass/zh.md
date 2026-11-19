@@ -9,6 +9,12 @@ repositoryUrl: https://github.com/Liyuk/interview-compass
 draft: false
 tags: [interview, promotion, hiring, open-source, engineering-management]
 translationKey: 2026/10/interview-compass
+primaryQuery: "工程师面试准备 怎样讲清经历和证据"
+searchIntent: project
+relatedQueries:
+  - "面试官如何评估候选人能力"
+  - "工程师晋升准备 收集升职证据"
+  - "岗位责任与面试考核怎样对齐"
 ---
 
 **先看清岗位，再讲清证据。**

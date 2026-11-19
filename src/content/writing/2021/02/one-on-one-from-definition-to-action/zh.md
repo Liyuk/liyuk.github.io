@@ -7,6 +7,13 @@ type: essay
 featured: true
 tags: [communication, collaboration, self-reflection, work-leadership]
 column: { slug: one-on-one-conversations, order: 1 }
+primaryQuery: "怎样开好一对一会议 话题框架"
+searchIntent: howto
+relatedQueries:
+  - "一对一沟通 不知道聊什么"
+  - "员工成长 一对一话题清单"
+  - "主管如何进行有效沟通"
+  - "一对一谈话 避免冷场"
 ---
 
 这套「主题式一对一」最初解决的，就是"**不知道聊什么**"这个难题。背景很朴素：作为 leader，发现大家一对一时常没话聊、或者聊得很散，于是为每个主题准备了一份话题清单——沟通前自己先想一遍（准备自己的感受），再照着问题聊（待沟通的点），最后留一个开放的吐槽与反馈入口。

@@ -6,6 +6,13 @@ publishedAt: 2023-03-25
 type: essay
 tags: [distributed-work, collaboration, communication, work-leadership]
 column: { slug: engineering-collaboration, order: 2 }
+primaryQuery: "分布式团队 上下文丢失"
+searchIntent: howto
+relatedQueries:
+  - "异地协作 信息同步"
+  - "跨时区团队 闭环责任"
+  - "远程团队 文档管理"
+  - "分散式工作 沟通效率"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「上下文」这条线的展开。

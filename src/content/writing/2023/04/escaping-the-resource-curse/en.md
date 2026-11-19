@@ -9,6 +9,13 @@ publishedAt: 2023-04-09
 type: essay
 tags: [organization, decision-making, prioritization, work-leadership]
 translationKey: 2023/04/escaping-the-resource-curse
+primaryQuery: "why more resources make organizations slower"
+searchIntent: essay
+relatedQueries:
+  - "how to identify low value work in organizations"
+  - "decision quality vs resource allocation"
+  - "why teams become less efficient with more budget"
+  - "detecting the resource curse in organizations"
 ---
 
 > This essay expands on the “Resources and Capacity” thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

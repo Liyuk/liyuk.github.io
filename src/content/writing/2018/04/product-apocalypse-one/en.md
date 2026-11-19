@@ -9,6 +9,12 @@ updatedAt: 2026-08-14
 type: case-study
 tags: [product, problem-framing, archive, work-leadership]
 translationKey: 2018/04/product-apocalypse-one
+primaryQuery: "product development identify real problem before solution"
+searchIntent: essay
+relatedQueries:
+  - "how to validate user problems"
+  - "problem framing in product design"
+  - "asking right questions before building features"
 ---
 
 > Editorial note: The original case and line of thinking came from a friend, and I moved it onto my blog back then. I hadn't actually built a product myself at that time, so this only keeps the problem breakdown and does not pretend to present a complete methodology.

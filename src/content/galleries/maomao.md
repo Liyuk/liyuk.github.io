@@ -22,4 +22,10 @@ images:
     caption: 同一把椅子上的另一个瞬间，抬头望过来。
     width: 1200
     height: 1600
+primaryQuery: "毛毛猫摄影"
+searchIntent: visual
+relatedQueries:
+  - "家里的猫坐在椅子上"
+  - "宠物猫肖像照"
+  - "毛毛抬头看向镜头"
 ---

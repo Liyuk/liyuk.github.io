@@ -6,6 +6,13 @@ publishedAt: 2021-11-15
 type: essay
 tags: [relationships, communication, collaboration, career, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 3 }
+primaryQuery: "如何建立可靠的职业关系"
+searchIntent: howto
+relatedQueries:
+  - "人脉维护 互惠原则"
+  - "职业关系中怎么拒绝请求"
+  - "如何帮助他人而不被利用"
+  - "职业关系 边界和信任"
 ---
 
 “拓展人脉”很容易让人联想到交换名片、维护联系人，或在需要帮助时才想起某个人。这种理解把关系变成了库存：我认识多少人，谁将来可能对我有用。

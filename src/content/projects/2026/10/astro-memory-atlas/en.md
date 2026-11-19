@@ -13,6 +13,12 @@ hero:
 draft: false
 tags: [astro, static-site, privacy, relationships, personal-publication]
 translationKey: 2026/10/astro-memory-atlas
+primaryQuery: "build a personal memory keepsake site"
+searchIntent: project
+relatedQueries:
+  - "astro photo album template"
+  - "self-hosted relationship timeline"
+  - "how to organize relationship memories"
 ---
 
 I'd been working on a few things for an anniversary and wanted to put our photos into an album. I first looked for an existing project I could use. I found quite a few wedding sites, but nothing that quite fit. I wanted to record everyday life too, keep adding to it, and look back a few years later. After looking around, I started building it around what I needed, a little at a time.

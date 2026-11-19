@@ -9,6 +9,13 @@ type: essay
 tags: [team, leadership, growth, mentoring, work-leadership]
 column: { slug: team-building, order: 4 }
 translationKey: 2023/06/team-development-compounds
+primaryQuery: "how to develop team capability through real responsibility"
+searchIntent: howto
+relatedQueries:
+  - "designing challenging work for team growth"
+  - "how to give feedback on behavior and judgment"
+  - "converting work experience into team assets"
+  - "management by practice not by training"
 ---
 
 > This article expands on the "Team and Growth" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

@@ -6,6 +6,12 @@ publishedAt: 2012-01-01
 updatedAt: 2026-08-14
 type: essay
 tags: [fiction, archive, field-notes]
+primaryQuery: "知识如何改变人的行动能力"
+searchIntent: essay
+relatedQueries:
+  - "认知差距与行动之间的关系"
+  - "过多信息导致决策困难"
+  - "维度差异的思维困境"
 ---
 
 > 整理说明：原稿写于 2012 年，旧站于 2018 年首次发布。原始材料只留下创作年份，因此创作日期按该年 1 月 1 日归档；此次仅做段落与标点整理。

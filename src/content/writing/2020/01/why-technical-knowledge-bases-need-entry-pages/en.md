@@ -10,6 +10,13 @@ type: essay
 tags: [technical-writing, knowledge-management, information-architecture, engineering, technology]
 column: { slug: documentation, order: 2 }
 translationKey: 2020/01/why-technical-knowledge-bases-need-entry-pages
+primaryQuery: "how to design knowledge base entry pages"
+searchIntent: howto
+relatedQueries:
+  - "technical documentation organization structure"
+  - "knowledge base information architecture"
+  - "managing outdated documentation"
+  - "onboarding with documentation"
 ---
 
 > This article is an expansion of the "context" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

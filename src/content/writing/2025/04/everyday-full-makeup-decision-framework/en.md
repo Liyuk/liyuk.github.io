@@ -8,6 +8,13 @@ publishedAt: 2025-04-12
 type: note
 tags: [beauty, everyday-life, guide, field-notes]
 translationKey: 2025/04/everyday-full-makeup-decision-framework
+primaryQuery: "everyday makeup routine natural long wear"
+searchIntent: howto
+relatedQueries:
+  - "how to contour and highlight face"
+  - "eye makeup tutorial eyeshadow eyeliner"
+  - "setting makeup powder techniques"
+  - "concealing dark circles under eyes"
 ---
 
 ## How to Read This

@@ -10,6 +10,12 @@ draft: false
 tags: [thinking, problem-framing, decision-making, communication, work-leadership]
 column: { slug: thinking-training, order: 4 }
 translationKey: 2026/08/structured-thinking-practice
+primaryQuery: "how to structure your thinking for work communication"
+searchIntent: howto
+relatedQueries:
+  - "how to tell your project story at an interview"
+  - "how to report a blocker to your manager clearly"
+  - "how to write promotion materials with evidence"
 ---
 
 > This is the hands-on companion to [The Five Lenses: Connection-Oriented Problem Location](/en/research/2026/08/connection-oriented-problem-location/). That piece explains "what this method is, why it holds, and where its boundaries lie"; this one is only about "how to use it." Tool definitions are not repeated here — where a tool is used, a brief mention is dropped in. For the full definitions, see the research version or the quick-reference card at the end.

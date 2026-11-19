@@ -10,6 +10,13 @@ updatedAt: 2026-08-15
 status: archived
 repositoryUrl: https://github.com/weNKers/OurBook
 tags: [education, public-good, vuepress, static-site, community]
+primaryQuery: "ourbook real university experiences for gaokao applicants"
+searchIntent: project
+relatedQueries:
+  - "authentic college experiences for college admissions"
+  - "gaokao application information beyond rankings"
+  - "college admissions market 2011 to 2026"
+  - "public interest project student university reviews"
 ---
 
 [View OurBook on GitHub ↗](https://github.com/weNKers/OurBook) · [www.wenkers.cn ↗](https://www.wenkers.cn)

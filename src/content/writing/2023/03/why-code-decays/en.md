@@ -9,6 +9,13 @@ type: essay
 tags: [engineering, code-quality, architecture, technology]
 column: { slug: technical-systems, order: 2 }
 translationKey: 2023/03/why-code-decays
+primaryQuery: "why does code decay"
+searchIntent: essay
+relatedQueries:
+  - "how to prevent code decay"
+  - "system boundaries and coupling"
+  - "technical debt management"
+  - "code review practices"
 ---
 
 A piece of code usually doesn't become a "legacy system" overnight. The more common path is this: the first temporary branch solved an urgent need, the second branch copied that logic, and a third team, unaware of the original conventions, added yet another entry point. Each step looks reasonable on its own, but together they make changing anything dangerous. I've seen this path repeatedly in systems I've maintained for years—it is almost never a single moment of "bad writing," but local changes that bypass shared boundaries again and again.

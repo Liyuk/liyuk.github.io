@@ -10,6 +10,13 @@ type: essay
 tags: [engineering, process, collaboration, technology]
 column: { slug: technical-systems, order: 3 }
 translationKey: 2023/03/engineering-standards-without-bureaucracy
+primaryQuery: "engineering standards that reduce rework without bureaucracy"
+searchIntent: howto
+relatedQueries:
+  - "how to design minimal viable process"
+  - "when to eliminate process steps"
+  - "defining responsibility in delivery"
+  - "exception handling in standards"
 ---
 
 > This article expands on the "closed loop" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).

@@ -10,6 +10,13 @@ updatedAt: 2026-08-14
 type: essay
 tags: [technical-sharing, learning, knowledge-management, collaboration, technology]
 translationKey: 2020/10/what-good-technical-sharing-should-change
+primaryQuery: "how to make technical sharing drive actual change"
+searchIntent: howto
+relatedQueries:
+  - "how to choose technical sharing topics"
+  - "organizing effective technical discussions"
+  - "turning technical sharing into reusable knowledge"
+  - "knowledge collaboration system in teams"
 ---
 
 Many technical-sharing efforts, over time, turn into a fixed activity: when the time comes, pick a topic, prepare some materials, schedule a talk, and once it is over, wait for the next one. It looks industrious, but participants do not necessarily learn more deeply from it, and the experience does not necessarily get preserved. I organized this kind of "industrious but unchanged" sharing for quite a long time — until I began to measure it against a single standard, and only then did things improve: **after this sharing session, whose judgment or action will change, and in what way?**

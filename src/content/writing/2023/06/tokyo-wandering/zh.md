@@ -5,6 +5,12 @@ createdAt: 2023-06-11
 publishedAt: 2023-06-11
 type: essay
 tags: [japan, tokyo, travel, field-notes]
+primaryQuery: "东京六天自由行 真实开销和体验"
+searchIntent: essay
+relatedQueries:
+  - "东京房价 人均生活成本"
+  - "银座 涉谷 镰仓一日游"
+  - "东京地铁拥挤 交通体验"
 ---
 
 > 文中费用和汇率均为 2023 年 6 月个人记录，不代表当前价格或旅行建议。

@@ -10,6 +10,13 @@ type: essay
 tags: [product-thinking, engineering, decision-making, product]
 column: { slug: one-on-one-conversations, order: 6 }
 translationKey: 2022/03/product-judgment-for-engineers
+primaryQuery: "how to decide if a feature is worth building"
+searchIntent: howto
+relatedQueries:
+  - "how engineers and product managers communicate about requirements"
+  - "how to evaluate product feature impact"
+  - "asking the right questions about user problems"
+  - "product goals and business metrics alignment"
 ---
 
 The topic of product sense came up in a one-on-one—an engineer (RD) wanted to talk about "product sense," and at the time we split it into two parts: **how engineers should understand the product**, and **what product managers actually do**. The core is the difference in stance between RD and PM. When discussing it, always ask one step further first: What is the user trying to accomplish? Where are they getting stuck? What friction does this solution remove, and what cost does it introduce?

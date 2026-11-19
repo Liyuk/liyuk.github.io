@@ -10,6 +10,12 @@ type: essay
 tags: [data, metrics, retrospective, operations, technology]
 column: { slug: data-metrics-guide, order: 5 }
 translationKey: 2021/05/periodic-metrics-and-retrospectives
+primaryQuery: "how to set up periodic metrics reporting and retrospectives"
+searchIntent: howto
+relatedQueries:
+  - "metrics table template for teams"
+  - "data anomaly investigation workflow"
+  - "turning data insights into action items"
 ---
 
 The purpose of periodic statistics is not "filling in numbers once a week," but helping the team catch problems while changes are still manageable, and continuously knowing whether the actions already taken are working. A good statistics table keeps only the fields that support judgment; a good retrospective separates facts, explanations, and actions, and avoids replacing a conclusion with a single fluctuation chart.

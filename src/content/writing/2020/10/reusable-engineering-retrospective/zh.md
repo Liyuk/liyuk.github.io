@@ -6,6 +6,13 @@ publishedAt: 2020-10-22
 updatedAt: 2026-08-14
 type: essay
 tags: [engineering, retrospective, learning, collaboration, technology]
+primaryQuery: "工程复盘怎么做才有价值"
+searchIntent: howto
+relatedQueries:
+  - "复盘五步工作流"
+  - "如何避免无效复盘"
+  - "复盘会议怎么主持"
+  - "从问题原因推导改进行动"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「复盘」这条线的展开。

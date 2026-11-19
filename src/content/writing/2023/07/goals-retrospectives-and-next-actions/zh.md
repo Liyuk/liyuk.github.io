@@ -6,6 +6,13 @@ publishedAt: 2023-07-16
 type: essay
 tags: [retrospective, decision-making, growth, work-leadership]
 column: { slug: one-on-one-conversations, order: 11 }
+primaryQuery: "如何做复盘才能真正成长而不是应付工作"
+searchIntent: howto
+relatedQueries:
+  - "怎样制定可执行的工作目标"
+  - "复盘模板 改进计划怎么写"
+  - "规划和复盘的正确做法"
+  - "工作复盘避免自我辩护的方法"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「复盘」这条线的展开。

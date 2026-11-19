@@ -10,6 +10,13 @@ type: essay
 tags: [planning, management, capacity-planning, work-leadership]
 column: { slug: engineering-collaboration, order: 4 }
 translationKey: 2023/04/headcount-is-not-a-ratio
+primaryQuery: "when to add headcount to a team"
+searchIntent: howto
+relatedQueries:
+  - "headcount planning alignment goals"
+  - "how to identify bottlenecks before hiring"
+  - "capacity gap process problem or staffing"
+  - "cutting goals vs adding people"
 ---
 
 > This article expands on the "Resources and Capacity" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

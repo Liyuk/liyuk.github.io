@@ -5,6 +5,13 @@ createdAt: 2023-03-05
 publishedAt: 2023-03-05
 type: essay
 tags: [engineering, product-thinking, decision-making, work-leadership]
+primaryQuery: "工程师怎样在产品定位不清时推动决策"
+searchIntent: essay
+relatedQueries:
+  - "工程师如何把技术和用户价值结合"
+  - "怎么判断是缺功能还是缺问题定义"
+  - "技术方案如何快速验证而不必全量构建"
+  - "工程师应该怎样理解产品约束"
 ---
 
 "我们到底有什么不一样？"这句话一旦反复出现，工程师很容易掉进两个极端：要么认为这完全是别人的问题，只等需求落下；要么反过来承诺"做一个新技术功能"就能解决定位。两个极端我都待过——前者让我变成等需求的人，后者让我把技术新鲜感误当成了价值。

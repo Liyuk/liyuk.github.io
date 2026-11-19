@@ -5,6 +5,12 @@ createdAt: 2021-01-01
 publishedAt: 2021-01-01
 type: essay
 tags: [career, motivation, reflection, work-leadership]
+primaryQuery: "职业中如何获得真正的成就感"
+searchIntent: essay
+relatedQueries:
+  - "工作中的自我认可与反馈"
+  - "帮助他人与职业意义"
+  - "成就感与压力下的完成"
 ---
 
 关于成就感，常见的理论已经很多。这里不展开理论，只整理一些个人的体会：成就感并不只是事情做成以后收到的奖励。它更像一套持续运转的反馈系统，帮助人确认自己正在完成什么、为何投入，以及是否仍认可这样的自己。

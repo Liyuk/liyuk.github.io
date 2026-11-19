@@ -8,6 +8,13 @@ tags: [engineering-management, leadership, engineering, work-leadership]
 locale: en
 translationStatus: reviewed
 translationKey: 2023/03/how-close-managers-should-stay-to-code
+primaryQuery: "how close should managers stay to code"
+searchIntent: essay
+relatedQueries:
+  - "when should engineering managers stop writing code"
+  - "defining problems architecture before execution"
+  - "technical manager cross team collaboration"
+  - "engineering management unblocking teams"
 ---
 
 Technical managers are often pulled between two anxieties: keep writing code, and worry about not having time for the team; stop touching code, and worry that they will soon only be able to talk in empty phrases. I have been through both, and I have watched peers around me swing back and forth.

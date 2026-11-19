@@ -9,6 +9,13 @@ tags: [relationships, gifts, everyday-life, guide, field-notes]
 locale: en
 translationStatus: reviewed
 translationKey: 2025/02/gifting-question-framework
+primaryQuery: "how to choose gifts that people actually want"
+searchIntent: howto
+relatedQueries:
+  - "personalized gift ideas for meaningful relationships"
+  - "when to ask before giving a gift"
+  - "experience gifts instead of physical items"
+  - "making custom gifts that feel personal"
 ---
 
 ## Before We Start

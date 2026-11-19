@@ -8,6 +8,13 @@ draft: false
 type: case-study
 tags: [technology, agent-systems, developer-productivity]
 translationKey: 2026/08/dsh-plugin-architecture-stability
+primaryQuery: "DSH 插件开发 常见问题排查"
+searchIntent: howto
+relatedQueries:
+  - "DSH 插件加载原理 fiber 生命周期"
+  - "插件热更新不生效 怎么办"
+  - "React DOM 被插件改动导致崩溃"
+  - "DSH 事件归一化 持久化"
 ---
 
 > 本文是一份阶段性工程总结，不是 DSH 的官方 API 规范。例子来自我在 2026 年 8 月开发和验收的三组插件：`dsh-skin-chatlab`、`dsh-agent-suite` 和 `dsh-quota-router`，也参考了 DSH preview 版本的源码、运行日志和相关修复。DSH 仍在快速演进；升级后，事件名、payload、DOM 语义锚点和加载行为都必须重新核对。

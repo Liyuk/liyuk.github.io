@@ -9,6 +9,13 @@ publishedAt: 2023-03-05
 type: essay
 tags: [engineering, product-thinking, decision-making, work-leadership]
 translationKey: 2023/03/engineering-without-unique-value
+primaryQuery: "how engineers shape decisions when unique value is unclear"
+searchIntent: essay
+relatedQueries:
+  - "engineering value beyond writing code"
+  - "how to validate before building the full system"
+  - "uncovering user friction in product development"
+  - "turning technical constraints into product clarity"
 ---
 
 "What exactly makes us different?" Once this question keeps resurfacing, engineers easily fall into two extremes: either deciding it's entirely someone else's problem and simply waiting for requirements to land, or conversely promising that "building a new tech feature" will solve the positioning. I've been in both extremes — the former turned me into someone who waits for requirements, the latter made me mistake technical novelty for value.

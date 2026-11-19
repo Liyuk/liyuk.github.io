@@ -7,6 +7,13 @@ updatedAt: 2026-08-15
 status: archived
 repositoryUrl: https://github.com/weNKers/OurBook
 tags: [education, public-good, vuepress, static-site, community]
+primaryQuery: "OurBook 大学真实体验 高考填志愿"
+searchIntent: project
+relatedQueries:
+  - "怎样看大学真实样子 不是排名"
+  - "高考志愿填报 信息来源 2011-2026"
+  - "南开校友写的大学体验 公益项目"
+  - "填志愿找真实反馈 而不是算法推荐"
 ---
 
 [在 GitHub 查看 OurBook ↗](https://github.com/weNKers/OurBook)　·　[www.wenkers.cn ↗](https://www.wenkers.cn)

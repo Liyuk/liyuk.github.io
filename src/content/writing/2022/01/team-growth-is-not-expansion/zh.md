@@ -6,6 +6,13 @@ publishedAt: 2022-01-01
 type: essay
 tags: [team, leadership, growth, work-leadership]
 column: { slug: team-building, order: 3 }
+primaryQuery: "怎样建设一个可靠的团队 而不只是增加人数"
+searchIntent: essay
+relatedQueries:
+  - "团队协作效率 责任边界 标准"
+  - "如何传递团队经验 避免依赖某个人"
+  - "团队成员梯队 新人培养"
+  - "团队稳定性 人员变动后仍能持续交付"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「团队与成长」这条线的展开。

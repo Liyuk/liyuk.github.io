@@ -14,6 +14,13 @@ citationUrls:
   - https://www.bis.org/publ/work1208.htm
   - https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/06/the-effects-of-generative-ai-on-productivity-innovation-and-entrepreneurship_da1d085d/b21df222-en.pdf
 translationKey: 2026/08/what-i-meant-and-what-ai-wrote
+primaryQuery: "AI 写作时怎样确保想法是自己的"
+searchIntent: essay
+relatedQueries:
+  - "用 AI 写东西的陷阱 被推着走"
+  - "AI 辅助写作 如何保持独立思考"
+  - "AI 生成的内容 怎样变成自己的知识"
+  - "AI 看起来完整 但我真的理解了吗"
 ---
 
 我最近用 AI 用得非常多。每天都有大量的对话，拿它做各种事情：写代码、处理工作、整理博客，也和它讨论一些还没有想清楚的问题。真正放到生产里时，它通常是有用的，能帮我更快地完成一些事情。

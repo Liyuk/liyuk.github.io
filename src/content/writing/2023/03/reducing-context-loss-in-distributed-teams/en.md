@@ -9,6 +9,13 @@ type: essay
 tags: [distributed-work, collaboration, communication, work-leadership]
 column: { slug: engineering-collaboration, order: 2 }
 translationKey: 2023/03/reducing-context-loss-in-distributed-teams
+primaryQuery: "reducing context loss in distributed teams"
+searchIntent: howto
+relatedQueries:
+  - "remote team collaboration best practices"
+  - "async documentation for distributed work"
+  - "close loop responsibility remote teams"
+  - "cross timezone team communication"
 ---
 
 > This essay expands on the "context" thread from [Management Retrospective](/en/writing/2026/08/management-retrospective/).

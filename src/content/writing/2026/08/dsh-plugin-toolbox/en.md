@@ -9,6 +9,13 @@ draft: false
 type: essay
 tags: [technology, agent-systems, developer-productivity]
 translationKey: 2026/08/dsh-plugin-toolbox
+primaryQuery: "dsh plugins for deepseek harness workbench"
+searchIntent: project
+relatedQueries:
+  - "how to extend deepseek harness with plugins"
+  - "agent tool observability and visibility"
+  - "cross-session memory for ai agents"
+  - "multi-agent task orchestration patterns"
 ---
 
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) has only been out for a few days, and I've already installed nine plugins on it. That's not really a collecting habit; once you actually use the thing, there are gaps you only notice when they're missing, and each of these plugs happens to fill one. This post records what each one adds, how it works under the hood, and which one I find most useful.

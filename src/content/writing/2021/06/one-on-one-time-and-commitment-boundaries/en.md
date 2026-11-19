@@ -9,6 +9,13 @@ type: essay
 tags: [communication, prioritization, collaboration, work-leadership]
 column: { slug: one-on-one-conversations, order: 3 }
 translationKey: 2021/06/one-on-one-time-and-commitment-boundaries
+primaryQuery: "one on one meeting discuss workload and capacity"
+searchIntent: howto
+relatedQueries:
+  - "how to talk about being overcommitted at work"
+  - "setting clear priorities in team collaboration"
+  - "asking for trade-offs in project commitments"
+  - "work-life balance conversation with manager"
 ---
 
 "I've been really busy" is a genuine feeling, but it isn't enough to help collaboration. Break "busy" apart when you talk: things already committed to, requests not yet confirmed, non-compressible recovery time, and the options that must be dropped. Judging whether commitments are overloaded isn't only about hours and intensity — it's also about whether they're sustainable over the long term.

@@ -6,6 +6,13 @@ publishedAt: 2021-08-17
 updatedAt: 2026-08-14
 type: essay
 tags: [project-management, engineering, collaboration, ownership, delivery, work-leadership]
+primaryQuery: "工程POC职责 跨职能需求协作"
+searchIntent: howto
+relatedQueries:
+  - "需求POC怎样避免成为项目瓶颈"
+  - "跨团队需求如何定义完成条件"
+  - "产品开发中如何建立有效的信息同步机制"
+  - "工程项目管理 职责边界与风险可见性"
 ---
 
 一个需求同时牵涉产品、设计、工程、测试、数据或运营时，最容易失去的往往不是某个具体任务，而是整体视角：每个人都在做自己的部分，却没人持续确认它们能否在同一时间形成可交付的结果。我刚开始承担需求 POC 时，是把"让每个人满意"当责任的——结果既累又失焦。后来才把边界理清楚：它不是替所有人兜底，而是让协作闭环不丢。

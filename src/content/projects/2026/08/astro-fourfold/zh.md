@@ -14,6 +14,12 @@ hero:
 draft: false
 tags: [astro, static-site, personal-publication, information-architecture, open-source]
 translationKey: 2026/08/astro-fourfold
+primaryQuery: "Astro 个人博客框架 Fourfold"
+searchIntent: project
+relatedQueries:
+  - "独立作者内容管理系统推荐"
+  - "博客专栏和标签组织结构"
+  - "静态网站生成器对比"
 ---
 
 [在 GitHub 查看 Fourfold ↗](https://github.com/Liyuk/astro-fourfold)

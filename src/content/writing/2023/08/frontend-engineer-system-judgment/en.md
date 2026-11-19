@@ -9,6 +9,13 @@ publishedAt: 2023-08-01
 type: essay
 tags: [frontend, career-development, systems-thinking, decision-making, work-leadership]
 translationKey: 2023/08/frontend-engineer-system-judgment
+primaryQuery: "frontend engineer career path systems thinking progression"
+searchIntent: essay
+relatedQueries:
+  - "how frontend engineers move into tech management"
+  - "technical architecture vs individual contributor"
+  - "defining problems as an engineer grows"
+  - "frontend engineer career options beyond coding"
 ---
 
 A frontend engineer's growth is not about climbing from one fixed title to the next. Some prefer making complex interactions reliable; others become long-term maintainers of design systems or engineering efficiency; still others take their technical skills into management, architecture, startups, teaching, or adjacent industries.

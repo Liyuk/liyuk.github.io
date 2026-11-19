@@ -10,6 +10,13 @@ type: essay
 tags: [communication, feedback, collaboration, work-leadership]
 column: { slug: one-on-one-conversations, order: 9 }
 translationKey: 2023/01/clarify-feedback-and-commitment
+primaryQuery: "how to communicate clearly at work"
+searchIntent: howto
+relatedQueries:
+  - "how to give effective feedback"
+  - "one on one meeting questions"
+  - "resolving workplace conflicts through communication"
+  - "improving your communication skills"
 ---
 
 The topic of "how to communicate well" came from real feedback: the earlier theme-based one-on-ones (the competency model) were judged as "a bit too abstract overall," so this more practical topic—one people actually wanted to discuss—was born. It aims to solve two things: "not knowing what to talk about" and "not saying things clearly."

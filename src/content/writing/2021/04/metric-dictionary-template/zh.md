@@ -7,6 +7,13 @@ publishedAt: 2021-04-20
 type: essay
 tags: [data, metrics, collaboration, measurement]
 column: { slug: data-metrics-guide, order: 4 }
+primaryQuery: "如何建立指标字典统一数据定义和口径"
+searchIntent: howto
+relatedQueries:
+  - "指标字典模板和示例"
+  - "完成率、留存、转化等常见指标怎么定义"
+  - "指标定义卡该写哪些字段"
+  - "数据口径不一致怎么解决"
 ---
 
 同一个“完成率”，在不同人手里经常有不同分母：有人以点击开始为分母，有人以请求发起为分母，有人排除了超时，有人把重试后的成功算作一次完整成功。没有指标字典，数据口径会在会议、SQL 和看板之间逐渐分叉。

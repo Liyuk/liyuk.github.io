@@ -6,6 +6,12 @@ publishedAt: 2023-03-23
 type: essay
 tags: [capacity-planning, management, prioritization, delivery, work-leadership]
 column: { slug: engineering-collaboration, order: 3 }
+primaryQuery: "资源紧张时团队怎么不透支"
+searchIntent: howto
+relatedQueries:
+  - "团队容量规划怎么做"
+  - "资源不足怎么定优先级"
+  - "如何避免员工过度加班"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「资源与容量」这条线的展开。

@@ -10,6 +10,13 @@ draft: false
 type: case-study
 tags: [technology, agent-systems, developer-productivity]
 translationKey: 2026/08/dsh-plugin-architecture-stability
+primaryQuery: "debugging dsh plugin loading issues"
+searchIntent: howto
+relatedQueries:
+  - "dsh plugin lifecycle and cordis fiber"
+  - "why dsh plugin code changes do not take effect"
+  - "plugin hot reload vs full reload"
+  - "dsh host client boundaries architecture"
 ---
 
 > This is a stage-of-development engineering summary, not an official DSH API specification. The examples come from developing and validating three plugin suites in August 2026: `dsh-skin-chatlab`, `dsh-agent-suite`, and `dsh-quota-router`. They also draw on DSH preview source code, runtime logs, and related fixes. DSH is evolving quickly; after every upgrade, event names, payloads, DOM anchors, and loading behavior must be checked again.

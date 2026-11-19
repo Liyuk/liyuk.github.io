@@ -6,6 +6,12 @@ publishedAt: 2023-06-01
 type: essay
 tags: [growth, self-reflection, feedback, work-leadership]
 column: { slug: growth-self-assessment, order: 3 }
+primaryQuery: "如何建立自我迭代的反馈系统"
+searchIntent: essay
+relatedQueries:
+  - "怎样从失败中提取有用的反馈"
+  - "工作中不断返工如何定位真实问题"
+  - "自我成长不用鸡血的方法"
 ---
 
 “自我迭代”很容易被说成一句要求人不断加速的话：学得更快、做得更多、变得更强。但如果它只是给自己施压，最后通常只会变成焦虑。

@@ -21,6 +21,13 @@ citationUrls:
   - https://www.mckinsey.com/capabilities/operations/our-insights/zero-based-productivity-marketing-measure-allocate-and-invest-marketing-dollars-more-effectively
   - https://support.google.com/analytics/answer/10596866
   - https://mixpanel.com/blog/north-star-metric/
+primaryQuery: "designing a marketing system architecture for growth and audit"
+searchIntent: howto
+relatedQueries:
+  - "how to prevent fraud in referral and reward programs"
+  - "decoupling marketing from transaction systems"
+  - "tracking marketing budget and cost allocation"
+  - "building an auditable entitlement and benefit system"
 ---
 
 Marketing systems rarely begin inside the marketing department. Their capabilities are usually scattered across commerce, account, product, and support systems.

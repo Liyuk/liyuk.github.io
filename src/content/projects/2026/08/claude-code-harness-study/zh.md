@@ -11,6 +11,12 @@ hero:
   alt: 一枚任务核心被多层边界包围，并将可审计事件轨迹送入受限文件工作区的概念示意。
   caption: 概念示意：能力由权限、审批与可追溯执行边界约束；并非项目界面截图。
 tags: [agent, coding-agent, systems, typescript]
+primaryQuery: "coding agent 权限控制 沙箱执行"
+searchIntent: project
+relatedQueries:
+  - "agent 文件操作隔离"
+  - "ai编程助手系统边界设计"
+  - "模型工具调用审批流程"
 ---
 
 [在 GitHub 查看项目与学习记录 ↗](https://github.com/Liyuk/claude-code-harness-study)

@@ -9,6 +9,13 @@ type: essay
 tags: [writing, decision-making, communication, work-leadership]
 column: { slug: documentation, order: 3 }
 translationKey: 2025/12/turn-spoken-ideas-into-decision-documents
+primaryQuery: "how to turn ideas into decision documents"
+searchIntent: howto
+relatedQueries:
+  - "how to structure scattered thoughts"
+  - "writing tools for organizing ideas"
+  - "how to write clearer team documents"
+  - "turning natural language into professional writing"
 ---
 
 Lately everyone is writing annual summaries and plans. Once there are many documents, things easily turn into a crowdsourcing scene. Gathering everyone's content, going through it, and then revising it with a writing tool and my own head often reveals some very interesting differences.

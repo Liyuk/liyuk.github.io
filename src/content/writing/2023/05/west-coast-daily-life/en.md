@@ -8,6 +8,12 @@ publishedAt: 2023-05-15
 type: essay
 tags: [united-states, west-coast, travel, field-notes]
 translationKey: 2023/05/west-coast-daily-life
+primaryQuery: "west coast usa trip budget 15 days"
+searchIntent: essay
+relatedQueries:
+  - "working across time zones remote team"
+  - "california gas parking accommodation prices"
+  - "los angeles bay area self-driving costs"
 ---
 
 > Prices in this piece come from my personal spending records in May 2023; the RMB-to-USD exchange rate at the time was about 6.8, and they do not reflect current prices.

@@ -5,6 +5,13 @@ createdAt: 2022-01-30
 publishedAt: 2022-01-30
 type: essay
 tags: [everyday-life, cooking, systems, field-notes]
+primaryQuery: "一个人怎样规划日常饮食 降低做饭摩擦"
+searchIntent: howto
+relatedQueries:
+  - "独居怎样建立厨房库存清单"
+  - "菜单模块化 减少每餐决策"
+  - "单人备餐 节省时间和精力"
+  - "冰箱冷冻柜 应对忙碌晚上"
 ---
 
 一个人吃饭最难的部分，往往不在烹饪本身。

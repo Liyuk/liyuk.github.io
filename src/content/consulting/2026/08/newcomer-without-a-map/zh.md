@@ -13,6 +13,12 @@ column: { slug: career-management-growth, order: 1 }
 featured: true
 tags: [career-development, onboarding, organization, network, authorization, growth, communication, collaboration]
 translationKey: 2026/08/newcomer-without-a-map
+primaryQuery: "新入职没有清晰方向怎么办"
+searchIntent: howto
+relatedQueries:
+  - "资深工程师换公司如何快速融入"
+  - "入职后和主管沟通职业发展"
+  - "业务不熟怎么获取上下文"
 ---
 
 > 这是「咨询访谈」的第一期。人物、公司和业务名称均已匿名化。本文是基于一次真实咨询的整理稿，不是逐字稿；问答保留了当时的沟通顺序，旁白是我对问题的分析。

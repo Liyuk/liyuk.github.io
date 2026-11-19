@@ -8,6 +8,13 @@ createdAt: 2022-01-30
 publishedAt: 2022-01-30
 type: essay
 tags: [everyday-life, cooking, systems, field-notes]
+primaryQuery: "simple meal planning system for one person"
+searchIntent: howto
+relatedQueries:
+  - "how to organize kitchen inventory for solo cooking"
+  - "meal modules instead of recipes"
+  - "low friction meal prep for busy evenings"
+  - "freezer staples for quick dinners"
 ---
 
 The hardest part of eating alone is often not the cooking itself.

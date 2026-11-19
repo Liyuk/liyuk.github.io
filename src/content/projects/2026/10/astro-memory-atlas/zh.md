@@ -13,6 +13,12 @@ hero:
 draft: false
 tags: [astro, static-site, privacy, relationships, personal-publication]
 translationKey: 2026/10/astro-memory-atlas
+primaryQuery: "纪念相册网站怎么做"
+searchIntent: project
+relatedQueries:
+  - "自己搭建回忆相册站"
+  - "Astro 个人网站模板"
+  - "怎样记录两个人的回忆"
 ---
 
 最近在做一些纪念日相关的东西，就想把两个人的照片整理成一个相册。我先去找有没有现成的项目，搜到不少婚礼主题的页面，但一直没有找到很合用的。我想记下来的东西还包括平时的生活，而且以后还能接着往里面加，过几年再回头看。找了一圈，就开始按自己的需求一点点做。

@@ -14,6 +14,12 @@ hero:
   caption: "System architecture diagram, from CanonLoom's public design paper."
 tags: [agent, creative-writing, workflow, python]
 translationKey: 2026/08/canonloom
+primaryQuery: "command-driven workflow for novel writing"
+searchIntent: project
+relatedQueries:
+  - "AI collaboration for long-form writing"
+  - "tracking story state and consistency"
+  - "agent-assisted creative writing tool"
 ---
 
 [View CanonLoom on GitHub ↗](https://github.com/Liyuk/canonloom)

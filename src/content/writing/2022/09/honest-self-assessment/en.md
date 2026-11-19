@@ -10,6 +10,13 @@ type: essay
 tags: [self-reflection, growth, feedback, work-leadership]
 column: { slug: one-on-one-conversations, order: 8 }
 translationKey: 2022/09/honest-self-assessment
+primaryQuery: "how to assess your capability level objectively"
+searchIntent: howto
+relatedQueries:
+  - "understanding and applying capability models at work"
+  - "how to know if you meet promotion requirements"
+  - "self-assessment methods that reduce bias"
+  - "getting honest feedback on your performance gaps"
 ---
 
 The origin of this topic is quite specific: whether just graduated or already working for five or six years, many people have doubts about capability models and about the stage they are at — what the requirements are for their current stage, how to improve their capabilities, and what the standards for promotion are — and they often get lost in the fog. This one-on-one aims to answer two general questions: **how a standard model should be understood after reading it closely**, and **how to measure the stage you are at and the direction of capability improvement**. The premise is: communication and answers are both sincere and practical.

@@ -6,6 +6,12 @@ publishedAt: 2023-04-08
 type: essay
 tags: [communication, self-reflection, collaboration, work-leadership]
 column: { slug: one-on-one-conversations, order: 10 }
+primaryQuery: "工作中焦虑压力太大，怎么跟上司开口调整工作条件"
+searchIntent: howto
+relatedQueries:
+  - "工作一对一对话怎么表达自己的压力"
+  - "能力意愿象限模型怎么用"
+  - "怎样在工作中设定健康的边界"
 ---
 
 这个话题的背景很现实：在大环境不那么友好的情况下，跟许多人聊天，绝大部分人都表达了焦虑和压力（这两者并存）。这个主题的目的不是彻底解决焦虑与压力，更多是聊一下从认知角度的解法——参考心理学中"合理情绪疗法"，给到部分疏导和缓解。

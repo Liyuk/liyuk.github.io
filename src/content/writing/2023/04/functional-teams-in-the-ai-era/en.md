@@ -10,6 +10,12 @@ type: essay
 tags: [organization-design, ai, engineering, work-leadership]
 column: { slug: technical-systems, order: 5 }
 translationKey: 2023/04/functional-teams-in-the-ai-era
+primaryQuery: "when to reorganize functional lines"
+searchIntent: essay
+relatedQueries:
+  - "functional vs business lines organization"
+  - "breaking down organizational silos"
+  - "end-to-end execution capability"
 ---
 
 Functional lines are not inherently wrong. Functional teams that organize specialized capability well are not rare: they unify standards, accumulate deep expertise, and push one link of the chain to its limit, so the system runs efficiently like well-oiled gears. It has its historical rationale — when the division of labor is deep enough, functional lines do make professional strength run efficiently.

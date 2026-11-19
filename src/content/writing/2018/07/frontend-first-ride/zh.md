@@ -6,6 +6,12 @@ publishedAt: 2018-07-04
 updatedAt: 2026-08-14
 type: note
 tags: [frontend, learning, career, archive, technology]
+primaryQuery: "前端初学者如何开始学习"
+searchIntent: howto
+relatedQueries:
+  - "前端面试题怎么准备"
+  - "算法题怎么刷才有效"
+  - "前端实习找工作要求"
 ---
 
 > 写这篇文章的时候，大概想过要写很久，不过先贴点资料以供参考。

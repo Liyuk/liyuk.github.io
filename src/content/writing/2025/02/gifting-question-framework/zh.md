@@ -5,6 +5,13 @@ createdAt: 2025-02-20
 publishedAt: 2025-02-20
 type: note
 tags: [relationships, gifts, everyday-life, guide, field-notes]
+primaryQuery: "送礼怎样避免踩雷"
+searchIntent: howto
+relatedQueries:
+  - "根据人选礼物而不是商品"
+  - "送礼前如何确认对方真正需要什么"
+  - "怎样送一份有记忆点的定制礼物"
+  - "对方什么都不缺时送什么"
 ---
 
 ## 写在开始

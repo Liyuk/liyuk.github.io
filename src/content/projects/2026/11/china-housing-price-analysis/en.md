@@ -11,6 +11,13 @@ status: active
 draft: false
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [data, machine-learning, housing, forecasting, time-series, explainability, reproducibility, china]
+primaryQuery: "China housing price index 70 cities"
+searchIntent: project
+relatedQueries:
+  - "housing price forecast China"
+  - "compare city property trends"
+  - "NBS housing data download"
+  - "how to interpret price index"
 ---
 
 [View the repository ↗](https://github.com/Liyuk/cn-housing-price-training) · [Open the 70-city dashboard ↗](https://liyuk.github.io/cn-housing-price-training/)

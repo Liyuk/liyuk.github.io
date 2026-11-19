@@ -13,6 +13,12 @@ column: { slug: career-management-growth, order: 1 }
 featured: true
 tags: [career-development, onboarding, organization, network, authorization, growth, communication, collaboration]
 translationKey: 2026/08/newcomer-without-a-map
+primaryQuery: "how to find direction after joining new team"
+searchIntent: howto
+relatedQueries:
+  - "senior engineer onboarding strategy"
+  - "building credibility in new role"
+  - "how to gather business context quickly"
 ---
 
 > This is the first episode of Consultation Interviews. The person, companies, and business details have been anonymized. This is an edited account of a real consultation rather than a verbatim transcript; the questions preserve the shape of the conversation, while the notes explain how I approached the problem.

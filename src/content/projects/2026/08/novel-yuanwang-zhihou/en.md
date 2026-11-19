@@ -16,6 +16,12 @@ work:
   status: "Updates paused (serialization experiment complete)"
   cover: /images/projects/novel-yuanwang-zhihou/cover.webp
 tags: [fiction, novel, work-leadership]
+primaryQuery: "after the wish novel"
+searchIntent: project
+relatedQueries:
+  - "wish and responsibility novel"
+  - "desert trade route fiction"
+  - "how wishes change fate"
 ---
 
 [Read _After the Wish_ on Qidian ↗](https://www.qidian.com/book/1050031941/)

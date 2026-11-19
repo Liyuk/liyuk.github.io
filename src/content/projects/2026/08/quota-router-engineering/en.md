@@ -13,6 +13,13 @@ draft: false
 repositoryUrl: https://github.com/Liyuk/dsh-quota-router
 paperUrl: https://github.com/Liyuk/dsh-quota-router/blob/main/docs/blog-quota-router-engineering.md
 tags: [ai-gateway, agent, routing, algorithms, reliability, observability, typescript]
+primaryQuery: "designing multi-model multi-provider routing system"
+searchIntent: project
+relatedQueries:
+  - "failure classification and fallback retry strategy"
+  - "task profile and model mapping configuration"
+  - "candidate chain expansion and filtering algorithm"
+  - "route decision and cost accounting"
 ---
 
 The hard part of multi-model, multi-provider routing is not merely switching models. It is preserving the answers to a set of operational questions:

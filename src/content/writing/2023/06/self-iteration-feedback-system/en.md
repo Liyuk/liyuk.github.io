@@ -9,6 +9,12 @@ type: essay
 tags: [growth, self-reflection, feedback, work-leadership]
 column: { slug: growth-self-assessment, order: 3 }
 translationKey: 2023/06/self-iteration-feedback-system
+primaryQuery: "building a self-iteration feedback loop"
+searchIntent: essay
+relatedQueries:
+  - "how to extract useful feedback from failure"
+  - "defining the real problem behind repeated mistakes"
+  - "sustainable self-improvement without burnout"
 ---
 
 "Self-iteration" is easily turned into a demand to keep accelerating: learn faster, do more, become stronger. But if it is only about putting pressure on yourself, it usually ends up as anxiety.

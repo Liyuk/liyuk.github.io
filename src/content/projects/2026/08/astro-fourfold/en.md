@@ -14,6 +14,12 @@ hero:
 draft: false
 tags: [astro, static-site, personal-publication, information-architecture, open-source]
 translationKey: 2026/08/astro-fourfold
+primaryQuery: "astro static blog starter fourfold"
+searchIntent: project
+relatedQueries:
+  - "personal publication information architecture"
+  - "static site content model design"
+  - "open source blogging template"
 ---
 
 [View Fourfold on GitHub ↗](https://github.com/Liyuk/astro-fourfold)

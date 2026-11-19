@@ -5,6 +5,13 @@ createdAt: 2023-03-17
 publishedAt: 2023-03-17
 type: essay
 tags: [quality, reliability, engineering, technology]
+primaryQuery: "产品质量如何跨团队共同负责"
+searchIntent: essay
+relatedQueries:
+  - "质量问题为什么出在交接处"
+  - "上线前如何评估组合风险"
+  - "生产事故如何快速止损再排查"
+  - "线上问题监控的作用"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「闭环」这条线的展开。

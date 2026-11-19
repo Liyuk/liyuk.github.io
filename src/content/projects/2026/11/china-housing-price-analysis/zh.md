@@ -8,6 +8,13 @@ status: active
 draft: false
 repositoryUrl: https://github.com/Liyuk/cn-housing-price-training
 tags: [data, machine-learning, housing, forecasting, time-series, explainability, reproducibility, china]
+primaryQuery: "中国房价数据怎么查 70城指数"
+searchIntent: project
+relatedQueries:
+  - "城市房价走势对比"
+  - "二手房价格预测模型"
+  - "国家统计局房价数据下载"
+  - "房价指数怎么理解"
 ---
 
 [查看项目仓库 ↗](https://github.com/Liyuk/cn-housing-price-training) · [打开 70 城趋势看板 ↗](https://liyuk.github.io/cn-housing-price-training/)

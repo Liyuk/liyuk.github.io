@@ -8,6 +8,13 @@ tags: [reading, books, notes, learning, archive, field-notes]
 locale: en
 translationStatus: reviewed
 translationKey: 2023/11/my-reading-archives
+primaryQuery: "how to maintain a consistent reading habit"
+searchIntent: essay
+relatedQueries:
+  - "effective ways to take reading notes"
+  - "paper books vs ebooks for learning"
+  - "finding time to read with a busy schedule"
+  - "recommended books by category"
 ---
 
 > This is a personal reading record from a particular stage. The views in the books, my judgments, and how much I recommend them are all shaped by my reading experience at that time; they are not advice on buying books, health, career, or investing.

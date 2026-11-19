@@ -6,6 +6,12 @@ publishedAt: 2021-04-08
 type: essay
 tags: [data, metrics, collaboration, measurement]
 column: { slug: data-metrics-guide, order: 3 }
+primaryQuery: "产品看板指标怎么分级排优先"
+searchIntent: howto
+relatedQueries:
+  - "度量指标 什么最重要"
+  - "怎样评估团队应该关注哪些数据"
+  - "数据看板 如何避免指标泛滥"
 ---
 
 一张看板里放得下几十项指标，但人的注意力放不下。没有分级时，团队很容易被最显眼、变化最快的数字吸走，却忽略真正决定用户结果的信号。

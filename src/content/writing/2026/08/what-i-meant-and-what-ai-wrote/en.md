@@ -14,6 +14,13 @@ citationUrls:
   - https://www.bis.org/publ/work1208.htm
   - https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/06/the-effects-of-generative-ai-on-productivity-innovation-and-entrepreneurship_da1d085d/b21df222-en.pdf
 translationKey: 2026/08/what-i-meant-and-what-ai-wrote
+primaryQuery: "how to use AI for writing while keeping your own voice"
+searchIntent: essay
+relatedQueries:
+  - "AI writing assistance pitfalls and risks"
+  - "maintaining intellectual autonomy with AI tools"
+  - "when AI generated content is not truly your knowledge"
+  - "AI makes you feel productive but are you progressing"
 ---
 
 I have been using AI a great deal lately. Every day brings a large number of conversations: writing code, handling work, organizing my blog, and discussing questions I have not fully worked out yet. When I put it to work on something concrete, it is usually useful. It helps me get certain things done faster.

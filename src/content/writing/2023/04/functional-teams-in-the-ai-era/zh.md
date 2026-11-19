@@ -6,6 +6,12 @@ publishedAt: 2023-04-06
 type: essay
 tags: [organization-design, ai, engineering, work-leadership]
 column: { slug: technical-systems, order: 5 }
+primaryQuery: "职能线与业务线怎么划分"
+searchIntent: essay
+relatedQueries:
+  - "AI时代组织结构如何设计"
+  - "跨职能协作成本高怎么办"
+  - "何时应该打破职能部门壁垒"
 ---
 
 职能线不是天然错误。把专业能力组织得好的职能团队并不少见：统一标准、深度积累，把某一环做到极致，系统像上了油的齿轮一样高效。它有它的历史理由——分工足够深的时候，职能线确实能让专业力量高效运转。

@@ -6,6 +6,13 @@ publishedAt: 2020-10-22
 updatedAt: 2026-08-14
 type: essay
 tags: [technical-sharing, learning, knowledge-management, collaboration, technology]
+primaryQuery: "技术分享怎样才能真正改变人的判断和行动"
+searchIntent: howto
+relatedQueries:
+  - "技术分享选题 应该怎么选"
+  - "怎样组织有效的技术讨论"
+  - "技术经验分享后怎样沉淀复用"
+  - "技术分享一次讲座不够 应该怎么做"
 ---
 
 许多技术分享做着做着，会变成一种固定活动：到时间找一个主题，准备一些材料，安排一次讲解，结束后等待下一次。它看起来很勤奋，但参与者未必因此学得更深，经验也未必因此留下来。我组织过很长一段这样"勤奋但不改变"的分享——直到开始用一个标准衡量它，情况才变好：**这次分享结束后，哪些人的什么判断或行动会发生变化？**

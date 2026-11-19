@@ -9,6 +9,12 @@ type: note
 draft: false
 tags: [strategy, product-thinking, decision-making, learning]
 translationKey: 2026/08/canvas-pitch-diligence
+primaryQuery: "business model canvas vs startup pitch vs due diligence"
+searchIntent: essay
+relatedQueries:
+  - "how to structure a startup pitch"
+  - "what investors look for in due diligence"
+  - "unit economics and business model"
 ---
 
 "Looking at a project" is actually three perspectives with completely different purposes, and they are easy to mix up. Note this down: **the business model canvas is "made for yourself," the startup pitch is "told to others," and investor due diligence is "others scrutinizing you."** The first leans toward "how to make it work," the last leans toward "whether it's worth investing," and the pitch in between is an act of expression that packages "make it work" into "worth investing."

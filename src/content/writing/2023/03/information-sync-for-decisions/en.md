@@ -9,6 +9,13 @@ publishedAt: 2023-03-27
 type: essay
 tags: [communication, documentation, collaboration, work-leadership]
 translationKey: 2023/03/information-sync-for-decisions
+primaryQuery: "how to sync information effectively for decision making"
+searchIntent: howto
+relatedQueries:
+  - "how to write status updates clearly"
+  - "communicating same update to different stakeholders"
+  - "avoiding misunderstandings in information sharing"
+  - "how to structure information for action"
 ---
 
 > This essay expands on the "alignment" thread in [*Management Retrospective*](/en/writing/2026/08/management-retrospective/).

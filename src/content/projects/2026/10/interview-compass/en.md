@@ -10,6 +10,12 @@ repositoryUrl: https://github.com/Liyuk/interview-compass
 draft: false
 tags: [interview, promotion, hiring, open-source, engineering-management]
 translationKey: 2026/10/interview-compass
+primaryQuery: "engineering interview preparation show evidence"
+searchIntent: project
+relatedQueries:
+  - "how to structure interview answers with examples"
+  - "promotion preparation for engineers"
+  - "hiring manager interview framework"
 ---
 
 **Know the role. Show the evidence.**

@@ -9,6 +9,12 @@ type: note
 featured: true
 tags: [site-notes, field-notes]
 translationKey: 2026/08/rebuilding-this-site
+primaryQuery: "rebuilding a blog managing old content"
+searchIntent: essay
+relatedQueries:
+  - "personal publishing workflow"
+  - "blog content migration strategy"
+  - "organizing long-term writing archive"
 ---
 
 This blog has been around for years. Old pieces are scattered in different places, and plenty of links stopped working long ago. Now I want to tidy it up: slowly sort through what I wrote before, and bring in the things I have been making, studying, and noticing on the road.

@@ -15,6 +15,12 @@ hero:
   caption: "Conceptual illustration: capabilities are constrained by permissions, approvals, and traceable execution boundaries; not a screenshot of the project interface."
 tags: [agent, coding-agent, systems, typescript]
 translationKey: 2026/08/claude-code-harness-study
+primaryQuery: "coding agent harness permissions sandbox"
+searchIntent: project
+relatedQueries:
+  - "agent tool execution boundaries"
+  - "ai code execution isolation"
+  - "model approval workflow design"
 ---
 
 [View the project and learning notes on GitHub ↗](https://github.com/Liyuk/claude-code-harness-study)

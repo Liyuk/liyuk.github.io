@@ -11,6 +11,12 @@ column: { slug: multi-team-management, order: 4 }
 locale: en
 translationStatus: reviewed
 translationKey: 2026/08/manager-of-managers-leadership-supply
+primaryQuery: "how managers of managers plan hiring and leadership supply"
+searchIntent: howto
+relatedQueries:
+  - "roles and responsibilities of HRBP, TA, and hiring managers"
+  - "how to identify real hiring gaps instead of just adding headcount"
+  - "building leadership succession and internal development"
 ---
 
 When an organization grows from one team into several, hiring changes with it.

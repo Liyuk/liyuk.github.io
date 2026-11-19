@@ -10,6 +10,13 @@ type: essay
 tags: [architecture, engineering, systems-design, technology]
 column: { slug: technical-systems, order: 4 }
 translationKey: 2023/03/shared-core-and-local-variation
+primaryQuery: "how multi-region systems balance shared code and local variation"
+searchIntent: essay
+relatedQueries:
+  - "shared core pattern multi-region architecture"
+  - "when to unify platform vs keep regional customization"
+  - "identifying stable parts in multi-region systems"
+  - "avoiding code duplication across regions"
 ---
 
 When a system begins serving a second region, a second kind of customer, or a second business line, teams often fall into a dilemma: keep making another copy and worry about maintenance costs spiraling out of control, or immediately turn it into a "unified platform" and discover that the real differences are far more numerous than expected. Each end of the spectrum has its own lessons.

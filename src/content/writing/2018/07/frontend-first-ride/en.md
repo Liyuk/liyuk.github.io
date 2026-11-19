@@ -9,6 +9,12 @@ updatedAt: 2026-08-14
 type: note
 tags: [frontend, learning, career, archive, technology]
 translationKey: 2018/07/frontend-first-ride
+primaryQuery: "how to start learning frontend development"
+searchIntent: howto
+relatedQueries:
+  - "how to prepare for frontend interviews"
+  - "how to practice coding interview problems"
+  - "frontend internship requirements"
 ---
 
 > When I was writing this article, I probably intended to write for a long time, but for now let me just paste some materials for reference.

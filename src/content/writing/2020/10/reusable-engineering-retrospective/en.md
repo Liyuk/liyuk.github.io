@@ -10,6 +10,13 @@ publishedAt: 2020-10-22
 updatedAt: 2026-08-14
 type: essay
 tags: [engineering, retrospective, learning, collaboration, technology]
+primaryQuery: "how to run an effective engineering retrospective"
+searchIntent: howto
+relatedQueries:
+  - "engineering retrospective best practices"
+  - "retrospective five step workflow"
+  - "how to convert retrospective discussion into actions"
+  - "avoiding ineffective retrospectives"
 ---
 
 > This article expands on the "retrospective" thread in [*Management Retrospective*](/en/writing/2026/08/management-retrospective/).

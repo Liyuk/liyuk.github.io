@@ -7,6 +7,13 @@ updatedAt: 2026-08-14
 type: essay
 tags: [leadership, collaboration, management, work-leadership]
 column: { slug: team-building, order: 2 }
+primaryQuery: "团队重建 先做什么"
+searchIntent: howto
+relatedQueries:
+  - "怎样重建团队文化和标准"
+  - "从零搭建团队的思路"
+  - "团队责任制怎么设计"
+  - "目标拆解 团队对齐"
 ---
 
 有时，原本顺畅的团队会因为目标变化、关键角色变动或长期消耗而失去连续性。此时最容易犯的错，是把“重新开始”理解成重新画一张分工图，或者马上用一串任务填满空白。

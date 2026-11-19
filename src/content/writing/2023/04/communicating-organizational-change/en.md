@@ -9,6 +9,12 @@ tags: [management, communication, organizational-change, work-leadership]
 locale: en
 translationStatus: reviewed
 translationKey: 2023/04/communicating-organizational-change
+primaryQuery: "how to communicate organizational change effectively"
+searchIntent: howto
+relatedQueries:
+  - "communicating uncertainty to teams"
+  - "managing information during transitions"
+  - "tailoring messages to different audiences"
 ---
 
 What hurts people most in organizational change is often not the change itself but the information vacuum it leaves behind. Most changes are planned well in advance; what truly spirals out of control is the speculation that grows in that vacuum.

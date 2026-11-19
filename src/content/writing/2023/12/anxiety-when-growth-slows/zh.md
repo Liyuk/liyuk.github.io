@@ -6,6 +6,13 @@ publishedAt: 2023-12-10
 type: essay
 tags: [self-reflection, communication, decision-making, work-leadership]
 column: { slug: one-on-one-conversations, order: 12 }
+primaryQuery: "业务增速放缓 团队焦虑 怎么办"
+searchIntent: essay
+relatedQueries:
+  - "团队焦虑时 如何定基调和沟通"
+  - "业务压力大 怎样避免过度承诺"
+  - "工作不确定性强 如何保护判断力"
+  - "新市场没达预期 团队如何调整心态"
 ---
 
 这个话题来自一个具体年份：业务指标仍在增长，但整体 OKR 进度有差距——已在的市场效果不错，重要的新市场却还没带来预期中的高速增长，同时有一些并发问题需要讨论解决方案。面对这种情况，**先定基调：要积极应对困难，充分分析问题，解决关键路径。**

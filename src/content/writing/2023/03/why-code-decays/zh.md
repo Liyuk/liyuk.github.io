@@ -6,6 +6,13 @@ publishedAt: 2023-03-07
 type: essay
 tags: [engineering, code-quality, architecture, technology]
 column: { slug: technical-systems, order: 2 }
+primaryQuery: "代码为什么会变坏"
+searchIntent: essay
+relatedQueries:
+  - "如何避免代码衰退"
+  - "系统边界和模块耦合"
+  - "技术债务的本质"
+  - "代码审查的真实价值"
 ---
 
 一段代码通常不是在某天突然变成"遗留系统"的。它更常见的路径是：第一个临时分支解决了紧急需求，第二个分支复制了这段逻辑，第三个团队不知道原有约定，于是加了另一个入口。每一步单独看都合理，合起来却让修改任何地方都变得危险。我在维护过几年的系统里反复看到这条路径——它几乎从不是某一次"写得差"，而是局部变更一次次绕过共同边界。

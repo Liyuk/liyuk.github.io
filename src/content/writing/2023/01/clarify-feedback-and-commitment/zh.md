@@ -6,6 +6,13 @@ publishedAt: 2023-01-14
 type: essay
 tags: [communication, feedback, collaboration, work-leadership]
 column: { slug: one-on-one-conversations, order: 9 }
+primaryQuery: "工作沟通怎么做才能聊清楚"
+searchIntent: howto
+relatedQueries:
+  - "如何有效给反馈不伤人"
+  - "一对一沟通提什么问题"
+  - "职场冲突沟通如何解决"
+  - "提高表达能力的方法"
 ---
 
 "如何做好沟通"这个话题，来源于一个真实的反馈：前面的主题式一对一（能力模型）被评价"整体比较虚"，于是有了这个更务实、想聊的话题。它想解决的，就是"不知道聊什么"和"话没说清楚"这两件事。

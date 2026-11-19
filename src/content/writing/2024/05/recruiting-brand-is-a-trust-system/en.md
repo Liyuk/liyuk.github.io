@@ -9,6 +9,12 @@ publishedAt: 2024-05-20
 type: essay
 tags: [hiring, leadership, communication, team-building, work-leadership]
 translationKey: 2024/05/recruiting-brand-is-a-trust-system
+primaryQuery: "how to write recruiting job postings that attract the right talent"
+searchIntent: essay
+relatedQueries:
+  - "recruitment branding shared mission"
+  - "job posting strategy for teams"
+  - "how to communicate vision in hiring"
 ---
 
 What a recruiting post is truly trying to accomplish is not to introduce a position, nor to generate a wave of buzz, but to establish a shared belief: **this work is worth doing; we have a chance to make it happen; and you can work with us to turn it from a possibility into reality.**

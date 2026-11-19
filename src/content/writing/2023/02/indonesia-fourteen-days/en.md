@@ -8,6 +8,13 @@ createdAt: 2023-02-20
 publishedAt: 2023-02-20
 type: essay
 tags: [indonesia, jakarta, travel, field-notes]
+primaryQuery: "jakarta cost of living and transportation"
+searchIntent: essay
+relatedQueries:
+  - "jakarta food prices street stalls vs malls"
+  - "jakarta metro and taxi fares 2023"
+  - "jakarta motorcycle taxis grab gojek"
+  - "jakarta city structure wealth gap"
 ---
 
 > All prices and conversions in this piece are personal records from Jakarta in February 2023 and do not represent current prices or statistics.

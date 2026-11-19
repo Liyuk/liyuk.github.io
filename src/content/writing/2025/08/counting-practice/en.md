@@ -10,6 +10,13 @@ type: essay
 tags: [thinking, communication, self-reflection, work-leadership]
 column: { slug: thinking-training, order: 2 }
 translationKey: 2025/08/counting-practice
+primaryQuery: "how to structure vague thoughts clearly"
+searchIntent: howto
+relatedQueries:
+  - "active listening and restating technique"
+  - "how to sync on problems effectively"
+  - "giving clear status updates"
+  - "how to review past decisions"
 ---
 
 There is a very simple kind of training that I call "counting." What it originally sets out to solve is not a lack of knowledge, but a more common problem: having a lot in your head, yet being unable to say clearly what you are actually asking; hearing someone say a lot, yet being unable to grasp the main point.

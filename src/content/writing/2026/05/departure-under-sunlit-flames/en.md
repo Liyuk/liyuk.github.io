@@ -9,6 +9,13 @@ type: essay
 featured: true
 tags: [career, reflection, leadership, work-leadership]
 translationKey: 2026/05/departure-under-sunlit-flames
+primaryQuery: "career reflection after eight years"
+searchIntent: essay
+relatedQueries:
+  - "staying true to your original aspiration at work"
+  - "how career changes reshape who you are"
+  - "context not control leadership"
+  - "navigating uncertainty in career transitions"
 ---
 
 I've read many colleagues' farewell notes, but when it was finally my turn to write one, I suddenly didn't know what to say. There's still some time before my last day, but let me say goodbye a little early.

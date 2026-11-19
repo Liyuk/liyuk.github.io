@@ -11,6 +11,12 @@ hero:
   alt: CanonLoom 的系统架构图，展示作者意图、文件协议、受限执行与审查结算之间的关系。
   caption: 系统架构图，来自 CanonLoom 的公开设计论文。
 tags: [agent, creative-writing, workflow, python]
+primaryQuery: "长篇小说 AI协作 工作流"
+searchIntent: project
+relatedQueries:
+  - "小说创作 跨章节一致性"
+  - "命令行 小说写作工具"
+  - "Agent 辅助创作 管理"
 ---
 
 [在 GitHub 查看 CanonLoom ↗](https://github.com/Liyuk/canonloom)

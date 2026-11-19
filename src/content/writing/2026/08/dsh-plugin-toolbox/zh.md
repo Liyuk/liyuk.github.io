@@ -7,6 +7,13 @@ publishedAt: 2026-08-16
 draft: false
 type: essay
 tags: [technology, agent-systems, developer-productivity]
+primaryQuery: "DSH 工作台怎么用 有哪些好用的插件"
+searchIntent: project
+relatedQueries:
+  - "DeepSeek Harness 插件生态"
+  - "agent 工具如何提高可观测性"
+  - "跨会话记忆插件实现原理"
+  - "怎样用多代理团队完成复杂任务"
 ---
 
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（DSH）才出来没几天，我已经往里装了九个插件。装这么多倒不是收集癖，是这套东西真用起来之后，有些「缺了才察觉」的地方，刚好有插件能补。这篇记一下它们各自补了什么、实现原理是什么，顺便说说哪个最好使。

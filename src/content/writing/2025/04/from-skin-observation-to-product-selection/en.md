@@ -8,6 +8,13 @@ publishedAt: 2025-04-12
 type: note
 tags: [beauty, everyday-life, guide, skincare, field-notes]
 translationKey: 2025/04/from-skin-observation-to-product-selection
+primaryQuery: "how to choose makeup that suits your skin tone"
+searchIntent: howto
+relatedQueries:
+  - "how to find the right foundation shade"
+  - "choosing blush and lipstick colors by skin undertone"
+  - "choosing makeup texture for oily or dry skin"
+  - "makeup color analysis lightness and saturation"
 ---
 
 ## First, define what "suits you" means

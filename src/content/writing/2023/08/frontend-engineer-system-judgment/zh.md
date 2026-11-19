@@ -5,6 +5,13 @@ createdAt: 2023-08-01
 publishedAt: 2023-08-01
 type: essay
 tags: [frontend, career-development, systems-thinking, decision-making, work-leadership]
+primaryQuery: "前端工程师职业发展 从执行走向系统判断"
+searchIntent: essay
+relatedQueries:
+  - "前端工程师 3到5年怎么发展"
+  - "技术管理和技术架构 怎么选择"
+  - "工程师如何从做项目到定义问题"
+  - "前端工程师可以转向哪些方向"
 ---
 
 前端工程师的发展，并不是从一个固定头衔爬到另一个固定头衔。有人更喜欢把复杂交互做得可靠，有人会成为设计系统或工程效率的长期维护者；也有人会把技术带进管理、架构、创业、教学，或者转向相邻行业。

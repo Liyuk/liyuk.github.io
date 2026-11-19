@@ -12,6 +12,13 @@ featured: false
 tags: [career-development, engineering, product-thinking, operations, communication, collaboration, prioritization, risk-management]
 column: { slug: engineering-team-judgment, order: 1 }
 translationKey: 2026/09/product-engineer-without-boundaries
+primaryQuery: "研发接产品项目但没有资源怎么推进"
+searchIntent: howto
+relatedQueries:
+  - "跨职能协作 决策权限怎么确定"
+  - "业务目标和研发时间冲突如何处理"
+  - "承接新任务前怎么和老板确认职责范围"
+  - "产品设计缺陷如何及时反馈给业务方"
 ---
 
 > 本文根据一次真实咨询记录整理，不是逐字稿。对话顺序保留为“来访者先完整陈述，咨询者再拆解分析”；人物、组织、业务场景和项目细节均已抽象，部分重复事实合并表述。文中的建议来自当次咨询，但行动尚待来访者与团队讨论。

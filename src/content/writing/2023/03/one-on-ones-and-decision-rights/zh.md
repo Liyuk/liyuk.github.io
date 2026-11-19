@@ -5,6 +5,12 @@ createdAt: 2023-03-31
 publishedAt: 2023-03-31
 type: essay
 tags: [management, communication, ownership, work-leadership]
+primaryQuery: "1对1会议怎么开 避免决策权混乱"
+searchIntent: howto
+relatedQueries:
+  - "如何在1对1中澄清授权和权限边界"
+  - "向下属传达背景信息时怎样避免被理解成授权"
+  - "1对1开场 应该先聊什么"
 ---
 
 > 本文是[《管理复盘》](/writing/2026/08/management-retrospective/)中「对齐」这条线的展开。

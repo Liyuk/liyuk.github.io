@@ -7,6 +7,13 @@ type: essay
 featured: true
 tags: [leadership, team, decision-making, communication, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 1 }
+primaryQuery: "技术招聘 怎样评估候选人"
+searchIntent: howto
+relatedQueries:
+  - "招聘时怎么定义岗位需求"
+  - "面试评估人选的方法"
+  - "技术团队招聘标准"
+  - "新人入职后如何复盘"
 ---
 
 当团队需要人时，最自然的反应是尽快把岗位发布出去、约更多面试、把流程推进得更快。但“招到人”只是一个结果，不足以说明招聘做得好。更重要的问题是：团队究竟缺少什么能力？这个人加入后会承担什么真实的问题？我们凭什么相信彼此能在同一段路上合作？

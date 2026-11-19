@@ -9,6 +9,13 @@ type: essay
 tags: [mentorship, onboarding, career-development, feedback, leadership, work-leadership]
 column: { slug: team-building, order: 6 }
 translationKey: 2020/10/mentor-relationship-and-first-90-days
+primaryQuery: "how to structure a 90 day onboarding plan for new hires"
+searchIntent: howto
+relatedQueries:
+  - "effective mentoring relationships in teams"
+  - "how to give feedback to new employees"
+  - "new hire onboarding framework"
+  - "building independence in junior team members"
 ---
 
 > This article expands on the "Team and Growth" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

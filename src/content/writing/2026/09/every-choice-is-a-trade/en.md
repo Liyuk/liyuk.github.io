@@ -20,6 +20,13 @@ citationUrls:
   - https://doi.org/10.2307/1884852
   - https://www.econlib.org/library/Knight/knRUP.html?chapter_num=10
   - https://doi.org/10.1109/TSSC.1966.300074
+primaryQuery: "how to decide if a project is worth doing"
+searchIntent: essay
+relatedQueries:
+  - "supply and demand in startups"
+  - "when to enter and exit a project"
+  - "making career decisions with long horizons"
+  - "separating facts from wishful thinking in decisions"
 ---
 
 I’ve been looking back at some of the startup projects I worked on, and at the same time, thinking about what companies are doing through the lens of financial trading. Projects and trades are very different. One deals with users, products, and teams; the other with prices, positions, and risk. But when I review them side by side, I keep coming back to two questions: what is the supply and demand, and when should resources go in or come back out?

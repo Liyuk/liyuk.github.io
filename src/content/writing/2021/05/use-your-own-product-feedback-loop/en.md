@@ -9,6 +9,12 @@ publishedAt: 2021-05-15
 type: essay
 tags: [product-thinking, engineering, feedback, work-leadership]
 translationKey: 2021/05/use-your-own-product-feedback-loop
+primaryQuery: "how to build an effective product feedback loop"
+searchIntent: howto
+relatedQueries:
+  - "designing tasks for user testing"
+  - "classifying product issues and opportunities"
+  - "collecting evidence based product feedback"
 ---
 
 > This article expands on the "closed loop" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

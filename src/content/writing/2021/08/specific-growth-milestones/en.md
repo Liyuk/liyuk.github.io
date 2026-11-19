@@ -10,6 +10,12 @@ type: essay
 tags: [growth, self-reflection, feedback, work-leadership]
 column: { slug: one-on-one-conversations, order: 4 }
 translationKey: 2021/08/specific-growth-milestones
+primaryQuery: "how to make growth discussions concrete and actionable"
+searchIntent: howto
+relatedQueries:
+  - "asking better one-on-one questions about growth"
+  - "turning vague aspirations into measurable milestones"
+  - "discussing team growth with clear frameworks"
 ---
 
 "I want to grow faster" easily ends up vague. I prepared this set of questions because of a real one-on-one — after 20 to 30 hours of conversation, I compiled the scattered questions into this checklist. When you talk, keep one thing in mind: growth is an accumulation of milestones, and a milestone is made up of four parts: **situation, behavior, evidence, and the next round of practice**.

@@ -5,6 +5,12 @@ createdAt: 2022-07-01
 publishedAt: 2022-07-01
 type: essay
 tags: [career, campus-recruitment, engineering, work-leadership]
+primaryQuery: "校招面试官到底想看什么"
+searchIntent: essay
+relatedQueries:
+  - "简历怎么写才能过筛选"
+  - "技术面试怎么回答基础题"
+  - "项目经历怎么讲才有说服力"
 ---
 
 校招准备常常被做成题库冲刺：背更多题、做更多题、收集更多面经。但简历、基础问答和项目交流，最后都在回答同一件事：**当你遇到一个还没有标准答案的问题时，能不能理解它、作出判断，并把事情推进到结果？**

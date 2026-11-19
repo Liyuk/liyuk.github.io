@@ -6,6 +6,13 @@ publishedAt: 2022-03-12
 type: essay
 tags: [product-thinking, engineering, decision-making, product]
 column: { slug: one-on-one-conversations, order: 6 }
+primaryQuery: "怎样判断一个功能值不值得做"
+searchIntent: howto
+relatedQueries:
+  - "研发和产品经理怎么沟通需求"
+  - "产品需求怎样做效果评估"
+  - "功能上线后如何复盘和迭代"
+  - "产品目标不清楚怎么办"
 ---
 
 产品 sense 这个话题，在一次一对一里被提出——RD 想聊"产品 sense"，当时拆成了两个部分：**研发应该如何理解产品**，以及**产品到底在做什么**。核心是 RD 和 PM 的立场差异。聊的时候先多问一步：用户想完成什么？他们在哪一步受阻？这个方案解决的阻力是什么，又引入了什么成本？

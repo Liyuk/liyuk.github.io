@@ -10,6 +10,12 @@ column: { slug: documentation, order: 1 }
 locale: en
 translationStatus: reviewed
 translationKey: 2020/10/documents-are-collaboration-interfaces
+primaryQuery: "how to write effective technical and proposal documents"
+searchIntent: howto
+relatedQueries:
+  - "technical document structure best practices"
+  - "how to present conclusions and context in documents"
+  - "writing clear goals and backgrounds for documents"
 ---
 
 > This article is an expansion of the "context" thread in [Management Retrospective](/en/writing/2026/08/management-retrospective/).

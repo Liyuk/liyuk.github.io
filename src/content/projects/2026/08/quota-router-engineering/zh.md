@@ -12,6 +12,13 @@ draft: false
 repositoryUrl: https://github.com/Liyuk/dsh-quota-router
 paperUrl: https://github.com/Liyuk/dsh-quota-router/blob/main/docs/blog-quota-router-engineering.md
 tags: [ai-gateway, agent, routing, algorithms, reliability, observability, typescript]
+primaryQuery: "多模型多来源路由系统怎么设计"
+searchIntent: project
+relatedQueries:
+  - "失败分类和 fallback 重试策略"
+  - "任务 Profile 和模型映射配置"
+  - "候选链算法展开和过滤"
+  - "路由决策和成本计算"
 ---
 
 多模型、多 provider 的真正难点，通常不是“能不能切换模型”，而是切换之后是否仍然知道：

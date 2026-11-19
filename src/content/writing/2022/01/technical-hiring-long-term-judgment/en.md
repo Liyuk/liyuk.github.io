@@ -11,6 +11,13 @@ featured: true
 tags: [leadership, team, decision-making, communication, work-leadership]
 column: { slug: recruiting-and-professional-relationships, order: 1 }
 translationKey: 2022/01/technical-hiring-long-term-judgment
+primaryQuery: "how to evaluate technical candidates in interviews"
+searchIntent: howto
+relatedQueries:
+  - "defining job requirements for technical roles"
+  - "technical hiring best practices"
+  - "assessing cultural fit in interviews"
+  - "post-hire evaluation and feedback"
 ---
 
 When a team needs people, the most natural response is to post the opening as quickly as possible, schedule more interviews, and push the process faster. But "filling a seat" is only an outcome; it does not prove the hiring was done well. The more important questions are: What capability is the team actually missing? What real problem will this person take on after joining? What gives us reason to believe we can work together on the same stretch of road?
