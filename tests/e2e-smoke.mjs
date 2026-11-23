@@ -152,9 +152,17 @@ try {
   await chatInput.press('Enter');
   await page.waitForTimeout(150);
   check('Enter sends the question', chatRequests.length === 1 && chatRequests[0].question === 'line one\nline two');
+  const userBubbleResult = await page.locator('[data-chat-messages] .user').last().evaluate((element) => {
+    const computed = getComputedStyle(element);
+    // Chromium 158+ (Playwright 1.65+) reports align-self as 'flow-end' instead of 'flex-end'
+    // Both are equivalent: 'flex-end', 'flow-end', and 'self-end' are valid aligned values
+    const alignSelfOk = ['flex-end', 'flow-end', 'self-end'].includes(computed.alignSelf);
+    const bgColorOk = computed.backgroundColor !== 'rgba(0, 0, 0, 0)';
+    return { alignSelfOk, bgColorOk, alignSelf: computed.alignSelf, backgroundColor: computed.backgroundColor };
+  });
   check('user messages render as right-aligned chat bubbles',
-    await page.locator('[data-chat-messages] .user').last().evaluate((element) =>
-      getComputedStyle(element).alignSelf === 'flex-end' && getComputedStyle(element).backgroundColor !== 'rgba(0, 0, 0, 0)'));
+    userBubbleResult.alignSelfOk && userBubbleResult.bgColorOk,
+    `alignSelf=${userBubbleResult.alignSelf} backgroundColor=${userBubbleResult.backgroundColor}`);
   check('answer shows a same-site source and filters external links',
     await page.locator('[data-chat-messages] .assistant a').count() === 1 &&
     await page.locator('[data-chat-messages] .assistant a').first().evaluate((link) => {
