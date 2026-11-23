@@ -4,7 +4,7 @@ description: 一个带个人供给方分成机制的 OpenAI 兼容中转平台�
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 status: active
-repositoryUrl: https://github.com/Liyuk/neo-matrix
+draft: true
 hero:
   src: /images/projects/neo-matrix/hero-settlement.webp
   alt: Neo Matrix 管理端的结算与提现页面，12 张结算单、¥123 流水，含一张对账异常待核验。
@@ -17,8 +17,6 @@ relatedQueries:
   - "API 密钥路由和分成机制"
   - "OpenAI 兼容中转怎么实现结算"
 ---
-
-[在 GitHub 查看 Neo Matrix ↗](https://github.com/Liyuk/neo-matrix)
 
 ## 这是一个什么项目
 
