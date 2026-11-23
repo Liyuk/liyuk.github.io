@@ -70,7 +70,7 @@ const project = defineCollection({
     publishedAt: contentDate.optional(),
     updatedAt: contentDate.optional(),
     status: z.enum(['active', 'maintained', 'archived']),
-    repositoryUrl: z.string().url(),
+    repositoryUrl: z.string().url().optional(),
     paperUrl: z.string().url().optional(),
     support: z.boolean().default(false),
     hero: z.object({

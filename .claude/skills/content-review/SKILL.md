@@ -60,7 +60,7 @@ Run `.claude/skills/xinda-ya-translation` in review mode. A translation stuck at
 - Is every external citation (`citationUrls`, inline links) something that's actually reachable and says what the piece claims it says?
 - For `consulting`: does the de-identification pass in `agent/category-guides/consulting.md` hold up — not just "no real name," but no re-identifying combination of company/timeline/team/relationship details?
 - For `gallery`: is every identifiable person other than the author confirmed as consenting to publication (not just to being photographed), per `agent/category-guides/gallery.md`?
-- Is a `localhost`/`127.0.0.1` example (if `audit:content` flagged one) confirmed as an intentional reader-facing example, not a leaked private address (see the `neo-matrix` precedent in `agent/architecture.md`)?
+- Is a `localhost`/`127.0.0.1` example (if `audit:content` flagged one) confirmed as an intentional reader-facing example, not a leaked private address?
 - Does the translation status accurately reflect review state — no published entry sitting at `translationStatus: draft`?
 
 ### 8. Final report

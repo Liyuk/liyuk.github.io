@@ -4,7 +4,7 @@ description: "An OpenAI-compatible relay platform with a revenue-sharing mechani
 createdAt: 2026-08-15
 publishedAt: 2026-08-15
 status: active
-repositoryUrl: https://github.com/Liyuk/neo-matrix
+draft: true
 hero:
   src: /images/projects/neo-matrix/hero-settlement.webp
   alt: "Neo Matrix admin settlement and withdrawal page, showing 12 settlement orders and about ¥123 in transaction flow, including a reconciliation exception awaiting verification."
@@ -20,8 +20,6 @@ relatedQueries:
   - "revenue sharing for API suppliers"
   - "OpenAI compatible routing settlement"
 ---
-
-[View Neo Matrix on GitHub ↗](https://github.com/Liyuk/neo-matrix)
 
 ## What kind of project is this?
 
