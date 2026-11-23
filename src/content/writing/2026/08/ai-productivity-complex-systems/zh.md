@@ -15,7 +15,7 @@ citationUrls:
   - https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai-how-organizations-are-rewiring-to-capture-value
   - https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gencost02.html
   - https://shopify.dev/docs/api/storefront/latest/enums/orderfinancialstatus
-  - https://docs.stripe.com/payout-reconciliation
+  - https://docs.stripe.com/reports/payout-reconciliation
 translationKey: 2026/08/ai-productivity-complex-systems
 primaryQuery: "AI 能提高生产力吗"
 searchIntent: essay
@@ -40,7 +40,7 @@ AI 确实放大了人的创造力。一个模糊的想法，可以很快变成�
 
 我们很多时候不是在接口联调阶段发现问题，而是在对账时发现：订单看起来都成功了，最后应收、实收、退款或分账却对不上。钱对不上，其他事情就都会出问题。对账把隐藏的模型差异变成了硬事实，后面才逐步补上报警、自动回补、分阶段的状态流转，必要时再做状态回退和模型迁移。
 
-对账把原本模糊的系统差异变成了一个不能回避的事实。接下来才需要补上报警、自动回补、分阶段的状态流转，以及必要时的状态回退和模型迁移。支付系统的公开文档也把支付流水、批次和银行入账之间的匹配作为独立的 reconciliation 工作，而不是把“接口返回成功”直接当成财务完成。[Stripe 的 payout reconciliation 文档](https://docs.stripe.com/payout-reconciliation)
+对账把原本模糊的系统差异变成了一个不能回避的事实。接下来才需要补上报警、自动回补、分阶段的状态流转，以及必要时的状态回退和模型迁移。支付系统的公开文档也把支付流水、批次和银行入账之间的匹配作为独立的 reconciliation 工作，而不是把“接口返回成功”直接当成财务完成。[Stripe 的 payout reconciliation 文档](https://docs.stripe.com/reports/payout-reconciliation)
 
 这类系统真正运行起来，大致是一个不断回到现实校对的闭环：
 

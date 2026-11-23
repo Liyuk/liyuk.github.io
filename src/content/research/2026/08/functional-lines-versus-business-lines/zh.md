@@ -210,7 +210,7 @@ Netflix 长期实践"full-cycle developers"——开发者从写代码到部署�
 
 ## 参考文献
 
-1. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹研究，讨论 AI 进入组织的四类边界。
+1. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹研究，讨论 AI 进入组织的四类边界。
 2. Skelton, M., & Pais, M. (2019; 第 2 版 2025). *Team Topologies: Organizing Business and Technology Teams for Fast Flow*. IT Revolution Press. 提出流对齐、平台、使能、复杂子系统四种团队类型。[官方介绍](https://teamtopologies.com/)。本文引用其团队类型与"面向价值流动"的组织原则。
 3. Skelton, M., & Pais, M. (2025). [Team Topologies, 2nd Edition: Real-World Lessons from the Global Business Community](https://itrevolution.com/articles/team-topologies-2nd-edition-real-world-lessons-from-the-global-business-community/). 2025 年 9 月出版；补充了大量落地案例。
 4. Conway, M. E. (1968). *How Do Committees Invent?*. 康威定律：系统的结构会镜像组织的沟通结构。[综述](https://github.com/gmkzwwg/cs-learning-atlas/blob/master/collections/_engineering/7.3.software-process-delivery-iteration-and-coordination.md)。本文作为"组织结构影响系统结构"的约束背景。

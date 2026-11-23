@@ -149,7 +149,7 @@ By moving the focus from "what tools are we still missing" to "which feedback lo
 5. Google (2025). [AI in software engineering at Google: Progress and the path ahead](https://research.google/blog/ai-in-software-engineering-at-google-progress-and-the-path-ahead/). A public retrospective on embedding AI capabilities into the development workflow and iterating on online feedback.
 6. DORA (2026). [DORA ROI of AI-assisted Software Development](https://cloud.google.com/resources/content/dora-roi-of-ai-assisted-software-development). 2026 annual report; provides the ROI expansion of "AI is an amplifier," the value-realization J-curve, and the "verification tax" concept, usable as mechanistic evidence.
 7. DX (2026). [2026 DX Benchmarks](https://getdx.com/blog/2026-dx-benchmarks-are-now-available/). Industry quantitative benchmarks; provide the cross-sectional observation that "the share of AI-generated code is rising while the developer experience index stays flat and review throughput declines."
-8. Liyuk (2026). [Define the Boundaries Before Putting AI Capabilities into an Engineering Organization](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). A sister study on this site.
+8. Liyuk (2026). [Define the Boundaries Before Putting AI Capabilities into an Engineering Organization](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). A sister study on this site.
 
 ## Author Information and Statement
 

@@ -306,8 +306,8 @@ MECE 解决"拆得全"，但它不解决"拆完全之后先查哪一块"。拆�
 16. Freeman, R. E. (1984). *Strategic Management: A Stakeholder Approach*. 利益相关者理论。
 17. Bolman, L. G., & Deal, T. E. *Reframing Organizations*. 多镜头看组织的四框架（结构/人力资源/政治/象征）。
 18. Beck, A. T. *Cognitive Therapy and the Emotional Disorders*."非黑即白"（dichotomous thinking）作为认知扭曲的出处。
-19. Liyuk (2023). [资源不足时，怎样不让团队靠透支运转](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2023/03/working-under-resource-constraints/zh.md). 本站写作；附录 C 完整案例"支持团队响应慢"的原始出处。
-20. Liyuk (2023). [当一个人失去动力，管理者能做什么](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2023/03/when-a-team-member-loses-motivation/zh.md). 本站写作；附录 C 末尾第二实例的原始出处。
+19. Liyuk (2023). [资源不足时，怎样不让团队靠透支运转](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/writing/2023/03/working-under-resource-constraints/zh.md). 本站写作；附录 C 完整案例"支持团队响应慢"的原始出处。
+20. Liyuk (2023). [当一个人失去动力，管理者能做什么](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/writing/2023/03/when-a-team-member-loses-motivation/zh.md). 本站写作；附录 C 末尾第二实例的原始出处。
 21. Senge, P. M. (1990). *The Fifth Discipline: The Art & Practice of the Learning Organization*. Currency Doubleday. 系统思考与学习型组织的经典来源。
 22. Altshuller, G. TRIZ（发明问题解决理论）：技术矛盾/物理矛盾、矛盾矩阵与 40 个发明原理，20 世纪 40 年代起发展。
 23. Kepner, C. H., & Tregoe, B. B. Kepner-Tregoe 问题解决与决策四步：情境评估（SA）→问题分析（PA）→决策分析（DA）→潜在问题分析（PPA）。
