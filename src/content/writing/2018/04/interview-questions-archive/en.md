@@ -23,6 +23,6 @@ In the spring of 2018, I returned to Beijing after three years away and asked fr
 
 At the time I casually organized the questions I'd encountered in interviews, then added a pile of related material on everyday engineering problems, computer fundamentals, algorithms, operating systems, computer organization, and networks. Originally it was just so I wouldn't mess up the next round; later I came to feel that interview questions are never just interview questions. They readily expose the gaps in an engineer's knowledge structure.
 
-Original question bank: [View "Interview-Book"](https://mountain-buzhou.github.io/Interview-Book/)
+Original question bank: [View "Interview-Book"](https://liyuk.github.io/Interview-Book/)
 
 If I ever reorganize this material, I can't just pile up questions and answers; at the very least I should make clear why each question is asked, how to think about it, and where it's easy to miss.
