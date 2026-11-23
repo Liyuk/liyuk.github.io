@@ -365,7 +365,7 @@ const copy = i18n(locale).chat;
       return { answer, sources, suggestions };
     };
 
-    launcher.addEventListener('click', () => setOpen(panel.hidden));
+    launcher.addEventListener('click', () => setOpen(!!panel.hidden));
     close.addEventListener('click', () => setOpen(false));
     window.addEventListener('site-chat:ask', (event) => {
       const { question } = (event as CustomEvent<{ question?: string }>).detail ?? {};
