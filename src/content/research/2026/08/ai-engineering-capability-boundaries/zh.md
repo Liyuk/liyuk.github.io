@@ -155,7 +155,7 @@ flowchart TD
 3. Model Context Protocol. [Specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28/). 该版将协议核心改为无状态。
 4. DORA (2025). [The Impact of Generative AI in Software Development](https://dora.dev/ai/gen-ai-report/report/). 规模化调查；本文只借用其结论结构，不引用未经核验的数字。
 5. [Is Agent Code Less Maintainable Than Human Code?](https://arxiv.org/abs/2606.21804) (2026). 机制证据，用于说明"通过测试"不等于"长期可维护"。
-6. [vexp-swe-bench: Open benchmark for AI coding agents](https://github.com/Vexp-ai/swe-bench-pro-opus-5-vexp) (2026). 把解决率、成本与独特胜出并列报告的开放基准。
+6. vexp-swe-bench: Open benchmark for AI coding agents (2026). 把解决率、成本与独特胜出并列报告的开放基准。
 7. Google Research (2025). [Deeper insights into retrieval augmented generation: The role of sufficient context](https://research.google/blog/deeper-insights-into-retrieval-augmented-generation-the-role-of-sufficient-context/).
 8. Liyuk (2026). [Coding Agent Harness Study](https://github.com/Liyuk/claude-code-harness-study). 本文作者的最小实现：capability/approval、沙箱执行、暂存 diff、append-only 事件轨迹。
 
