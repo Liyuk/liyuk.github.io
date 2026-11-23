@@ -44,7 +44,7 @@ Back in March of this year, I compiled the interview questions I had encountered
 
 Looking back now, it's still quite lacking, because everything is written rather superficially with nothing hard in it, and for the time being I don't plan to introduce the deeper path beyond it.
 
-- [Interview Book](https://mountain-buzhou.github.io/Interview-Book/)
+- [Interview Book](https://liyuk.github.io/Interview-Book/)
 
 ## On How to Find an Internship
 

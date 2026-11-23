@@ -41,7 +41,7 @@ relatedQueries:
 
 现在看来还欠缺挺多，因为写得都比较粗浅，没有难度高的东西，暂时也不打算介绍后面更深的道路了。
 
-- [Interview Book](https://mountain-buzhou.github.io/Interview-Book/)
+- [Interview Book](https://liyuk.github.io/Interview-Book/)
 
 ## 关于如何找实习
 

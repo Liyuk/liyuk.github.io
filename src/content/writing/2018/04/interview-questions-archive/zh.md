@@ -20,6 +20,6 @@ relatedQueries:
 
 当时顺手把面试里遇到的题目整理了一遍，又补了一堆日常工程问题、计算机基础、算法、操作系统、组成原理和网络相关资料。本来只是为了下一轮别再翻车；后来才觉得，面试题不只是面试题。它很容易把一个工程师知识结构里空着的地方照出来。
 
-原始题库：[查看《Interview-Book》](https://mountain-buzhou.github.io/Interview-Book/)
+原始题库：[查看《Interview-Book》](https://liyuk.github.io/Interview-Book/)
 
 以后真要把这份资料重新整理，不能只堆题目和答案；至少要把为什么问、怎么想、哪些地方容易漏写清楚。
