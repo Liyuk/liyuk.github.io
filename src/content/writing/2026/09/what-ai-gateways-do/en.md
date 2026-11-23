@@ -22,7 +22,7 @@ citationUrls:
   - https://github.com/Helicone/helicone
   - https://github.com/maximhq/bifrost
   - https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/azure-openai-gateway-guide
-  - https://github.com/microsoftdocs/architecture-center/blob/main/docs/ai-ml/guide/azure-openai-gateway-multi-backend.md
+  - https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/azure-openai-gateway-multi-backend
 ---
 
 “The model is down. Why not just switch to another one?”
@@ -511,4 +511,4 @@ The following public sources serve as conceptual and architectural references. T
 5. [Helicone GitHub](https://github.com/Helicone/helicone): request observability, call chains, and cost-recording direction.
 6. [Bifrost GitHub](https://github.com/maximhq/bifrost): virtual keys, model catalogs, and provider/key routing governance.
 7. [Azure OpenAI Gateway Architecture](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/azure-openai-gateway-guide): multi-backend access, throttling, load balancing, and health governance.
-8. [Azure OpenAI Multi-backend Gateway](https://github.com/microsoftdocs/architecture-center/blob/main/docs/ai-ml/guide/azure-openai-gateway-multi-backend.md): an architecture example covering token throttling, backend load balancing, health checks, and circuit breaking.
+8. [Azure OpenAI Multi-backend Gateway](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/azure-openai-gateway-multi-backend): an architecture example covering token throttling, backend load balancing, health checks, and circuit breaking.

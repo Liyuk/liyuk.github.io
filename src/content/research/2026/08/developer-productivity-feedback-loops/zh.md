@@ -145,7 +145,7 @@ flowchart LR
 5. Google (2025). [AI in software engineering at Google: Progress and the path ahead](https://research.google/blog/ai-in-software-engineering-at-google-progress-and-the-path-ahead/). 关于把 AI 能力嵌入开发工作流、以线上反馈迭代的公开复盘。
 6. DORA (2026). [DORA ROI of AI-assisted Software Development](https://cloud.google.com/resources/content/dora-roi-of-ai-assisted-software-development). 2026 年度报告；提供"AI 是放大器"在 ROI 上的展开、价值实现 J 曲线与"验证税"概念，可作为机制证据。
 7. DX (2026). [2026 DX Benchmarks](https://getdx.com/blog/2026-dx-benchmarks-are-now-available/). 行业量化基准；提供"AI 生成代码占比上升而开发者体验指数持平、审查吞吐下滑"的横截面观察。
-8. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹研究。
+8. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹研究。
 
 ## 作者信息与声明
 

@@ -21,7 +21,7 @@ citationUrls:
   - https://github.com/Helicone/helicone
   - https://github.com/maximhq/bifrost
   - https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/azure-openai-gateway-guide
-  - https://github.com/microsoftdocs/architecture-center/blob/main/docs/ai-ml/guide/azure-openai-gateway-multi-backend.md
+  - https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/azure-openai-gateway-multi-backend
 ---
 
 “这个模型挂了，换一个不就好了？”
@@ -510,4 +510,4 @@ fallback 还可能改变模型质量。更高的成功率不一定意味着更�
 5. [Helicone GitHub](https://github.com/Helicone/helicone)：请求可观测性、调用链和成本记录方向。
 6. [Bifrost GitHub](https://github.com/maximhq/bifrost)：virtual key、模型目录和 Provider/Key 路由治理。
 7. [Azure OpenAI Gateway Architecture](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/azure-openai-gateway-guide)：多后端访问、限流、负载均衡和健康治理。
-8. [Azure OpenAI Multi-backend Gateway](https://github.com/microsoftdocs/architecture-center/blob/main/docs/ai-ml/guide/azure-openai-gateway-multi-backend.md)：token 限流、后端负载均衡、健康检查和 circuit breaking 的架构示例。
+8. [Azure OpenAI Multi-backend Gateway](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/azure-openai-gateway-multi-backend)：token 限流、后端负载均衡、健康检查和 circuit breaking 的架构示例。

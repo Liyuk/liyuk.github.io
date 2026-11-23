@@ -163,13 +163,13 @@ flowchart TD
 2. Forsgren, N., Storey, M.-A., Maddila, C., Zimmermann, T., Houck, B., & Butler, J. (2021). [The SPACE of Developer Productivity: There's More to It Than You Think](https://www.microsoft.com/en-us/research/publication/the-space-of-developer-productivity-theres-more-to-it-than-you-think/). *ACM Queue*, 19(1). 开发者生产力的多维度框架。
 3. DORA. (2024). [DORA's software delivery performance metrics](https://dora.dev/guides/dora-metrics/). 当前五指标：变更前置时间、部署频率、失败部署恢复时间、变更失败率、部署返工率；指标当目标即触发 Goodhart 效应的官方提醒。
 4. Google. (2020, updated 2024). [Web Vitals](https://web.dev/articles/vitals). Core Web Vitals：LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1；2024 年 INP 取代 FID。
-5. Liyuk (2026). [开发者生产力不是工具目录，而是一个反馈系统](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/developer-productivity-feedback-loops/zh.md). 本站姊妹研究。
-6. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹研究。
-7. Liyuk (2021). [数据度量工作指南（一）：数据口径是组织协作的接口](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2021/04/data-definitions-are-collaboration-interfaces/zh.md). 本站写作系列；数据口径作为协作接口的五部分构成、绝对量/比例/体验三分与基线原则。
-8. Liyuk (2021). [数据度量工作指南（二）：指标争论之前，先定义测量对象](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2021/04/define-the-measurement-before-arguing-about-metrics/zh.md). 本站写作系列；请求、会话、用户、任务等测量对象的公开词典。
-9. Liyuk (2021). [数据度量工作指南（三）：指标分级，让数据先服务最重要的决策](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2021/04/metric-tiers-prioritize-decisions/zh.md). 本站写作系列；指标分级模型与四维排序。
-10. Liyuk (2021). [数据度量工作指南（四）：指标字典模板，把定义变成可复算的协作接口](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2021/04/metric-dictionary-template/zh.md). 本站写作系列；指标字典模板与六类公开示例。
-11. Liyuk (2021). [数据度量工作指南（五）：周期统计与复盘，让数字变成下一次行动](https://github.com/Liyuk/liyuk.github.io/blob/main/src/content/writing/2021/04/periodic-metrics-and-retrospectives/zh.md). 本站写作系列；周期统计、异常记录与数据复盘模板。
+5. Liyuk (2026). [开发者生产力不是工具目录，而是一个反馈系统](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/research/2026/08/developer-productivity-feedback-loops/zh.md). 本站姊妹研究。
+6. Liyuk (2026). [把 AI 能力放进工程组织前，先定义哪些边界](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/research/2026/08/ai-engineering-capability-boundaries/zh.md). 本站姊妹研究。
+7. Liyuk (2021). [数据度量工作指南（一）：数据口径是组织协作的接口](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/writing/2021/03/data-definitions-are-collaboration-interfaces/zh.md). 本站写作系列；数据口径作为协作接口的五部分构成、绝对量/比例/体验三分与基线原则。
+8. Liyuk (2021). [数据度量工作指南（二）：指标争论之前，先定义测量对象](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/writing/2021/03/define-the-measurement-before-arguing-about-metrics/zh.md). 本站写作系列；请求、会话、用户、任务等测量对象的公开词典。
+9. Liyuk (2021). [数据度量工作指南（三）：指标分级，让数据先服务最重要的决策](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/writing/2021/04/metric-tiers-prioritize-decisions/zh.md). 本站写作系列；指标分级模型与四维排序。
+10. Liyuk (2021). [数据度量工作指南（四）：指标字典模板，把定义变成可复算的协作接口](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/writing/2021/04/metric-dictionary-template/zh.md). 本站写作系列；指标字典模板与六类公开示例。
+11. Liyuk (2021). [数据度量工作指南（五）：周期统计与复盘，让数字变成下一次行动](https://github.com/Liyuk/liyuk.github.io/blob/master/src/content/writing/2021/05/periodic-metrics-and-retrospectives/zh.md). 本站写作系列；周期统计、异常记录与数据复盘模板。
 
 ## 附录：作为协议的最小产物清单
 

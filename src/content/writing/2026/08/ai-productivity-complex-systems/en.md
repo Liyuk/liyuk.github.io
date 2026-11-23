@@ -16,7 +16,7 @@ citationUrls:
   - https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai-how-organizations-are-rewiring-to-capture-value
   - https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gencost02.html
   - https://shopify.dev/docs/api/storefront/latest/enums/orderfinancialstatus
-  - https://docs.stripe.com/payout-reconciliation
+  - https://docs.stripe.com/reports/payout-reconciliation
 translationKey: 2026/08/ai-productivity-complex-systems
 primaryQuery: "does AI improve productivity"
 searchIntent: essay
@@ -41,7 +41,7 @@ Worse, much of the important information was not in the documentation. It lived 
 
 We often found the problem not during interface testing but during reconciliation: the orders looked successful, yet receivables, cash received, refunds, or settlements did not match. When the money does not reconcile, everything else becomes a problem too. Reconciliation turned hidden model differences into hard facts. Only then did we gradually add alerts, automatic recovery, staged status transitions, and, when necessary, status rollback and model migration.
 
-Payment platforms likewise treat matching payment activity, payout batches, and bank deposits as a distinct reconciliation task rather than treating a successful API response as financial completion.[Stripe payout reconciliation](https://docs.stripe.com/payout-reconciliation)
+Payment platforms likewise treat matching payment activity, payout batches, and bank deposits as a distinct reconciliation task rather than treating a successful API response as financial completion.[Stripe payout reconciliation](https://docs.stripe.com/reports/payout-reconciliation)
 
 Once this kind of system is running, the work becomes a loop that repeatedly checks the model against reality:
 
