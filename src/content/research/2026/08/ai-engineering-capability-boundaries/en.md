@@ -159,7 +159,7 @@ It is a set of questions to "think through before putting them into an organizat
 3. Model Context Protocol. [Specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28/). This version changes the protocol core to be stateless.
 4. DORA (2025). [The Impact of Generative AI in Software Development](https://dora.dev/ai/gen-ai-report/report/). Large-scale survey; this study borrows only its conclusion structure, not unverified numbers.
 5. [Is Agent Code Less Maintainable Than Human Code?](https://arxiv.org/abs/2606.21804) (2026). Mechanistic evidence used to show that "passing tests" is not the same as "long-term maintainability."
-6. [vexp-swe-bench: Open benchmark for AI coding agents](https://github.com/Vexp-ai/swe-bench-pro-opus-5-vexp) (2026). An open benchmark that reports resolution rate, cost, and unique wins side by side.
+6. vexp-swe-bench: Open benchmark for AI coding agents (2026). An open benchmark that reports resolution rate, cost, and unique wins side by side.
 7. Google Research (2025). [Deeper insights into retrieval augmented generation: The role of sufficient context](https://research.google/blog/deeper-insights-into-retrieval-augmented-generation-the-role-of-sufficient-context/).
 8. Liyuk (2026). [Coding Agent Harness Study](https://github.com/Liyuk/claude-code-harness-study). The author's minimal implementation: capability/approval, sandboxed execution, staged diff, append-only event trail.
 
