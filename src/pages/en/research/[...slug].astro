@@ -1,5 +1,8 @@
 ---
+import type { ComponentProps } from 'astro/types';
 import Page from '../../research/[...slug].astro';
 export { getStaticPaths } from '../../research/[...slug].astro';
+type Props = ComponentProps<typeof Page>;
+const props = Astro.props as Props;
 ---
-<Page {...Astro.props} />
+<Page {...props} />
